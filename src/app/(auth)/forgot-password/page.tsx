@@ -4,12 +4,12 @@
 
 "use client";
 import Link from "next/link";
-import ForgotPasswordPage from "@/templates/AuthPages/ForgotPasswordPage";
+// import ForgotPasswordPage from "@/templates/AuthPages/ForgotPasswordPage";
 
 const ForgotPassword = () => {
     return (
         <>
-            <ForgotPasswordPage />
+            {/* <ForgotPasswordPage /> */}
             <div className="mt-12 text-sm">
                 Already registered?
                 <Link
