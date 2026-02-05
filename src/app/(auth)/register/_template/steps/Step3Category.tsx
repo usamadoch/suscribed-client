@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-// import { pageApi } from "@/lib/api";
-// import { SignUpFormValues } from "../../../../lib/validation";
+
 import StepActions from "./StepActions";
+
 import { SignUpFormValues } from "@/app/(auth)/_validations";
+import { pageApi } from "@/app/[page-slug]/_api";
 
 const CATEGORIES = [
     "Gaming",
@@ -32,7 +33,7 @@ const Step3Category = ({ onNext, onBack }: Step3Props) => {
         if (valid) {
             const { category } = getValues();
             try {
-                // await pageApi.updateMyPage({ category });
+                await pageApi.updateMyPage({ category });
                 onNext();
             } catch (error) {
                 console.error("Failed to update category", error);

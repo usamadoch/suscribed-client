@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import Field from "@/components/Field";
-// import { pageApi } from "@/lib/api";
-// import { SignUpFormValues } from "../../../../lib/validation";
-import StepActions from "./StepActions";
-// import { slugify } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
+
+
+import Field from "@/components/Field";
+import StepActions from "./StepActions";
+
 import { slugify } from "@/lib/utils";
+
 import { SignUpFormValues } from "@/app/(auth)/_validations";
+import { pageApi } from "@/app/[page-slug]/_api";
 
 
 
@@ -42,10 +44,10 @@ const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
         if (valid) {
             const { creatorName, pageSlug } = getValues();
             try {
-                // await pageApi.updateMyPage({
-                //     displayName: creatorName,
-                //     pageSlug
-                // });
+                await pageApi.updateMyPage({
+                    displayName: creatorName,
+                    pageSlug
+                });
                 // Invalidate cache to reflect new slug elsewhere
                 await queryClient.invalidateQueries({ queryKey: ['my-creation-page'] });
                 onNext();

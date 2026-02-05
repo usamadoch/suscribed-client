@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import Icon from "@/components/Icon";
-// import { pageApi } from "@/lib/api";
-// import { SignUpFormValues } from "../../../../lib/validation";
 
 import StepActions from "./StepActions";
-// import { socialProfiles } from "@/mock/profile";
+
+import Icon from "@/components/Icon";
 import { SignUpFormValues } from "@/app/(auth)/_validations";
 import { socialProfiles } from "../../../../../../mock/profile";
+import { pageApi } from "@/app/[page-slug]/_api";
 
 type Step4Props = {
     onBack: () => void;
