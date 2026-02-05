@@ -1,4 +1,20 @@
 
+export type Permission =
+    | 'post:create'
+    | 'post:read'
+    | 'post:update'
+    | 'post:delete'
+    | 'dashboard:view'
+    | 'analytics:view'
+    | 'members:view'
+    | 'payouts:view'
+    | 'page:manage'
+    | 'explore:view'
+    | 'subscriptions:view' // viewing own memberships
+    | 'security:manage'
+    | 'admin:access';
+
+
 
 export type SocialPlatform = 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'discord' | 'website' | 'facebook' | 'linkedin' | 'pinterest' | 'x' | 'other';
 
