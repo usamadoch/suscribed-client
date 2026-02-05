@@ -1,7 +1,9 @@
 
 
+export type SocialPlatform = 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'discord' | 'website' | 'facebook' | 'linkedin' | 'pinterest' | 'x' | 'other';
+
 export interface SocialLink {
-    platform: 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'facebook' | 'linkedin' | 'pinterest' | 'website';
+    platform: SocialPlatform;
     url: string;
     label?: string;
 }
@@ -33,8 +35,6 @@ export interface NotificationPreferences {
     };
 }
 
-
-
 export interface User {
     _id: string;
     email: string;
@@ -46,16 +46,70 @@ export interface User {
     isEmailVerified: boolean;
     createdAt: string;
     updatedAt: string;
-    specifications?: string[];
     googleId?: string;
-    notificationPreferences?: NotificationPreferences;
+    notificationPreferences: NotificationPreferences;
+}
+
+// ====================
+// MEDIA TYPES
+// ====================
+
+export interface BaseMediaAttachment {
+    url: string;
+    filename: string;
+    fileSize: number;
+    mimeType: string;
+    dimensions?: { width: number; height: number };
+    _id?: string; // Often returned by DB
+}
+
+export interface ImageAttachment extends BaseMediaAttachment {
+    type: 'image';
+}
+
+export interface VideoAttachment extends BaseMediaAttachment {
+    type: 'video';
+    thumbnailUrl: string;
+    duration: number;
+}
+
+export type MediaAttachment = ImageAttachment | VideoAttachment;
+
+// ====================
+// POST TYPES
+// ====================
+
+export type PostType = 'text' | 'image' | 'video';
+export type PostStatus = 'draft' | 'scheduled' | 'published';
+export type PostVisibility = 'public' | 'members';
+
+export interface Post {
+    _id: string;
+    creatorId: string;
+    pageId: string;
+    caption: string;
+    mediaAttachments: MediaAttachment[];
+    postType: PostType;
+    tags: string[];
+    visibility: PostVisibility;
+    status: PostStatus;
+    publishedAt: string | null;
+    scheduledFor: string | null;
+    viewCount: number;
+    likeCount: number;
+    commentCount: number;
+    allowComments: boolean;
+    isPinned: boolean;
+    createdAt: string;
+    updatedAt: string;
+    // Client specific
+    isLiked?: boolean; // Often added by aggregating queries
 }
 
 
 // ====================
 // API RESPONSE TYPES
 // ====================
-
 
 export interface Pagination {
     page: number;
@@ -66,14 +120,11 @@ export interface Pagination {
     hasPrevPage: boolean;
 }
 
-
 export interface ApiError {
     code: string;
     message: string;
     details?: Record<string, string[]>;
 }
-
-
 
 export interface SuccessResponse<T> {
     success: true;
