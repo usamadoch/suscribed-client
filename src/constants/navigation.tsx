@@ -1,4 +1,5 @@
-import { Permission } from '@/types';
+
+import { Permission } from "@/lib/types";
 
 type NavigationItem = {
     title: string;
