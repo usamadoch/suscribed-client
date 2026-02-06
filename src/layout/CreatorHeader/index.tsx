@@ -8,10 +8,11 @@
 import { useState } from "react";
 import { useWindowScrollPosition } from "@n8tb1t/use-scroll-position";
 import Link from "next/link";
-import { usePathname, useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import Image from "@/components/Image";
 import { useCreatorPage } from "@/hooks/useQueries";
+import { usePageSlug } from "@/hooks/usePageSlug";
 import { getFullImageUrl } from "@/lib/utils";
 
 type CreatorHeaderProps = {
@@ -32,8 +33,7 @@ const navLinks = [
 const CreatorHeader = ({ pageName = "Creator Page" }: CreatorHeaderProps) => {
     const [headerStyle, setHeaderStyle] = useState<boolean>(false);
     const pathname = usePathname();
-    const params = useParams();
-    const slug = params?.['page-slug'] as string;
+    const slug = usePageSlug();
 
     const { data } = useCreatorPage(slug);
     const { page } = data || {};

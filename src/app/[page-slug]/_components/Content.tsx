@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
-import { postApi } from "@/lib/api";
+// import { postApi } from "@/lib/api";
 // import { getFullImageUrl } from "@/lib/utils";
 import { Post } from "@/lib/types";
 
@@ -16,21 +16,21 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            setIsLoading(true);
-            try {
-                const { posts } = await postApi.getAll({ pageSlug, limit: 5 });
-                setPosts(posts);
-            } catch (error) {
-                console.error("Failed to fetch posts", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchPosts = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             const { posts } = await postApi.getAll({ pageSlug, limit: 5 });
+    //             setPosts(posts);
+    //         } catch (error) {
+    //             console.error("Failed to fetch posts", error);
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     };
 
-        if (pageSlug) fetchPosts();
-    }, [pageSlug]);
+    //     if (pageSlug) fetchPosts();
+    // }, [pageSlug]);
 
     // const getThumbnail = (post: Post) => {
     //     if (post.mediaAttachments && post.mediaAttachments.length > 0) {

@@ -2,11 +2,12 @@
 "use client";
 
 import { useCallback } from "react";
-import { useParams, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useAuth } from "@/store/auth";
 import { useCreatorPage } from "@/hooks/useQueries";
+import { usePageSlug } from "@/hooks/usePageSlug";
 import { type CreatorPage as CreatorPageType } from "@/lib/types";
 import { ApiClientError } from "@/lib/api";
 
@@ -19,8 +20,7 @@ import Content from "../_components/Content";
 
 
 const CreatorPage = () => {
-    const params = useParams();
-    const slug = params?.['page-slug'] as string;
+    const slug = usePageSlug();
     const queryClient = useQueryClient();
     const { user } = useAuth();
 
