@@ -11,7 +11,7 @@ import Header from "./Header";
 import CreatorHeader from "./CreatorHeader";
 import Footer from "./Footer";
 
-import { RequireAuth } from "@/app/(auth)/_store/auth";
+import { RequireAuth } from "@/store/auth";
 
 type LayoutProps = {
     background?: boolean;

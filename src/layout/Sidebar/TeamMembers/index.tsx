@@ -7,9 +7,8 @@ import Icon from "@/components/Icon";
 
 import { usePermission } from "@/hooks/usePermission";
 import { getFullImageUrl } from "@/lib/utils";
-import { useMyMemberships } from "@/app/(protected)/members/_queries";
-import { Membership } from "@/app/(protected)/members/_types";
-import { CreatorPage } from "@/app/[page-slug]/_types";
+import { useMyMemberships } from "@/hooks/useQueries";
+import { Membership, CreatorPage } from "@/lib/types";
 
 type TeamMembersProps = {
     visible?: boolean;

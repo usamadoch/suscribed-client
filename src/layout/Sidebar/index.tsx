@@ -4,7 +4,7 @@ import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems, Transition } fro
 import Logo from "@/components/Logo";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
-import { useAuth } from "@/app/(auth)/_store/auth";
+import { useAuth } from "@/store/auth";
 
 import Menu from "./Menu";
 import TeamMembers from "./TeamMembers";

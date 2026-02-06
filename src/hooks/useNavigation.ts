@@ -1,12 +1,12 @@
 
 import { useMemo } from 'react';
 import { navigation } from '@/constants/navigation';
-import { useAuth } from '@/app/(auth)/_store/auth';
+import { useAuth } from '@/store/auth';
 import { hasPermission } from '@/constants/permissions';
 
 
 import { Permission } from '@/lib/types';
-import { useMyPage } from '@/app/[page-slug]/_queries';
+import { useMyPage } from '@/hooks/useQueries';
 
 export type NavigationItem = {
     title: string;

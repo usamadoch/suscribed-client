@@ -11,7 +11,7 @@ import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 
 import Image from "@/components/Image";
-import { useCreatorPage } from "@/app/[page-slug]/_queries";
+import { useCreatorPage } from "@/hooks/useQueries";
 import { getFullImageUrl } from "@/lib/utils";
 
 type CreatorHeaderProps = {
@@ -32,8 +32,8 @@ const navLinks = [
 const CreatorHeader = ({ pageName = "Creator Page" }: CreatorHeaderProps) => {
     const [headerStyle, setHeaderStyle] = useState<boolean>(false);
     const pathname = usePathname();
-    const { pageSlug } = useParams();
-    const slug = pageSlug as string;
+    const params = useParams();
+    const slug = params?.['page-slug'] as string;
 
     const { data } = useCreatorPage(slug);
     const { page } = data || {};
@@ -43,7 +43,7 @@ const CreatorHeader = ({ pageName = "Creator Page" }: CreatorHeaderProps) => {
     });
 
     const isLinkActive = (url: string) => {
-        const fullUrl = `/${pageSlug}${url}`;
+        const fullUrl = `/${slug}${url}`;
         if (url === "") {
             return pathname === fullUrl;
         }
@@ -75,7 +75,7 @@ const CreatorHeader = ({ pageName = "Creator Page" }: CreatorHeaderProps) => {
                     {navLinks.map((link, index) => (
                         <Link
                             key={index}
-                            href={`/${pageSlug}${link.url}`}
+                            href={`/${slug}${link.url}`}
                             className={`btn-transparent-dark btn-medium ${isLinkActive(link.url)
                                 ? "text-purple-1 fill-purple-1"
                                 : "text-n-1 fill-n-1 dark:text-white dark:fill-white hover:text-purple-1 hover:fill-purple-1"
