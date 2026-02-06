@@ -1,4 +1,4 @@
-import { useAuth } from '@/app/(auth)/_store/auth';
+import { useAuth } from '@/store/auth';
 import { hasPermission, ROLE_PERMISSIONS } from '@/constants/permissions';
 import { Permission } from '@/lib/types';
 

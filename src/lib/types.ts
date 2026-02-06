@@ -21,7 +21,7 @@ export type SocialPlatform = 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'd
 export interface SocialLink {
     platform: SocialPlatform;
     url: string;
-    label?: string;
+    label?: string; // Optional: User-defined display name for the link
 }
 
 export type UserRole = 'member' | 'creator' | 'admin';
@@ -62,7 +62,7 @@ export interface User {
     isEmailVerified: boolean;
     createdAt: string;
     updatedAt: string;
-    googleId?: string;
+    googleId?: string; // Optional: Only present if user signed up/linked via Google
     notificationPreferences: NotificationPreferences;
 }
 
@@ -75,18 +75,19 @@ export interface BaseMediaAttachment {
     filename: string;
     fileSize: number;
     mimeType: string;
-    dimensions?: { width: number; height: number };
-    _id?: string; // Often returned by DB
+    _id?: string; // Optional: Present when returned from DB, absent during upload
 }
 
 export interface ImageAttachment extends BaseMediaAttachment {
     type: 'image';
+    dimensions: { width: number; height: number };
 }
 
 export interface VideoAttachment extends BaseMediaAttachment {
     type: 'video';
     thumbnailUrl: string;
     duration: number;
+    dimensions: { width: number; height: number };
 }
 
 export type MediaAttachment = ImageAttachment | VideoAttachment;
@@ -95,17 +96,14 @@ export type MediaAttachment = ImageAttachment | VideoAttachment;
 // POST TYPES
 // ====================
 
-export type PostType = 'text' | 'image' | 'video';
 export type PostStatus = 'draft' | 'scheduled' | 'published';
 export type PostVisibility = 'public' | 'members';
 
-export interface Post {
+interface BasePost {
     _id: string;
     creatorId: string;
     pageId: string;
     caption: string;
-    mediaAttachments: MediaAttachment[];
-    postType: PostType;
     tags: string[];
     visibility: PostVisibility;
     status: PostStatus;
@@ -119,8 +117,25 @@ export interface Post {
     createdAt: string;
     updatedAt: string;
     // Client specific
-    isLiked?: boolean; // Often added by aggregating queries
+    isLiked?: boolean; // Optional: Injected by client-side aggregation
 }
+
+export interface TextPost extends BasePost {
+    postType: 'text';
+    mediaAttachments: never[];
+}
+
+export interface ImagePost extends BasePost {
+    postType: 'image';
+    mediaAttachments: ImageAttachment[];
+}
+
+export interface VideoPost extends BasePost {
+    postType: 'video';
+    mediaAttachments: VideoAttachment[];
+}
+
+export type Post = TextPost | ImagePost | VideoPost;
 
 
 // ====================
@@ -157,3 +172,168 @@ export interface ErrorResponse {
 }
 
 export type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
+
+
+
+export interface UploadedFile {
+    url: string;
+    filename: string;
+    fileSize: number;
+    mimeType: string;
+}
+
+
+// ====================
+// AUTH RELATED TYPES
+// ====================
+
+export interface SignupPayload {
+    email: string;
+    password: string;
+    displayName: string;
+    username: string;
+    role?: 'member' | 'creator';
+}
+
+export interface LoginPayload {
+    email: string;
+    password: string;
+}
+
+export interface ChangePasswordPayload {
+    currentPassword: string;
+    newPassword: string;
+}
+
+export interface AuthState {
+    user: User | null;
+    isLoading: boolean;
+    isAuthenticated: boolean;
+    error: string | null;
+}
+
+
+// ====================
+// API PAYLOAD TYPES
+// ====================
+
+export type PostType = Post['postType'];
+export type CreatePostPayload =
+    | { postType: 'text'; caption: string; mediaAttachments?: never; visibility?: PostVisibility; tags?: string[]; allowComments?: boolean; status?: 'draft' | 'published'; scheduledFor?: string; }
+    | { postType: 'image'; caption?: string; mediaAttachments: ImageAttachment[]; visibility?: PostVisibility; tags?: string[]; allowComments?: boolean; status?: 'draft' | 'published'; scheduledFor?: string; }
+    | { postType: 'video'; caption?: string; mediaAttachments: VideoAttachment[]; visibility?: PostVisibility; tags?: string[]; allowComments?: boolean; status?: 'draft' | 'published'; scheduledFor?: string; };
+
+export type UpdatePostPayload = Partial<CreatePostPayload>;
+
+export interface UpdateUserPayload {
+    displayName?: string;
+    username?: string;
+    bio?: string;
+    avatarUrl?: string;
+    specifications?: string[];
+    notificationPreferences?: Partial<NotificationPreferences>;
+}
+
+export interface UpdatePagePayload {
+    displayName?: string;
+    tagline?: string;
+    pageSlug?: string;
+    specifications?: string[];
+    category?: string[];
+    about?: string;
+    avatarUrl?: string;
+    bannerUrl?: string;
+    socialLinks?: SocialLink[];
+    theme?: PageTheme;
+    isPublic?: boolean;
+    status?: 'draft' | 'published';
+}
+
+export interface JoinMembershipPayload {
+    creatorId: string;
+    pageId: string;
+}
+
+export interface StartConversationPayload {
+    recipientId: string;
+}
+
+export interface SendMessagePayload {
+    content: string;
+    contentType?: 'text' | 'image' | 'file';
+}
+
+export interface CreateCommentPayload {
+    content: string;
+    parentId?: string;
+}
+
+
+// ====================
+// PAGE RELATED TYPES
+// ====================
+
+export interface PageTheme {
+    primaryColor: string;
+    accentColor: string;
+    layout: 'default' | 'minimal' | 'featured';
+}
+
+export interface CreatorPage {
+    _id: string;
+    userId: string | User;
+    pageSlug: string;
+    displayName: string;
+    tagline: string;
+    category: string[];
+    avatarUrl: string | null;
+    bannerUrl: string | null;
+    about: string;
+    socialLinks: SocialLink[];
+    theme: PageTheme;
+    isPublic: boolean;
+    status: 'draft' | 'published';
+    memberCount: number;
+    postCount: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface UpdatePagePayload {
+    displayName?: string;
+    tagline?: string;
+    pageSlug?: string;
+    specifications?: string[];
+    category?: string[];
+    about?: string;
+    avatarUrl?: string;
+    bannerUrl?: string;
+    socialLinks?: SocialLink[];
+    theme?: PageTheme;
+    isPublic?: boolean;
+    status?: 'draft' | 'published';
+}
+
+
+// ====================
+// MEMBERSHIP RELATED TYPES
+// ====================
+
+export type MembershipStatus = 'active' | 'paused' | 'cancelled';
+
+export interface Membership {
+    _id: string;
+    memberId: string | User;
+    creatorId: string | User;
+    pageId: string | CreatorPage;
+    status: MembershipStatus;
+    tier?: string;
+    joinedAt: string;
+    cancelledAt: string | null;
+    updatedAt: string;
+}
+
+export interface JoinMembershipPayload {
+    creatorId: string;
+    pageId: string;
+}
