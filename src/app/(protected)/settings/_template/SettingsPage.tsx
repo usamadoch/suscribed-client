@@ -10,19 +10,26 @@ import CreatorAccount from "./sections/CreatorAccount";
 
 import { usePermission } from "@/hooks/usePermission";
 
-import { useAuth } from "@/store/auth";
 import Layout from "@/layout";
 
 import Tabs from "@/components/Tabs";
 
+const SettingsTabValues = {
+    Account: "account",
+    Security: "security",
+    SocialNetworks: "social-networks",
+    Notifications: "notifications",
+} as const;
+
+type SettingsTab = typeof SettingsTabValues[keyof typeof SettingsTabValues];
+
 const SettingsPage = () => {
-    const { user } = useAuth();
     const canManagePage = usePermission('page:manage');
     const canManageSecurity = usePermission('security:manage');
 
-    const [type, setType] = useState<string>("account");
+    const [type, setType] = useState<SettingsTab>("account");
 
-    const allTypes = [
+    const allTypes: { title: string; value: SettingsTab }[] = [
         {
             title: "Account",
             value: "account",
@@ -70,7 +77,7 @@ const SettingsPage = () => {
                             classButton="2xl:ml-0 md:whitespace-nowrap"
                             items={types}
                             value={type}
-                            setValue={setType}
+                            setValue={(val) => setType(val as SettingsTab)}
                         />
                         {/* <button className="btn-stroke btn-small shrink-0 min-w-[6rem] ml-4 md:hidden">
                             <Icon name="dots" />

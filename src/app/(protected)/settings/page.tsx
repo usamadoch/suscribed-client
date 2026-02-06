@@ -6,8 +6,8 @@
 
 
 import type { NextPage } from "next";
-import SettingsPage from "./_template";
-// import SettingsPage from "@/templates/SettingsPage";
+import SettingsPage from "./_template/SettingsPage";
+
 
 const Settings: NextPage = () => {
     return <SettingsPage />;
