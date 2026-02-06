@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import StepActions from "./StepActions";
 
 import { SignUpFormValues } from "@/app/(auth)/_validations";
-import { pageApi } from "@/app/[page-slug]/_api";
+import { pageApi } from "@/lib/api";
 
 const CATEGORIES = [
     "Gaming",

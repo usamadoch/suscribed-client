@@ -9,7 +9,7 @@ import StepActions from "./StepActions";
 import { slugify } from "@/lib/utils";
 
 import { SignUpFormValues } from "@/app/(auth)/_validations";
-import { pageApi } from "@/app/[page-slug]/_api";
+import { pageApi } from "@/lib/api";
 
 
 

@@ -16,9 +16,9 @@ import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
 
 import { LoginSchema } from "../../_validations";
-import { authApi } from "../../_api";
+import { authApi } from "@/lib/api";
 
-import { useAuth, useAuthStore } from "../../_store/auth";
+import { useAuth, useAuthStore } from "../../../../store/auth";
 import { ApiClientError } from "@/lib/api";
 
 

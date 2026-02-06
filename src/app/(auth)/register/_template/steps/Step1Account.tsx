@@ -13,8 +13,8 @@ import Loader from "@/components/Loader";
 
 import StepActions from "./StepActions";
 
-import { useAuth, useAuthStore } from "@/app/(auth)/_store/auth";
-import { authApi } from "@/app/(auth)/_api";
+import { useAuth, useAuthStore } from "@/store/auth";
+import { authApi } from "@/lib/api";
 import { SignUpFormValues } from "@/app/(auth)/_validations";
 import { generateUsername } from "@/lib/utils";
 

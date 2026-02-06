@@ -7,7 +7,7 @@ import StepActions from "./StepActions";
 import Icon from "@/components/Icon";
 import { SignUpFormValues } from "@/app/(auth)/_validations";
 import { socialProfiles } from "../../../../../../mock/profile";
-import { pageApi } from "@/app/[page-slug]/_api";
+import { pageApi } from "@/lib/api";
 
 type Step4Props = {
     onBack: () => void;

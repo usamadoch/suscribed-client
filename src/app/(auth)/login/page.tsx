@@ -4,7 +4,7 @@
 
 import LoginPage from "./_template";
 
-import { RedirectIfAuthenticated } from "../_store/auth";
+import { RedirectIfAuthenticated } from "../../../store/auth";
 
 const SigninPage = () => {
 
