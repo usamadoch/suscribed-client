@@ -7,7 +7,7 @@ import { useAuth } from "@/store/auth";
 // ======================
 
 // Hook to fetch Creator Page Data (Profile, Banner, etc.)
-export const useCreatorPage = (slug: string) => {
+export const useCreatorPage = (slug?: string) => {
     const { user } = useAuth();
     return useQuery({
         queryKey: ['creator-page', slug, user?._id],

@@ -140,7 +140,7 @@ const CreatorsPostsPage = () => {
                                     // We create a strictly typed item for Review component
 
                                     const images = post.postType === 'image'
-                                        ? post.mediaAttachments.map(m => getFullImageUrl(m.url))
+                                        ? post.mediaAttachments.map(m => getFullImageUrl(m.url)).filter((url): url is string => !!url)
                                         : undefined;
 
                                     const postItem = {

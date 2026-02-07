@@ -15,7 +15,11 @@ import {
     CreatePostPayload,
     UpdatePostPayload,
     CreateCommentPayload,
-    UpdateUserPayload
+    UpdateUserPayload,
+    Conversation,
+    StartConversationPayload,
+    Message,
+    SendMessagePayload
 } from "./types";
 
 
@@ -400,6 +404,29 @@ export const uploadApi = {
 
 
 // ====================
+// MEDIA API (NEW)
+// ====================
+
+export const mediaApi = {
+    async getCloudinarySignature(): Promise<{
+        timestamp: number;
+        signature: string;
+        apiKey: string;
+        cloudName: string;
+    }> {
+        return fetchApi('/media/cloudinary/signature');
+    },
+
+    async getMuxUploadUrl(): Promise<{
+        url: string;
+        uploadId: string;
+    }> {
+        return fetchApi('/media/mux/upload-url');
+    },
+};
+
+
+// ====================
 // POST API
 // ====================
 
@@ -586,6 +613,89 @@ export const userApi = {
         return fetchApi('/users/me', {
             method: 'PUT',
             body: JSON.stringify(payload),
+        });
+    },
+};
+
+
+
+
+// ====================
+// CONVERSATION API
+// ====================
+
+interface GetConversationsParams {
+    page?: number;
+    limit?: number;
+}
+
+interface GetMessagesParams {
+    page?: number;
+    limit?: number;
+}
+
+export const conversationApi = {
+    async getAll(params: GetConversationsParams = {}): Promise<{
+        conversations: Conversation[];
+    } & { pagination: Pagination }> {
+        const searchParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined) {
+                searchParams.set(key, String(value));
+            }
+        });
+        const query = searchParams.toString();
+        const response = await fetch(`${API_BASE_URL}/conversations${query ? `?${query}` : ''}`, {
+            credentials: 'include',
+        });
+        const data = await response.json();
+        if (!data.success) throw new ApiClientError(data.error, response.status);
+        return { ...data.data, pagination: data.meta?.pagination };
+    },
+
+    async start(payload: StartConversationPayload): Promise<{
+        conversation: Conversation;
+        isNew: boolean;
+    }> {
+        return fetchApi('/conversations', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+    },
+
+    async getMessages(
+        conversationId: string,
+        params: GetMessagesParams = {}
+    ): Promise<{ messages: Message[] } & { pagination: Pagination }> {
+        const searchParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined) {
+                searchParams.set(key, String(value));
+            }
+        });
+        const query = searchParams.toString();
+        const response = await fetch(
+            `${API_BASE_URL}/conversations/${conversationId}/messages${query ? `?${query}` : ''}`,
+            { credentials: 'include' }
+        );
+        const data = await response.json();
+        if (!data.success) throw new ApiClientError(data.error, response.status);
+        return { ...data.data, pagination: data.meta?.pagination };
+    },
+
+    async sendMessage(
+        conversationId: string,
+        payload: SendMessagePayload
+    ): Promise<{ message: Message }> {
+        return fetchApi(`/conversations/${conversationId}/messages`, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+    },
+
+    async markAsRead(conversationId: string, messageId: string): Promise<{ message: Message }> {
+        return fetchApi(`/conversations/${conversationId}/messages/${messageId}/read`, {
+            method: 'PUT',
         });
     },
 };

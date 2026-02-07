@@ -8,15 +8,16 @@
 import { useState } from "react";
 import { useWindowScrollPosition } from "@n8tb1t/use-scroll-position";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 
 import Image from "@/components/Image";
 import { useCreatorPage } from "@/hooks/useQueries";
-import { usePageSlug } from "@/hooks/usePageSlug";
+// import { usePageSlug } from "@/hooks/usePageSlug";
 import { getFullImageUrl } from "@/lib/utils";
 
 type CreatorHeaderProps = {
     pageName?: string;
+    pageSlug?: string;
 };
 
 const navLinks = [
@@ -30,10 +31,13 @@ const navLinks = [
     },
 ];
 
-const CreatorHeader = ({ pageName = "Creator Page" }: CreatorHeaderProps) => {
+const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderProps) => {
     const [headerStyle, setHeaderStyle] = useState<boolean>(false);
     const pathname = usePathname();
-    const slug = usePageSlug();
+    const params = useParams<{ "page-slug"?: string }>();
+    // Use the prop if available, otherwise try to get it from the URL
+    // If not in URL, this will be undefined, but won't crash with 404
+    const slug = (pageSlug || params["page-slug"]) as string;
 
     const { data } = useCreatorPage(slug);
     const { page } = data || {};

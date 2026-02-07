@@ -78,13 +78,20 @@ export interface BaseMediaAttachment {
     _id?: string; // Optional: Present when returned from DB, absent during upload
 }
 
+export type MediaStatus = 'preparing' | 'ready' | 'errored';
+
 export interface ImageAttachment extends BaseMediaAttachment {
     type: 'image';
+    cloudinaryPublicId?: string;
     dimensions: { width: number; height: number };
 }
 
 export interface VideoAttachment extends BaseMediaAttachment {
     type: 'video';
+    muxUploadId?: string;
+    muxAssetId?: string;
+    muxPlaybackId?: string;
+    status?: MediaStatus;
     thumbnailUrl: string;
     duration: number;
     dimensions: { width: number; height: number };
@@ -336,4 +343,75 @@ export interface Membership {
 export interface JoinMembershipPayload {
     creatorId: string;
     pageId: string;
+}
+
+
+
+
+// Notification
+export type NotificationType =
+    | 'new_member' | 'member_left' | 'new_post' | 'post_liked' | 'new_like'
+    | 'new_comment' | 'comment_reply' | 'new_message' | 'mention'
+    | 'creator_went_live' | 'membership_expired' | 'system';
+
+export interface Notification {
+    _id: string;
+    recipientId: string;
+    type: NotificationType;
+    title: string;
+    body: string;
+    message?: string;
+    imageUrl: string | null;
+    actionUrl: string;
+    actionLabel: string;
+    relatedId?: string;
+    metadata?: Record<string, any>; // Added for richer context
+    isRead: boolean;
+    readAt: string | null;
+    createdAt: string;
+}
+
+
+
+
+
+
+// Conversation & Message
+export type MessageStatus = 'sent' | 'delivered' | 'read';
+
+export interface MessageAttachment {
+    type: 'image' | 'file';
+    url: string;
+    filename: string;
+    fileSize: number;
+    mimeType: string;
+}
+
+export interface Message {
+    _id: string;
+    conversationId: string;
+    senderId: string | User;
+    content: string;
+    contentType: 'text' | 'image' | 'file';
+    attachments: MessageAttachment[];
+    status: MessageStatus;
+    isRead?: boolean;
+    readAt: string | null;
+    createdAt: string;
+}
+
+export interface Conversation {
+    _id: string;
+    participants: (string | User)[];
+    creatorId: string | User;
+    memberId: string | User;
+    isActive: boolean;
+    lastMessage: {
+        content: string;
+        senderId: string;
+        sentAt: string;
+    } | null;
+    unreadCounts: Record<string, number>;
+    createdAt: string;
+    updatedAt?: string;
 }
