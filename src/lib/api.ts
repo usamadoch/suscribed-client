@@ -19,7 +19,8 @@ import {
     Conversation,
     StartConversationPayload,
     Message,
-    SendMessagePayload
+    SendMessagePayload,
+    Notification
 } from "./types";
 
 
@@ -408,13 +409,16 @@ export const uploadApi = {
 // ====================
 
 export const mediaApi = {
-    async getCloudinarySignature(): Promise<{
+    async getCloudinarySignature(folder?: string): Promise<{
         timestamp: number;
         signature: string;
         apiKey: string;
         cloudName: string;
+        folder?: string;
     }> {
-        return fetchApi('/media/cloudinary/signature');
+        // Build query string if folder is provided
+        const query = folder ? `?folder=${encodeURIComponent(folder)}` : '';
+        return fetchApi(`/media/cloudinary/signature${query}`);
     },
 
     async getMuxUploadUrl(): Promise<{

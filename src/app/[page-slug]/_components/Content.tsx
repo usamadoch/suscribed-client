@@ -4,93 +4,77 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
+
 // import { postApi } from "@/lib/api";
-// import { getFullImageUrl } from "@/lib/utils";
+import { getFullImageUrl } from "@/lib/utils";
 import { Post } from "@/lib/types";
+import { useCreatorPage, useCreatorPosts } from "@/hooks/useQueries";
+import Review from "@/components/Review";
 
 type CreatorContentProps = {
     pageSlug: string;
 };
 
 const Content = ({ pageSlug }: CreatorContentProps) => {
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    // Using cached queries
+    const { data: pageData } = useCreatorPage(pageSlug);
+    const { data: postsData, isLoading: isLoadingPosts } = useCreatorPosts(pageSlug);
 
-    // useEffect(() => {
-    //     const fetchPosts = async () => {
-    //         setIsLoading(true);
-    //         try {
-    //             const { posts } = await postApi.getAll({ pageSlug, limit: 5 });
-    //             setPosts(posts);
-    //         } catch (error) {
-    //             console.error("Failed to fetch posts", error);
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     };
+    const { page, isOwner, isMember } = pageData || {};
+    const posts = postsData || [];
 
-    //     if (pageSlug) fetchPosts();
-    // }, [pageSlug]);
+    // Filter posts for home page: text and image posts only
+    const filteredPosts = posts.filter((post: Post) => {
+        return post.postType === 'text' || post.postType === 'image';
+    });
 
-    // const getThumbnail = (post: Post) => {
-    //     if (post.mediaAttachments && post.mediaAttachments.length > 0) {
-    //         return post.mediaAttachments[0].thumbnailUrl || post.mediaAttachments[0].url;
-    //     }
-    //     return "/images/course-photo-1.jpg"; // Default fallback
-    // };
+    const isLocked = (post: Post): boolean => {
+        if (isOwner) return false;
+        if (post.visibility === 'public') return false;
+        if (post.visibility === 'members' && isMember) return false;
+        return true;
+    };
 
     return (
         <div className="pb-20">
+            <h4 className="px-16 text-h4 mb-8">Latest Posts</h4>
 
+            {isLoadingPosts ? (
+                <div className="px-16 text-n-3">Loading posts...</div>
+            ) : filteredPosts.length === 0 ? (
+                <div className="px-16 text-n-3">No posts available.</div>
+            ) : (
+                <div className="px-16 grid grid-cols-1 gap-6 max-w-5xl">
+                    {filteredPosts.map((post) => {
+                        const locked = isLocked(post);
 
-            <h4 className="px-16 text-h4">Latest Posts</h4>
-            <div>
+                        // TextPost or ImagePost logic from CreatorsPostsPage
+                        const images = post.postType === 'image'
+                            ? post.mediaAttachments.map(m => getFullImageUrl(m.url)).filter((url): url is string => !!url)
+                            : undefined;
 
-                <Link
-                    className="mx-16 group flex flex-row w-full max-w-5xl mt-5"
-                    href="/education/course-details"
-                >
-                    <div className="relative h-80 w-1/2 overflow-hidden border border-black">
-                        <Image
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            src="/images/course-photo-1.jpg"
-                            fill
-                            sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33.33vw"
-                            alt=""
-                        />
-                    </div>
-                    {/* <div className="flex flex-col w-1/2 pt-4 px-5 pb-5">
-                            <div className="mb-1 text-h6">Beyond The Game With Jamal Merrell</div>
-                            <div className="mb-3.5 text-sm text-n-3 dark:text-white/75">
-                                School Name
-                                        </div>
+                        const postItem = {
+                            id: post._id,
+                            author: page?.displayName || "",
+                            avatar: getFullImageUrl(page?.avatarUrl) || "/images/content/avatar-1.jpg",
+                            time: new Date(post.createdAt).toLocaleDateString(),
+                            content: post.caption,
+                            images: images
+                        };
 
-                        </div> */}
-
-                    <div className="flex flex-col  w-1/2  pt-4 px-5 pb-5">
-                        {/* <div className="mb-1 text-h6">Beyond The Game With Jamal Merrell</div> */}
-                        <div className="mb-3.5 text-sm text-n-3 dark:text-white/75">
-                            What makes this Video special is that this is the very first time BOHEMIA and Asim Riaz met and finally connect.
-                            Sahi Ayy by Asim Riaz X BOHEMIA. Music by Showkidd.
-                            Video: Shot/Edit - Ruthvik Anil Jadhav Instagram.com/ruthvik._.10
-                            Lyrics: Asim Riaz, Diljan, BOHEMIA.
-
-                        </div>
-                        <div className="flex justify-start gap-5 items-center">
-                            <div className="text-sm flex items-center gap-1">
-                                <Icon name="like" />
-                                36
+                        return (
+                            <div className="w-full" key={post._id}>
+                                <div className="relative">
+                                    <div className={locked ? "blur-sm select-none" : ""}>
+                                        <Review item={postItem} />
+                                    </div>
+                                    {/* Locked overlay could be added here if needed */}
+                                </div>
                             </div>
-                            <div className="text-sm flex items-center gap-1">
-                                <Icon name="comments" />
-                                25
-                            </div>
-                        </div>
-                    </div>
-                </Link>
-
-
-            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 };

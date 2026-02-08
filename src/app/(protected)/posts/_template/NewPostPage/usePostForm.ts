@@ -176,7 +176,7 @@ export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps
         ));
 
         try {
-            const { timestamp, signature, apiKey, cloudName } = await mediaApi.getCloudinarySignature();
+            const { timestamp, signature, apiKey, cloudName } = await mediaApi.getCloudinarySignature('posts');
 
             const formData = new FormData();
             formData.append('file', mediaFile.file);

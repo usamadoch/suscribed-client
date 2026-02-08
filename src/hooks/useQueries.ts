@@ -19,6 +19,7 @@ export const useCreatorPage = (slug?: string) => {
         enabled: !!slug,
         staleTime: 1000 * 60 * 10, // 10 minutes cache for profile info
         refetchOnWindowFocus: false,
+        placeholderData: keepPreviousData,
     });
 };
 
@@ -108,6 +109,7 @@ export const useCreatorPosts = (slug: string) => {
         },
         enabled: !!slug,
         staleTime: 1000 * 60 * 2, // 2 minutes cache for posts
+        placeholderData: keepPreviousData,
     });
 };
 
