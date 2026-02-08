@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Icon from "@/components/Icon";
 import { twMerge } from "tailwind-merge";
 import { useNavigation, NavigationItem } from "@/hooks/useNavigation";
-// import { useSocket } from "@/stores/socket";
+import { useSocket } from "@/store/socket";
 
 type MenuProps = {
     visible?: boolean;
@@ -13,9 +13,7 @@ const Menu = ({ visible }: MenuProps) => {
     const pathname = usePathname();
     const navigationItems = useNavigation();
 
-    // const { unreadCount } = useSocket();
-
-    const unreadCount = 0;
+    const { unreadCount, messageUnreadCount } = useSocket();
 
     return (
         <>
@@ -31,7 +29,7 @@ const Menu = ({ visible }: MenuProps) => {
                     // Add new counters here mapping the URL to the count value
                     const dynamicCounters: Record<string, number> = {
                         "/notifications": unreadCount,
-                        "/messages": 0, // Placeholder for future message count
+                        "/messages": messageUnreadCount,
                     };
 
                     const dynamicCount = dynamicCounters[link.url];

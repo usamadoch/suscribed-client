@@ -83,6 +83,7 @@ export type MediaStatus = 'preparing' | 'ready' | 'errored';
 export interface ImageAttachment extends BaseMediaAttachment {
     type: 'image';
     cloudinaryPublicId?: string;
+    thumbnailUrl?: string;                // Optional: Preview thumbnail
     dimensions: { width: number; height: number };
 }
 
@@ -108,9 +109,10 @@ export type PostVisibility = 'public' | 'members';
 
 interface BasePost {
     _id: string;
-    creatorId: string;
-    pageId: string;
-    caption: string;
+    creatorId: string | { _id: string; displayName?: string; username?: string; avatarUrl?: string | null };
+    pageId: string | { _id: string; pageSlug: string; displayName?: string; avatarUrl?: string | null };
+    caption: string | null;              // Null when post is locked
+    teaser?: string;                     // Present when post is locked
     tags: string[];
     visibility: PostVisibility;
     status: PostStatus;
@@ -123,9 +125,45 @@ interface BasePost {
     isPinned: boolean;
     createdAt: string;
     updatedAt: string;
+    isLocked: boolean;                   // True if user cannot access full content
     // Client specific
-    isLiked?: boolean; // Optional: Injected by client-side aggregation
+    isLiked?: boolean;                   // Optional: Injected by client-side aggregation
 }
+
+/**
+ * Locked media attachment - returned when user doesn't have access
+ * url is null, only thumbnailUrl (blurred preview) is available
+ */
+export interface LockedImageAttachment {
+    type: 'image';
+    url: null;
+    thumbnailUrl?: string;               // Blurred preview URL
+    filename: string;
+    fileSize: number;
+    mimeType: string;
+    dimensions?: { width: number; height: number };
+}
+
+export interface LockedVideoAttachment {
+    type: 'video';
+    url: null;
+    thumbnailUrl?: string;               // Blurred preview URL
+    filename: string;
+    fileSize: number;
+    mimeType: string;
+    dimensions?: { width: number; height: number };
+    muxPlaybackId: null;
+    muxAssetId: null;
+    duration?: number;
+    status?: MediaStatus;
+}
+
+export type LockedMediaAttachment = LockedImageAttachment | LockedVideoAttachment;
+
+/**
+ * Union type that represents any media attachment (locked or unlocked)
+ */
+export type AnyMediaAttachment = MediaAttachment | LockedMediaAttachment;
 
 export interface TextPost extends BasePost {
     postType: 'text';
@@ -134,15 +172,53 @@ export interface TextPost extends BasePost {
 
 export interface ImagePost extends BasePost {
     postType: 'image';
-    mediaAttachments: ImageAttachment[];
+    mediaAttachments: (ImageAttachment | LockedImageAttachment)[];
 }
 
 export interface VideoPost extends BasePost {
     postType: 'video';
-    mediaAttachments: VideoAttachment[];
+    mediaAttachments: (VideoAttachment | LockedVideoAttachment)[];
 }
 
 export type Post = TextPost | ImagePost | VideoPost;
+
+/**
+ * Type guard to check if a post is locked
+ */
+export function isLockedPost(post: Post): boolean {
+    return post.isLocked === true;
+}
+
+/**
+ * Type guard to check if a media attachment is locked (url is null)
+ */
+export function isLockedMedia(
+    attachment: MediaAttachment | LockedMediaAttachment
+): attachment is LockedMediaAttachment {
+    return attachment.url === null;
+}
+
+/**
+ * Type guard to check if a media attachment is unlocked (has url)
+ */
+export function isUnlockedMedia(
+    attachment: MediaAttachment | LockedMediaAttachment
+): attachment is MediaAttachment {
+    return attachment.url !== null;
+}
+
+/**
+ * Helper to get unlocked media attachments from a post.
+ * Use this when you know the post should be unlocked (e.g., in editing contexts).
+ * Returns an empty array if the post is locked.
+ */
+export function getUnlockedMediaAttachments(post: Post): MediaAttachment[] {
+    if (post.isLocked) return [];
+    if (post.postType === 'text') return [];
+
+    // Filter to only unlocked media (which should be all of them if !isLocked)
+    return post.mediaAttachments.filter(isUnlockedMedia);
+}
 
 
 // ====================
@@ -226,9 +302,9 @@ export interface AuthState {
 
 export type PostType = Post['postType'];
 export type CreatePostPayload =
-    | { postType: 'text'; caption: string; mediaAttachments?: never; visibility?: PostVisibility; tags?: string[]; allowComments?: boolean; status?: 'draft' | 'published'; scheduledFor?: string; }
-    | { postType: 'image'; caption?: string; mediaAttachments: ImageAttachment[]; visibility?: PostVisibility; tags?: string[]; allowComments?: boolean; status?: 'draft' | 'published'; scheduledFor?: string; }
-    | { postType: 'video'; caption?: string; mediaAttachments: VideoAttachment[]; visibility?: PostVisibility; tags?: string[]; allowComments?: boolean; status?: 'draft' | 'published'; scheduledFor?: string; };
+    | { _id?: string; postType: 'text'; caption: string; mediaAttachments?: never; visibility?: PostVisibility; tags?: string[]; allowComments?: boolean; status?: 'draft' | 'published'; scheduledFor?: string; }
+    | { _id?: string; postType: 'image'; caption?: string; mediaAttachments: ImageAttachment[]; visibility?: PostVisibility; tags?: string[]; allowComments?: boolean; status?: 'draft' | 'published'; scheduledFor?: string; }
+    | { _id?: string; postType: 'video'; caption?: string; mediaAttachments: VideoAttachment[]; visibility?: PostVisibility; tags?: string[]; allowComments?: boolean; status?: 'draft' | 'published'; scheduledFor?: string; };
 
 export type UpdatePostPayload = Partial<CreatePostPayload>;
 

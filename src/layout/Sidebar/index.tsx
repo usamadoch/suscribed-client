@@ -15,6 +15,8 @@ const Sidebar = ({ }: SidebarProps) => {
     const { user, logout } = useAuth();
     const [visible, setVisible] = useState<boolean>(false);
 
+    console.log(user);
+
     return (
         <div
             className={`fixed top-0 left-0 bottom-0 flex flex-col w-[18.75rem] pt-6 px-8 pb-4.5 bg-n-1 xl:z-30 md:hidden ${visible ? "w-[18.75rem]" : "xl:w-20"

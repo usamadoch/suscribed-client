@@ -4,7 +4,7 @@
 
 // import PostDetailPage from "../_template/PostDetailPage/PostDetailPage";
 
-import PostDetailPage from "../_template/PostDetailPage/PostDetailPage";
+import PostDetailPage from "./_template/PostDetailPage/PostDetailPage";
 
 const PostDetail = () => {
     return (

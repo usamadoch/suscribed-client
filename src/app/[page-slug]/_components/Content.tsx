@@ -1,13 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 
-// import { postApi } from "@/lib/api";
 import { getFullImageUrl } from "@/lib/utils";
-import { Post } from "@/lib/types";
+import { Post, isLockedMedia } from "@/lib/types";
 import { useCreatorPage, useCreatorPosts } from "@/hooks/useQueries";
 import Review from "@/components/Review";
 
@@ -20,20 +17,13 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
     const { data: pageData } = useCreatorPage(pageSlug);
     const { data: postsData, isLoading: isLoadingPosts } = useCreatorPosts(pageSlug);
 
-    const { page, isOwner, isMember } = pageData || {};
+    const { page } = pageData || {};
     const posts = postsData || [];
 
     // Filter posts for home page: text and image posts only
     const filteredPosts = posts.filter((post: Post) => {
         return post.postType === 'text' || post.postType === 'image';
     });
-
-    const isLocked = (post: Post): boolean => {
-        if (isOwner) return false;
-        if (post.visibility === 'public') return false;
-        if (post.visibility === 'members' && isMember) return false;
-        return true;
-    };
 
     return (
         <div className="pb-20">
@@ -46,11 +36,29 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
             ) : (
                 <div className="px-16 grid grid-cols-1 gap-6 max-w-5xl">
                     {filteredPosts.map((post) => {
-                        const locked = isLocked(post);
+                        // Use the backend-provided isLocked flag
+                        const locked = post.isLocked;
 
-                        // TextPost or ImagePost logic from CreatorsPostsPage
-                        const images = post.postType === 'image'
-                            ? post.mediaAttachments.map(m => getFullImageUrl(m.url)).filter((url): url is string => !!url)
+                        // For locked posts, use teaser or show locked message
+                        // For unlocked posts, use the full content
+                        const displayContent = locked
+                            ? post.teaser || 'Exclusive content for members'
+                            : post.caption || '';
+
+                        // For images, handle locked state properly
+                        const images = post.postType === 'image' && !locked
+                            ? post.mediaAttachments
+                                .filter(m => !isLockedMedia(m) && m.url)
+                                .map(m => getFullImageUrl(m.url))
+                                .filter((url): url is string => !!url)
+                            : undefined;
+
+                        // For locked image posts, show blurred thumbnails
+                        const lockedImages = post.postType === 'image' && locked
+                            ? post.mediaAttachments
+                                .filter(m => m.thumbnailUrl)
+                                .map(m => m.thumbnailUrl)
+                                .filter((url): url is string => !!url)
                             : undefined;
 
                         const postItem = {
@@ -58,17 +66,33 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                             author: page?.displayName || "",
                             avatar: getFullImageUrl(page?.avatarUrl) || "/images/content/avatar-1.jpg",
                             time: new Date(post.createdAt).toLocaleDateString(),
-                            content: post.caption,
-                            images: images
+                            content: displayContent,
+                            images: locked ? lockedImages : images,
+                            isLocked: locked,
                         };
 
                         return (
                             <div className="w-full" key={post._id}>
                                 <div className="relative">
-                                    <div className={locked ? "blur-sm select-none" : ""}>
-                                        <Review item={postItem} />
-                                    </div>
-                                    {/* Locked overlay could be added here if needed */}
+                                    <Link href={`/posts/${post._id}`}>
+                                        <div className={locked ? "blur-[2px] select-none pointer-events-none" : ""}>
+                                            <Review item={postItem} />
+                                        </div>
+                                    </Link>
+                                    {locked && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
+                                            <div className="text-center">
+                                                <Icon name="lock" className="w-8 h-8 fill-white mb-2 mx-auto" />
+                                                <p className="text-white font-medium">Members Only</p>
+                                                <Link
+                                                    href={`/${pageSlug}`}
+                                                    className="text-sm text-accent hover:underline"
+                                                >
+                                                    Join to unlock
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         );
@@ -80,3 +104,4 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
 };
 
 export default Content;
+

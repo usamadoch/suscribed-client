@@ -6,7 +6,8 @@ import Icon from "@/components/Icon";
 // import { useAuth } from "@/stores/auth";
 import Field from "@/components/Field";
 import { useAuth } from "@/store/auth";
-import { uploadApi, userApi } from "@/lib/api";
+import { userApi } from "@/lib/api";
+import { useImageUpload } from "@/hooks/useImageUpload";
 
 type AccountFormValues = {
     displayName: string;
@@ -53,6 +54,8 @@ const MemberAccount = () => {
         }
     };
 
+    const { uploadImage, isUploading: isUploadingImage } = useImageUpload();
+
     const onSubmit = async (data: AccountFormValues) => {
         setIsLoading(true);
         setMessage(null);
@@ -62,8 +65,12 @@ const MemberAccount = () => {
 
             // 1. Upload avatar if selected
             if (selectedFile) {
-                const uploaded = await uploadApi.uploadImage(selectedFile);
-                avatarUrl = uploaded.url;
+                const url = await uploadImage(selectedFile, 'avatar');
+                if (url) {
+                    avatarUrl = url;
+                } else {
+                    throw new Error("Failed to upload image");
+                }
             }
 
             // 2. Update User Profile

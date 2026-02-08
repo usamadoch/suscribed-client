@@ -35,7 +35,7 @@ const PostForm = ({ formState, submitLabel = "Post" }: PostFormProps) => {
         <div className="flex lg:block">
             <div className="grow lg:mb-6 lg:bg-transparent lg:p-0 lg:border-none dark:lg:bg-transparent">
                 <form
-                    className="flex  flex-col gap-10 pl-1 py-1 pr-5 bg-white border border-n-1 shadow-primary-4 md:pr-4 dark:bg-n-1 dark:border-white"
+                    className="flex  flex-col  pl-1 py-1 pr-5 bg-white border border-n-1 shadow-primary-4 md:pr-4 dark:bg-n-1 dark:border-white"
                     onSubmit={(e) => {
                         e.preventDefault();
                         handleSubmit();
@@ -58,6 +58,7 @@ const PostForm = ({ formState, submitLabel = "Post" }: PostFormProps) => {
                         openFileSelector={openFileSelector}
                         onFileSelection={handleFileSelection}
                         fileInputRef={fileInputRef}
+                        attachments={attachments}
                     />
                 </form>
             </div>

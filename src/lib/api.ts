@@ -343,65 +343,7 @@ export const membershipApi = {
 
 
 
-// ====================
-// UPLOAD API
-// ====================
 
-
-
-
-export const uploadApi = {
-    async uploadImage(file: File): Promise<UploadedFile> {
-        const formData = new FormData();
-        formData.append('image', file);
-        return fetchApi('/upload/image', {
-            method: 'POST',
-            body: formData,
-        });
-    },
-
-    async uploadImages(files: File[]): Promise<{ files: UploadedFile[] }> {
-        const formData = new FormData();
-        files.forEach((file) => formData.append('images', file));
-        return fetchApi('/upload/images', {
-            method: 'POST',
-            body: formData,
-        });
-    },
-
-    async uploadVideo(file: File): Promise<UploadedFile> {
-        const formData = new FormData();
-        formData.append('video', file);
-        return fetchApi('/upload/video', {
-            method: 'POST',
-            body: formData,
-        });
-    },
-
-    async uploadAudio(file: File): Promise<UploadedFile> {
-        const formData = new FormData();
-        formData.append('audio', file);
-        return fetchApi('/upload/audio', {
-            method: 'POST',
-            body: formData,
-        });
-    },
-
-    async uploadFile(file: File): Promise<UploadedFile> {
-        const formData = new FormData();
-        formData.append('file', file);
-        return fetchApi('/upload/file', {
-            method: 'POST',
-            body: formData,
-        });
-    },
-
-    async deleteFile(type: string, filename: string): Promise<{ message: string }> {
-        return fetchApi(`/uploads/${type}/${filename}`, {
-            method: 'DELETE',
-        });
-    },
-};
 
 
 // ====================
@@ -409,23 +351,35 @@ export const uploadApi = {
 // ====================
 
 export const mediaApi = {
-    async getCloudinarySignature(folder?: string): Promise<{
+    async getCloudinarySignature(type: string, refId?: string): Promise<{
         timestamp: number;
         signature: string;
         apiKey: string;
         cloudName: string;
         folder?: string;
+        public_id?: string;
     }> {
-        // Build query string if folder is provided
-        const query = folder ? `?folder=${encodeURIComponent(folder)}` : '';
-        return fetchApi(`/media/cloudinary/signature${query}`);
+        // Build query string
+        const searchParams = new URLSearchParams();
+        searchParams.set('type', type);
+        if (refId) searchParams.set('refId', refId);
+
+        const query = searchParams.toString();
+        return fetchApi(`/media/cloudinary/signature?${query}`);
     },
 
-    async getMuxUploadUrl(): Promise<{
+    async getMuxUploadUrl(refId?: string): Promise<{
         url: string;
         uploadId: string;
     }> {
-        return fetchApi('/media/mux/upload-url');
+        const query = refId ? `?refId=${refId}` : '';
+        return fetchApi(`/media/mux/upload-url${query}`);
+    },
+
+    async deleteMedia(type: 'image' | 'video', id: string): Promise<{ message: string }> {
+        return fetchApi(`/media/${type}/${encodeURIComponent(id)}`, {
+            method: 'DELETE',
+        });
     },
 };
 
@@ -701,5 +655,9 @@ export const conversationApi = {
         return fetchApi(`/conversations/${conversationId}/messages/${messageId}/read`, {
             method: 'PUT',
         });
+    },
+
+    async getUnreadCount(): Promise<{ count: number }> {
+        return fetchApi('/conversations/unread-count');
     },
 };

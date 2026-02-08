@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -8,8 +7,6 @@ import { useCreatorPage, useCreatorPosts } from "@/hooks/useQueries";
 import { usePageSlug } from "@/hooks/usePageSlug";
 
 import Icon from "@/components/Icon";
-import Review from "@/components/Review";
-import Tabs from "@/components/Tabs";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 import { getFullImageUrl } from "@/lib/utils";
@@ -36,20 +33,13 @@ const CreatorsPostsPage = () => {
         notFound();
     }
 
-    const { page, isOwner, isMember } = pageData;
+    const { page } = pageData;
     const posts = postsData || [];
 
     // Filter posts: only video posts for this page
     const filteredPosts = posts.filter((post: Post) => {
         return post.postType === 'video';
     });
-
-    const isLocked = (post: Post): boolean => {
-        if (isOwner) return false;
-        if (post.visibility === 'public') return false;
-        if (post.visibility === 'members' && isMember) return false;
-        return true;
-    };
 
     return (
         <>
@@ -69,26 +59,58 @@ const CreatorsPostsPage = () => {
                     ) : (
                         <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                             {filteredPosts.map((post) => {
-                                const locked = isLocked(post);
+                                // Use the backend-provided isLocked flag
+                                const locked = post.isLocked;
 
-                                // It's a VideoPost
+                                // Get thumbnail URL (blurred for locked, normal for unlocked)
+                                const thumbnailUrl = post.mediaAttachments[0]?.thumbnailUrl;
+
+                                // Display content: teaser for locked, caption for unlocked
+                                const displayCaption = locked
+                                    ? post.teaser || 'Exclusive content'
+                                    : post.caption || 'Untitled video';
+
                                 return (
                                     <Link
                                         href={`/posts/${post._id}`}
-                                        target="_blank" key={post._id}
+                                        key={post._id}
                                         className="card group"
                                     >
-                                        <div className="relative aspect-video bg-n-2 overflow-hidden ">
-                                            {/* {locked ? (
-                                                <LockedContent type="overlay" text="Join to unlock this content" />
-                                            ) : null} */}
+                                        <div className="relative aspect-video bg-n-2 overflow-hidden">
+                                            {/* Video thumbnail or placeholder */}
+                                            {thumbnailUrl ? (
+                                                <img
+                                                    src={thumbnailUrl}
+                                                    alt={displayCaption}
+                                                    className={`w-full h-full object-cover ${locked ? 'blur-sm' : ''}`}
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center bg-black">
+                                                    <Icon name="video" className="w-12 h-12 fill-white/80 group-hover:scale-110 transition-transform duration-300" />
+                                                </div>
+                                            )}
 
-                                            <div className="w-full h-full flex items-center justify-center bg-black">
-                                                <Icon name="video" className="w-12 h-12 fill-white/80 group-hover:scale-110 transition-transform duration-300" />
-                                            </div>
+                                            {/* Locked overlay */}
+                                            {locked && (
+                                                <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                                                    <div className="text-center">
+                                                        <Icon name="lock" className="w-8 h-8 fill-white mb-2 mx-auto" />
+                                                        <p className="text-white text-sm font-medium">Members Only</p>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Play button overlay for unlocked videos */}
+                                            {!locked && (
+                                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <Icon name="play" className="w-12 h-12 fill-white" />
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="p-5">
-                                            <h4 className="text-sm font-semibold truncate mb-2">{post.caption}</h4>
+                                            <h4 className="text-sm font-semibold truncate mb-2">
+                                                {displayCaption}
+                                            </h4>
                                             <div className="flex items-center text-xs text-n-3">
                                                 <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                                                 <span className="mx-2">•</span>
@@ -96,6 +118,15 @@ const CreatorsPostsPage = () => {
                                                     <Icon name="like" className="w-3 h-3 mr-1 fill-n-3" />
                                                     {post.likeCount}
                                                 </span>
+                                                {locked && (
+                                                    <>
+                                                        <span className="mx-2">•</span>
+                                                        <span className="flex items-center text-accent">
+                                                            <Icon name="lock" className="w-3 h-3 mr-1 fill-accent" />
+                                                            Locked
+                                                        </span>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                     </Link>
@@ -110,3 +141,4 @@ const CreatorsPostsPage = () => {
 };
 
 export default CreatorsPostsPage;
+

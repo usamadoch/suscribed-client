@@ -31,7 +31,7 @@ const MessagesPage = () => {
     const recipientId = searchParams.get("to");
 
     const { user } = useAuth();
-    const { socket, isConnected } = useSocket();
+    const { socket, isConnected, setIsOnMessagesPage, resetMessageUnreadCount } = useSocket();
     const [visible, setVisible] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [activeId, setActiveId] = useState<string | null>(null);
@@ -51,6 +51,18 @@ const MessagesPage = () => {
     });
 
     const conversations = conversationsData || [];
+
+    // Handle messages page visibility and reset unread count
+    // When user enters: reset badge to 0 and mark as "on page"
+    // When user leaves: mark as "off page" so new messages increment badge again
+    useEffect(() => {
+        setIsOnMessagesPage(true);
+        resetMessageUnreadCount();
+
+        return () => {
+            setIsOnMessagesPage(false);
+        };
+    }, [setIsOnMessagesPage, resetMessageUnreadCount]);
 
     // Fetch recipient user if needed (when not in existing conversations)
     const {

@@ -1,8 +1,7 @@
 "use client"
 
 import Layout from "@/layout";
-// import Layout from "@/components/Layout";
-// import PostForm from "./components/PostForm";
+
 import { usePostForm } from "./usePostForm";
 import PostForm from "./components/PostForm";
 

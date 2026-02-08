@@ -4,28 +4,32 @@ import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { create } from 'zustand';
 import { useAuth } from './auth';
-// import { api } from '@/lib/api';
 import { useQueryClient } from '@tanstack/react-query';
 import { Notification } from '@/lib/types';
-import { notificationApi } from '@/lib/api';
-// import type { Notification } from '@/types';
+import { notificationApi, conversationApi } from '@/lib/api';
 
 interface SocketState {
     socket: Socket | null;
     isConnected: boolean;
     notifications: Notification[];
     unreadCount: number;
+    messageUnreadCount: number;
     activeConversationId: string | null;
+    isOnMessagesPage: boolean;
     // Actions
     setSocket: (socket: Socket | null) => void;
     setIsConnected: (connected: boolean) => void;
     setActiveConversationId: (id: string | null) => void;
+    setIsOnMessagesPage: (isOn: boolean) => void;
     addNotification: (notification: Notification) => void;
     markAsRead: (id: string) => void;
     markAllAsReadLocal: () => void;
     clearNotifications: () => void;
     setNotifications: (notifications: Notification[]) => void;
     setUnreadCount: (count: number) => void;
+    setMessageUnreadCount: (count: number) => void;
+    incrementMessageUnreadCount: () => void;
+    resetMessageUnreadCount: () => void;
 }
 
 export const useSocketStore = create<SocketState>((set) => ({
@@ -33,30 +37,29 @@ export const useSocketStore = create<SocketState>((set) => ({
     isConnected: false,
     notifications: [],
     unreadCount: 0,
+    messageUnreadCount: 0,
     activeConversationId: null,
+    isOnMessagesPage: false,
     setSocket: (socket) => set({ socket }),
     setIsConnected: (isConnected) => set({ isConnected }),
     setActiveConversationId: (id) => set({ activeConversationId: id }),
+    setIsOnMessagesPage: (isOnMessagesPage) => set({ isOnMessagesPage }),
     addNotification: (notification) => set((state) => {
-        // Suppress message notifications if user is currently viewing that conversation
-        const notifConversationId = notification.metadata?.conversationId || notification.relatedId;
-        if (notification.type === 'new_message' && notifConversationId === state.activeConversationId) {
+        // Skip message notifications - we use messageUnreadCount for those
+        if (notification.type === 'new_message') {
             return { notifications: state.notifications, unreadCount: state.unreadCount };
         }
 
         const existingIndex = state.notifications.findIndex(n => n._id === notification._id);
 
         if (existingIndex !== -1) {
-            // Update existing notification
             const updatedNotifications = [...state.notifications];
             updatedNotifications[existingIndex] = notification;
-            // Move to top if updated? Or keep position? Usually move to top.
             updatedNotifications.splice(existingIndex, 1);
             updatedNotifications.unshift(notification);
 
             return {
                 notifications: updatedNotifications,
-                // Unread count doesn't change if we are just updating an existing unread one
                 unreadCount: state.unreadCount
             };
         }
@@ -82,6 +85,11 @@ export const useSocketStore = create<SocketState>((set) => ({
     clearNotifications: () => set({ notifications: [], unreadCount: 0 }),
     setNotifications: (notifications) => set({ notifications }),
     setUnreadCount: (unreadCount) => set({ unreadCount }),
+    setMessageUnreadCount: (messageUnreadCount) => set({ messageUnreadCount }),
+    incrementMessageUnreadCount: () => set((state) => ({
+        messageUnreadCount: state.messageUnreadCount + 1
+    })),
+    resetMessageUnreadCount: () => set({ messageUnreadCount: 0 }),
 }));
 
 const SOCKET_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
@@ -94,8 +102,8 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         setIsConnected,
         addNotification,
         setUnreadCount,
+        setMessageUnreadCount,
         socket: currentSocket,
-        activeConversationId
     } = useSocketStore();
 
     useEffect(() => {
@@ -119,33 +127,49 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         });
 
         newSocket.on('connect', () => {
-            console.log('Socket connected');
             setIsConnected(true);
-            // Fetch initial unread count
+
+            // Fetch initial notification unread count
             notificationApi.getUnreadCount()
                 .then(res => setUnreadCount(res.count))
-                .catch(err => console.error('Failed to fetch unread count', err));
+                .catch(err => console.error('Failed to fetch notification unread count', err));
+
+            // Fetch initial message unread count
+            conversationApi.getUnreadCount()
+                .then(res => setMessageUnreadCount(res.count))
+                .catch(err => console.error('Failed to fetch message unread count', err));
         });
 
         newSocket.on('disconnect', () => {
-            console.log('Socket disconnected');
             setIsConnected(false);
         });
 
+        // Handle general notifications (excluding messages)
         newSocket.on('notification', (notification: Notification) => {
-            console.log('Received notification:', notification);
-
-            // Check active conversation here as well for redundancy, though store action handles strictly local state updates
-            // But we might want to avoid invalidating queries if it's suppressed
-            const currentActiveId = useSocketStore.getState().activeConversationId;
-            const notifConversationId = notification.metadata?.conversationId || notification.relatedId;
-
-            if (notification.type === 'new_message' && notifConversationId === currentActiveId) {
+            // Skip message notifications - those are handled separately
+            if (notification.type === 'new_message') {
                 return;
             }
 
             addNotification(notification);
             queryClient.invalidateQueries({ queryKey: ['notifications'] });
+        });
+
+        // Handle new message notifications for sidebar badge
+        newSocket.on('new_message_notification', ({ conversationId }: { conversationId: string; message: any }) => {
+            const state = useSocketStore.getState();
+
+            // Don't increment if user is on the messages page
+            if (state.isOnMessagesPage) {
+                queryClient.invalidateQueries({ queryKey: ['conversations'] });
+                return;
+            }
+
+            // Increment unread count for sidebar badge
+            useSocketStore.getState().incrementMessageUnreadCount();
+
+            // Invalidate conversations query to update last message preview
+            queryClient.invalidateQueries({ queryKey: ['conversations'] });
         });
 
         newSocket.on('connect_error', (error: any) => {

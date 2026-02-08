@@ -41,7 +41,7 @@ const NewPostSettings = ({
 
     const getButtonText = () => {
         if (isSubmitting) return <Loader />;
-        if (isUploading) return <span>Uploading...</span>;
+        // if (isUploading) return <span>Uploading...</span>;
         if (hasUploadError) return <span>Fix Errors</span>;
         return <span>Publish</span>;
     };

@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { pageApi, uploadApi } from '@/lib/api';
+import { pageApi, mediaApi } from '@/lib/api';
 
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -30,34 +30,67 @@ export const usePageImageUpload = ({ onUploadSuccess }: UsePageImageUploadProps 
 
         setUploadingType(type);
         try {
-            const uploadedFile = await uploadApi.uploadImage(file);
-            if (uploadedFile?.url) {
+            // 1. Get signature from backend
+            // We use user-level types: 'banner' or 'avatar'
+            const signatureData = await mediaApi.getCloudinarySignature(type);
+
+            // 2. Prepare FormData for Cloudinary
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('api_key', signatureData.apiKey);
+            formData.append('timestamp', signatureData.timestamp.toString());
+            formData.append('signature', signatureData.signature);
+
+            // IMPORTANT: If public_id is signed, it MUST be included in the upload
+            if (signatureData.public_id) {
+                formData.append('public_id', signatureData.public_id);
+            }
+            // Only append folder if we're NOT using public_id (folder is baked into public_id path)
+            if (signatureData.folder && !signatureData.public_id) {
+                formData.append('folder', signatureData.folder);
+            }
+
+            // 3. Upload directly to Cloudinary
+            const uploadUrl = `https://api.cloudinary.com/v1_1/${signatureData.cloudName}/image/upload`;
+
+            const response = await fetch(uploadUrl, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || 'Upload failed');
+            }
+
+            const data = await response.json();
+            const imageUrl = data.secure_url;
+
+            // 4. Update backend with new URL
+            if (imageUrl) {
                 // Apply cache busting for immediate update
-                const newUrl = `${uploadedFile.url}?t=${Date.now()}`;
+                const newUrl = `${imageUrl}`; // Cloudinary URLs are usually stable, maybe add timestamp if needed for react re-renders but usually not needed if URL changes. 
+                // Actually, if we overwrite, URL might be same. But here we get a new public_id usually unless we force same name.
+                // Let's assume new URL for now.
 
                 if (type === 'banner') setOptimisticBanner(newUrl);
                 else setOptimisticAvatar(newUrl);
 
-                // Update backend
-                // Note: We use pageApi.updateMyPage here which assumes the context is "My Page"
-                // For public page editing, this hook might need to be adapted or 'updateMyPage' needs to be swappable.
-                // However, user specifically asked for this functionality 'in /[publicSlug]' which implies editing.
-                // Assuming the user is the owner editing their page, updateMyPage is correct.
                 const payload = type === 'banner'
-                    ? { bannerUrl: uploadedFile.url }
-                    : { avatarUrl: uploadedFile.url };
+                    ? { bannerUrl: imageUrl }
+                    : { avatarUrl: imageUrl };
 
                 await pageApi.updateMyPage(payload);
 
                 if (onUploadSuccess) {
-                    onUploadSuccess(type, uploadedFile.url);
+                    onUploadSuccess(type, imageUrl);
                 }
 
                 return newUrl;
             }
         } catch (error) {
             console.error(`Failed to upload ${type}`, error);
-            alert(`Failed to upload ${type}`);
+            alert(`Failed to upload ${type}: ${error instanceof Error ? error.message : 'Unknown error'}`);
         } finally {
             setUploadingType(null);
         }

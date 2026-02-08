@@ -28,16 +28,22 @@ const MuxVideoPlayer = ({
     className = "",
     autoPlay = false,
 }: MuxVideoPlayerProps) => {
-    // Show Mux player when ready with playbackId
-    if (playbackId && status === "ready") {
+    // Show Mux player if ready OR if we have a local source (to use Mux UI for pending videos)
+    if ((playbackId && status === "ready") || fallbackSrc) {
         return (
             <Suspense fallback={<div className={`bg-n-2 dark:bg-n-1 animate-pulse ${className}`} />}>
                 <MuxPlayer
-                    playbackId={playbackId}
+                    playbackId={status === "ready" ? playbackId : undefined}
+                    src={status === "ready" ? undefined : fallbackSrc}
                     streamType="on-demand"
                     autoPlay={autoPlay}
                     className={className}
-                    style={{ width: "100%", height: "100%" }}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        "--media-accent-color": "#ae7affe6",
+                        "--media-range-bar-color": "#ae7affe6",
+                    }}
                 />
             </Suspense>
         );
@@ -55,17 +61,7 @@ const MuxVideoPlayer = ({
         );
     }
 
-    // Fallback to native video for local preview (during upload or before Mux ready)
-    if (fallbackSrc) {
-        return (
-            <video
-                src={fallbackSrc}
-                className={`object-contain ${className}`}
-                controls
-                playsInline
-            />
-        );
-    }
+    // Native video fallback removed - MuxPlayer handles fallbackSrc now
 
     // Show processing indicator when no fallback available (post detail page while Mux processes)
     // This happens after post is created but before Mux webhook updates with playbackId
