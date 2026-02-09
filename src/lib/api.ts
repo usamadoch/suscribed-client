@@ -661,3 +661,88 @@ export const conversationApi = {
         return fetchApi('/conversations/unread-count');
     },
 };
+
+
+// ====================
+// ANALYTICS API
+// ====================
+
+export interface AnalyticsOverview {
+    totalMembers: number;
+    newMembers: number;
+    memberGrowth: number;
+    totalViews: number;
+    viewGrowth: number;
+    totalPosts: number;
+    totalLikes: number;
+    totalComments: number;
+    engagementRate: number;
+}
+
+export interface MemberGrowthData {
+    _id: string; // Date string YYYY-MM-DD
+    count: number;
+}
+
+
+
+export interface PostAnalytics {
+    _id: string;
+    title?: string;
+    caption?: string;
+    viewCount: number;
+    likeCount: number;
+    commentCount: number;
+    publishedAt: string | null;
+    mediaAttachments?: {
+        type: 'image' | 'video';
+        url: string;
+    }[];
+}
+
+export interface EngagementBreakdown {
+    breakdown: {
+        likes: number;
+        comments: number;
+        views: number;
+    };
+    percentages: {
+        likes: number | string;
+        comments: number | string;
+    };
+}
+
+import { TimeRange } from "./types";
+
+interface AnalyticsParams {
+    days?: TimeRange;
+}
+
+export const analyticsApi = {
+    async getOverview(params: AnalyticsParams = {}): Promise<AnalyticsOverview> {
+        const searchParams = new URLSearchParams();
+        if (params.days) searchParams.set('days', String(params.days));
+        const query = searchParams.toString();
+        return fetchApi(`/analytics/overview${query ? `?${query}` : ''}`);
+    },
+
+    async getMembers(params: AnalyticsParams = {}): Promise<{
+        dailyGrowth: MemberGrowthData[];
+    }> {
+        const searchParams = new URLSearchParams();
+        if (params.days) searchParams.set('days', String(params.days));
+        const query = searchParams.toString();
+        return fetchApi(`/analytics/members${query ? `?${query}` : ''}`);
+    },
+
+    async getPosts(): Promise<{
+        topPosts: PostAnalytics[];
+        recentPosts: PostAnalytics[];
+    }> {
+        return fetchApi('/analytics/posts');
+    },
+
+    async getEngagement(): Promise<EngagementBreakdown> {
+        return fetchApi('/analytics/engagement');
+    },
+};

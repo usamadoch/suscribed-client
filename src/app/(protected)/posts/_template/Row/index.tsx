@@ -11,13 +11,23 @@ import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 
 import { getFullImageUrl } from "@/lib/utils";
-import { Post } from "@/lib/types";
+
+
+interface RowItem {
+    _id: string;
+    caption?: string | null;
+    mediaAttachments?: { type: string; url?: string | null }[];
+    viewCount?: number;
+    likeCount?: number;
+    commentCount?: number;
+}
 
 type RowProps = {
-    item: Post;
+    item: RowItem;
+    showActions?: boolean;
 };
 
-const Row = ({ item }: RowProps) => {
+const Row = ({ item, showActions = true }: RowProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const { mutate: deletePost, isPending } = useDeletePost();
 
@@ -83,48 +93,51 @@ const Row = ({ item }: RowProps) => {
                 </td>
 
 
-                <td className="td-custom py-3.5 text-right">
-                    <Menu as="div" className="relative inline-block text-left">
-                        <MenuButton className="btn-stroke btn-small btn-square">
-                            <Icon name="dots" />
-                        </MenuButton>
-                        <Transition
-                            enter="transition duration-100 ease-out"
-                            enterFrom="transform scale-95 opacity-0"
-                            enterTo="transform scale-100 opacity-100"
-                            leave="transition duration-75 ease-out"
-                            leaveFrom="transform scale-100 opacity-100"
-                            leaveTo="transform scale-95 opacity-0"
-                        >
-                            <MenuItems className="absolute right-0 mt-2 w-48 origin-top-right bg-white border border-n-1 rounded-sm shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
-                                <MenuItem>
-                                    {({ active }) => (
-                                        <Link
-                                            href={`/posts/${item._id}/edit`}
-                                            className={`flex items-center w-full px-4 py-2 text-sm font-bold transition-colors ${active ? "bg-n-3/10 dark:bg-white/20" : ""
-                                                } text-n-1 dark:text-white`}
-                                        >
-                                            <Icon className="mr-3 fill-n-1 dark:fill-white icon-18" name="edit" />
-                                            Edit
-                                        </Link>
-                                    )}
-                                </MenuItem>
-                                <MenuItem>
-                                    {({ active }) => (
-                                        <button
-                                            className={`flex items-center w-full px-4 py-2 text-sm font-bold transition-colors ${active ? "bg-n-3/10 dark:bg-white/20" : ""
-                                                } text-pink-1`}
-                                            onClick={() => setIsOpen(true)}
-                                        >
-                                            <Icon className="mr-3 fill-pink-1 icon-18" name="trash" />
-                                            Delete
-                                        </button>
-                                    )}
-                                </MenuItem>
-                            </MenuItems>
-                        </Transition>
-                    </Menu>
-                </td>
+
+                {showActions && (
+                    <td className="td-custom py-3.5 text-right">
+                        <Menu as="div" className="relative inline-block text-left">
+                            <MenuButton className="btn-stroke btn-small btn-square">
+                                <Icon name="dots" />
+                            </MenuButton>
+                            <Transition
+                                enter="transition duration-100 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-100 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0"
+                            >
+                                <MenuItems className="absolute right-0 mt-2 w-48 origin-top-right bg-white border border-n-1 rounded-sm shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
+                                    <MenuItem>
+                                        {({ active }) => (
+                                            <Link
+                                                href={`/posts/${item._id}/edit`}
+                                                className={`flex items-center w-full px-4 py-2 text-sm font-bold transition-colors ${active ? "bg-n-3/10 dark:bg-white/20" : ""
+                                                    } text-n-1 dark:text-white`}
+                                            >
+                                                <Icon className="mr-3 fill-n-1 dark:fill-white icon-18" name="edit" />
+                                                Edit
+                                            </Link>
+                                        )}
+                                    </MenuItem>
+                                    <MenuItem>
+                                        {({ active }) => (
+                                            <button
+                                                className={`flex items-center w-full px-4 py-2 text-sm font-bold transition-colors ${active ? "bg-n-3/10 dark:bg-white/20" : ""
+                                                    } text-pink-1`}
+                                                onClick={() => setIsOpen(true)}
+                                            >
+                                                <Icon className="mr-3 fill-pink-1 icon-18" name="trash" />
+                                                Delete
+                                            </button>
+                                        )}
+                                    </MenuItem>
+                                </MenuItems>
+                            </Transition>
+                        </Menu>
+                    </td>
+                )}
             </tr>
 
             <Modal

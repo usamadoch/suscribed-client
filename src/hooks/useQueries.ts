@@ -207,3 +207,69 @@ export const useMarkNotificationsAsRead = () => {
         },
     });
 };
+
+
+// ======================
+// ANALYTICS QUERIES
+// ======================
+
+import { analyticsApi } from "@/lib/api";
+
+import { TimeRange } from "@/lib/types";
+
+// Hook to fetch Analytics Overview
+export const useAnalyticsOverview = (days: TimeRange = 30) => {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: ['analytics-overview', days, user?._id],
+        queryFn: async () => {
+            return await analyticsApi.getOverview({ days });
+        },
+        enabled: !!user && (user.role === 'creator' || user.role === 'admin'),
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        gcTime: 1000 * 60 * 10, // 10 minutes garbage collection time
+    });
+};
+
+// Hook to fetch Member Analytics
+export const useAnalyticsMembers = (days: TimeRange = 30) => {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: ['analytics-members', days, user?._id],
+        queryFn: async () => {
+            return await analyticsApi.getMembers({ days });
+        },
+        enabled: !!user && (user.role === 'creator' || user.role === 'admin'),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 10,
+    });
+};
+
+// Hook to fetch Post Analytics
+export const useAnalyticsPosts = () => {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: ['analytics-posts', user?._id],
+        queryFn: async () => {
+            return await analyticsApi.getPosts();
+        },
+        enabled: !!user && (user.role === 'creator' || user.role === 'admin'),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 10,
+    });
+};
+
+// Hook to fetch Engagement Analytics
+export const useAnalyticsEngagement = () => {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: ['analytics-engagement', user?._id],
+        queryFn: async () => {
+            return await analyticsApi.getEngagement();
+        },
+        enabled: !!user && (user.role === 'creator' || user.role === 'admin'),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 10,
+    });
+};
+

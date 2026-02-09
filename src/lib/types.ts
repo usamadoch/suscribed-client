@@ -14,6 +14,8 @@ export type Permission =
     | 'security:manage'
     | 'admin:access';
 
+export type TimeRange = 7 | 30 | 90;
+
 
 
 export type SocialPlatform = 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'discord' | 'website' | 'facebook' | 'linkedin' | 'pinterest' | 'x' | 'other';
