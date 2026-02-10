@@ -6,8 +6,8 @@ type CommentProps = {
     className?: string;
     avatar?: string;
     placeholder: string;
-    value: any;
-    setValue: any;
+    value: string;
+    setValue: React.ChangeEventHandler<HTMLTextAreaElement>;
     onSend?: () => void;
     disabled?: boolean;
 };

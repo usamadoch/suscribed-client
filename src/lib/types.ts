@@ -103,6 +103,19 @@ export interface VideoAttachment extends BaseMediaAttachment {
 export type MediaAttachment = ImageAttachment | VideoAttachment;
 
 // ====================
+// COMMENT TYPES
+// ====================
+
+export interface Comment {
+    _id: string;
+    postId: string;
+    authorId: string | User;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+// ====================
 // POST TYPES
 // ====================
 
@@ -111,8 +124,8 @@ export type PostVisibility = 'public' | 'members';
 
 interface BasePost {
     _id: string;
-    creatorId: string | { _id: string; displayName?: string; username?: string; avatarUrl?: string | null };
-    pageId: string | { _id: string; pageSlug: string; displayName?: string; avatarUrl?: string | null };
+    creatorId: string | Pick<User, '_id' | 'displayName' | 'username' | 'avatarUrl'>;
+    pageId: string | Pick<CreatorPage, '_id' | 'pageSlug' | 'displayName' | 'avatarUrl'>;
     caption: string | null;              // Null when post is locked
     teaser?: string;                     // Present when post is locked
     tags: string[];

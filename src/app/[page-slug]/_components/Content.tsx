@@ -1,5 +1,4 @@
-"use client";
-
+import { useState } from "react";
 import Link from "next/link";
 import Icon from "@/components/Icon";
 
@@ -7,6 +6,7 @@ import { getFullImageUrl } from "@/lib/utils";
 import { Post, isLockedMedia } from "@/lib/types";
 import { useCreatorPage, useCreatorPosts } from "@/hooks/useQueries";
 import Review from "@/components/Review";
+import PostModal from "@/components/PostModal";
 
 type CreatorContentProps = {
     pageSlug: string;
@@ -19,6 +19,8 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
 
     const { page } = pageData || {};
     const posts = postsData || [];
+
+    const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
     // Filter posts for home page: text and image posts only
     const filteredPosts = posts.filter((post: Post) => {
@@ -68,17 +70,21 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                             time: new Date(post.createdAt).toLocaleDateString(),
                             content: displayContent,
                             images: locked ? lockedImages : images,
+                            likes: post.likeCount || 0,
+                            comments: post.commentCount || 0,
+                            isLiked: !!post.isLiked,
                             isLocked: locked,
                         };
 
                         return (
                             <div className="w-full" key={post._id}>
                                 <div className="relative">
-                                    <Link href={`/posts/${post._id}`}>
-                                        <div className={locked ? "blur-[2px] select-none pointer-events-none" : ""}>
-                                            <Review item={postItem} />
-                                        </div>
-                                    </Link>
+                                    <div
+                                        className={`cursor-pointer ${locked ? "blur-[2px] select-none pointer-events-none" : ""}`}
+                                        onClick={() => !locked && setSelectedPost(post)}
+                                    >
+                                        <Review item={postItem} />
+                                    </div>
                                     {locked && (
                                         <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
                                             <div className="text-center">
@@ -99,6 +105,12 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                     })}
                 </div>
             )}
+
+            <PostModal
+                visible={!!selectedPost}
+                post={selectedPost}
+                onClose={() => setSelectedPost(null)}
+            />
         </div>
     );
 };

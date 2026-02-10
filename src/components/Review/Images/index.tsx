@@ -28,7 +28,7 @@ const Images = ({ items, imageBig }: ImagesProps) => {
 
     return (
         <div className={`relative mt-4 group w-full ${imageBig ? "h-[20rem]" : "h-[30rem]"}`}>
-            <div className="w-full h-full relative border border-n-1 dark:border-white rounded-lg overflow-hidden">
+            <div className="w-full h-full relative border border-n-1 dark:border-white overflow-hidden">
                 <Image
                     className="object-contin"
                     src={items[currentIndex]}

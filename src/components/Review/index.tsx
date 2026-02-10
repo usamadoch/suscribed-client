@@ -1,14 +1,19 @@
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Images from "./Images";
+import Actions from "./Actions";
 
 
 type ReviewItem = {
+    id: string;
     avatar: string;
     author: string;
     time: string;
     content: string;
     images?: string[];
+    likes: number;
+    comments: number;
+    isLiked: boolean;
 }
 
 type ReviewProps = {
@@ -46,6 +51,14 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                 {item.images && (
                     <Images items={item.images} imageBig={imageBig} />
                 )}
+
+
+                <Actions
+                    postId={item.id}
+                    comments={item.comments}
+                    likes={item.likes}
+                    isLiked={item.isLiked}
+                />
 
             </div>
         </div>

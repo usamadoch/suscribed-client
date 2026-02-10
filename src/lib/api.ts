@@ -12,6 +12,7 @@ import {
     JoinMembershipPayload,
     UploadedFile,
     Post,
+    Comment,
     CreatePostPayload,
     UpdatePostPayload,
     CreateCommentPayload,

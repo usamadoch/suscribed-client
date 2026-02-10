@@ -11,7 +11,7 @@ type ModalProps = {
     title?: string;
     visible: boolean;
     onClose: () => void;
-    initialFocus?: any;
+    initialFocus?: React.MutableRefObject<HTMLElement | null>;
     children: React.ReactNode;
     video?: boolean;
 };
@@ -83,7 +83,10 @@ const Modal = ({
                                     : ""
                                 } ${classButtonClose}`
                             )}
-                            onClick={onClose}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onClose();
+                            }}
                         >
                             <Icon
                                 className="fill-inherit transition-colors"
