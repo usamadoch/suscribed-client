@@ -24,6 +24,9 @@ import { MediaAttachment, isUnlockedMedia, AnyMediaAttachment } from "@/lib/type
 import CreatorHeader from "@/layout/CreatorHeader";
 
 
+
+import Actions from "@/components/Review/Actions";
+
 const PostDetailPage = () => {
     const params = useParams<{ id: string }>();
     const postId = params.id as string;
@@ -114,11 +117,11 @@ const PostDetailPage = () => {
                     <div className="w-full">
                         {/* Media Gallery */}
                         {mediaItems.length > 0 && locked ? (
-                            <div className="relative w-full h-[512px] bg-n-2 mb-6 rounded-2xl overflow-hidden">
+                            <div className="relative w-full h-[512px] bg-n-2 mb-6 overflow-hidden">
                                 <LockedContent type="overlay" text="Join to unlock this content" />
                                 {/* Show blurred thumbnail from backend (already blurred by Cloudinary) */}
                                 <Image
-                                    className="object-cover scale-105 opacity-50"
+                                    className="object-contain "
                                     src={mediaItems[0].thumbnailUrl || "/images/img-1.jpg"}
                                     fill
                                     alt="Locked content preview"
@@ -140,6 +143,17 @@ const PostDetailPage = () => {
                         )}
 
                         <div className="max-w-4xl mx-auto p-5">
+                            {!locked && (
+                                <div className="flex justify-end">
+                                    <Actions
+                                        postId={post._id}
+                                        likes={post.likeCount}
+                                        comments={post.commentCount}
+                                        isLiked={post.isLiked || false}
+                                        className="mb-4"
+                                    />
+                                </div>
+                            )}
                             <div className="relative">
                                 <div className={`text-sm whitespace-pre-wrap mb-6 text-n-1 dark:text-white ${locked ? "blur-xs select-none" : ""}`}>
                                     {displayCaption}
@@ -150,7 +164,6 @@ const PostDetailPage = () => {
                                 <span>{new Date(post.publishedAt || post.createdAt).toLocaleDateString()}</span>
                                 <div className="flex gap-4">
                                     <span>{post.viewCount} views</span>
-                                    <span>{post.likeCount} likes</span>
                                 </div>
                             </div>
 
@@ -177,7 +190,8 @@ const PostDetailPage = () => {
                     </div>
 
                 </>
-            )}
+            )
+            }
         </>
     );
 };

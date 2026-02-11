@@ -1,12 +1,17 @@
+
 import { useState } from "react";
 import Link from "next/link";
+import { toast } from "react-hot-toast";
 import Icon from "@/components/Icon";
 
 import { getFullImageUrl } from "@/lib/utils";
-import { Post, isLockedMedia } from "@/lib/types";
-import { useCreatorPage, useCreatorPosts } from "@/hooks/useQueries";
+import { Post, isLockedMedia, CreatorPage } from "@/lib/types";
+import { useAuth } from "@/store/auth";
+import { useCreatorPage, useCreatorPosts, useJoinPage } from "@/hooks/useQueries";
 import Review from "@/components/Review";
 import PostModal from "@/components/PostModal";
+import LoginModal from "@/components/LoginModal";
+import JoinMembershipModal from "@/components/JoinMembershipModal";
 
 type CreatorContentProps = {
     pageSlug: string;
@@ -16,16 +21,44 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
     // Using cached queries
     const { data: pageData } = useCreatorPage(pageSlug);
     const { data: postsData, isLoading: isLoadingPosts } = useCreatorPosts(pageSlug);
+    const { isAuthenticated } = useAuth();
+    const { mutate: joinPage, isPending: isJoining } = useJoinPage();
 
     const { page } = pageData || {};
     const posts = postsData || [];
 
     const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+    const [loginModalVisible, setLoginModalVisible] = useState(false);
+    const [joinModalVisible, setJoinModalVisible] = useState(false);
 
     // Filter posts for home page: text and image posts only
     const filteredPosts = posts.filter((post: Post) => {
         return post.postType === 'text' || post.postType === 'image';
     });
+
+    const handlePostClick = (post: Post) => {
+        if (!post.isLocked) {
+            setSelectedPost(post);
+        } else {
+            if (!isAuthenticated) {
+                setLoginModalVisible(true);
+            } else {
+                setJoinModalVisible(true);
+            }
+        }
+    };
+
+    const handleJoin = () => {
+        if (!page) return;
+
+        const creatorId = typeof page.userId === 'object' ? page.userId._id : page.userId;
+        joinPage({ creatorId, pageId: page._id }, {
+            onSuccess: () => {
+                toast.success("Joined successfully!");
+                setJoinModalVisible(false);
+            }
+        });
+    };
 
     return (
         <div className="pb-20">
@@ -80,25 +113,12 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                             <div className="w-full" key={post._id}>
                                 <div className="relative">
                                     <div
-                                        className={`cursor-pointer ${locked ? "blur-[2px] select-none pointer-events-none" : ""}`}
-                                        onClick={() => !locked && setSelectedPost(post)}
+                                        className="cursor-pointer"
+                                        onClick={() => handlePostClick(post)}
                                     >
                                         <Review item={postItem} />
                                     </div>
-                                    {locked && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
-                                            <div className="text-center">
-                                                <Icon name="lock" className="w-8 h-8 fill-white mb-2 mx-auto" />
-                                                <p className="text-white font-medium">Members Only</p>
-                                                <Link
-                                                    href={`/${pageSlug}`}
-                                                    className="text-sm text-accent hover:underline"
-                                                >
-                                                    Join to unlock
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    )}
+
                                 </div>
                             </div>
                         );
@@ -111,6 +131,21 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                 post={selectedPost}
                 onClose={() => setSelectedPost(null)}
             />
+
+            <LoginModal
+                visible={loginModalVisible}
+                onClose={() => setLoginModalVisible(false)}
+            />
+
+            {page && (
+                <JoinMembershipModal
+                    visible={joinModalVisible}
+                    onClose={() => setJoinModalVisible(false)}
+                    page={page}
+                    onJoin={handleJoin}
+                    isJoining={isJoining}
+                />
+            )}
         </div>
     );
 };

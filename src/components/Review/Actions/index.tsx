@@ -9,9 +9,10 @@ type ActionsProps = {
     comments: number;
     likes: number;
     isLiked: boolean;
+    className?: string;
 };
 
-const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLiked }: ActionsProps) => {
+const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLiked, className }: ActionsProps) => {
     const { isAuthenticated } = useAuth();
     const [liked, setLiked] = useState<boolean>(initialIsLiked);
     const [likesCount, setLikesCount] = useState<number>(initialLikes);
@@ -76,7 +77,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
 
     return (
         <>
-            <div className="flex mt-3">
+            <div className={`flex ${className || "mt-3"}`}>
                 <button className="btn-transparent-dark btn-small mr-5 px-0">
                     <Icon name="comments" />
                     <span>{comments}</span>

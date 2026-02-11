@@ -27,7 +27,7 @@ const LockedContent = ({
 
     if (type === 'overlay') {
         return (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-n-1/80 backdrop-blur-sm p-6 text-center rounded-2xl">
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-n-1/80 backdrop-blur-sm p-6 text-center ">
                 <div className="w-12 h-12 rounded-full bg-n-1 flex items-center justify-center mb-3 shadow-lg">
                     <Icon name="lock" className="w-6 h-6 fill-purple-1" />
                 </div>

@@ -9,7 +9,6 @@ import { usePageSlug } from "@/hooks/usePageSlug";
 import Icon from "@/components/Icon";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
-import { getFullImageUrl } from "@/lib/utils";
 import CreatorHeader from "@/layout/CreatorHeader";
 import { Post } from "@/lib/types";
 
@@ -82,7 +81,7 @@ const CreatorsPostsPage = () => {
                                                 <img
                                                     src={thumbnailUrl}
                                                     alt={displayCaption}
-                                                    className={`w-full h-full object-cover ${locked ? 'blur-sm' : ''}`}
+                                                    className={`w-full h-full object-cover `}
                                                 />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center bg-black">
@@ -91,24 +90,24 @@ const CreatorsPostsPage = () => {
                                             )}
 
                                             {/* Locked overlay */}
-                                            {locked && (
+                                            {/* {locked && (
                                                 <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                                                     <div className="text-center">
                                                         <Icon name="lock" className="w-8 h-8 fill-white mb-2 mx-auto" />
                                                         <p className="text-white text-sm font-medium">Members Only</p>
                                                     </div>
                                                 </div>
-                                            )}
+                                            )} */}
 
                                             {/* Play button overlay for unlocked videos */}
-                                            {!locked && (
+                                            {/* {!locked && (
                                                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <Icon name="play" className="w-12 h-12 fill-white" />
                                                 </div>
-                                            )}
+                                            )} */}
                                         </div>
                                         <div className="p-5">
-                                            <h4 className="text-sm font-semibold truncate mb-2">
+                                            <h4 className={`text-sm font-semibold truncate mb-2 ${locked ? "blur-xs select-none" : ""}`}>
                                                 {displayCaption}
                                             </h4>
                                             <div className="flex items-center text-xs text-n-3">

@@ -14,6 +14,7 @@ type ReviewItem = {
     likes: number;
     comments: number;
     isLiked: boolean;
+    isLocked?: boolean;
 }
 
 type ReviewProps = {
@@ -46,7 +47,7 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                     </button>
                 </div>
 
-                <div className="text-sm">{item.content}</div>
+                <div className={`text-sm ${item.isLocked ? "blur-[3px] select-none" : ""}`}>{item.content}</div>
 
                 {item.images && (
                     <Images items={item.images} imageBig={imageBig} />
