@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
+import { Skeleton } from "@/components/Skeleton";
 
 import { usePermission } from "@/hooks/usePermission";
 import { getFullImageUrl } from "@/lib/utils";
@@ -16,7 +17,7 @@ type TeamMembersProps = {
 
 const TeamMembers = ({ visible }: TeamMembersProps) => {
     const canViewSubscriptions = usePermission('subscriptions:view');
-    const { data: rawMemberships } = useMyMemberships(canViewSubscriptions);
+    const { data: rawMemberships, isLoading } = useMyMemberships(canViewSubscriptions);
 
     // Filter active and ensure page data exists
     const memberships = (rawMemberships || []).filter((m: Membership) =>
@@ -26,6 +27,24 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     if (!canViewSubscriptions) return null;
+
+    if (isLoading) {
+        return (
+            <>
+                <div className={`mb-3 overflow-hidden whitespace-nowrap text-xs font-medium text-white/50 ${visible ? "w-full opacity-100" : "xl:w-0 xl:opacity-0"}`}>
+                    My Memberships
+                </div>
+                <div className="-mx-4">
+                    {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className={`flex items-center h-9.5 mb-1.5 px-4 ${visible ? "px-4" : "xl:px-0"}`}>
+                            <Skeleton className={`shrink-0 w-5.5 h-5.5 rounded-full ${visible ? "mr-2.5 ml-0" : "xl:mx-auto"}`} />
+                            <Skeleton className={`h-3 w-24 rounded ${visible ? "block" : "xl:hidden"}`} />
+                        </div>
+                    ))}
+                </div>
+            </>
+        );
+    }
 
     const displayedMemberships = isExpanded ? memberships : memberships.slice(0, 4);
 
