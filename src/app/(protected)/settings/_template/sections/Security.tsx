@@ -7,12 +7,14 @@ import Field from "@/components/Field";
 import Loader from "@/components/Loader";
 
 import { useAuth } from "@/store/auth";
+import Alert from "@/components/Alert";
 
 type SecurityProps = {};
 
 const Security = ({ }: SecurityProps) => {
     const { user } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
+    const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
     // If registered via Google, don't show password settings
     const isGoogleUser = !!user?.googleId;
@@ -46,12 +48,12 @@ const Security = ({ }: SecurityProps) => {
                 currentPassword: data.currentPassword,
                 newPassword: data.newPassword,
             });
-            alert("Password updated successfully");
+            setMessage({ type: 'success', text: "Password updated successfully" });
             reset();
         } catch (error: unknown) {
             console.error("Failed to update password", error);
-            const message = error instanceof Error ? error.message : "Failed to update password";
-            alert(message);
+            const msg = error instanceof Error ? error.message : "Failed to update password";
+            setMessage({ type: 'error', text: msg });
         } finally {
             setIsLoading(false);
         }
@@ -72,12 +74,20 @@ const Security = ({ }: SecurityProps) => {
         <div className="card">
             <div className="card-title">Security Settings</div>
             <div className="p-5">
+                {message && (
+                    <Alert
+                        type={message.type}
+                        message={message.text}
+                        onClose={() => setMessage(null)}
+                    />
+                )}
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-wrap -mt-4 -mx-2.5">
                         <Field
                             className="w-[calc(100%-1.25rem)] mt-4 mx-2.5"
                             label="Current Password"
                             type="password"
+                            classInput="h-12"
                             placeholder="Enter current password"
                             error={errors.currentPassword}
                             {...register("currentPassword", { required: "Current password is required" })}
@@ -86,6 +96,7 @@ const Security = ({ }: SecurityProps) => {
                             className="w-[calc(50%-1.25rem)] mt-4 mx-2.5 md:w-[calc(100%-1.25rem)]"
                             label="New Password"
                             type="password"
+                            classInput="h-12"
                             placeholder="Enter new password"
                             error={errors.newPassword}
                             {...register("newPassword", {
@@ -99,6 +110,7 @@ const Security = ({ }: SecurityProps) => {
                         <Field
                             className="w-[calc(50%-1.25rem)] mt-4 mx-2.5 md:w-[calc(100%-1.25rem)]"
                             label="Confirm New Password"
+                            classInput="h-12"
                             type="password"
                             placeholder="Confirm new password"
                             error={errors.confirmPassword}
@@ -113,10 +125,10 @@ const Security = ({ }: SecurityProps) => {
                     <div className="flex justify-between mt-16 md:block md:mt-8">
                         <button
                             type="submit"
-                            className="btn-purple min-w-[11.7rem] md:w-full"
+                            className="btn-medium btn-purple min-w-[11.7rem] md:w-full"
                             disabled={isLoading}
                         >
-                            {isLoading ? <Loader /> : "Update Password"}
+                            Update Password
                         </button>
                     </div>
                 </form>

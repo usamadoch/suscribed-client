@@ -18,6 +18,7 @@ import Icon from "@/components/Icon";
 import Field from "@/components/Field";
 import Loader from "@/components/Loader";
 import Categories from "../components/Categories";
+import Alert from "@/components/Alert";
 
 // Constants
 const SPECIFICATION_OPTIONS = [
@@ -123,6 +124,7 @@ const CreatorAccount = () => {
     });
 
     const [isUploading, setIsUploading] = useState(false); // Kept for button disabling if needed, though hook has isUploading
+    const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
     // Form setup
     const {
@@ -214,11 +216,20 @@ const CreatorAccount = () => {
             socialLinks: socialLinksPayload
         };
 
-        await updateProfile(updateData);
+        const res = await updateProfile(updateData);
+        if (res.success) {
+            setMessage({ type: 'success', text: "Creator profile updated successfully" });
+        } else {
+            setMessage({ type: 'error', text: "Failed to update profile" });
+        }
     };
 
     if (isLoading) {
-        return <LoadingSpinner />
+        return (
+            <div className="flex items-center justify-center pt-10">
+                <Loader />
+            </div>
+        )
     }
 
     return (
@@ -236,6 +247,13 @@ const CreatorAccount = () => {
                 />
 
                 <div className="p-5">
+                    {message && (
+                        <Alert
+                            type={message.type}
+                            message={message.text}
+                            onClose={() => setMessage(null)}
+                        />
+                    )}
                     <div className="flex items-center w-[calc(50%-1.5rem)] -mt-2 mx-3 md:w-full md:mb-6 md:mt-0 md:mx-0 md:last:mb-0">
                         {/* Avatar Image */}
                         <div className="-mt-20 relative shrink-0 w-27.5 h-27.5 mr-3">
@@ -261,23 +279,25 @@ const CreatorAccount = () => {
                         <div className="flex flex-wrap -mt-4 -mx-2.5">
                             <Field
                                 className="w-[calc(50%-1.25rem)] mx-2.5 mt-4"
+                                classInput="h-12"
                                 label="Creator Name"
                                 error={errors.creatorName}
                                 {...register("creatorName", { required: "Creator name is required" })}
                             />
 
                             <Field
-                                className="w-[calc(50%-1.25rem)] mx-2.5 mt-4"
+                                className="w-[calc(50%-1.25rem)] mx-2.5 mt-4 "
                                 label="Profile URL"
+
                                 prefix="example.com/"
-                                classInput="pl-[7.5rem]"
+                                classInput="pl-[7.5rem] h-12"
                                 icon="link"
                                 error={errors.pageSlug}
                                 {...register("pageSlug", { required: "Profile slug is required" })}
                             />
 
                             <Field
-                                className="w-[calc(100%-1.25rem)] mt-4 mx-2.5"
+                                className="w-[calc(100%-1.25rem)]  mt-4 mx-2.5"
                                 label={`About your page (${about?.length || 0}/500)`}
                                 textarea
                                 maxLength={500}
@@ -313,6 +333,7 @@ const CreatorAccount = () => {
                                             </div>
                                             <Field
                                                 className="w-full"
+                                                classInput="h-12"
                                                 {...register(`socialLinks.${index}.value` as const)}
                                             />
                                         </div>
@@ -334,7 +355,7 @@ const CreatorAccount = () => {
                         <div className="flex justify-between mt-16 md:block md:mt-8">
                             <button
                                 type="submit"
-                                className="btn-purple min-w-[11.7rem] md:w-full"
+                                className=" btn-medium btn-purple min-w-[11.7rem] md:w-full"
                                 disabled={isUpdating || isUploadingImage}
                             >
                                 {

@@ -194,11 +194,11 @@ const Notifications = () => {
                         </div>
                     )}
                     <button
-                        className="btn-purple min-w-[11.7rem] md:w-full ml-auto"
+                        className="btn-medium btn-purple min-w-[11.7rem] md:w-full ml-auto"
                         onClick={handleSave}
                         disabled={isSaving}
                     >
-                        {isSaving ? "Saving..." : "Update Settings"}
+                        Update Settings
                     </button>
                 </div>
             </div>

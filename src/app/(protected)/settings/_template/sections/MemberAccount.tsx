@@ -8,6 +8,7 @@ import Field from "@/components/Field";
 import { useAuth } from "@/store/auth";
 import { userApi } from "@/lib/api";
 import { useImageUpload } from "@/hooks/useImageUpload";
+import Alert from "@/components/Alert";
 
 type AccountFormValues = {
     displayName: string;
@@ -101,9 +102,11 @@ const MemberAccount = () => {
             <div className="">
                 <div className="p-5">
                     {message && (
-                        <div className={`mb-4 p-3 rounded ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                            {message.text}
-                        </div>
+                        <Alert
+                            type={message.type}
+                            message={message.text}
+                            onClose={() => setMessage(null)}
+                        />
                     )}
                     <div className="flex items-center w-[calc(50%-1.5rem)] -mt-2 mx-3 md:w-full md:mb-6 md:mt-0 md:mx-0 md:last:mb-0">
                         <div className="mt-8 relative shrink-0 w-[6.875rem] h-[6.875rem] mr-3 cursor-pointer shadow-primary-4 rounded-full group" onClick={handleAvatarClick}>
@@ -135,6 +138,7 @@ const MemberAccount = () => {
                             <Field
                                 className="w-[calc(50%-1.25rem)] mx-2.5 mt-4"
                                 label="Display Name"
+                                classInput="h-12"
                                 placeholder="Enter display name"
                                 error={errors.displayName}
                                 {...register("displayName", { required: "Display name is required" })}
@@ -143,6 +147,7 @@ const MemberAccount = () => {
                                 className="w-[calc(50%-1.25rem)] mx-2.5 mt-4"
                                 label="Username"
                                 placeholder="Enter username"
+                                classInput="h-12"
                                 error={errors.username}
                                 {...register("username", { required: "Username is required" })}
                             />
@@ -150,6 +155,7 @@ const MemberAccount = () => {
                                 className="w-[calc(100%-1.25rem)] mt-4 mx-2.5"
                                 label={`Bio (${bio?.length || 0}/500)`}
                                 placeholder="Enter bio"
+
                                 textarea
                                 maxLength={500}
                                 {...register("bio", { maxLength: 500 })}
@@ -159,10 +165,10 @@ const MemberAccount = () => {
                         <div className="flex justify-between mt-16 md:block md:mt-8">
                             <button
                                 type="submit"
-                                className="btn-purple min-w-[11.7rem] md:w-full"
+                                className="btn-medium btn-purple min-w-[11.7rem] md:w-full"
                                 disabled={isLoading}
                             >
-                                {isLoading ? "Updating..." : "Update Settings"}
+                                Update Settings
                             </button>
                         </div>
                     </form>
