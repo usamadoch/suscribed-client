@@ -19,7 +19,6 @@ export const useCreatorPage = (slug?: string) => {
         enabled: !!slug,
         staleTime: 1000 * 60 * 10, // 10 minutes cache for profile info
         refetchOnWindowFocus: false,
-        placeholderData: keepPreviousData,
     });
 };
 

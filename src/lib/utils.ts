@@ -24,6 +24,34 @@ export const getFullImageUrl = (url: string | null | undefined): string | undefi
     return `${cleanBaseUrl}/${cleanUrl}`;
 };
 
+/**
+ * Optimizes Cloudinary image URLs by injecting transformation parameters.
+ * If the URL is not a Cloudinary URL, it returns the original URL.
+ * 
+ * @param url The original image URL
+ * @param width The desired width
+ * @param height The desired height
+ * @returns The optimized URL
+ */
+export const optimizeImage = (url: string | undefined, width: number, height: number): string | undefined => {
+    if (!url) return undefined;
+    if (!url.includes('cloudinary.com')) return url;
+
+    // Check if URL already has transformations (this is a simple check, might need to be more robust)
+    // Cloudinary URLs usually have /upload/ followed by version or transformations
+    // We want to insert transformations after /upload/
+
+    const uploadIndex = url.indexOf('/upload/');
+    if (uploadIndex === -1) return url;
+
+    const prefix = url.substring(0, uploadIndex + 8); // include /upload/
+    const suffix = url.substring(uploadIndex + 8);
+
+    const transformations = `w_${width},h_${height},c_fill,q_auto,f_auto`;
+
+    return `${prefix}${transformations}/${suffix}`;
+};
+
 
 export const generateUsername = (name: string, email: string) => {
     let base = name.toLowerCase().replace(/[^a-z0-9]/g, '');
