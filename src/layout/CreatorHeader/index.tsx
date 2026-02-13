@@ -14,6 +14,8 @@ import Image from "@/components/Image";
 import { useCreatorPage } from "@/hooks/useQueries";
 // import { usePageSlug } from "@/hooks/usePageSlug";
 import { getFullImageUrl } from "@/lib/utils";
+import Icon from "@/components/Icon";
+import { useAuth } from "@/store/auth";
 
 type CreatorHeaderProps = {
     pageName?: string;
@@ -39,8 +41,12 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
     // If not in URL, this will be undefined, but won't crash with 404
     const slug = (pageSlug || params["page-slug"]) as string;
 
-    const { data } = useCreatorPage(slug);
+    const { data, isLoading } = useCreatorPage(slug);
+
+
     const { page } = data || {};
+    const { user } = useAuth();
+
 
     useWindowScrollPosition(({ currPos }) => {
         setHeaderStyle(currPos.y <= -1);
@@ -59,21 +65,39 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
             className={`top-0 left-0 right-0 z-20 border-b border-n-1 dark:border-white transition-colors ${headerStyle ? "bg-white dark:bg-n-1" : "bg-transparent"
                 }`}
         >
-            <div className="flex justify-between items-center mx-auto w-full h-18 px-6 2xl:px-8 lg:px-6 md:px-5">
-                <Link href={`/${page?.pageSlug || slug}`} className="flex items-center gap-2" >
+            <div className="flex justify-between items-center mx-auto w-full h-14 px-6 2xl:px-8 lg:px-6 md:px-5">
+                <div className="flex items-center ">
 
-                    <div className="relative shrink-0 w-9 h-9 rounded-full overflow-hidden">
-                        <Image
-                            className="object-cover mb-0"
-                            src={getFullImageUrl(page?.avatarUrl) || "/images/avatar-2.jpg"}
-                            fill
-                            alt={page?.displayName || "Avatar"}
-                            unoptimized
-                        />
-                    </div>
-                    <div className="font-bold">{page?.displayName || pageName}</div>
+                    {isLoading ? (
+                        <div className="flex items-center gap-2">
+                            <div className="border border-n-1 dark:border-white rounded-full w-9 h-9 animate-skeleton bg-n-4/10"></div>
+                            <div className="border border-n-1 dark:border-white h-6 w-26 animate-skeleton bg-n-4/10"></div>
+                        </div>
+                    ) : (
+                        <Link href={`/${page?.pageSlug || slug}`} className="flex items-center gap-2 mr-24" >
 
-                </Link>
+                            <div className="relative shrink-0 w-9 h-9 rounded-full overflow-hidden">
+                                <Image
+                                    className="object-cover mb-0"
+                                    src={getFullImageUrl(page?.avatarUrl) || "/images/avatar-2.jpg"}
+                                    fill
+                                    alt={page?.displayName || "Avatar"}
+                                    unoptimized
+                                />
+                            </div>
+                            <div className="font-bold">{page?.displayName || pageName}</div>
+
+                        </Link>
+                    )}
+
+                    {user?._id === (typeof page?.userId === 'string' ? page?.userId : page?.userId?._id) && (
+                        <Link href="/dashboard" className="btn-stroke btn-medium gap-1">
+                            <Icon name="burger" className="w-5 h-5 " />
+                            Dashboard
+                        </Link>
+                    )}
+
+                </div>
 
                 <div className="flex items-center space-x-2 md:space-x-4">
                     {navLinks.map((link, index) => (
@@ -91,7 +115,7 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
                 </div>
 
             </div>
-        </header>
+        </header >
     );
 };
 
