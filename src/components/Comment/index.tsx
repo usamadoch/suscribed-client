@@ -46,6 +46,14 @@ const Comment = ({
                 autoFocus
                 value={value}
                 onChange={setValue}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        if (value.trim() && !disabled) {
+                            onSend?.();
+                        }
+                    }
+                }}
                 placeholder={placeholder}
                 required
             />
