@@ -177,7 +177,7 @@ module.exports = {
             });
             addComponents({
                 ".btn": {
-                    "@apply inline-flex items-center justify-center h-13 px-5 border border-n-1 rounded-sm text-base text-n-1 fill-n-1 font-bold transition-colors":
+                    "@apply inline-flex items-center justify-center h-13 px-5 border border-n-1 text-base text-n-1 fill-n-1 font-bold transition-colors":
                         {},
                 },
                 ".btn svg": {
