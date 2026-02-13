@@ -42,9 +42,9 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                     <div className="ml-2 pt-0.75 truncate text-xs font-medium text-n-3 dark:text-white/75">
                         {item.time}
                     </div>
-                    <button className="btn-transparent-dark btn-square btn-small -mt-1.5 -mr-2 ml-auto">
+                    {/* <button className="btn-transparent-dark btn-square btn-small -mt-1.5 -mr-2 ml-auto">
                         <Icon name="dots" />
-                    </button>
+                    </button> */}
                 </div>
 
                 <div className={`text-sm ${item.isLocked ? "blur-[3px] select-none" : ""}`}>{item.content}</div>

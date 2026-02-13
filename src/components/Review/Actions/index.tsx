@@ -3,6 +3,7 @@ import Icon from "@/components/Icon";
 import { postApi } from "@/lib/api";
 import { useAuth } from "@/store/auth";
 import LoginModal from "@/components/LoginModal";
+import { twMerge } from "tailwind-merge";
 
 type ActionsProps = {
     postId: string;
@@ -10,13 +11,15 @@ type ActionsProps = {
     likes: number;
     isLiked: boolean;
     className?: string;
+    showComment?: boolean;
 };
 
-const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLiked, className }: ActionsProps) => {
+const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLiked, className, showComment = true }: ActionsProps) => {
     const { isAuthenticated } = useAuth();
     const [liked, setLiked] = useState<boolean>(initialIsLiked);
     const [likesCount, setLikesCount] = useState<number>(initialLikes);
     const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
+    const [animating, setAnimating] = useState<boolean>(false);
 
     // Refs for debouncing and server synchronization
     const serverLiked = useRef<boolean>(initialIsLiked);
@@ -65,6 +68,10 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
         setLiked(nextLiked);
         setLikesCount(prev => nextLiked ? prev + 1 : prev - 1);
 
+        // Trigger animation
+        setAnimating(true);
+        setTimeout(() => setAnimating(false), 400);
+
         // 2. Debounce the server sync
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
@@ -77,21 +84,28 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
 
     return (
         <>
-            <div className={`flex ${className || "mt-3"}`}>
-                <button className="btn-transparent-dark btn-small mr-5 px-0">
-                    <Icon name="comments" />
-                    <span>{comments}</span>
-                </button>
+            <div className={`flex ${className || "mt-4"}`}>
+                {showComment && (
+                    <button className="flex gap-1 mr-5 px-0">
+                        <Icon name="comments" className="h-7 w-7" />
+                        <span className="text-md">{comments}</span>
+                    </button>
+                )}
 
                 <button
-                    className={`btn-transparent-dark btn-small px-0 cursor-pointer `}
+                    className={`flex gap-1 px-0 cursor-pointer active:scale-90 transition-transform`}
                     onClick={handleLike}
                 >
                     <Icon
                         name={liked ? "like-filled" : "like"}
-                        viewBox={liked ? "0 0 512 512" : "0 0 16 16"}
+                        className={twMerge(
+                            "h-7 w-7 transition-colors",
+                            animating && "animate-heart-pop",
+                            liked ? "fill-purple-1" : "fill-n-1 dark:fill-white"
+                        )}
+                        viewBox="0 0 512 512"
                     />
-                    <span>{likesCount}</span>
+                    <span className="text-md">{likesCount}</span>
                 </button>
                 {/* <button
                     className={`btn-transparent-dark btn-square btn-small ml-auto -mr-2`}
