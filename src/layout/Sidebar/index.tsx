@@ -15,11 +15,10 @@ const Sidebar = ({ }: SidebarProps) => {
     const { user, logout } = useAuth();
     const [visible, setVisible] = useState<boolean>(false);
 
-    console.log(user);
 
     return (
         <div
-            className={`fixed top-0 left-0 bottom-0 flex flex-col w-[18.75rem] pt-6 px-8 pb-4.5 bg-n-1 xl:z-30 md:hidden ${visible ? "w-[18.75rem]" : "xl:w-20"
+            className={`fixed top-0 left-0 bottom-0 flex flex-col w-[18.75rem] pt-6 px-8 pb-4.5 bg-n-1 overflow-auto scroll-smooth xl:z-30 md:hidden ${visible ? "w-[18.75rem]" : "xl:w-20"
                 }`}
         >
             <div className="flex justify-between items-center h-[1.625rem] mb-11">
@@ -34,10 +33,10 @@ const Sidebar = ({ }: SidebarProps) => {
                     />
                 </button>
             </div>
-            <div className="flex-1 overflow-y-auto scroll-smooth -mr-4 pr-4">
-                <Menu visible={visible} />
-                <TeamMembers visible={visible} />
-            </div>
+            {/* <div className="flex-1 overflow-y-auto scroll-smooth -mr-4 pr-4"> */}
+            <Menu visible={visible} />
+            <TeamMembers visible={visible} />
+            {/* </div> */}
             <div
                 className={`flex items-center h-18 mt-auto mx-0 pt-10 ${visible ? "mx-0" : "xl:-mx-4"
                     }`}

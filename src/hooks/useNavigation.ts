@@ -18,6 +18,8 @@ export type NavigationItem = {
     onClick?: () => void;
     counter?: number;
     counterColor?: string;
+    suffixIcon?: string;
+    suffixIconViewBox?: string;
 };
 
 export const useNavigation = () => {
@@ -55,7 +57,9 @@ export const useNavigation = () => {
                     title: "Your Page",
                     icon: "profile", // Ensure this icon exists in your Icon component
                     url: `/${pageSlug}`,
-                    target: "_blank"
+                    target: "_blank",
+                    suffixIcon: "new-window",
+                    suffixIconViewBox: "0 0 24 24"
                 };
 
                 // Insert after Dashboard

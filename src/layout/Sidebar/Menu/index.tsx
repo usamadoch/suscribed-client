@@ -59,7 +59,16 @@ const Menu = ({ visible }: MenuProps) => {
                             />
                             {link.title}
 
-                            {showCounter && (
+                            {link.suffixIcon ? (
+
+                                <Icon
+                                    className={`ml-auto fill-inherit transition-colors ${visible ? "block" : "xl:hidden"
+                                        }`}
+                                    name={link.suffixIcon}
+                                    viewBox={link.suffixIconViewBox}
+                                />
+                            ) : showCounter ? (
+
                                 <div
                                     className={`min-w-[1.625rem] ml-auto px-1 py-0.25 text-center text-xs font-bold text-n-1 ${visible ? "block" : "xl:hidden"
                                         }`}
@@ -70,7 +79,7 @@ const Menu = ({ visible }: MenuProps) => {
                                 >
                                     {counterValue}
                                 </div>
-                            )}
+                            ) : null}
                         </Link>
                     );
                 })}
