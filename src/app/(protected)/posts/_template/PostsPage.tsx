@@ -13,13 +13,13 @@ import { usePosts } from "@/hooks/useQueries";
 import { RequireCreator } from "@/store/auth";
 
 import Layout from "@/layout";
-import DataListWrapper from "@/components/DataListWrapper";
 import Sorting from "@/components/Sorting";
 import Icon from "@/components/Icon";
 import Empty from "@/components/Empty";
 import TablePagination from "@/components/TablePagination";
 
 import { Post, Pagination } from "@/lib/types";
+import Loader from "@/components/Loader";
 
 const PostsPage = () => {
     const { mounted } = useHydrated();
@@ -55,84 +55,89 @@ const PostsPage = () => {
 
     if (!mounted) return null;
 
-    // Error Message Handling
-    const errorMessage = isError
-        ? (error instanceof Error ? error.message : "Failed to fetch posts")
-        : null;
-
-
-    // console.log(posts.length);
-
     return (
         <RequireCreator>
             <Layout title="Posts">
-                <DataListWrapper isLoading={isLoading} isError={isError} errorMessage={errorMessage}>
-                    <>
-                        {isTablet ? (
-                            <div className="card">
-                                {posts.length > 0 ? (
-                                    posts.map((post) => (
-                                        <Item item={post} key={post._id} />
-                                    ))
-                                ) : (
-                                    <Empty
-                                        title="No notifications yet"
-                                        content="You’ll get updates when people join your community, interact with your posts and more."
-                                        imageSvg={
-                                            <Icon
-                                                name="notification"
-                                                className="w-24 h-24 fill-n-1 dark:fill-white"
-                                            />
-                                        }
-                                    // buttonText="Return Home"
-                                    // onClick={() => router.push("/")}
-                                    />
-                                )}
-                            </div>
-                        ) : (
-                            <table className="table-custom">
-                                <thead>
-                                    <tr>
-                                        <th className="th-custom w-[60%] text-left">
-                                            <Sorting title="Caption" />
-                                        </th>
-                                        <th className="th-custom text-left">
-                                            <Sorting title="Views" />
-                                        </th>
+                <>
+                    {isTablet ? (
+                        <div className="card">
+                            {posts.length > 0 ? (
+                                posts.map((post) => (
+                                    <Item item={post} key={post._id} />
+                                ))
+                            ) : (
+                                <Empty
+                                    title="No notifications yet"
+                                    content="You’ll get updates when people join your community, interact with your posts and more."
+                                    imageSvg={
+                                        <Icon
+                                            name="notification"
+                                            className="w-24 h-24 fill-n-1 dark:fill-white"
+                                        />
+                                    }
+                                // buttonText="Return Home"
+                                // onClick={() => router.push("/")}
+                                />
+                            )}
+                        </div>
+                    ) : (
+                        <table className="table-custom">
+                            <thead>
+                                <tr>
+                                    <th className="th-custom w-[60%] text-left">
+                                        <Sorting title="Caption" />
+                                    </th>
+                                    <th className="th-custom text-left">
+                                        <Sorting title="Views" />
+                                    </th>
 
-                                        <th className="th-custom text-left">
-                                            <Sorting title="Likes" />
-                                        </th>
-                                        <th className="th-custom text-left">
-                                            <Sorting title="Comments" />
-                                        </th>
-                                        <th className="th-custom text-left"></th>
+                                    <th className="th-custom text-left">
+                                        <Sorting title="Likes" />
+                                    </th>
+                                    <th className="th-custom text-left">
+                                        <Sorting title="Comments" />
+                                    </th>
+                                    <th className="th-custom text-left"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {isLoading ? (
+                                    <tr>
+                                        <td colSpan={5} className="td-custom py-10 h-full">
+                                            <div className="flex justify-center items-center">
+                                                <Loader />
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {posts.length > 0 ? (
-                                        posts.map((post) => (
-                                            <Row item={post} key={post._id} />
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan={5} className="py-12 text-center text-gray-500">
-                                                No posts found.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        )}
-                        <TablePagination
-                            page={pagination.page}
-                            totalPages={pagination.totalPages}
-                            hasNextPage={pagination.hasNextPage}
-                            hasPrevPage={pagination.hasPrevPage}
-                            onPageChange={handlePageChange}
-                        />
-                    </>
-                </DataListWrapper>
+                                ) : (
+
+
+                                    <>
+                                        {posts.length > 0 ? (
+                                            posts.map((post) => (
+                                                <Row item={post} key={post._id} />
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={5} className="td-custom py-10 text-center">
+                                                    No posts found.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </>
+
+                                )}
+                            </tbody>
+                        </table>
+                    )}
+                    <TablePagination
+                        page={pagination.page}
+                        totalPages={pagination.totalPages}
+                        hasNextPage={pagination.hasNextPage}
+                        hasPrevPage={pagination.hasPrevPage}
+                        onPageChange={handlePageChange}
+                    />
+                </>
             </Layout>
         </RequireCreator>
     );

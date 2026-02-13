@@ -10,7 +10,6 @@ import { useSearchParams } from "next/navigation";
 
 
 import Empty from "@/components/Empty";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 
 import { useAuth } from "@/store/auth";
@@ -22,7 +21,6 @@ import Layout from "@/layout";
 
 import Messages from "./sections/Messages";
 import Chat from "./sections/Chat";
-
 
 
 
@@ -222,13 +220,15 @@ const MessagesPage = () => {
 
     const isInboxEmpty = !isLoading && finalConversations.length === 0 && !recipientId;
 
-    if (isLoading) {
-        return (
-            <Layout title="Inbox">
-                <LoadingSpinner />
-            </Layout>
-        );
-    }
+    // if (!isLoading) {
+    //     return (
+    //         <Layout title="Inbox">
+    //             <div className="flex items-center justify-center">
+    //                 <Loader />
+    //             </div>
+    //         </Layout>
+    //     );
+    // }
 
     return (
         <Layout title="Inbox" background={isInboxEmpty}>

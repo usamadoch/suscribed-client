@@ -6,11 +6,10 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/r
 import { useDeletePost } from "@/hooks/useQueries";
 
 import Modal from "@/components/Modal";
-import Loader from "@/components/Loader";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 
-import { getFullImageUrl } from "@/lib/utils";
+import { getFullImageUrl, optimizeImage } from "@/lib/utils";
 
 
 interface RowItem {
@@ -39,7 +38,7 @@ const Row = ({ item, showActions = true }: RowProps) => {
     const mediaItem = item.mediaAttachments?.find(m => m.type === 'image' || m.type === 'video');
     const isVideo = mediaItem?.type === 'video';
     const remoteUrl = mediaItem?.url ? getFullImageUrl(mediaItem.url) : undefined;
-    const thumbnail = remoteUrl || "/images/content/product-1.jpg";
+    const thumbnail = optimizeImage(remoteUrl, 150, 150) || "";
 
     const handleDelete = () => {
         deletePost(item._id, {
@@ -61,17 +60,20 @@ const Row = ({ item, showActions = true }: RowProps) => {
                         className="inline-flex items-center text-sm  transition-colors hover:text-purple-1"
                         href={`/posts/${item._id}`}
                     >
-                        <div className={`shrink-0 w-18 mr-5 border border-n-1 rounded overflow-hidden aspect-square relative flex justify-center items-center ${isVideo ? 'bg-n-2 dark:bg-n-7' : ''}`}>
+                        <div className={`shrink-0 w-18 mr-5 border border-n-1 overflow-hidden aspect-square relative flex justify-center items-center ${isVideo ? 'bg-n-2 dark:bg-n-7' : ''}`}>
                             {isVideo ? (
                                 <Icon name="video" className="w-6 h-6 fill-n-4 dark:fill-n-4" />
-                            ) : (
+                            ) : thumbnail ? (
                                 <Image
                                     className="object-cover"
                                     src={thumbnail}
                                     fill
                                     alt={item.caption || "Post thumbnail"}
-                                    unoptimized
                                 />
+                            ) : (
+                                <div className="w-full h-full bg-n-2 dark:bg-n-7 flex items-center justify-center">
+                                    <Icon name="image" className="w-6 h-6 fill-n-4 dark:fill-n-4" />
+                                </div>
                             )}
                         </div>
 
@@ -108,7 +110,7 @@ const Row = ({ item, showActions = true }: RowProps) => {
                                 leaveFrom="transform scale-100 opacity-100"
                                 leaveTo="transform scale-95 opacity-0"
                             >
-                                <MenuItems className="absolute right-0 mt-2 w-48 origin-top-right bg-white border border-n-1 rounded-sm shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
+                                <MenuItems className="absolute right-0 mt-2 w-48 origin-top-right bg-white border border-n-1 shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
                                     <MenuItem>
                                         {({ active }) => (
                                             <Link
@@ -125,10 +127,10 @@ const Row = ({ item, showActions = true }: RowProps) => {
                                         {({ active }) => (
                                             <button
                                                 className={`flex items-center w-full px-4 py-2 text-sm font-bold transition-colors ${active ? "bg-n-3/10 dark:bg-white/20" : ""
-                                                    } text-pink-1`}
+                                                    } text-red-500`}
                                                 onClick={() => setIsOpen(true)}
                                             >
-                                                <Icon className="mr-3 fill-pink-1 icon-18" name="trash" />
+                                                <Icon className="mr-3 fill-red-500 icon-18" name="delete" />
                                                 Delete
                                             </button>
                                         )}
@@ -136,45 +138,38 @@ const Row = ({ item, showActions = true }: RowProps) => {
                                 </MenuItems>
                             </Transition>
                         </Menu>
+
+                        <Modal
+                            title="Delete Post"
+                            visible={isOpen}
+                            onClose={() => setIsOpen(false)}
+                        >
+                            <div className="text-sm text-n-3">
+                                Are you sure you want to delete this post? This action cannot be undone.
+                            </div>
+                            <div className="mt-6 flex justify-end gap-3">
+                                <button
+                                    type="button"
+                                    className="flex-1 btn-stroke px-5 btn-medium cursor-pointer"
+                                    onClick={() => setIsOpen(false)}
+                                    disabled={isPending}
+                                >
+                                    Cancel
+                                </button>
+
+
+                                <button
+                                    className="flex-1 btn-purple btn-medium bg-red-500 hover:bg-red-500/80 cursor-pointer px-5 md:!bg-transparent md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
+                                    onClick={handleDelete}
+                                    disabled={isPending}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </Modal>
                     </td>
                 )}
-            </tr>
-
-            <Modal
-                title="Delete Post"
-                visible={isOpen}
-                onClose={() => setIsOpen(false)}
-            >
-                <div className="text-sm text-n-3">
-                    Are you sure you want to delete this post? This action cannot be undone.
-                </div>
-                <div className="mt-6 flex justify-end gap-3">
-                    <button
-                        type="button"
-                        className="btn-stroke px-5 btn-medium cursor-pointer"
-                        onClick={() => setIsOpen(false)}
-                        disabled={isPending}
-                    >
-                        Cancel
-                    </button>
-                    {/* <button
-                        type="button"
-                        className="btn-pink btn-small"
-                        onClick={handleDelete}
-                        disabled={isPending}
-                    >
-                        {isPending ? "Deleting..." : "Delete"}
-                    </button> */}
-
-                    <button
-                        className="btn-purple btn-medium bg-pink-1 hover:bg-pink-1/80 cursor-pointer px-5 md:!bg-transparent md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
-                        onClick={handleDelete}
-                        disabled={isPending}
-                    >
-                        {isPending ? <Loader className="w-6 h-6 text-white" /> : "Delete"}
-                    </button>
-                </div>
-            </Modal>
+            </tr >
         </>
     );
 };

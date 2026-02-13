@@ -62,10 +62,11 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user 
     return (
         <div className="flex flex-col w-[28rem] border-r border-n-1 4xl:w-[23.125rem] lg:w-full lg:border-none dark:border-white">
             <div className="flex p-5 border-b border-n-1 dark:border-white">
-                <button className="btn-purple btn-small mr-auto px-4">
+                {/* <button className="btn-purple btn-small mr-auto px-4">
                     <Icon name="edit" />
                     <span>Compose</span>
-                </button>
+                </button> */}
+                <div className="flex-grow"></div>
                 <button className="btn-stroke btn-square btn-small mr-1.5">
                     <Icon name="filters" />
                 </button>
@@ -98,13 +99,13 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user 
                             </div>
                             <div className="w-[calc(100%-2rem)] pl-3">
                                 <div className="flex justify-between mb-1 text-xs font-medium text-n-3 dark:text-white/75">
-                                    <div className="line-clamp-1 mr-2">{otherUser.displayName || 'Unknown'}</div>
+                                    <div className="line-clamp-1 mr-2 capitalize">{otherUser.displayName || 'Unknown'}</div>
                                     <div className="shrink-0">{formatTime(lastMessage?.sentAt || conversation.createdAt)}</div>
                                 </div>
-                                <div className="truncate text-sm font-bold text-n-1 dark:text-white">
+                                <div className="truncate text-sm">
                                     {/* Using display name as title for now, or last message preview */}
                                     {lastMessage ? (
-                                        <span className={lastMessage.senderId === user?._id ? "text-n-3 dark:text-white/75" : ""}>
+                                        <span >
                                             {lastMessage.senderId === user?._id && "You: "}
                                             {lastMessage.content}
                                         </span>

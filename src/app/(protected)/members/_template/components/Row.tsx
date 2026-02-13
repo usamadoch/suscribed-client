@@ -51,14 +51,11 @@ const Row = ({ item }: RowProps) => {
                 {new Date(item.joinedAt).toLocaleDateString()}
             </td>
             <td className="td-custom text-right">
-                <div className={`inline-block px-3 py-1 rounded-sm text-xs font-bold ${getStatusColor(item.status)}`}>
+                <div className={`inline-block px-3 py-1 text-xs font-bold ${getStatusColor(item.status)}`}>
                     {item.status}
                 </div>
             </td>
             <td className="td-custom text-right">
-                {/* <button className="btn-transparent-dark btn-small btn-square">
-                    <Icon name="dots" />
-                </button> */}
 
                 <Link
                     href={`/messages?to=${member._id}`}

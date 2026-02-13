@@ -14,10 +14,7 @@ import CommentsSection from "../../../_template/PostDetailPage/CommentsSection";
 
 import { usePost, usePostComments, useJoinPage } from "@/hooks/useQueries";
 
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import Image from "@/components/Image";
-
-import { getFullImageUrl } from "@/lib/utils";
 
 import { postApi } from "@/lib/api";
 import { MediaAttachment, isUnlockedMedia, AnyMediaAttachment } from "@/lib/types";
@@ -26,6 +23,7 @@ import CreatorHeader from "@/layout/CreatorHeader";
 
 
 import Actions from "@/components/Review/Actions";
+import Loader from "@/components/Loader";
 
 const PostDetailPage = () => {
     const params = useParams<{ id: string }>();
@@ -37,8 +35,6 @@ const PostDetailPage = () => {
     const { data: comments, isLoading: isCommentsLoading } = usePostComments(postId);
 
 
-    console.log(post);
-
     // Use the backend-provided isLocked flag
     const locked = post?.isLocked ?? false;
 
@@ -48,7 +44,7 @@ const PostDetailPage = () => {
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-    const isLoading = isPostLoading || isCommentsLoading;
+    // const isLoading = isPostLoading || isCommentsLoading;
 
     const handleCommentSubmit = async () => {
         if (!value.trim()) return;
@@ -104,16 +100,15 @@ const PostDetailPage = () => {
 
     return (
         <>
-            {isLoading ? (
+            {isPostLoading ? (
                 <div className="w-full h-96 flex items-center justify-center">
-                    <LoadingSpinner />
+                    <Loader />
                 </div>
             ) : !post ? (
                 <div className="p-10 text-center text-n-1 dark:text-white">Post not found</div>
             ) : (
                 <>
-
-                    <CreatorHeader pageSlug={typeof post.pageId === 'object' ? post.pageId.pageSlug : undefined} />
+                    <CreatorHeader pageSlug={typeof post.pageId === 'object' ? (post.pageId as any).pageSlug : undefined} />
                     <div className="w-full">
                         {/* Media Gallery */}
                         {mediaItems.length > 0 && locked ? (
@@ -167,31 +162,37 @@ const PostDetailPage = () => {
                                 </div>
                             </div>
 
-                            {locked ? (
-                                <LockedContent
-                                    handleJoin={handleJoin}
-                                    isJoining={isJoining}
-                                    user={user}
-                                    isLoginModalOpen={isLoginModalOpen}
-                                    setIsLoginModalOpen={setIsLoginModalOpen}
-                                />
-                            ) : (
-                                <CommentsSection
-                                    user={user}
-                                    value={value}
-                                    setValue={setValue}
-                                    handleCommentSubmit={handleCommentSubmit}
-                                    isSubmittingComment={isSubmittingComment}
-                                    comments={comments || []}
-                                />
-                            )}
                         </div>
-
                     </div>
 
                 </>
-            )
-            }
+            )}
+
+            <div className="max-w-4xl mx-auto p-5">
+
+                {locked ? (
+                    <LockedContent
+                        handleJoin={handleJoin}
+                        isJoining={isJoining}
+                        user={user}
+                        isLoginModalOpen={isLoginModalOpen}
+                        setIsLoginModalOpen={setIsLoginModalOpen}
+                    />
+                ) : isCommentsLoading ? (
+                    <div className="flex items-center justify-center py-10">
+                        <Loader />
+                    </div>
+                ) : (
+                    <CommentsSection
+                        user={user}
+                        value={value}
+                        setValue={setValue}
+                        handleCommentSubmit={handleCommentSubmit}
+                        isSubmittingComment={isSubmittingComment}
+                        comments={comments || []}
+                    />
+                )}
+            </div>
         </>
     );
 };

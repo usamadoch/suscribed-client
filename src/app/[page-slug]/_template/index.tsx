@@ -13,10 +13,10 @@ import { ApiClientError } from "@/lib/api";
 
 import CreatorHeader from "@/layout/CreatorHeader";
 
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import Banner from "../_components/Banner";
 import ProfileHeader from "../_components/ProfileHeader";
 import Content from "../_components/Content";
+import Loader from "@/components/Loader";
 
 
 const CreatorPage = () => {
@@ -25,7 +25,6 @@ const CreatorPage = () => {
     const { user } = useAuth();
 
     const { data, isLoading, error } = useCreatorPage(slug);
-
     const { page, isOwner, isMember } = data || {};
 
     const handleImageSuccess = useCallback((type: 'banner' | 'avatar', url: string) => {
@@ -72,7 +71,7 @@ const CreatorPage = () => {
     if (isLoading) {
         return (
             <div className="flex h-screen items-center justify-center">
-                <LoadingSpinner />
+                <Loader text="Loading..." />
             </div>
         );
     }

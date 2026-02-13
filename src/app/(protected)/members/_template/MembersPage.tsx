@@ -12,11 +12,11 @@ import { useHydrated } from "@/hooks/useHydrated";
 import { useMyMembers } from "@/hooks/useQueries";
 import { RequireCreator } from "@/store/auth";
 import Layout from "@/layout";
-import DataListWrapper from "@/components/DataListWrapper";
 import TablePagination from "@/components/TablePagination";
 import Sorting from "@/components/Sorting";
 import Item from "./components/Item";
 import Row from "./components/Row";
+import Loader from "@/components/Loader";
 
 
 const MembersPage = () => {
@@ -27,7 +27,7 @@ const MembersPage = () => {
     const limit = 10;
 
     // React Query Hook
-    const { data, isLoading, isError, error } = useMyMembers({ page, limit });
+    const { data, isLoading } = useMyMembers({ page, limit });
 
     const memberships = data?.memberships || [];
     const pagination = data?.pagination || {
@@ -51,70 +51,78 @@ const MembersPage = () => {
 
     if (!mounted) return null;
 
-    // Error Message Handling
-    const errorMessage = isError
-        ? (error instanceof Error ? error.message : "Failed to fetch members")
-        : null;
-
 
     return (
         <RequireCreator>
             <Layout title="Members">
 
-                <DataListWrapper isLoading={isLoading} isError={isError} errorMessage={errorMessage}>
-                    <>
-                        {isMobile ? (
-                            <div className="card">
-                                {memberships.map((membership) => (
-                                    <Item item={membership} key={membership._id} />
-                                ))}
-                            </div>
-                        ) : (
-                            <table className="table-custom">
-                                <thead>
+                {/* <DataListWrapper isLoading={isLoading} isError={isError} errorMessage={errorMessage}> */}
+                <>
+                    {isMobile ? (
+                        <div className="card">
+                            {memberships.map((membership) => (
+                                <Item item={membership} key={membership._id} />
+                            ))}
+                        </div>
+                    ) : (
+                        <table className="table-custom">
+                            <thead>
+                                <tr>
+                                    <th className="th-custom">
+                                        {/* <Checkbox /> */}
+                                    </th>
+                                    <th className="th-custom">
+                                        <Sorting title="Name" />
+                                    </th>
+                                    <th className="th-custom">
+                                        <Sorting title="Tier" />
+                                    </th>
+                                    <th className="th-custom">
+                                        <Sorting title="Joined" />
+                                    </th>
+                                    <th className="th-custom text-right">
+                                        <Sorting title="Status" />
+                                    </th>
+                                    <th className="th-custom text-right"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {isLoading ? (
                                     <tr>
-                                        <th className="th-custom">
-                                            {/* <Checkbox /> */}
-                                        </th>
-                                        <th className="th-custom">
-                                            <Sorting title="Name" />
-                                        </th>
-                                        <th className="th-custom">
-                                            <Sorting title="Tier" />
-                                        </th>
-                                        <th className="th-custom">
-                                            <Sorting title="Joined" />
-                                        </th>
-                                        <th className="th-custom text-right">
-                                            <Sorting title="Status" />
-                                        </th>
-                                        <th className="th-custom text-right"></th>
+                                        <td colSpan={6} className="td-custom text-center text-gray-500">
+                                            <div className="flex items-center justify-center">
+                                                <Loader />
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {memberships.length > 0 ? (
-                                        memberships.map((membership) => (
-                                            <Row item={membership} key={membership._id} />
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan={6} className="py-12 text-center text-gray-500">
-                                                No members found.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        )}
-                        <TablePagination
-                            page={pagination.page}
-                            totalPages={pagination.totalPages}
-                            hasNextPage={pagination.hasNextPage}
-                            hasPrevPage={pagination.hasPrevPage}
-                            onPageChange={handlePageChange}
-                        />
-                    </>
-                </DataListWrapper>
+                                ) : (
+
+                                    <>
+                                        {memberships.length > 0 ? (
+                                            memberships.map((membership) => (
+                                                <Row item={membership} key={membership._id} />
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={6} className=" py-12 text-center text-gray-500">
+                                                    No members found.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </>
+                                )}
+                            </tbody>
+                        </table>
+                    )}
+                    <TablePagination
+                        page={pagination.page}
+                        totalPages={pagination.totalPages}
+                        hasNextPage={pagination.hasNextPage}
+                        hasPrevPage={pagination.hasPrevPage}
+                        onPageChange={handlePageChange}
+                    />
+                </>
+                {/* </DataListWrapper> */}
             </Layout>
 
         </RequireCreator>

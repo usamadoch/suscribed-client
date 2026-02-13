@@ -17,6 +17,7 @@ import { useNotifications, useMarkNotificationsAsRead } from "@/hooks/useQueries
 import { useSocket } from "@/store/socket";
 
 import Layout from "@/layout";
+import Loader from "@/components/Loader";
 
 
 const NotificationsPage = () => {
@@ -43,10 +44,13 @@ const NotificationsPage = () => {
     return (
         <Layout title="Notifications" background={!isLoading && notifications.length === 0}>
             {isLoading ? (
-                <LoadingSpinner />
+                <div className="flex items-center justify-center">
+                    <Loader />
+                </div>
             ) : error ? (
-                <div className="flex items-center justify-center h-full">
-                    Error: Failed to load notifications
+                <div className="flex items-center justify-center gap-3">
+                    <Icon name="info-circle" className="w-6 h-6 fill-n-1 dark:fill-white" />
+                    <p className="text-n-1 dark:text-white">Failed to load notifications</p>
                 </div>
             ) : notifications.length === 0 ? (
                 <Empty

@@ -12,6 +12,7 @@ import Review from "@/components/Review";
 import PostModal from "@/components/PostModal";
 import LoginModal from "@/components/LoginModal";
 import JoinMembershipModal from "@/components/JoinMembershipModal";
+import Loader from "@/components/Loader";
 
 type CreatorContentProps = {
     pageSlug: string;
@@ -61,70 +62,78 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
     };
 
     return (
-        <div className="pb-20">
-            <h4 className="px-16 text-h4 mb-8">Latest Posts</h4>
+        <div className="pb-20 px-16">
+            <h4 className="text-h4 mb-8">Latest Posts</h4>
 
-            {isLoadingPosts ? (
-                <div className="px-16 text-n-3">Loading posts...</div>
-            ) : filteredPosts.length === 0 ? (
-                <div className="px-16 text-n-3">No posts available.</div>
-            ) : (
-                <div className="px-16 grid grid-cols-1 gap-6 max-w-5xl">
-                    {filteredPosts.map((post) => {
-                        // Use the backend-provided isLocked flag
-                        const locked = post.isLocked;
+            <div className="max-w-5xl">
 
-                        // For locked posts, use teaser or show locked message
-                        // For unlocked posts, use the full content
-                        const displayContent = locked
-                            ? post.teaser || 'Exclusive content for members'
-                            : post.caption || '';
+                {isLoadingPosts ? (
+                    <div className="flex items-center justify-center pt-10">
+                        <Loader text="Loading posts..." />
+                    </div>
 
-                        // For images, handle locked state properly
-                        const images = post.postType === 'image' && !locked
-                            ? post.mediaAttachments
-                                .filter(m => !isLockedMedia(m) && m.url)
-                                .map(m => getFullImageUrl(m.url))
-                                .filter((url): url is string => !!url)
-                            : undefined;
+                ) : filteredPosts.length === 0 ? (
+                    <div className="text-n-3">No posts available.</div>
+                ) : (
+                    <div className="grid grid-cols-1 gap-6">
+                        {filteredPosts.map((post) => {
+                            // Use the backend-provided isLocked flag
+                            const locked = post.isLocked;
 
-                        // For locked image posts, show blurred thumbnails
-                        const lockedImages = post.postType === 'image' && locked
-                            ? post.mediaAttachments
-                                .filter(m => m.thumbnailUrl)
-                                .map(m => m.thumbnailUrl)
-                                .filter((url): url is string => !!url)
-                            : undefined;
+                            // For locked posts, use teaser or show locked message
+                            // For unlocked posts, use the full content
+                            const displayContent = locked
+                                ? post.teaser || 'Exclusive content for members'
+                                : post.caption || '';
 
-                        const postItem = {
-                            id: post._id,
-                            author: page?.displayName || "",
-                            avatar: getFullImageUrl(page?.avatarUrl) || "/images/content/avatar-1.jpg",
-                            time: new Date(post.createdAt).toLocaleDateString(),
-                            content: displayContent,
-                            images: locked ? lockedImages : images,
-                            likes: post.likeCount || 0,
-                            comments: post.commentCount || 0,
-                            isLiked: !!post.isLiked,
-                            isLocked: locked,
-                        };
+                            // For images, handle locked state properly
+                            const images = post.postType === 'image' && !locked
+                                ? post.mediaAttachments
+                                    .filter(m => !isLockedMedia(m) && m.url)
+                                    .map(m => getFullImageUrl(m.url))
+                                    .filter((url): url is string => !!url)
+                                : undefined;
 
-                        return (
-                            <div className="w-full" key={post._id}>
-                                <div className="relative">
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={() => handlePostClick(post)}
-                                    >
-                                        <Review item={postItem} />
+                            // For locked image posts, show blurred thumbnails
+                            const lockedImages = post.postType === 'image' && locked
+                                ? post.mediaAttachments
+                                    .filter(m => m.thumbnailUrl)
+                                    .map(m => m.thumbnailUrl)
+                                    .filter((url): url is string => !!url)
+                                : undefined;
+
+                            const postItem = {
+                                id: post._id,
+                                author: page?.displayName || "",
+                                avatar: getFullImageUrl(page?.avatarUrl) || "/images/content/avatar-1.jpg",
+                                time: new Date(post.createdAt).toLocaleDateString(),
+                                content: displayContent,
+                                images: locked ? lockedImages : images,
+                                likes: post.likeCount || 0,
+                                comments: post.commentCount || 0,
+                                isLiked: !!post.isLiked,
+                                isLocked: locked,
+                            };
+
+                            return (
+                                <div className="w-full" key={post._id}>
+                                    <div className="relative">
+                                        <div
+                                            className="cursor-pointer"
+                                            onClick={() => handlePostClick(post)}
+                                        >
+                                            <Review item={postItem} />
+                                        </div>
+
                                     </div>
-
                                 </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            )}
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
+
 
             <PostModal
                 visible={!!selectedPost}
