@@ -51,7 +51,7 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                         {textarea ? (
                             <textarea
                                 className={twMerge(
-                                    `w-full h-24 px-5 py-3 bg-white border border-n-1 rounded-sm text-sm text-n-1 font-bold outline-none resize-none transition-colors placeholder:text-n-3 focus:border-purple-1 dark:bg-n-1 dark:border-white dark:text-white dark:focus:border-purple-1 dark:placeholder:text-white/75 ${icon ? "pr-15" : ""
+                                    `w-full h-24 px-5 py-3 bg-white border border-n-1 text-sm text-n-1 font-bold outline-none resize-none transition-colors placeholder:text-n-3 focus:border-purple-1 dark:bg-n-1 dark:border-white dark:text-white dark:focus:border-purple-1 dark:placeholder:text-white/75 ${icon ? "pr-15" : ""
                                     } ${error ? "pr-15 border-pink-1!" : ""} ${image || currency ? "pr-15" : ""
                                     } ${classInput}`
                                 )}
@@ -65,7 +65,7 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                         ) : (
                             <input
                                 className={twMerge(
-                                    `w-full h-16 px-5 bg-white border border-n-1 rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-purple-1 dark:bg-n-1 dark:border-white dark:text-white dark:focus:border-purple-1 dark:placeholder:text-white/75 ${icon || type === "password" ? "pr-15" : ""
+                                    `w-full h-16 px-5 bg-white border border-n-1 text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-purple-1 dark:bg-n-1 dark:border-white dark:text-white dark:focus:border-purple-1 dark:placeholder:text-white/75 ${icon || type === "password" ? "pr-15" : ""
                                     } ${error ? "pr-15 border-pink-1!" : ""} ${image || currency ? "pr-15" : ""
                                     } ${classInput}`
                                 )}

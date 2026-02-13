@@ -14,6 +14,7 @@ type ModalProps = {
     initialFocus?: React.MutableRefObject<HTMLElement | null>;
     children: React.ReactNode;
     video?: boolean;
+    showCloseIcon?: boolean;
 };
 
 const Modal = ({
@@ -27,6 +28,7 @@ const Modal = ({
     initialFocus,
     children,
     video,
+    showCloseIcon = true,
 }: ModalProps) => {
     return (
         <Transition show={visible} as={Fragment}>
@@ -76,23 +78,25 @@ const Modal = ({
                         ) : (
                             children
                         )}
-                        <button
-                            className={twMerge(
-                                `absolute top-6 right-5 text-0 hover:fill-purple-1 outline-none dark:fill-white dark:hover:fill-purple-1 ${video
-                                    ? "absolute top-6 right-6 w-10 h-10 fill-white"
-                                    : ""
-                                } ${classButtonClose}`
-                            )}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onClose();
-                            }}
-                        >
-                            <Icon
-                                className="fill-inherit transition-colors"
-                                name="close"
-                            />
-                        </button>
+                        {showCloseIcon && (
+                            <button
+                                className={twMerge(
+                                    `absolute top-6 right-5 text-0 hover:fill-purple-1 outline-none dark:fill-white dark:hover:fill-purple-1 ${video
+                                        ? "absolute top-6 right-6 w-10 h-10 fill-white"
+                                        : ""
+                                    } ${classButtonClose}`
+                                )}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onClose();
+                                }}
+                            >
+                                <Icon
+                                    className="fill-inherit transition-colors"
+                                    name="close"
+                                />
+                            </button>
+                        )}
                     </DialogPanel>
                 </TransitionChild>
             </Dialog>

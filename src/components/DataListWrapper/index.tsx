@@ -1,6 +1,6 @@
 
 import { ReactNode } from "react";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
+import Loader from "../Loader";
 
 interface DataListWrapperProps {
     isLoading: boolean;
@@ -16,7 +16,11 @@ const DataListWrapper = ({
     children
 }: DataListWrapperProps) => {
     if (isLoading) {
-        return <LoadingSpinner />;
+        return (
+            <div className="flex items-center justify-center">
+                <Loader text="Loading..." />
+            </div>
+        )
     }
 
     if (isError) {
