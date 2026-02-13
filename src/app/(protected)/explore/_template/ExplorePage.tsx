@@ -7,6 +7,7 @@ import Search from "@/components/Search";
 import Item from "./Item";
 import { useExploreCreators } from "./useExploreCreators";
 import Layout from "@/layout";
+import Loader from "@/components/Loader";
 
 export const ExplorePage = () => {
     const { creators, isLoading, error } = useExploreCreators();
@@ -34,8 +35,8 @@ export const ExplorePage = () => {
                 />
 
                 {isLoading ? (
-                    <div className="flex justify-center py-10">
-                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-1"></div>
+                    <div className="flex justify-center pt-10">
+                        <Loader />
                     </div>
                 ) : error ? (
                     <div className="text-center text-red-500 py-10">{error}</div>

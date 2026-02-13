@@ -13,6 +13,7 @@ import {
 import Statistics, { StatisticsItem } from "./Statistics";
 import SimpleChart from "./SimpleChart";
 import { TimeRange, TimeRangeOption } from "./types";
+import Loader from "@/components/Loader";
 
 interface MembershipTabProps {
     days: TimeRange;
@@ -24,8 +25,6 @@ interface MembershipTabProps {
 const MembershipTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: MembershipTabProps) => {
     const { data: overview, isLoading: overviewLoading } = useAnalyticsOverview(days);
     const { data: members, isLoading: membersLoading } = useAnalyticsMembers(days);
-
-    // const isLoading = overviewLoading || membersLoading;
 
     // Transform daily growth data for chart
     const chartData = useMemo(() => {
@@ -95,7 +94,11 @@ const MembershipTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }:
     return (
         <div className="space-y-6">
             {/* Key Metrics */}
-            {overviewLoading ? <LoadingSpinner /> : (
+            {overviewLoading ? (
+                <div className="flex items-center justify-center py-10">
+                    <Loader />
+                </div>
+            ) : (
                 <Statistics
                     items={statisticsData}
                     timeRangeValue={timeRange}

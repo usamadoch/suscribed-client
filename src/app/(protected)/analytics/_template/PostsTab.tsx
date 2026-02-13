@@ -18,6 +18,7 @@ import Tabs from "@/components/Tabs";
 import Statistics, { StatisticsItem } from "./Statistics";
 import SimpleChart from "./SimpleChart";
 import { TimeRange } from "./types";
+import Loader from "@/components/Loader";
 
 interface PostsTabProps {
     days: TimeRange;
@@ -40,8 +41,6 @@ const PostsTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Post
     ];
 
 
-    console.log(overview);
-
 
     // Generate chart data from overview
     const chartData = useMemo(() => {
@@ -60,8 +59,6 @@ const PostsTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Post
         }
         return result;
     }, [overview?.totalViews, days]);
-
-    // console.log(chartData);
 
 
     // Generate statistics data for the Statistics component
@@ -156,7 +153,9 @@ const PostsTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Post
                         </h3>
 
                         {isLoading ? (
-                            <LoadingSpinner />
+                            <div className="flex items-center justify-center py-10">
+                                <Loader />
+                            </div>
                         ) : posts?.topPosts && posts.topPosts.length > 0 ? (
                             <div className="overflow-x-auto">
                                 <table className="table-custom">
@@ -202,7 +201,9 @@ const PostsTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Post
                         </h3>
 
                         {isLoading ? (
-                            <LoadingSpinner />
+                            <div className="flex items-center justify-center py-10">
+                                <Loader />
+                            </div>
                         ) : posts?.recentPosts && posts.recentPosts.length > 0 ? (
                             <div className="overflow-x-auto">
                                 <table className="table-custom">
