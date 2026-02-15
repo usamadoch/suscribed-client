@@ -11,8 +11,6 @@ type PostInputProps = {
 const PostInput = ({ content, setContent, attachmentCount }: PostInputProps) => {
     const { user } = useAuth();
 
-    // console.log(user);
-
     return (
         <div className="flex items-start mt-2 text-sm font-bold">
             <div className="relative ml-2  w-10 h-10 mr-2.5">

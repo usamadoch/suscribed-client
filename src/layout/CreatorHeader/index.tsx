@@ -69,8 +69,8 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
                 <div className="flex items-center ">
 
                     {isLoading ? (
-                        <div className="flex items-center gap-2">
-                            <div className="border border-n-1 dark:border-white rounded-full w-9 h-9 animate-skeleton bg-n-4/10"></div>
+                        <div className="flex items-center gap-2 mr-24">
+                            <div className="border border-n-1 dark:border-white overflow-hidden rounded-full w-9 h-9 animate-skeleton bg-n-4/10"></div>
                             <div className="border border-n-1 dark:border-white h-6 w-26 animate-skeleton bg-n-4/10"></div>
                         </div>
                     ) : (

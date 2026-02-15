@@ -10,6 +10,7 @@ type CommentProps = {
     setValue: React.ChangeEventHandler<HTMLTextAreaElement>;
     onSend?: () => void;
     disabled?: boolean;
+    inputDisabled?: boolean; // New prop for disabling the input specifically
 };
 
 const Comment = ({
@@ -19,7 +20,8 @@ const Comment = ({
     value,
     setValue,
     onSend,
-    disabled
+    disabled,
+    inputDisabled
 }: CommentProps) => {
     return (
         <form
@@ -41,7 +43,7 @@ const Comment = ({
                 </div>
             )}
             <TextareaAutosize
-                className="grow self-center py-2 px-4 bg-transparent text-sm font-medium text-n-1 outline-none resize-none placeholder:text-n-1 md:px-3 dark:text-white dark:placeholder:text-white"
+                className={`grow self-center py-2 px-4 bg-transparent text-sm font-medium text-n-1 outline-none resize-none placeholder:text-n-1 md:px-3 dark:text-white dark:placeholder:text-white ${inputDisabled ? "cursor-not-allowed opacity-50" : ""}`}
                 maxRows={5}
                 autoFocus
                 value={value}
@@ -49,13 +51,14 @@ const Comment = ({
                 onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
-                        if (value.trim() && !disabled) {
+                        if (value.trim() && !disabled && !inputDisabled) {
                             onSend?.();
                         }
                     }
                 }}
                 placeholder={placeholder}
                 required
+                disabled={inputDisabled}
             />
             <div className="flex items-center shrink-0 h-[3.375rem]">
                 {/* <button

@@ -55,7 +55,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
         }
     };
 
-    const handleLike = async (e: React.MouseEvent) => {
+    const handleLike = async (e: React.MouseEvent): Promise<void> => {
         e.stopPropagation();
 
         if (!isAuthenticated) {
@@ -87,8 +87,8 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
             <div className={`flex ${className || "mt-4"}`}>
                 {showComment && (
                     <button className="flex gap-1 mr-5 px-0">
-                        <Icon name="comments" className="h-7 w-7" />
-                        <span className="text-md">{comments}</span>
+                        <Icon name="comments" />
+                        <span className="text-xs">{comments}</span>
                     </button>
                 )}
 
@@ -99,16 +99,18 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
                     <Icon
                         name={liked ? "like-filled" : "like"}
                         className={twMerge(
-                            "h-7 w-7 transition-colors",
+                            "transition-colors",
                             animating && "animate-heart-pop",
                             liked ? "fill-purple-1" : "fill-n-1 dark:fill-white"
                         )}
                         viewBox="0 0 512 512"
                     />
-                    <span className="text-md">{likesCount}</span>
+                    {/* <span className="text-md">{likesCount}</span> */}
+                    <span className="text-xs">{likesCount}</span>
                 </button>
+
                 {/* <button
-                    className={`btn-transparent-dark btn-square btn-small ml-auto -mr-2`}
+                    className={` ml-auto -mr-2`}
                 // onClick={() => setVisible(!visible)}
                 >
 

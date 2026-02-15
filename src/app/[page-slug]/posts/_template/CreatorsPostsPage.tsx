@@ -1,73 +1,57 @@
 "use client";
 
 import Link from "next/link";
-import { notFound } from "next/navigation";
-
-import { useCreatorPage, useCreatorPosts } from "@/hooks/useQueries";
+import { useCreatorPosts } from "@/hooks/useQueries";
 import { usePageSlug } from "@/hooks/usePageSlug";
 
 import Icon from "@/components/Icon";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 import CreatorHeader from "@/layout/CreatorHeader";
 import { Post } from "@/lib/types";
+import Loader from "@/components/Loader";
+import ReadMore from "@/components/ReadMore";
 
 
 const CreatorsPostsPage = () => {
     const slug = usePageSlug();
 
-    // Using cached queries
-    const { data: pageData, isLoading: isLoadingPage } = useCreatorPage(slug);
-    const { data: postsData, isLoading: isLoadingPosts } = useCreatorPosts(slug);
+    const { data: postsData, isLoading } = useCreatorPosts(slug, { type: 'video' });
 
-    if (isLoadingPage) {
-        return (
-            <div className="flex h-screen items-center justify-center">
-                <LoadingSpinner />
-            </div>
-        );
-    }
-
-    if (!pageData || !pageData.page) {
-        notFound();
-    }
-
-    const { page } = pageData;
     const posts = postsData || [];
 
     // Filter posts: only video posts for this page
-    const filteredPosts = posts.filter((post: Post) => {
-        return post.postType === 'video';
-    });
 
     return (
         <>
             <CreatorHeader />
-            <div className="max-w-[90rem] mx-auto px-6 2xl:px-8 lg:px-6 md:px-5 pt-24 pb-20">
+            <div className="max-w-360 mx-auto px-6 2xl:px-8 lg:px-6 md:px-5 pt-24 pb-20">
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-h3">Posts</h1>
                 </div>
 
                 <div className="grid gap-6">
-                    {isLoadingPosts ? (
-                        <div className="flex items-center justify-center py-20">
-                            <LoadingSpinner />
+                    {isLoading ? (
+                        <div className="flex items-center justify-center">
+                            <Loader />
                         </div>
-                    ) : filteredPosts.length === 0 ? (
+                    ) : posts.length === 0 ? (
                         <div className="text-center py-10 text-n-3">No video posts found.</div>
                     ) : (
                         <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
-                            {filteredPosts.map((post) => {
-                                // Use the backend-provided isLocked flag
-                                const locked = post.isLocked;
+                            {posts.map((post) => {
 
-                                // Get thumbnail URL (blurred for locked, normal for unlocked)
-                                const thumbnailUrl = post.mediaAttachments[0]?.thumbnailUrl;
+                                // Use strict narrowing
+                                const isLocked = post.isLocked;
+                                let displayCaption: string;
+                                let thumbnailUrl: string | undefined;
 
-                                // Display content: teaser for locked, caption for unlocked
-                                const displayCaption = locked
-                                    ? post.teaser || 'Exclusive content'
-                                    : post.caption || 'Untitled video';
+                                if (post.isLocked) {
+                                    displayCaption = post.teaser || 'Exclusive content';
+                                    thumbnailUrl = post.mediaAttachments[0]?.thumbnailUrl;
+                                } else {
+                                    displayCaption = post.caption || 'Untitled video';
+                                    thumbnailUrl = post.mediaAttachments[0]?.thumbnailUrl;
+                                }
 
                                 return (
                                     <Link
@@ -107,17 +91,16 @@ const CreatorsPostsPage = () => {
                                             )} */}
                                         </div>
                                         <div className="p-5">
-                                            <h4 className={`text-sm font-semibold truncate mb-2 ${locked ? "blur-xs select-none" : ""}`}>
-                                                {displayCaption}
-                                            </h4>
+                                            <p className={`text-sm font-semibold mb-2 ${isLocked ? "blur-xs select-none" : ""}`}>
+                                                <ReadMore words={12}>{displayCaption}</ReadMore>
+                                            </p>
                                             <div className="flex items-center text-xs text-n-3">
                                                 <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                                                 <span className="mx-2">•</span>
                                                 <span className="flex items-center">
-                                                    <Icon name="like" className="w-3 h-3 mr-1 fill-n-3" />
-                                                    {post.likeCount}
+                                                    {post.viewCount} views
                                                 </span>
-                                                {locked && (
+                                                {isLocked && (
                                                     <>
                                                         <span className="mx-2">•</span>
                                                         <span className="flex items-center text-accent">

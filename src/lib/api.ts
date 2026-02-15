@@ -398,6 +398,7 @@ interface GetPostsParams {
     visibility?: string;
     page?: number;
     limit?: number;
+    type?: string | string[];
 }
 
 export const postApi = {

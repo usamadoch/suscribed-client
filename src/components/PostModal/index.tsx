@@ -12,6 +12,8 @@ import { getFullImageUrl } from "@/lib/utils";
 import Actions from "@/components/Review/Actions";
 import { useAuth } from "@/store/auth";
 import Loader from "../Loader";
+import CommentItem from "@/components/CommentItem";
+import ReadMore from "@/components/ReadMore";
 
 type PostModalProps = {
     visible: boolean;
@@ -53,10 +55,13 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
     const fullImageUrl = displayedImage ? getFullImageUrl(displayedImage) : null;
 
     // Helper to get creator info safely
-    // post.creatorId can be string or object depending on population
-    const creator = typeof post.creatorId === 'object' ? post.creatorId : null;
-    const creatorName = creator?.displayName || creator?.username || "Creator";
-    const creatorAvatar = getFullImageUrl(creator?.avatarUrl) || "/images/content/avatar-1.jpg";
+    // post.pageId can be string or object depending on population
+    const page = typeof post.pageId === 'object' ? post.pageId : null;
+    const creatorName = page?.displayName || "Creator";
+    const creatorAvatar = getFullImageUrl(page?.avatarUrl) || "/images/content/avatar-1.jpg";
+
+
+    console.log(comments);
 
     return (
         <Modal
@@ -67,7 +72,7 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
         // classButtonClose="z-20 text-n-1 dark:text-white bg-white/50 dark:bg-n-1/50 rounded-full p-2 hover:bg-white dark:hover:bg-n-1"
         >
             {/* Left Section: Image */}
-            <div className="w-2/3 bg-n-1 flex items-center justify-center relative overflow-hidden md:min-h-[20rem]">
+            <div className="w-3/5 bg-n-1 flex items-center justify-center relative overflow-hidden md:min-h-[20rem]">
                 {fullImageUrl ? (
                     <div className="relative w-full h-full">
                         <Image
@@ -94,7 +99,7 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
             </div>
 
             {/* Right Section: Details (Stacked) */}
-            <div className="w-1/3 shrink-0 bg-white dark:bg-n-1 flex flex-col border-l border-n-3/10 dark:border-white/10 md:w-full md:flex-1 md:h-full">
+            <div className="w-2/5 shrink-0 bg-white dark:bg-n-1 flex flex-col border-l border-n-3/10 dark:border-white/10 md:w-full md:flex-1 md:h-full">
                 {/* 1. Author Header */}
                 <div className="p-4 border-b border-n-3 dark:border-white flex items-center shrink-0">
                     <div className="relative w-10 h-10 mr-3">
@@ -117,7 +122,9 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                     {/* Post Caption as first item if exists */}
                     {post.caption && !post.isLocked && (
                         <div className="">
-                            <p className="text-sm text-n-1 dark:text-white">{post.caption}</p>
+                            <p className="text-sm text-n-1 dark:text-white">
+                                <ReadMore words={30}>{post.caption}</ReadMore>
+                            </p>
                         </div>
                     )}
 
@@ -127,32 +134,11 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                         </div>
                     ) : comments.length > 0 ? (
                         comments.map((comment) => (
-                            <div key={comment._id} className="flex gap-3">
-                                <div className="relative w-8 h-8 shrink-0">
-                                    <Image
-                                        className="object-cover rounded-full"
-                                        src={
-                                            typeof comment.authorId === 'object'
-                                                ? getFullImageUrl(comment.authorId.avatarUrl) || "/images/content/avatar-1.jpg"
-                                                : "/images/content/avatar-1.jpg"
-                                        }
-                                        fill
-                                        alt="User"
-                                        unoptimized
-                                    />
-                                </div>
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <span className="text-xs font-bold text-n-1 dark:text-white">
-                                            {typeof comment.authorId === 'object' ? comment.authorId.displayName : "User"}
-                                        </span>
-                                        {/* Time could be added here if available in comment data */}
-                                    </div>
-                                    <p className="text-sm text-n-1 dark:text-white/80 leading-relaxed">
-                                        {comment.content}
-                                    </p>
-                                </div>
-                            </div>
+                            <CommentItem
+                                key={comment._id}
+                                comment={comment}
+                                variant="modal"
+                            />
                         ))
                     ) : (
                         <div className="text-center py-8 text-n-3 text-sm">
@@ -176,12 +162,13 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                 {/* 3. Fixed Comment Input */}
                 <div className="p-4 shrink-0">
                     <Comment
-
-                        placeholder="Write a comment..."
+                        placeholder={post.allowComments ? "Write a comment..." : "Comments are turned off."}
+                        className="shadow-none"
                         value={commentValue}
                         setValue={(e) => setCommentValue(e.target.value)}
                         onSend={handleSendComment}
-                        disabled={sendingComment || post.isLocked}
+                        disabled={!post.allowComments || sendingComment || post.isLocked}
+                        inputDisabled={!post.allowComments}
                     />
                 </div>
             </div>

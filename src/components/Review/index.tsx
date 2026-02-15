@@ -2,6 +2,7 @@ import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Images from "./Images";
 import Actions from "./Actions";
+import ReadMore from "@/components/ReadMore";
 
 
 type ReviewItem = {
@@ -10,11 +11,11 @@ type ReviewItem = {
     author: string;
     time: string;
     content: string;
-    images?: string[];
+    images: string[] | null;
     likes: number;
     comments: number;
     isLiked: boolean;
-    isLocked?: boolean;
+    isLocked: boolean;
 }
 
 type ReviewProps = {
@@ -47,7 +48,9 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                     </button> */}
                 </div>
 
-                <div className={`text-sm ${item.isLocked ? "blur-[3px] select-none" : ""}`}>{item.content}</div>
+                <div className={`text-sm ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
+                    <ReadMore>{item.content}</ReadMore>
+                </div>
 
                 {item.images && (
                     <Images items={item.images} imageBig={imageBig} />

@@ -122,12 +122,11 @@ export interface Comment {
 export type PostStatus = 'draft' | 'scheduled' | 'published';
 export type PostVisibility = 'public' | 'members';
 
-interface BasePost {
+// Common fields for all posts
+interface BasePostFields {
     _id: string;
     creatorId: string | Pick<User, '_id' | 'displayName' | 'username' | 'avatarUrl'>;
     pageId: string | Pick<CreatorPage, '_id' | 'pageSlug' | 'displayName' | 'avatarUrl'>;
-    caption: string | null;              // Null when post is locked
-    teaser?: string;                     // Present when post is locked
     tags: string[];
     visibility: PostVisibility;
     status: PostStatus;
@@ -140,10 +139,25 @@ interface BasePost {
     isPinned: boolean;
     createdAt: string;
     updatedAt: string;
-    isLocked: boolean;                   // True if user cannot access full content
+    isLocked: boolean;
     // Client specific
-    isLiked?: boolean;                   // Optional: Injected by client-side aggregation
+    isLiked?: boolean;
 }
+
+// Invariants for Locked vs Unlocked posts
+type LockedPostState = {
+    isLocked: true;
+    teaser: string;      // Locked posts must have a teaser (or at least undefined is not enough, domain usually implies content replacement)
+    caption: null;       // Locked posts hide caption
+}
+
+type UnlockedPostState = {
+    isLocked: false;
+    teaser?: null;       // Unlocked posts don't use teaser
+    caption: string | null;
+}
+
+type BasePost = BasePostFields & (LockedPostState | UnlockedPostState);
 
 /**
  * Locked media attachment - returned when user doesn't have access
@@ -180,17 +194,17 @@ export type LockedMediaAttachment = LockedImageAttachment | LockedVideoAttachmen
  */
 export type AnyMediaAttachment = MediaAttachment | LockedMediaAttachment;
 
-export interface TextPost extends BasePost {
+export type TextPost = BasePost & {
     postType: 'text';
     mediaAttachments: never[];
 }
 
-export interface ImagePost extends BasePost {
+export type ImagePost = BasePost & {
     postType: 'image';
     mediaAttachments: (ImageAttachment | LockedImageAttachment)[];
 }
 
-export interface VideoPost extends BasePost {
+export type VideoPost = BasePost & {
     postType: 'video';
     mediaAttachments: (VideoAttachment | LockedVideoAttachment)[];
 }

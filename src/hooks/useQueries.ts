@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
-import { postApi, membershipApi, notificationApi, pageApi } from "@/lib/api";
+import { postApi, membershipApi, notificationApi, pageApi, analyticsApi } from "@/lib/api";
 import { useAuth } from "@/store/auth";
+import { TimeRange, PostType } from "@/lib/types";
 
 // ======================
 // PAGE RELATED QUERIES
@@ -97,13 +98,13 @@ export const useCheckMembership = (pageId: string) => {
 // ======================
 
 // Hook to fetch Creator Posts
-export const useCreatorPosts = (slug: string) => {
+export const useCreatorPosts = (slug: string, filters?: { type?: PostType | PostType[] }) => {
     const { user } = useAuth();
     return useQuery({
-        queryKey: ['creator-posts', slug, user?._id],
+        queryKey: ['creator-posts', slug, filters, user?._id],
         queryFn: async () => {
             if (!slug) return [];
-            const { posts } = await postApi.getAll({ pageSlug: slug, limit: 100 });
+            const { posts } = await postApi.getAll({ pageSlug: slug, limit: 100, ...filters });
             return posts;
         },
         enabled: !!slug,
@@ -211,10 +212,6 @@ export const useMarkNotificationsAsRead = () => {
 // ======================
 // ANALYTICS QUERIES
 // ======================
-
-import { analyticsApi } from "@/lib/api";
-
-import { TimeRange } from "@/lib/types";
 
 // Hook to fetch Analytics Overview
 export const useAnalyticsOverview = (days: TimeRange = 30) => {

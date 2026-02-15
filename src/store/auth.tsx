@@ -11,7 +11,6 @@ import { create } from 'zustand';
 import { AuthState, LoginPayload, SignupPayload } from '@/lib/types';
 import { ApiClientError, authApi, } from '@/lib/api';
 
-import { LoadingSpinner } from '@/components/LoadingSpinner';
 
 // ====================
 // AUTH STORE TYPES
@@ -278,11 +277,11 @@ export function RequireMember({ children, fallback }: RouteGuardProps) {
     }, [isLoading, isAuthenticated, user, router]);
 
     if (isLoading) {
-        return fallback || <LoadingSpinner />;
+        return fallback || null;
     }
 
     if (!isAuthenticated || user?.role !== 'member') {
-        return fallback || <LoadingSpinner />;
+        return fallback || null;
     }
 
     return <>{children}</>;

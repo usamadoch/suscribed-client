@@ -36,8 +36,7 @@ const MediaCarousel = ({ items }: MediaCarouselProps) => {
                     {items.map((item, index) => (
                         <div key={index} className="min-w-full h-full shrink-0">
                             <MediaBlock
-                                url={item.url}
-                                type={item.type === 'video' ? 'video' : 'image'}
+                                media={item}
                                 className="mb-0! rounded-none h-full"
                             />
                         </div>
