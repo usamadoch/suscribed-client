@@ -17,6 +17,8 @@ import {
     AnyMediaAttachment,
 } from "@/lib/types";
 
+import { formatAppDate } from "@/lib/date";
+
 import Icon from "@/components/Icon";
 
 // ─── Types ──────────────────────────────────────────────────
@@ -146,7 +148,7 @@ const PostContentArea = ({
                                     <h5 className="text-h5 md:text-h4">{displayName}</h5>
                                     <span>•</span>
                                     <span className="text-sm text-n-3">
-                                        {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
+                                        {formatAppDate(post.publishedAt || post.createdAt, { suffix: true })}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-3">

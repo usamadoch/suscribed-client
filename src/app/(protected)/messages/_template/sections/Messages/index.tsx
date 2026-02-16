@@ -1,6 +1,7 @@
 import Icon from "@/components/Icon";
 import Image from "next/image";
 import { Conversation, User } from "@/lib/types";
+import { formatAppDate } from "@/lib/date";
 
 type MessagesProps = {
     setVisible: (visible: boolean) => void;
@@ -43,30 +44,14 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user 
         return null;
     };
 
-    const formatTime = (date: string) => {
-        if (!date) return '';
-        const now = new Date();
-        const msgDate = new Date(date);
-        const diffMs = now.getTime() - msgDate.getTime();
-        const diffMins = Math.floor(diffMs / 60000);
-        const diffHours = Math.floor(diffMins / 60);
-        const diffDays = Math.floor(diffHours / 24);
-
-        if (diffMins < 1) return 'Just now';
-        if (diffMins < 60) return `${diffMins}m`;
-        if (diffHours < 24) return `${diffHours}h`;
-        if (diffDays < 7) return `${diffDays}d`;
-        return msgDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-    };
-
     return (
-        <div className="flex flex-col w-[28rem] border-r border-n-1 4xl:w-[23.125rem] lg:w-full lg:border-none dark:border-white">
+        <div className="flex flex-col w-md border-r border-n-1 4xl:w-92.5 lg:w-full lg:border-none dark:border-white">
             <div className="flex p-5 border-b border-n-1 dark:border-white">
                 {/* <button className="btn-purple btn-small mr-auto px-4">
                     <Icon name="edit" />
                     <span>Compose</span>
                 </button> */}
-                <div className="flex-grow"></div>
+                <div className="grow"></div>
                 <button className="btn-stroke btn-square btn-small mr-1.5">
                     <Icon name="filters" />
                 </button>
@@ -83,7 +68,7 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user 
                     return (
                         <button
                             className={`flex w-full px-5 py-3 border-b border-n-1 text-left last:border-none transition-colors hover:bg-n-3/5 dark:border-white dark:hover:bg-white/10 ${conversation._id === activeId
-                                ? "!bg-n-3/20 dark:!bg-white/20"
+                                ? "bg-n-3/20! dark:bg-white/20!"
                                 : ""
                                 }`}
                             key={conversation._id}
@@ -100,7 +85,7 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user 
                             <div className="w-[calc(100%-2rem)] pl-3">
                                 <div className="flex justify-between mb-1 text-xs font-medium text-n-3 dark:text-white/75">
                                     <div className="line-clamp-1 mr-2 capitalize">{otherUser.displayName || 'Unknown'}</div>
-                                    <div className="shrink-0">{formatTime(lastMessage?.sentAt || conversation.createdAt)}</div>
+                                    <div className="shrink-0">{formatAppDate(lastMessage?.sentAt || conversation.createdAt)}</div>
                                 </div>
                                 <div className="truncate text-sm">
                                     {/* Using display name as title for now, or last message preview */}

@@ -10,6 +10,7 @@ import PostModal from "@/components/PostModal";
 import LoginModal from "@/components/LoginModal";
 import JoinMembershipModal from "@/components/JoinMembershipModal";
 import Loader from "@/components/Loader";
+import { formatAppDate } from "@/lib/date";
 
 type CreatorContentProps = {
     pageSlug: string;
@@ -104,7 +105,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                                 id: post._id,
                                 author: page?.displayName || "",
                                 avatar: page?.avatarUrl || "/images/content/avatar-1.jpg",
-                                time: new Date(post.createdAt).toLocaleDateString(),
+                                time: formatAppDate(post.createdAt, { suffix: true }),
                                 content: content,
                                 images: images,
                                 likes: post.likeCount || 0,

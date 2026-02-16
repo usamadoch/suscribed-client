@@ -1,4 +1,5 @@
-import { formatDistanceToNow } from "date-fns";
+
+import { formatAppDate } from "@/lib/date";
 import Image from "@/components/Image";
 import Actions from "@/components/Review/Actions";
 import { Comment as PostComment } from "@/lib/types";
@@ -11,7 +12,7 @@ interface CommentItemProps {
 const CommentItem = ({ comment, variant = 'default' }: CommentItemProps) => {
     const author = typeof comment.authorId === 'object' ? comment.authorId : null;
     const authorName = author?.displayName || author?.username || 'User';
-    const timeAgo = comment.createdAt ? formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true }) : "";
+    const timeAgo = comment.createdAt ? formatAppDate(comment.createdAt) : "";
 
     // "default" applies the card style (border, shadow, padding)
     // "modal" applies a cleaner style (no border, minimal padding/margin)

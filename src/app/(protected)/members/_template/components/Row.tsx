@@ -2,6 +2,7 @@
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Link from "next/link";
+import { formatAppDate } from "@/lib/date";
 
 type RowProps = {
     item: any;
@@ -48,7 +49,7 @@ const Row = ({ item }: RowProps) => {
                 {item.tier || "-"}
             </td>
             <td className="td-custom text-n-3 dark:text-white/75">
-                {new Date(item.joinedAt).toLocaleDateString()}
+                {formatAppDate(item.joinedAt, { relative: false, dateFormat: 'MMM, d, yyyy' })}
             </td>
             <td className="td-custom text-right">
                 <div className={`inline-block px-3 py-1 text-xs font-bold ${getStatusColor(item.status)}`}>

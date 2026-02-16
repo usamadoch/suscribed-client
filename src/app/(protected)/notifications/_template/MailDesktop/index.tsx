@@ -1,6 +1,7 @@
 
 
 import Link from "next/link";
+import { formatAppDate } from "@/lib/date";
 import { Notification as AppNotification, NotificationType } from "@/lib/types";
 
 type MailDesktopProps = {
@@ -41,20 +42,7 @@ const MailDesktop = ({ item }: MailDesktopProps) => {
         }
     };
 
-    const formatTime = (date: string) => {
-        const now = new Date();
-        const notifDate = new Date(date);
-        const diffMs = now.getTime() - notifDate.getTime();
-        const diffMins = Math.floor(diffMs / 60000);
-        const diffHours = Math.floor(diffMins / 60);
-        const diffDays = Math.floor(diffHours / 24);
 
-        if (diffMins < 1) return 'Just now';
-        if (diffMins < 60) return `${diffMins}m ago`;
-        if (diffHours < 24) return `${diffHours}h ago`;
-        if (diffDays < 7) return `${diffDays}d ago`;
-        return notifDate.toLocaleDateString();
-    };
 
     return (
         <div className="flex items-start border-b border-n-1 text-sm last:border-none dark:border-white">
@@ -72,7 +60,7 @@ const MailDesktop = ({ item }: MailDesktopProps) => {
                     {item.body || item.message}{" "}
                 </div>
                 <div className="shrink-0 w-28 ml-4 pt-1.5 text-right font-medium">
-                    {formatTime(item.createdAt)}
+                    {formatAppDate(item.createdAt, { suffix: true })}
                 </div>
             </Link>
         </div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCreatorPosts } from "@/hooks/useQueries";
 import { usePageSlug } from "@/hooks/usePageSlug";
+import { formatAppDate } from "@/lib/date";
 
 import Icon from "@/components/Icon";
 
@@ -95,7 +96,7 @@ const CreatorsPostsPage = () => {
                                                 <ReadMore words={12}>{displayCaption}</ReadMore>
                                             </p>
                                             <div className="flex items-center text-xs text-n-3">
-                                                <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                                                <span>{formatAppDate(post.createdAt, { suffix: true })}</span>
                                                 <span className="mx-2">•</span>
                                                 <span className="flex items-center">
                                                     {post.viewCount} views

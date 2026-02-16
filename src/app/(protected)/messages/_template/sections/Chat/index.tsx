@@ -9,6 +9,7 @@ import Answer from "./Answer";
 import Question from "./Question";
 import { conversationApi, ApiClientError } from '@/lib/api';
 import { Message, User } from "@/lib/types";
+import { formatAppDate } from "@/lib/date";
 
 import { useAuth } from "@/store/auth";
 import { useSocket } from "@/store/socket";
@@ -207,7 +208,7 @@ const Chat = ({ visible, onClose, activeId, recipientUser, setActiveId, onMessag
 
     const formatTime = (date?: string) => {
         if (!date) return "";
-        return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return formatAppDate(date, { chatFormat: true });
     };
 
     return (

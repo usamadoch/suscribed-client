@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { formatAppDate } from "@/lib/date";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePostComments } from "@/hooks/useQueries";
@@ -108,7 +109,7 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                     </div>
                     <div>
                         <div className="font-bold text-sm text-n-1 dark:text-white">{creatorName}</div>
-                        <div className="text-xs text-n-3">{new Date(post.createdAt).toLocaleDateString()}</div>
+                        <div className="text-xs text-n-3">{formatAppDate(post.createdAt, { suffix: true })}</div>
                     </div>
                 </div>
 
