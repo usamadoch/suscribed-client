@@ -259,6 +259,7 @@ const MessagesPage = () => {
                         activeId={activeId}
                         setActiveId={setActiveId}
                         user={user}
+                        isLoading={isLoading}
                     />
                     <Chat
                         visible={visible}

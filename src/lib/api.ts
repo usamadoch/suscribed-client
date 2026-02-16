@@ -589,10 +589,8 @@ interface GetConversationsParams {
     limit?: number;
 }
 
-interface GetMessagesParams {
-    page?: number;
-    limit?: number;
-}
+import { GetMessagesParams } from "./types";
+
 
 export const conversationApi = {
     async getAll(params: GetConversationsParams = {}): Promise<{

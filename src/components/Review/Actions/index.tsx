@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import Icon from "@/components/Icon";
 import { postApi } from "@/lib/api";
 import { useAuth } from "@/store/auth";
@@ -15,6 +16,7 @@ type ActionsProps = {
 };
 
 const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLiked, className, showComment = true }: ActionsProps) => {
+    const queryClient = useQueryClient();
     const { isAuthenticated } = useAuth();
     const [liked, setLiked] = useState<boolean>(initialIsLiked);
     const [likesCount, setLikesCount] = useState<number>(initialLikes);
@@ -24,6 +26,16 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
     // Refs for debouncing and server synchronization
     const serverLiked = useRef<boolean>(initialIsLiked);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    // Sync state with props if they change (e.g. from parent re-render due to invalidation)
+    useEffect(() => {
+        setLiked(initialIsLiked);
+        serverLiked.current = initialIsLiked;
+    }, [initialIsLiked]);
+
+    useEffect(() => {
+        setLikesCount(initialLikes);
+    }, [initialLikes]);
 
     // Cleanup timeout on unmount
     useEffect(() => {
@@ -47,6 +59,12 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
             // If it doesn't (race condition?), we might need to revert or sync up.
             // For now, assume success means the toggle happened.
             serverLiked.current = targetLiked;
+
+            // Invalidate queries to reflect changes elsewhere (e.g. post list, modal)
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
+            queryClient.invalidateQueries({ queryKey: ['creator-posts'] });
+            queryClient.invalidateQueries({ queryKey: ['post', postId] });
+
         } catch (error) {
             console.error('Failed to toggle like', error);
             // Revert UI on error
@@ -79,7 +97,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
 
         timeoutRef.current = setTimeout(() => {
             syncLike(nextLiked);
-        }, 1000); // 1 second debounce
+        }, 400); // 1 second debounce
     };
 
     return (

@@ -9,9 +9,10 @@ type MessagesProps = {
     activeId: string | null;
     setActiveId: (id: string | null) => void;
     user: User | null;
+    isLoading?: boolean;
 };
 
-const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user }: MessagesProps) => {
+const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user, isLoading }: MessagesProps) => {
 
     const handleClick = (id: string) => {
         setActiveId(id);
@@ -59,8 +60,22 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user 
                     <Icon name="search" />
                 </button>
             </div>
+
+
+
             <div className="grow overflow-auto scroll-smooth">
-                {conversations.map((conversation: Conversation) => {
+                {isLoading ? Array.from({ length: 8 }).map((_, index) => (
+                    <div className="flex w-full px-5 py-3 border-b border-n-1 last:border-none" key={index}>
+                        <div className="border border-n-1 dark:border-white w-8 h-8 rounded-full animate-skeleton bg-n-4/10"></div>
+                        <div className="w-[calc(100%-2rem)] pl-3">
+                            <div className="flex justify-between mb-1">
+                                <div className="border border-n-1 dark:border-white w-20 h-4 animate-skeleton bg-n-4/10"></div>
+                                <div className="border border-n-1 dark:border-white w-8 h-4 animate-skeleton bg-n-4/10"></div>
+                            </div>
+                            <div className="border border-n-1 dark:border-white w-3/4 h-4 animate-skeleton bg-n-4/10"></div>
+                        </div>
+                    </div>
+                )) : conversations.map((conversation: Conversation) => {
                     const otherUser = getOtherParticipant(conversation);
                     const lastMessage = conversation.lastMessage;
                     if (!otherUser) return null;
@@ -102,6 +117,8 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user 
                         </button>
                     );
                 })}
+
+
             </div>
         </div>
     );

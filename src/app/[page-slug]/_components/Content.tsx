@@ -28,13 +28,15 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
 
 
 
-    const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+    const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
     const [loginModalVisible, setLoginModalVisible] = useState(false);
     const [joinModalVisible, setJoinModalVisible] = useState(false);
 
+    const activePost = posts.find(p => p._id === selectedPostId) || null;
+
     const handlePostClick = (post: Post) => {
         if (!post.isLocked) {
-            setSelectedPost(post);
+            setSelectedPostId(post._id);
         } else {
             if (!isAuthenticated) {
                 setLoginModalVisible(true);
@@ -60,7 +62,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
         <div className="pb-20 px-16">
             <h4 className="text-h4 mb-8">Latest Posts</h4>
 
-            <div className="max-w-5xl">
+            <div className="max-w-4xl">
 
                 {isLoading ? (
                     <div className="flex items-center justify-center pt-10">
@@ -135,12 +137,10 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                 )}
             </div>
 
-
-
             <PostModal
-                visible={!!selectedPost}
-                post={selectedPost}
-                onClose={() => setSelectedPost(null)}
+                visible={!!activePost}
+                post={activePost}
+                onClose={() => setSelectedPostId(null)}
             />
 
             <LoginModal

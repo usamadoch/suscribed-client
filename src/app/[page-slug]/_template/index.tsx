@@ -97,7 +97,7 @@ const CreatorPage = () => {
                 onUpdate={handleImageSuccess}
             />
 
-            <div className="max-w-[90rem] mx-auto">
+            <div className="max-w-360 mx-auto">
                 <ProfileHeader
                     page={page}
                     isOwner={!!isOwner}

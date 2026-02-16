@@ -261,6 +261,7 @@ export interface Pagination {
     totalPages: number;
     hasNextPage: boolean;
     hasPrevPage: boolean;
+    cursor?: string;
 }
 
 export interface ApiError {
@@ -519,4 +520,10 @@ export interface Conversation {
     unreadCounts: Record<string, number>;
     createdAt: string;
     updatedAt?: string;
+}
+
+export interface GetMessagesParams {
+    page?: number;
+    limit?: number;
+    cursor?: string;
 }
