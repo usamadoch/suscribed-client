@@ -2,7 +2,6 @@ import { formatDistanceToNow } from "date-fns";
 import Image from "@/components/Image";
 import Actions from "@/components/Review/Actions";
 import { Comment as PostComment } from "@/lib/types";
-import { getFullImageUrl } from "@/lib/utils";
 
 interface CommentItemProps {
     comment: PostComment;
@@ -12,7 +11,6 @@ interface CommentItemProps {
 const CommentItem = ({ comment, variant = 'default' }: CommentItemProps) => {
     const author = typeof comment.authorId === 'object' ? comment.authorId : null;
     const authorName = author?.displayName || author?.username || 'User';
-    const authorAvatar = getFullImageUrl(author?.avatarUrl) || "/images/avatars/avatar.jpg";
     const timeAgo = comment.createdAt ? formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true }) : "";
 
     // "default" applies the card style (border, shadow, padding)
@@ -26,7 +24,9 @@ const CommentItem = ({ comment, variant = 'default' }: CommentItemProps) => {
             <div className="relative shrink-0 w-8.5 h-8.5">
                 <Image
                     className="object-cover rounded-full"
-                    src={authorAvatar}
+                    family="avatar"
+                    slot="comment"
+                    src={author?.avatarUrl}
                     fill
                     alt={authorName}
                 />

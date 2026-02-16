@@ -12,7 +12,7 @@ import Loader from "@/components/Loader";
 import LoginModal from "@/components/LoginModal";
 import Modal from "@/components/Modal";
 
-import { getFullImageUrl, truncateText } from "@/lib/utils";
+import { truncateText } from "@/lib/utils";
 import { CreatorPage } from "@/lib/types";
 
 import { usePageImageUpload } from "@/hooks/usePageImageUpload";
@@ -88,21 +88,24 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                                 containerClassName="w-full h-full rounded-full"
                                 imageClassName="object-cover rounded-full"
                                 imageSrc={optimisticAvatar || page.avatarUrl}
-                                fallbackSrc="/images/avatar-2.jpg"
+
                                 alt="Avatar"
                                 onFileChange={handleAvatarUpload}
                                 uploadIconWrapperClassName="w-8 h-8"
                                 iconClassName="w-4 h-4 fill-n-1"
                                 isLoading={uploadingType === 'avatar'}
+                                family="avatar"
+                                slot="profile"
                             />
                         ) : (
                             <div className="relative w-full h-full rounded-full overflow-hidden">
                                 <Image
                                     className="object-cover"
-                                    src={getFullImageUrl(page.avatarUrl) || "/images/avatar-2.jpg"}
+                                    family="avatar"
+                                    slot="profile"
+                                    src={page.avatarUrl}
                                     fill
                                     alt="Avatar"
-                                    unoptimized
                                 />
                             </div>
                         )}
@@ -264,23 +267,25 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                 </div>
                 <div className=" px-5 pb-7 md:pt-8">
                     <div className="mb-6 text-center">
-                        <div className="relative w-full mt-5 aspect-[3/1] overflow-hidden bg-n-2 dark:bg-n-7">
+                        <div className="relative w-full mt-5 aspect-3/1 overflow-hidden bg-n-2 dark:bg-n-7">
                             <Image
                                 className="object-cover"
-                                src={getFullImageUrl(page.bannerUrl) || "/images/bg-1.jpg"}
+                                family="banner"
+                                slot="creatorPage"
+                                src={page.bannerUrl}
                                 fill
                                 alt="Banner"
-                                unoptimized
                             />
                         </div>
 
                         <div className="relative z-1 -mt-10 w-20 h-20 mx-auto mb-3 border-4 border-white rounded-full dark:border-n-1 bg-n-1">
                             <Image
                                 className="object-cover rounded-full"
-                                src={getFullImageUrl(page.avatarUrl) || "/images/avatars/avatar.jpg"}
+                                family="avatar"
+                                slot="profile"
+                                src={page.avatarUrl}
                                 fill
                                 alt="Creator Avatar"
-                                unoptimized
                             />
                         </div>
                         {/* <div className="mb-1 text-h4">Rustem Tolstobrov</div>

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
-import { getFullImageUrl } from "@/lib/utils";
 import { Post, isLockedMedia } from "@/lib/types";
 import { useAuth } from "@/store/auth";
 import { useCreatorPage, useCreatorPosts, useJoinPage } from "@/hooks/useQueries";
@@ -73,7 +72,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                     <div className="grid grid-cols-1 gap-6">
                         {posts.map((post: Post) => {
                             let content: string;
-                            let images: string[] | null = null;
+                            let images: string[] = [];
                             let isLocked = post.isLocked;
 
                             if (post.isLocked) {
@@ -96,7 +95,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                                     const attachments = post.mediaAttachments;
                                     images = attachments
                                         .filter(m => !isLockedMedia(m) && m.url)
-                                        .map(m => getFullImageUrl(m.url))
+                                        .map(m => m.url)
                                         .filter((url): url is string => !!url);
                                 }
                             }
@@ -104,7 +103,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                             const postItem = {
                                 id: post._id,
                                 author: page?.displayName || "",
-                                avatar: getFullImageUrl(page?.avatarUrl) || "/images/content/avatar-1.jpg",
+                                avatar: page?.avatarUrl || "/images/content/avatar-1.jpg",
                                 time: new Date(post.createdAt).toLocaleDateString(),
                                 content: content,
                                 images: images,
@@ -114,7 +113,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                                 isLocked: isLocked,
                             };
 
-                            console.log(postItem);
+                            // console.log(postItem);
 
 
                             return (

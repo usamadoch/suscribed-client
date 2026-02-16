@@ -1,12 +1,11 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
-import { getFullImageUrl } from "@/lib/utils";
+import { SlotFamily, SlotName } from "@/lib/image-slots";
 
-interface PageImageUploaderProps {
+interface BaseUploaderProps {
     imageSrc: string | null | undefined;
-    fallbackSrc: string;
     alt: string;
     onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     containerClassName?: string;
@@ -17,20 +16,36 @@ interface PageImageUploaderProps {
     isLoading?: boolean;
 }
 
+type LegacyUploaderProps = BaseUploaderProps & {
+    fallbackSrc: string;
+    family?: never;
+    slot?: never;
+};
+
+type SlotUploaderProps<F extends SlotFamily> = BaseUploaderProps & {
+    fallbackSrc?: never;
+    family: F;
+    slot: SlotName<F>;
+};
+
+type PageImageUploaderProps<F extends SlotFamily> = LegacyUploaderProps | SlotUploaderProps<F>;
+
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
 
-export const PageImageUploader = ({
-    imageSrc,
-    fallbackSrc,
-    alt,
-    onFileChange,
-    containerClassName = "",
-    imageClassName = "object-cover",
-    children,
-    uploadIconWrapperClassName,
-    iconClassName = "w-5 h-5 fill-n-1",
-    isLoading = false
-}: PageImageUploaderProps) => {
+export function PageImageUploader(props: LegacyUploaderProps): React.ReactElement;
+export function PageImageUploader<F extends SlotFamily>(props: SlotUploaderProps<F>): React.ReactElement;
+export function PageImageUploader<F extends SlotFamily>(props: PageImageUploaderProps<F>) {
+    const {
+        imageSrc,
+        alt,
+        onFileChange,
+        containerClassName = "",
+        imageClassName = "object-cover",
+        children,
+        uploadIconWrapperClassName,
+        iconClassName = "w-5 h-5 fill-n-1",
+        isLoading = false,
+    } = props;
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleClick = () => {
@@ -39,15 +54,31 @@ export const PageImageUploader = ({
         }
     };
 
+    // Helper to determine if we should use slot mode or legacy fallback logic
+    // If family/slot provided, we use them.
+    // If not, we might fallback to raw src.
+    // However, Image component handles the fallback logic now mostly via slot.
+    // If no family/slot, Image uses legacy mode (src directly).
+
     return (
         <div className={`relative group cursor-pointer ${containerClassName}`} onClick={handleClick}>
-            <Image
-                className={imageClassName}
-                src={getFullImageUrl(imageSrc) || fallbackSrc}
-                fill
-                alt={alt}
-                unoptimized
-            />
+            {'family' in props && props.family ? (
+                <Image
+                    className={imageClassName}
+                    family={props.family!}
+                    slot={props.slot!}
+                    src={imageSrc}
+                    fill
+                    alt={alt}
+                />
+            ) : (
+                <Image
+                    className={imageClassName}
+                    src={imageSrc || (props as LegacyUploaderProps).fallbackSrc}
+                    fill
+                    alt={alt}
+                />
+            )}
 
             {/* Hover/Loading Overlay */}
             <div className={`absolute inset-0 flex items-center justify-center transition-opacity border-2 border-transparent 
@@ -75,6 +106,6 @@ export const PageImageUploader = ({
             {children}
         </div>
     );
-};
+}
 
 export default PageImageUploader;

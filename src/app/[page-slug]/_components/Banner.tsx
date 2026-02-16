@@ -7,7 +7,6 @@ import Image from "@/components/Image";
 
 import { usePageImageUpload } from "@/hooks/usePageImageUpload";
 
-import { getFullImageUrl } from "@/lib/utils";
 import { CreatorPage } from "@/lib/types";
 
 import PageImageUploader from "./PageImageUploader";
@@ -45,19 +44,22 @@ const Banner = ({ page, isOwner, onUpdate }: CreatorBannerProps) => {
                 <PageImageUploader
                     containerClassName="w-full h-full"
                     imageSrc={optimisticBanner || page.bannerUrl}
-                    fallbackSrc="/images/img-1.jpg"
+
                     alt="Banner"
                     onFileChange={handleBannerUpload}
                     isLoading={uploadingType === 'banner'}
+                    family="banner"
+                    slot="creatorPage"
                 />
             ) : (
                 <Image
                     className="object-cover"
-                    src={getFullImageUrl(page.bannerUrl) || "/images/img-1.jpg"}
+                    family="banner"
+                    slot="creatorPage"
+                    src={page.bannerUrl}
                     fill
                     alt="Banner"
                     priority
-                    unoptimized
                 />
             )}
         </div>

@@ -1,5 +1,4 @@
 import Image from "@/components/Image";
-import Icon from "@/components/Icon";
 import Images from "./Images";
 import Actions from "./Actions";
 import ReadMore from "@/components/ReadMore";
@@ -11,7 +10,7 @@ type ReviewItem = {
     author: string;
     time: string;
     content: string;
-    images: string[] | null;
+    images: string[];
     likes: number;
     comments: number;
     isLiked: boolean;
@@ -29,10 +28,11 @@ const Review = ({ item, imageBig }: ReviewProps) => {
             <div className="relative shrink-0 w-8.5 h-8.5">
                 <Image
                     className="object-cover rounded-full"
+                    family="avatar"
+                    slot="comment"
                     src={item.avatar}
                     fill
                     alt="Avatar"
-                    unoptimized
                 />
             </div>
             <div className="w-[calc(100%-2.125rem)] pl-3.5">

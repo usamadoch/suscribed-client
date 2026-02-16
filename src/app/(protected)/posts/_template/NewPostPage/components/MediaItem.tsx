@@ -1,6 +1,7 @@
 
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
 import Icon from "@/components/Icon";
+import Image from "@/components/Image";
 import MuxVideoPlayer from "@/components/MuxVideoPlayer";
 import { MediaFile } from "../hooks/useMediaUpload";
 
@@ -28,10 +29,13 @@ const MediaItem = ({
             {/* Media Preview */}
             <div className={`relative ${index === 0 ? 'h-96' : 'h-40'} rounded-lg border border-n-1 overflow-hidden`}>
                 {file.type === "image" ? (
-                    <img
+                    <Image
+                        family="post"
+                        slot="feed"
                         src={file.url}
                         alt="Preview"
-                        className="w-full h-full object-cover"
+                        className="object-cover" // Image component handles classNames
+                        fill
                     />
                 ) : (
                     <MuxVideoPlayer

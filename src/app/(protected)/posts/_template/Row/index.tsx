@@ -9,7 +9,7 @@ import Modal from "@/components/Modal";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 
-import { getFullImageUrl, optimizeImage } from "@/lib/utils";
+
 
 
 interface RowItem {
@@ -37,8 +37,7 @@ const Row = ({ item, showActions = true }: RowProps) => {
     // Thumbnail
     const mediaItem = item.mediaAttachments?.find(m => m.type === 'image' || m.type === 'video');
     const isVideo = mediaItem?.type === 'video';
-    const remoteUrl = mediaItem?.url ? getFullImageUrl(mediaItem.url) : undefined;
-    const thumbnail = optimizeImage(remoteUrl, 150, 150) || "";
+    const mediaUrl = mediaItem?.url;
 
     const handleDelete = () => {
         deletePost(item._id, {
@@ -63,17 +62,15 @@ const Row = ({ item, showActions = true }: RowProps) => {
                         <div className={`shrink-0 w-18 mr-5 border border-n-1 overflow-hidden aspect-square relative flex justify-center items-center ${isVideo ? 'bg-n-2 dark:bg-n-7' : ''}`}>
                             {isVideo ? (
                                 <Icon name="video" className="w-6 h-6 fill-n-4 dark:fill-n-4" />
-                            ) : thumbnail ? (
+                            ) : (
                                 <Image
                                     className="object-cover"
-                                    src={thumbnail}
+                                    family="thumb"
+                                    slot="notification"
+                                    src={mediaUrl}
                                     fill
                                     alt={item.caption || "Post thumbnail"}
                                 />
-                            ) : (
-                                <div className="w-full h-full bg-n-2 dark:bg-n-7 flex items-center justify-center">
-                                    <Icon name="image" className="w-6 h-6 fill-n-4 dark:fill-n-4" />
-                                </div>
                             )}
                         </div>
 
@@ -159,7 +156,7 @@ const Row = ({ item, showActions = true }: RowProps) => {
 
 
                                 <button
-                                    className="flex-1 btn-purple btn-medium bg-red-500 hover:bg-red-500/80 cursor-pointer px-5 md:!bg-transparent md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
+                                    className="flex-1 btn-purple btn-medium bg-red-500 hover:bg-red-500/80 cursor-pointer px-5 md:bg-transparent! md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
                                     onClick={handleDelete}
                                     disabled={isPending}
                                 >

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "@/components/Image";
-import { getFullImageUrl } from "@/lib/utils";
 import { CreatorPage } from "@/lib/types";
 
 type ItemProps = {
@@ -14,13 +13,14 @@ const Item = ({ item }: ItemProps) => {
             href={`/${item.pageSlug}`}
         >
             <div className="relative grow pt-12 px-5 pb-7 md:pt-4 md:pb-4">
-                <div className="relative w-[8.25rem] h-[8.25rem] mx-auto mb-3.5">
+                <div className="relative w-32 h-32 mx-auto mb-3.5">
                     <Image
                         className="object-cover rounded-full"
-                        src={getFullImageUrl(item.avatarUrl) || "/images/avatar-1.jpg"}
+                        family="avatar"
+                        slot="profile"
+                        src={item.avatarUrl}
                         fill
                         alt={item.displayName}
-                        unoptimized
                     />
                 </div>
                 <div className="text-sm font-bold truncate">{item.displayName}</div>

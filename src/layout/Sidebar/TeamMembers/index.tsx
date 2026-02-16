@@ -7,7 +7,6 @@ import Icon from "@/components/Icon";
 import { Skeleton } from "@/components/Skeleton";
 
 import { usePermission } from "@/hooks/usePermission";
-import { getFullImageUrl } from "@/lib/utils";
 import { useMyMemberships } from "@/hooks/useQueries";
 import { Membership, CreatorPage } from "@/lib/types";
 
@@ -72,10 +71,11 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
                             >
                                 <Image
                                     className="object-cover scale-105"
-                                    src={getFullImageUrl(page.avatarUrl) || "/images/avatars/avatar.jpg"}
+                                    family="avatar"
+                                    slot="sidebar"
+                                    src={page.avatarUrl}
                                     fill
                                     alt={page.displayName || "Page"}
-                                    unoptimized
                                 />
                             </div>
                             {page.displayName}

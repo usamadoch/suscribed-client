@@ -1,5 +1,6 @@
+import Image from '@/components/Image';
 import MuxVideoPlayer from '@/components/MuxVideoPlayer';
-import { getFullImageUrl } from '@/lib/utils';
+import { constructSlotImageUrl } from '@/lib/image-slots';
 import { MediaAttachment } from '@/lib/types';
 
 // ─── Types ──────────────────────────────────────────────────
@@ -22,6 +23,9 @@ const MediaBlock = ({ media, className = '' }: MediaBlockProps) => {
     const muxStatus = media.type === 'video' ? media.status : undefined;
     const thumbnailUrl = media.type === 'video' ? media.thumbnailUrl : undefined;
 
+    // Use slot logic for Cloudinary fallback
+    const fallbackSrc = isVideo ? constructSlotImageUrl(media.url || thumbnailUrl, 'post', 'modal') : undefined;
+
     return (
         <div
             className={`w-full h-[512px] bg-gray-100 dark:bg-neutral-800 relative overflow-hidden ${className}`}
@@ -30,14 +34,17 @@ const MediaBlock = ({ media, className = '' }: MediaBlockProps) => {
                 <MuxVideoPlayer
                     playbackId={muxPlaybackId}
                     status={muxStatus}
-                    fallbackSrc={getFullImageUrl(media.url) || getFullImageUrl(thumbnailUrl)}
+                    fallbackSrc={fallbackSrc}
                     className="w-full h-full"
                 />
             ) : (
-                <img
-                    src={getFullImageUrl(media.url)}
+                <Image
+                    family="post"
+                    slot="modal"
+                    src={media.url}
                     alt="Post media"
-                    className="w-full h-full object-contain"
+                    className="object-contain" // passed to Image which passes to NextImage
+                    fill // We want it to fill the 512px container
                 />
             )}
         </div>

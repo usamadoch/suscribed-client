@@ -2,16 +2,13 @@ import Link from "next/link";
 import Image from "@/components/Image";
 
 import { Post } from "@/lib/types";
-import { getFullImageUrl } from "@/lib/utils";
 
 type ItemProps = {
     item: Post;
 };
 
 const Item = ({ item }: ItemProps) => {
-    const imageUrl = (item.mediaAttachments?.[0]?.url
-        ? getFullImageUrl(item.mediaAttachments[0].url)
-        : "/images/content/product-1.jpg") || "/images/content/product-1.jpg"; // Fallback image
+    const imageUrl = item.mediaAttachments?.[0]?.url;
 
     return (
         <Link
@@ -21,11 +18,10 @@ const Item = ({ item }: ItemProps) => {
             <div className="shrink-0 w-[4.25rem] border border-n-1">
                 <Image
                     className="w-full object-cover aspect-square"
+                    family="thumb" // Using thumb family
+                    slot="notification" // 80x80 fits 68px container well
                     src={imageUrl}
-                    width={74}
-                    height={74}
                     alt={item.caption || "Post thumbnail"}
-                    unoptimized
                 />
             </div>
             <div className="w-[calc(100%-4.25rem)] pl-5">

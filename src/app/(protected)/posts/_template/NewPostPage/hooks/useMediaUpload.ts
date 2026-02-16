@@ -1,7 +1,6 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import axios from "axios";
-import { getFullImageUrl } from "@/lib/utils";
 import { MediaAttachment } from "@/lib/types";
 import { postApi, mediaApi } from "@/lib/api";
 
@@ -26,7 +25,7 @@ export const useMediaUpload = (draftId: string, initialAttachments?: MediaAttach
         if (!initialAttachments) return [];
         return initialAttachments.map((m) => ({
             id: m.url || (m.type === 'video' && 'muxUploadId' in m ? m.muxUploadId : null) || Math.random().toString(36).substr(2, 9),
-            url: getFullImageUrl(m.url) || "",
+            url: m.url || "",
             type: m.type,
             isNew: false,
             uploadStatus: 'completed' as UploadStatus,
@@ -46,7 +45,7 @@ export const useMediaUpload = (draftId: string, initialAttachments?: MediaAttach
             if (attachments.length === 0) {
                 const mappedAttachments = initialAttachments.map((m) => ({
                     id: m.url || (m.type === 'video' && 'muxUploadId' in m ? m.muxUploadId : null) || Math.random().toString(36).substr(2, 9),
-                    url: getFullImageUrl(m.url) || "",
+                    url: m.url || "",
                     type: m.type,
                     isNew: false,
                     uploadStatus: 'completed' as UploadStatus,

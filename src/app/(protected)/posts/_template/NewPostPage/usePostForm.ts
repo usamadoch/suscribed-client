@@ -4,7 +4,6 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { getFullImageUrl } from "@/lib/utils";
 import { PostVisibility, MediaAttachment, Post, PostType, CreatePostPayload, UpdatePostPayload, getUnlockedMediaAttachments } from "@/lib/types";
 import { postApi } from "@/lib/api";
 import { useMediaUpload, MediaFile } from "./hooks/useMediaUpload";
@@ -86,7 +85,7 @@ export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps
                 if (!fileObj.isNew && initialData) {
                     const originalAttachments = getUnlockedMediaAttachments(initialData);
                     const original = originalAttachments.find(
-                        m => getFullImageUrl(m.url) === fileObj.url || m.url === fileObj.url
+                        m => m.url === fileObj.url
                     );
                     if (original) return original;
                 }
@@ -187,7 +186,7 @@ function areAttachmentsEqual(current: MediaFile[], original: MediaAttachment[]) 
     if (current.length !== original.length) return false;
     return current.every((c, i) => {
         if (c.isNew) return false;
-        const originalUrl = getFullImageUrl(original[i].url);
+        const originalUrl = original[i].url;
         return c.url === originalUrl;
     });
 }

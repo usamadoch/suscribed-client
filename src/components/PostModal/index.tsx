@@ -8,9 +8,7 @@ import Icon from "@/components/Icon";
 import Comment from "@/components/Comment";
 import { postApi } from "@/lib/api";
 import { Post, Comment as CommentType, isLockedMedia } from "@/lib/types";
-import { getFullImageUrl } from "@/lib/utils";
 import Actions from "@/components/Review/Actions";
-import { useAuth } from "@/store/auth";
 import Loader from "../Loader";
 import CommentItem from "@/components/CommentItem";
 import ReadMore from "@/components/ReadMore";
@@ -52,16 +50,11 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
         ? post.mediaAttachments.find(m => !isLockedMedia(m) && m.url)?.url
         : undefined;
 
-    const fullImageUrl = displayedImage ? getFullImageUrl(displayedImage) : null;
-
     // Helper to get creator info safely
     // post.pageId can be string or object depending on population
     const page = typeof post.pageId === 'object' ? post.pageId : null;
     const creatorName = page?.displayName || "Creator";
-    const creatorAvatar = getFullImageUrl(page?.avatarUrl) || "/images/content/avatar-1.jpg";
 
-
-    console.log(comments);
 
     return (
         <Modal
@@ -73,14 +66,15 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
         >
             {/* Left Section: Image */}
             <div className="w-3/5 bg-n-1 flex items-center justify-center relative overflow-hidden md:min-h-[20rem]">
-                {fullImageUrl ? (
+                {displayedImage ? (
                     <div className="relative w-full h-full">
                         <Image
-                            src={fullImageUrl}
+                            family="post"
+                            slot="modal"
+                            src={displayedImage}
                             fill
-                            className="object-contain"
+                            className="object-contain" // object-contain might need width/height from slot to be effective container-wise, but fill handles it.
                             alt="Post content"
-                            unoptimized
                         />
                     </div>
                 ) : (
@@ -105,10 +99,11 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                     <div className="relative w-10 h-10 mr-3">
                         <Image
                             className="object-cover rounded-full"
-                            src={creatorAvatar}
+                            family="avatar"
+                            slot="dropdown"
+                            src={page?.avatarUrl}
                             fill
                             alt={creatorName}
-                            unoptimized
                         />
                     </div>
                     <div>

@@ -1,37 +1,33 @@
 import MuxVideoPlayer from '@/components/MuxVideoPlayer';
-import { getFullImageUrl } from '@/lib/utils';
 import { MediaAttachment } from '@/lib/types';
+import Image from '@/components/Image';
+import { constructSlotImageUrl } from '@/lib/image-slots';
 
-interface MediaBlockProps {
-    media?: MediaAttachment;
-    // Legacy props for backward compatibility
-    url?: string;
-    type?: 'image' | 'video';
+type MediaBlockProps = {
     className?: string;
-}
-
-const MediaBlock = ({ media, url, type, className = '' }: MediaBlockProps) => {
-    // Support both new media object and legacy url/type props
-    const mediaUrl = media?.url || url;
-    const mediaType = media?.type || type;
-
-    console.log(media
-
-
+} & (
+        | { media: MediaAttachment; url?: never; type?: never }
+        | { media?: never; url: string; type?: 'image' | 'video' }
     );
+
+const MediaBlock = (props: MediaBlockProps) => {
+    const { className = '' } = props;
+
+    // Support both new media object and legacy url/type props
+    const mediaUrl = props.media?.url || props.url;
+    const mediaType = props.media?.type || props.type;
 
     // For videos, check if we have Mux playback info
     const isVideo = mediaType === 'video' || (!mediaType && !!mediaUrl?.match(/\.(mp4|webm|ogg|mov)$/i));
-    const muxPlaybackId = media?.type === 'video' ? media.muxPlaybackId : undefined;
-    const muxStatus = media?.type === 'video' ? media.status : undefined;
-    const thumbnailUrl = media?.type === 'video' ? media.thumbnailUrl : undefined;
+    const muxPlaybackId = props.media?.type === 'video' ? props.media.muxPlaybackId : undefined;
+    const muxStatus = props.media?.type === 'video' ? props.media.status : undefined;
+    const thumbnailUrl = props.media?.type === 'video' ? props.media.thumbnailUrl : undefined;
 
     // If no media at all, don't render
+    if (!mediaUrl && !props.media && !isVideo) return null;
 
-    if (!mediaUrl && !media && !isVideo) return null;
-
-
-    console.log(mediaUrl);
+    // Construct valid fallback URL for video player
+    const fallbackSrc = isVideo ? constructSlotImageUrl(mediaUrl || thumbnailUrl, 'post', 'modal') : undefined;
 
     return (
         <div className={`w-full h-[512px] bg-gray-100 dark:bg-neutral-800 relative overflow-hidden ${className}`}>
@@ -39,14 +35,17 @@ const MediaBlock = ({ media, url, type, className = '' }: MediaBlockProps) => {
                 <MuxVideoPlayer
                     playbackId={muxPlaybackId}
                     status={muxStatus}
-                    fallbackSrc={getFullImageUrl(mediaUrl) || getFullImageUrl(thumbnailUrl)}
+                    fallbackSrc={fallbackSrc}
                     className="w-full h-full"
                 />
             ) : (
-                <img
-                    src={getFullImageUrl(mediaUrl)}
+                <Image
+                    family="post"
+                    slot="modal"
+                    src={mediaUrl}
                     alt="Post media"
-                    className="w-full h-full object-contain"
+                    className="object-contain" // passed to Image which passes to NextImage (along with fill generally or intrinsic)
+                    fill // We want it to fill the 512px container
                 />
             )}
         </div>

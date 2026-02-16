@@ -13,7 +13,6 @@ import { usePathname, useParams } from "next/navigation";
 import Image from "@/components/Image";
 import { useCreatorPage } from "@/hooks/useQueries";
 // import { usePageSlug } from "@/hooks/usePageSlug";
-import { getFullImageUrl } from "@/lib/utils";
 import Icon from "@/components/Icon";
 import { useAuth } from "@/store/auth";
 
@@ -79,10 +78,11 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
                             <div className="relative shrink-0 w-9 h-9 rounded-full overflow-hidden">
                                 <Image
                                     className="object-cover mb-0"
-                                    src={getFullImageUrl(page?.avatarUrl) || "/images/avatar-2.jpg"}
+                                    family="avatar"
+                                    slot="dropdown"
+                                    src={page?.avatarUrl}
                                     fill
                                     alt={page?.displayName || "Avatar"}
-                                    unoptimized
                                 />
                             </div>
                             <div className="font-bold">{page?.displayName || pageName}</div>

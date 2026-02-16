@@ -33,23 +33,32 @@ export const getFullImageUrl = (url: string | null | undefined): string | undefi
  * @param height The desired height
  * @returns The optimized URL
  */
+import { constructSlotImageUrl, IMAGE_FAMILIES, SLOT_CONFIG } from './image-slots';
+
+// ... existing code ...
+
 export const optimizeImage = (url: string | undefined, width: number, height: number): string | undefined => {
     if (!url) return undefined;
-    if (!url.includes('cloudinary.com')) return url;
 
-    // Check if URL already has transformations (this is a simple check, might need to be more robust)
-    // Cloudinary URLs usually have /upload/ followed by version or transformations
-    // We want to insert transformations after /upload/
+    // Check if it's already a Cloudinary URL and inject params
+    if (url.includes('cloudinary.com')) {
+        // Quick check to avoid double processing if needed, though constructSlotImageUrl handles it too
+        // We'll reuse the logic from image-slots but ad-hoc
+        // Ideally we shouldn't use this function directly anymore, preferring slots.
+        // However, for ad-hoc legacy usage:
+        const uploadIndex = url.indexOf('/upload/');
+        if (uploadIndex === -1) return url;
 
-    const uploadIndex = url.indexOf('/upload/');
-    if (uploadIndex === -1) return url;
+        const prefix = url.substring(0, uploadIndex + 8);
+        const suffix = url.substring(uploadIndex + 8);
 
-    const prefix = url.substring(0, uploadIndex + 8); // include /upload/
-    const suffix = url.substring(uploadIndex + 8);
+        // Default strict transformations
+        const transformations = `w_${width},h_${height},c_fill,q_auto,f_auto,dpr_2.0`;
 
-    const transformations = `w_${width},h_${height},c_fill,q_auto,f_auto`;
+        return `${prefix}${transformations}/${suffix}`;
+    }
 
-    return `${prefix}${transformations}/${suffix}`;
+    return url;
 };
 
 

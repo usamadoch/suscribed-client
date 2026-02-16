@@ -27,15 +27,16 @@ const Images = ({ items, imageBig }: ImagesProps) => {
     if (!items || items.length === 0) return null;
 
     return (
-        <div className={`relative mt-4 group w-full ${imageBig ? "h-[20rem]" : "h-[30rem]"}`}>
+        <div className={`relative mt-4 group w-full ${imageBig ? "h-80" : "h-120"}`}>
             <div className="w-full h-full relative border border-n-1 dark:border-white overflow-hidden">
                 <Image
-                    className="object-contin"
+                    className="object-contain"
+                    family="post" // Use post family
+                    slot="feed"   // Use feed slot (600x600) for review images
                     src={items[currentIndex]}
                     fill
                     sizes="(max-width: 767px) 100vw, (max-width: 1023px) 100vw, 50vw"
                     alt=""
-                    unoptimized
                 />
             </div>
 
