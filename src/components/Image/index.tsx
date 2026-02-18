@@ -45,7 +45,7 @@ const Image = (props: ImageProps) => {
             className: `inline-block align-top transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"} ${className || ''}`,
             src: finalSrc,
             alt: alt || label,
-            onLoadingComplete: () => setLoaded(true),
+            onLoad: () => setLoaded(true),
             unoptimized: !src?.includes('cloudinary'), // Let Next.js optimize if not cloudinary, or false if cloudinary handles it
             fill,
             ...restProps
@@ -69,7 +69,7 @@ const Image = (props: ImageProps) => {
                 } ${className || ''}`}
             src={src || ''}
             alt={alt || ''}
-            onLoadingComplete={() => setLoaded(true)}
+            onLoad={() => setLoaded(true)}
             {...legacyProps}
         />
     );

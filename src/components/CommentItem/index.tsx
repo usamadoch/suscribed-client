@@ -50,6 +50,7 @@ const CommentItem = ({ comment, variant = 'default' }: CommentItemProps) => {
                     isLiked={false}
                     showComment={false}
                     className="mt-2"
+                    type="comment"
                 />
             </div>
         </div>

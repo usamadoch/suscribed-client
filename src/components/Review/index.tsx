@@ -1,7 +1,9 @@
+import Link from "next/link";
 import Image from "@/components/Image";
 import Images from "./Images";
 import Actions from "./Actions";
 import ReadMore from "@/components/ReadMore";
+import Icon from "../Icon";
 
 
 type ReviewItem = {
@@ -15,6 +17,8 @@ type ReviewItem = {
     comments: number;
     isLiked: boolean;
     isLocked: boolean;
+    shareUrl?: string;
+    isOwner?: boolean;
 }
 
 type ReviewProps = {
@@ -36,16 +40,25 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                 />
             </div>
             <div className="w-[calc(100%-2.125rem)] pl-3.5">
-                <div className="flex">
+                <div className="flex items-center">
                     <div className="whitespace-nowrap text-sm font-bold">
                         {item.author}
                     </div>
                     <div className="ml-2 pt-0.75 truncate text-xs font-medium text-n-3 dark:text-white/75">
                         {item.time}
                     </div>
-                    {/* <button className="btn-transparent-dark btn-square btn-small -mt-1.5 -mr-2 ml-auto">
-                        <Icon name="dots" />
-                    </button> */}
+
+
+                    {item.isOwner && (
+                        <Link
+                            href={`/posts/${item.id}/edit`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="btn-stroke btn-small  ml-auto"
+                        >
+                            <Icon name="edit" /> Edit
+                        </Link>
+                    )}
+
                 </div>
 
                 <div className={`text-sm ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
@@ -62,6 +75,7 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                     comments={item.comments}
                     likes={item.likes}
                     isLiked={item.isLiked}
+                    shareUrl={item.shareUrl}
                 />
 
             </div>

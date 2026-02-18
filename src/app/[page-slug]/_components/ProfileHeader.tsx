@@ -2,15 +2,13 @@
 
 import React, { useState, useCallback } from "react";
 import Link from "next/link";
-import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems, Transition } from "@headlessui/react";
 
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
 import LoginModal from "@/components/LoginModal";
-import Modal from "@/components/Modal";
+import ShareModal from "@/components/ShareModal";
 
 import { truncateText } from "@/lib/utils";
 import { CreatorPage } from "@/lib/types";
@@ -35,7 +33,6 @@ type CreatorProfileHeaderProps = {
 };
 
 const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: CreatorProfileHeaderProps) => {
-    const router = useRouter();
     const { isAuthenticated } = useAuth();
     const { mutate: joinPage, isPending: isJoining } = useJoinPage();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -75,7 +72,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
     };
 
 
-
+    console.log(page);
 
     return (
         <div className="relative z-1 flex items-end h-full pb-10 px-16 2xl:px-8 lg:px-6 md:px-5 md:pb-8">
@@ -256,63 +253,16 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
 
 
 
-            <Modal
-                classWrap="relative border-b-none"
-                classButtonClose="z-2 fill-white"
+
+            <ShareModal
                 visible={visible}
                 onClose={() => setVisible(false)}
-            >
-                <div className="relative z-1 card-title text-white">
-                    Share this
-                </div>
-                <div className=" px-5 pb-7 md:pt-8">
-                    <div className="mb-6 text-center">
-                        <div className="relative w-full mt-5 aspect-3/1 overflow-hidden bg-n-2 dark:bg-n-7">
-                            <Image
-                                className="object-cover"
-                                family="banner"
-                                slot="creatorPage"
-                                src={page.bannerUrl}
-                                fill
-                                alt="Banner"
-                            />
-                        </div>
+                shareUrl={`/${page.pageSlug}`}
+                bannerUrl={page.bannerUrl}
+                avatarUrl={page.avatarUrl}
+                title="Share this profile"
+            />
 
-                        <div className="relative z-1 -mt-10 w-20 h-20 mx-auto mb-3 border-4 border-white rounded-full dark:border-n-1 bg-n-1">
-                            <Image
-                                className="object-cover rounded-full"
-                                family="avatar"
-                                slot="profile"
-                                src={page.avatarUrl}
-                                fill
-                                alt="Creator Avatar"
-                            />
-                        </div>
-                        {/* <div className="mb-1 text-h4">Rustem Tolstobrov</div>
-                        <div className="text-sm font-medium text-n-3 dark:text-white/50">
-                            Account ending in 3456
-                        </div> */}
-                    </div>
-
-
-                    <button
-                        className="flex items-center w-full h-10 mb-1.5 px-6.5 text-sm font-bold last:mb-0 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-                        onClick={() => {
-                            navigator.clipboard.writeText(window.location.href);
-                            toast.success("Link copied to clipboard");
-                            // setVisible(false);
-                        }}
-                    >
-                        <Icon
-                            className="-mt-0.25 mr-3 fill-n-1 dark:fill-white"
-                            name="link"
-                        />
-                        Copy link
-                    </button>
-
-
-                </div>
-            </Modal>
         </div>
     );
 };

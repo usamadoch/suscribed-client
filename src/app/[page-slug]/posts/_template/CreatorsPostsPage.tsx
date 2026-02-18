@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useCreatorPosts } from "@/hooks/useQueries";
 import { usePageSlug } from "@/hooks/usePageSlug";
-import { formatAppDate } from "@/lib/date";
+import { formatAppDate, formatDuration } from "@/lib/date";
 
 import Icon from "@/components/Icon";
 
 import CreatorHeader from "@/layout/CreatorHeader";
-import { Post } from "@/lib/types";
+import { Post, VideoPost } from "@/lib/types";
 import Loader from "@/components/Loader";
 import ReadMore from "@/components/ReadMore";
 
@@ -18,7 +18,7 @@ const CreatorsPostsPage = () => {
 
     const { data: postsData, isLoading } = useCreatorPosts(slug, { type: 'video' });
 
-    const posts = postsData || [];
+    const posts = (postsData || []) as VideoPost[];
 
     // Filter posts: only video posts for this page
 
@@ -41,17 +41,20 @@ const CreatorsPostsPage = () => {
                         <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                             {posts.map((post) => {
 
-                                // Use strict narrowing
+                                // Strict narrowing for VideoPost
                                 const isLocked = post.isLocked;
+                                // In a VideoPost, mediaAttachments should be present.
+                                // We access the first one which is the main video.
+                                const video = post.mediaAttachments[0];
+
                                 let displayCaption: string;
-                                let thumbnailUrl: string | undefined;
+                                let thumbnailUrl: string | undefined = video?.thumbnailUrl;
+                                const duration = video?.duration;
 
                                 if (post.isLocked) {
-                                    displayCaption = post.teaser || 'Exclusive content';
-                                    thumbnailUrl = post.mediaAttachments[0]?.thumbnailUrl;
+                                    displayCaption = post.teaser;
                                 } else {
                                     displayCaption = post.caption || 'Untitled video';
-                                    thumbnailUrl = post.mediaAttachments[0]?.thumbnailUrl;
                                 }
 
                                 return (
@@ -71,6 +74,12 @@ const CreatorsPostsPage = () => {
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center bg-black">
                                                     <Icon name="video" className="w-12 h-12 fill-white/80 group-hover:scale-110 transition-transform duration-300" />
+                                                </div>
+                                            )}
+
+                                            {duration && (
+                                                <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 rounded text-xs font-semibold text-white">
+                                                    {formatDuration(duration)}
                                                 </div>
                                             )}
 

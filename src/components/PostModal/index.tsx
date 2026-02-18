@@ -66,7 +66,7 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
         // classButtonClose="z-20 text-n-1 dark:text-white bg-white/50 dark:bg-n-1/50 rounded-full p-2 hover:bg-white dark:hover:bg-n-1"
         >
             {/* Left Section: Image */}
-            <div className="w-3/5 bg-n-1 flex items-center justify-center relative overflow-hidden md:min-h-[20rem]">
+            <div className="w-3/5 bg-n-1 flex items-center justify-center relative overflow-hidden md:min-h-80">
                 {displayedImage ? (
                     <div className="relative w-full h-full">
                         <Image
@@ -124,23 +124,25 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                         </div>
                     )}
 
-                    {loadingComments ? (
-                        <div className="flex items-center justify-center">
-                            <Loader />
-                        </div>
-                    ) : comments.length > 0 ? (
-                        comments.map((comment) => (
-                            <CommentItem
-                                key={comment._id}
-                                comment={comment}
-                                variant="modal"
-                            />
-                        ))
-                    ) : (
-                        <div className="text-center py-8 text-n-3 text-sm">
-                            No comments yet. Be the first!
-                        </div>
-                    )}
+                    <div className="flex flex-col gap-3">
+                        {loadingComments ? (
+                            <div className="flex items-center justify-center">
+                                <Loader />
+                            </div>
+                        ) : comments.length > 0 ? (
+                            comments.map((comment) => (
+                                <CommentItem
+                                    key={comment._id}
+                                    comment={comment}
+                                    variant="modal"
+                                />
+                            ))
+                        ) : (
+                            <div className="text-center py-8 text-n-3 text-sm">
+                                No comments yet. Be the first!
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className="px-4">
@@ -150,6 +152,8 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                         comments={post.commentCount}
                         isLiked={post.isLiked || false}
                         showComment={false}
+                        shareUrl={`/post/${post._id}`}
+                        type="post"
                     />
                 </div>
 

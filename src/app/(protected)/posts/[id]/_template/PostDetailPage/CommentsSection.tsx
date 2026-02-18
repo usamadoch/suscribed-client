@@ -35,7 +35,7 @@ const CommentsSection = ({
                 inputDisabled={!allowComments}
             />
 
-            <div>
+            <div className="flex flex-col gap-3">
                 {comments && comments.length > 0 ? (
                     comments.map((comment) => (
                         <CommentItem key={comment._id} comment={comment} />

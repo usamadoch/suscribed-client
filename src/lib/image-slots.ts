@@ -59,10 +59,10 @@ export interface SlotDimension {
 // These are Public IDs or Full URLs for Cloudinary defaults.
 // They act as the "Setup" the user requested.
 export const CLOUDINARY_DEFAULTS = {
-    [IMAGE_FAMILIES.AVATAR]: 'defaults/avatar_placeholder', // Expecting 'defaults/avatar_placeholder' in Cloudinary
-    [IMAGE_FAMILIES.BANNER]: 'defaults/banner_placeholder',
-    [IMAGE_FAMILIES.POST]: 'defaults/image_placeholder',
-    fallback: 'defaults/placeholder',
+    [IMAGE_FAMILIES.AVATAR]: 'https://ui-avatars.com/api/?name=User&background=random',
+    [IMAGE_FAMILIES.BANNER]: 'https://picsum.photos/1920/320',
+    [IMAGE_FAMILIES.POST]: 'https://picsum.photos/800/800',
+    fallback: 'https://picsum.photos/400/400',
 };
 
 

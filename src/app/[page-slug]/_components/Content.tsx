@@ -20,13 +20,13 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
     // Using cached queries
     const { data: pageData } = useCreatorPage(pageSlug);
     const { data: postsData, isLoading } = useCreatorPosts(pageSlug, { type: ['text', 'image'] });
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const { mutate: joinPage, isPending: isJoining } = useJoinPage();
 
     const { page } = pageData || {};
     const posts = postsData || [];
 
-
+    const isOwner = user && page && (user._id === (typeof page.userId === 'object' ? page.userId._id : page.userId));
 
     const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
     const [loginModalVisible, setLoginModalVisible] = useState(false);
@@ -68,7 +68,6 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                     <div className="flex items-center justify-center pt-10">
                         <Loader text="Loading posts..." />
                     </div>
-
                 ) : posts.length === 0 ? (
                     <div className="text-n-3">No posts available.</div>
                 ) : (
@@ -114,6 +113,8 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                                 comments: post.commentCount || 0,
                                 isLiked: !!post.isLiked,
                                 isLocked: isLocked,
+                                shareUrl: `/posts/${post._id}`,
+                                isOwner: !!isOwner,
                             };
 
                             // console.log(postItem);

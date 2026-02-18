@@ -4,6 +4,8 @@ import Icon from "@/components/Icon";
 import { postApi } from "@/lib/api";
 import { useAuth } from "@/store/auth";
 import LoginModal from "@/components/LoginModal";
+import ShareModal from "@/components/ShareModal";
+import Comment from "@/components/Comment";
 import { twMerge } from "tailwind-merge";
 
 type ActionsProps = {
@@ -13,15 +15,22 @@ type ActionsProps = {
     isLiked: boolean;
     className?: string;
     showComment?: boolean;
+    shareUrl?: string;
+    type?: 'post' | 'comment';
 };
 
-const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLiked, className, showComment = true }: ActionsProps) => {
+const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLiked, className, showComment = true, shareUrl, type = 'post' }: ActionsProps) => {
     const queryClient = useQueryClient();
     const { isAuthenticated } = useAuth();
     const [liked, setLiked] = useState<boolean>(initialIsLiked);
     const [likesCount, setLikesCount] = useState<number>(initialLikes);
     const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
+    const [showShareModal, setShowShareModal] = useState<boolean>(false);
     const [animating, setAnimating] = useState<boolean>(false);
+
+    // Comment state
+    const [isCommentOpen, setIsCommentOpen] = useState(false);
+    const [commentValue, setCommentValue] = useState("");
 
     // Refs for debouncing and server synchronization
     const serverLiked = useRef<boolean>(initialIsLiked);
@@ -102,13 +111,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
 
     return (
         <>
-            <div className={`flex ${className || "mt-4"}`}>
-                {showComment && (
-                    <button className="flex gap-1 mr-5 px-0">
-                        <Icon name="comments" />
-                        <span className="text-xs">{comments}</span>
-                    </button>
-                )}
+            <div className={`flex items-center ${className || "mt-4"}`}>
 
                 <button
                     className={`flex gap-1 px-0 cursor-pointer active:scale-90 transition-transform`}
@@ -127,22 +130,49 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
                     <span className="text-xs">{likesCount}</span>
                 </button>
 
-                {/* <button
-                    className={` ml-auto -mr-2`}
-                // onClick={() => setVisible(!visible)}
+
+                {showComment && (
+                    <button className="flex gap-1 ml-5 px-0">
+                        <Icon name="comments" />
+                        <span className="text-xs">{comments}</span>
+                    </button>
+                )}
+
+
+
+                <button
+                    className={` ml-auto cursor-pointer`}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        if (type === 'post') {
+                            setShowShareModal(true);
+                        } else {
+                            setIsCommentOpen(!isCommentOpen);
+                        }
+                    }}
                 >
 
                     <Icon name="reply" />
-                </button> */}
+                </button>
             </div>
-            {/* {visible && (
+            {showShareModal && shareUrl && (
+                <div onClick={(e) => e.stopPropagation()}>
+                    <ShareModal
+                        visible={showShareModal}
+                        onClose={() => setShowShareModal(false)}
+                        shareUrl={shareUrl}
+                        title="Share this post"
+                    />
+                </div>
+            )}
+            {isCommentOpen && type === 'comment' && (
                 <Comment
-                    className="mt-4 mb-2 !pr-4 !py-0 !pl-0 border-dashed shadow-none md:-ml-12 md:!pr-3"
+                    className="mt-4 mb-2 pr-4! py-0! pl-0! border-dashed shadow-none md:-ml-12 md:pr-3!"
                     placeholder="Type to add your comment"
-                    value={value}
-                    setValue={(e: any) => setValue(e.target.value)}
+                    value={commentValue}
+                    setValue={(e) => setCommentValue(e.target.value)}
                 />
-            )} */}
+            )}
             <div
                 onClick={(e) => e.stopPropagation()}
                 onMouseDown={(e) => e.stopPropagation()}
@@ -153,6 +183,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
                     onClose={() => setShowLoginModal(false)}
                 />
             </div>
+
         </>
     );
 };
