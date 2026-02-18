@@ -22,8 +22,8 @@ export const SLOT_CONFIG = {
         sidebar: { width: 40, height: 40, label: 'Sidebar Avatar' }, // Added for 22px/24px usage
     },
     [IMAGE_FAMILIES.BANNER]: {
+        creatorPage: { width: 1920, height: 384, label: 'Creator Page Banner' },
         profileHeader: { width: 900, height: 180, label: 'Profile Header' },
-        creatorPage: { width: 1920, height: 320, label: 'Creator Page Banner' },
     },
     [IMAGE_FAMILIES.POST]: {
         composerPreview: { width: 300, height: 300, label: 'Composer Preview' },

@@ -11,10 +11,11 @@ import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 
 import Image from "@/components/Image";
-import { useCreatorPage } from "@/hooks/useQueries";
+import { useCreatorPage, usePost } from "@/hooks/useQueries";
 // import { usePageSlug } from "@/hooks/usePageSlug";
 import Icon from "@/components/Icon";
 import { useAuth } from "@/store/auth";
+import { useCreatorHeader } from "@/context/CreatorHeaderContext";
 
 type CreatorHeaderProps = {
     pageName?: string;
@@ -34,17 +35,35 @@ const navLinks = [
 
 const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderProps) => {
     const [headerStyle, setHeaderStyle] = useState<boolean>(false);
+    const { isHeaderHidden } = useCreatorHeader();
     const pathname = usePathname();
-    const params = useParams<{ "page-slug"?: string }>();
-    // Use the prop if available, otherwise try to get it from the URL
-    // If not in URL, this will be undefined, but won't crash with 404
-    const slug = (pageSlug || params["page-slug"]) as string;
+    const params = useParams();
 
-    const { data, isLoading } = useCreatorPage(slug);
+    const paramSlug = params?.["page-slug"] as string | undefined;
+    const postId = params?.id as string | undefined;
+
+    // Use the prop if available, otherwise try to get it from the URL
+    let slug = (pageSlug || paramSlug) as string | undefined;
+
+    // If no slug but we have a post ID, try to fetch post to get the slug
+    // Check if postId is valid MongoID (24 hex chars) to avoid unnecessary requests
+    const isValidPostId = !slug && postId && /^[a-f\d]{24}$/i.test(postId);
+
+    // We only fetch if we don't have a slug yet and have a valid post ID
+    const { data: postData, isLoading: isPostLoading } = usePost(isValidPostId ? postId! : "");
+
+    if (!slug && postData?.pageId && typeof postData.pageId === 'object') {
+        // Type assertion needed if types aren't fully strict on population
+        slug = (postData.pageId as any).pageSlug;
+    }
+
+    const { data, isLoading: isPageLoading } = useCreatorPage(slug);
+    const isLoading = isPageLoading || (!!isValidPostId && isPostLoading);
 
 
     const { page } = data || {};
     const { user } = useAuth();
+
 
 
     useWindowScrollPosition(({ currPos }) => {
@@ -58,6 +77,10 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
         }
         return pathname.startsWith(fullUrl);
     };
+
+    if (isHeaderHidden) {
+        return null;
+    }
 
     return (
         <header
@@ -73,7 +96,7 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
                             <div className="border border-n-1 dark:border-white h-6 w-26 animate-skeleton bg-n-4/10"></div>
                         </div>
                     ) : (
-                        <Link href={`/${page?.pageSlug || slug}`} className="flex items-center gap-2 mr-24" >
+                        <Link href={`/${page?.pageSlug || slug || ''}`} className="flex items-center gap-2 mr-24" >
 
                             <div className="relative shrink-0 w-9 h-9 rounded-full overflow-hidden">
                                 <Image
@@ -90,7 +113,7 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
                         </Link>
                     )}
 
-                    {user?._id === (typeof page?.userId === 'string' ? page?.userId : page?.userId?._id) && (
+                    {user?._id && user?._id === (typeof page?.userId === 'string' ? page?.userId : page?.userId?._id) && (
                         <Link href="/dashboard" className="btn-stroke btn-medium gap-1">
                             <Icon name="burger" className="w-5 h-5 " />
                             Dashboard

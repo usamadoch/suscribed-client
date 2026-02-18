@@ -21,8 +21,6 @@ const ShareModal = ({
     avatarUrl,
     title = "Share this"
 }: ShareModalProps) => {
-    console.log(bannerUrl, avatarUrl);
-
     return (
         <Modal
             classWrap="relative border-b-none"

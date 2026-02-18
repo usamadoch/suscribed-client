@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
-import { postApi, membershipApi, notificationApi, pageApi, analyticsApi } from "@/lib/api";
+import { postApi, membershipApi, notificationApi, pageApi, analyticsApi, ApiClientError } from "@/lib/api";
 import { useAuth } from "@/store/auth";
 import { TimeRange, PostType } from "@/lib/types";
 
@@ -20,6 +20,12 @@ export const useCreatorPage = (slug?: string) => {
         enabled: !!slug,
         staleTime: 1000 * 60 * 10, // 10 minutes cache for profile info
         refetchOnWindowFocus: false,
+        retry: (failureCount, error) => {
+            if (error instanceof ApiClientError && error.code === 'NOT_PUBLISHED') {
+                return false;
+            }
+            return failureCount < 3;
+        },
     });
 };
 
@@ -110,6 +116,12 @@ export const useCreatorPosts = (slug: string, filters?: { type?: PostType | Post
         enabled: !!slug,
         staleTime: 1000 * 60 * 2, // 2 minutes cache for posts
         placeholderData: keepPreviousData,
+        retry: (failureCount, error) => {
+            if (error instanceof ApiClientError && error.code === 'NOT_PUBLISHED') {
+                return false;
+            }
+            return failureCount < 3;
+        },
     });
 };
 
