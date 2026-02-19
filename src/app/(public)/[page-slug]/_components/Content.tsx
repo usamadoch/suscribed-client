@@ -11,6 +11,8 @@ import LoginModal from "@/components/LoginModal";
 import JoinMembershipModal from "@/components/JoinMembershipModal";
 import Loader from "@/components/Loader";
 import { formatAppDate } from "@/lib/date";
+import Link from "next/link";
+import Icon from "@/components/Icon";
 
 type CreatorContentProps = {
     pageSlug: string;
@@ -60,16 +62,30 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
 
     return (
         <div className="pb-20 px-16">
-            <h4 className="text-h4 mb-8">Latest Posts</h4>
+            {/* <h4 className="text-h4 mb-8">Latest Posts</h4> */}
 
-            <div className="max-w-4xl">
+            <div className="max-w-4xl pt-10">
 
                 {isLoading ? (
-                    <div className="flex items-center justify-center pt-10">
+                    <div className="flex items-center justify-center">
                         <Loader text="Loading posts..." />
                     </div>
                 ) : posts.length === 0 ? (
-                    <div className="text-n-2 dark:text-white">No posts available.</div>
+                    <div className="card p-5">
+
+                        <div className="text-center py-8 text-n-2">
+                            <Icon name="document" className="w-12 h-12 mx-auto mb-3 " />
+                            <p className="text-sm">No published posts yet</p>
+                        </div>
+
+                        <Link
+                            href="/posts/new"
+                            className="mt-4 btn-purple btn-medium w-full flex items-center justify-center gap-2"
+                        >
+                            <Icon name="plus" className="w-4 h-4" />
+                            <span>Create New Post</span>
+                        </Link>
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 gap-6">
                         {posts.map((post: Post) => {

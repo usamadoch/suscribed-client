@@ -25,18 +25,19 @@ const CreatorsPostsPage = () => {
     return (
         <>
             {/* CreatorHeader removed from here, now in layout */}
-            <div className="max-w-360 mx-auto px-6 2xl:px-8 lg:px-6 md:px-5 pt-24 pb-20">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-h3">Posts</h1>
-                </div>
+            <div className="max-w-360 mx-auto px-6 2xl:px-8 lg:px-6 md:px-5">
+
 
                 <div className="grid gap-6">
                     {isLoading ? (
-                        <div className="flex items-center justify-center">
+                        <div className="flex items-center justify-center pt-10">
                             <Loader />
                         </div>
                     ) : posts.length === 0 ? (
-                        <div className="text-center py-10 text-n-3">No video posts found.</div>
+                        <div className="flex items-center justify-center pt-10">
+
+                            <div className="text-center py-10 text-n-3">No video posts found.</div>
+                        </div>
                     ) : (
                         <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                             {posts.map((post) => {
