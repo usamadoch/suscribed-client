@@ -2,6 +2,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
+import { format } from "date-fns";
 
 import { useDeletePost } from "@/hooks/useQueries";
 
@@ -19,6 +20,10 @@ interface RowItem {
     viewCount?: number;
     likeCount?: number;
     commentCount?: number;
+    visibility?: string;
+    publishedAt?: string | null;
+    createdAt?: string;
+    postType?: string;
 }
 
 type RowProps = {
@@ -32,12 +37,15 @@ const Row = ({ item, showActions = true }: RowProps) => {
 
     // Caption preview
     const captionPreview = item.caption || "No caption";
-    const truncatedPreview = captionPreview.length > 50 ? captionPreview.substring(0, 50) + "..." : captionPreview;
+    const truncatedPreview = captionPreview.length > 50 ? captionPreview.substring(0, 80) + "..." : captionPreview;
 
     // Thumbnail
     const mediaItem = item.mediaAttachments?.find(m => m.type === 'image' || m.type === 'video');
-    const isVideo = mediaItem?.type === 'video';
+    const isVideo = mediaItem?.type === 'video' || item.postType === 'video';
+    const isImage = mediaItem?.type === 'image' || item.postType === 'image';
     const mediaUrl = mediaItem?.url;
+
+    const postTypeIcon = isVideo ? 'video' : isImage ? 'camera' : 'document';
 
     const handleDelete = () => {
         deletePost(item._id, {
@@ -59,9 +67,9 @@ const Row = ({ item, showActions = true }: RowProps) => {
                         className="inline-flex items-center text-sm  transition-colors hover:text-purple-1"
                         href={`/posts/${item._id}`}
                     >
-                        <div className={`shrink-0 w-18 mr-5 border border-n-1 overflow-hidden aspect-square relative flex justify-center items-center ${isVideo ? 'bg-n-2 dark:bg-n-7' : ''}`}>
+                        <div className={`shrink-0 w-32 mr-5 border border-n-1 overflow-hidden aspect-video relative flex justify-center items-center ${isVideo ? 'bg-n-2 dark:bg-n-7' : 'bg-n-2 dark:bg-n-7'}`}>
                             {isVideo ? (
-                                <Icon name="video" className="w-6 h-6 fill-n-4 dark:fill-n-4" />
+                                <Icon name="video" className="w-8 h-8 fill-n-4 dark:fill-n-4" />
                             ) : (
                                 <Image
                                     className="object-cover"
@@ -72,26 +80,32 @@ const Row = ({ item, showActions = true }: RowProps) => {
                                     alt={item.caption || "Post thumbnail"}
                                 />
                             )}
+                            <div className="absolute top-1 right-1 bg-black/50 p-1 rounded-lg flex items-center justify-center">
+                                <Icon name={postTypeIcon} className="w-3 h-3 fill-white" />
+                            </div>
                         </div>
 
-                        {truncatedPreview}
+                        <div className="flex flex-col gap-1 w-full">
+                            <div className="text-n-2 4xl:max-w-70 dark:text-white/75">
+                                {truncatedPreview}
+                            </div>
+
+                            <div className="text-xs text-n-3 flex items-center gap-3">
+                                <span>{item.viewCount || 0} views</span>
+                                <span>{item.likeCount || 0} likes</span>
+                                <span>{item.commentCount || 0} comments</span>
+                            </div>
+                        </div>
                     </Link>
-                </td>
 
+                </td>
 
                 <td className="td-custom py-3.5 font-medium">
-                    {item.viewCount || 0}
+                    {item.publishedAt ? format(new Date(item.publishedAt), 'MMM d, yyyy') : 'Draft'}
                 </td>
-                <td className="td-custom py-3.5 font-medium">
-                    <div className="inline-flex items-center shrink-0">
-                        {item.likeCount || 0}
-                    </div>
+                <td className="td-custom py-3.5 font-medium capitalize">
+                    {item.visibility || 'private'}
                 </td>
-                <td className="td-custom py-3.5 font-bold">
-                    {item.commentCount || 0}
-                </td>
-
-
 
                 {showActions && (
                     <td className="td-custom py-3.5 text-right">

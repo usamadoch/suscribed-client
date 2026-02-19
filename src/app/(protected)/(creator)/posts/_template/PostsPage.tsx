@@ -80,15 +80,12 @@ const PostsPage = () => {
                             <th className="th-custom w-[60%] text-left">
                                 <Sorting title="Caption" />
                             </th>
-                            <th className="th-custom text-left">
-                                <Sorting title="Views" />
-                            </th>
 
                             <th className="th-custom text-left">
-                                <Sorting title="Likes" />
+                                <Sorting title="Published At" />
                             </th>
                             <th className="th-custom text-left">
-                                <Sorting title="Comments" />
+                                <Sorting title="Visibility" />
                             </th>
                             <th className="th-custom text-left"></th>
                         </tr>
