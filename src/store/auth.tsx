@@ -8,7 +8,7 @@ import React, { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { create } from 'zustand';
 
-import { AuthState, LoginPayload, SignupPayload } from '@/lib/types';
+import { AuthState, LoginPayload, SignupPayload, ONBOARDING_STEPS } from '@/lib/types';
 import { ApiClientError, authApi, } from '@/lib/api';
 
 
@@ -149,7 +149,11 @@ export function useAuth() {
 
         const user = useAuthStore.getState().user; // Get fresh state
         if (user?.role === 'creator') {
-            router.push('/dashboard');
+            if ((user?.onboardingStep ?? 0) < ONBOARDING_STEPS.COMPLETE) {
+                router.push('/register');
+            } else {
+                router.push('/dashboard');
+            }
         } else {
             router.push('/explore');
         }
@@ -161,7 +165,11 @@ export function useAuth() {
 
         const user = useAuthStore.getState().user;
         if (user?.role === 'creator') {
-            router.push('/dashboard');
+            if ((user?.onboardingStep ?? 0) < ONBOARDING_STEPS.COMPLETE) {
+                router.push('/register');
+            } else {
+                router.push('/dashboard');
+            }
         } else {
             router.push('/explore');
         }
@@ -293,9 +301,18 @@ export function RequireMember({ children, fallback }: RouteGuardProps) {
 export function RedirectIfAuthenticated({ children, fallback }: RouteGuardProps) {
     const { isAuthenticated, isLoading, user } = useAuth();
     const router = useRouter();
+    const pathname = usePathname();
+
+    const isOnboarding = isAuthenticated && user?.role === 'creator' && (user?.onboardingStep ?? 0) < ONBOARDING_STEPS.COMPLETE;
+    const isOnRegisterPage = pathname === '/register';
 
     useEffect(() => {
         if (!isLoading && isAuthenticated) {
+            // If user is still onboarding and on register page, let them stay
+            if (isOnboarding && isOnRegisterPage) {
+                return;
+            }
+
             // Check for stored redirect path
             const redirectPath = sessionStorage.getItem('redirectAfterLogin');
             sessionStorage.removeItem('redirectAfterLogin');
@@ -303,17 +320,26 @@ export function RedirectIfAuthenticated({ children, fallback }: RouteGuardProps)
             if (redirectPath) {
                 router.push(redirectPath);
             } else if (user?.role === 'creator') {
-                router.push('/dashboard');
+                // If onboarding not complete, redirect to register
+                if ((user?.onboardingStep ?? 0) < ONBOARDING_STEPS.COMPLETE) {
+                    router.push('/register');
+                } else {
+                    router.push('/dashboard');
+                }
             } else {
                 router.push('/explore');
             }
         }
-    }, [isLoading, isAuthenticated, user, router]);
+    }, [isLoading, isAuthenticated, user, router, isOnboarding, isOnRegisterPage]);
 
     // Allow the login/signup form to render immediately even while loading (optimistic UI),
     // because these pages are server-rendered and we want to avoid a spinner flash for guests.
 
     if (!isLoading && isAuthenticated) {
+        // Let onboarding users stay on the register page
+        if (isOnboarding && isOnRegisterPage) {
+            return <>{children}</>;
+        }
         return fallback || null;
     }
 

@@ -7,7 +7,9 @@ import StepActions from "./StepActions";
 import Icon from "@/components/Icon";
 import { SignUpFormValues } from "@/app/(auth)/_validations";
 import { socialProfiles } from "../../../../../../mock/profile";
-import { pageApi } from "@/lib/api";
+import { pageApi, authApi } from "@/lib/api";
+import { useAuthStore } from "@/store/auth";
+import { ONBOARDING_STEPS } from "@/lib/types";
 
 type Step4Props = {
     onBack: () => void;
@@ -24,7 +26,14 @@ const Step4Socials = ({ onBack }: Step4Props) => {
         name: "socialLinks",
     });
 
-    const finishFlow = () => {
+    const finishFlow = async () => {
+        try {
+            // Mark onboarding as complete
+            const { user } = await authApi.updateOnboardingStep(ONBOARDING_STEPS.COMPLETE);
+            useAuthStore.setState((s) => ({ user: { ...s.user!, onboardingStep: user.onboardingStep } }));
+        } catch (error) {
+            console.error('Failed to update onboarding step', error);
+        }
         router.push('/dashboard');
     };
 

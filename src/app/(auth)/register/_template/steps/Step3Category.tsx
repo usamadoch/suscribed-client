@@ -4,7 +4,10 @@ import { useFormContext } from "react-hook-form";
 import StepActions from "./StepActions";
 
 import { SignUpFormValues } from "@/app/(auth)/_validations";
-import { pageApi } from "@/lib/api";
+import { pageApi, authApi } from "@/lib/api";
+import { useAuthStore } from "@/store/auth";
+import { ONBOARDING_STEPS } from "@/lib/types";
+import Alert from "@/components/Alert";
 
 const CATEGORIES = [
     "Gaming",
@@ -34,6 +37,9 @@ const Step3Category = ({ onNext, onBack }: Step3Props) => {
             const { category } = getValues();
             try {
                 await pageApi.updateMyPage({ category });
+                // Persist onboarding progress
+                const { user } = await authApi.updateOnboardingStep(ONBOARDING_STEPS.CATEGORY_DONE);
+                useAuthStore.setState((s) => ({ user: { ...s.user!, onboardingStep: user.onboardingStep } }));
                 onNext();
             } catch (error) {
                 console.error("Failed to update category", error);
@@ -44,8 +50,15 @@ const Step3Category = ({ onNext, onBack }: Step3Props) => {
 
     return (
         <div className="animate-in fade-in slide-in-from-right-8 duration-300">
-            <div className="mb-5 text-h3">Choose a category</div>
-            <div className="flex flex-wrap gap-3">
+            {errors.category && (
+                <Alert
+                    type="error"
+                    message={errors.category.message}
+                />
+            )}
+
+            <h4 className="mb-5 text-h4">Choose a category</h4>
+            <div className="flex flex-wrap gap-4">
                 {CATEGORIES.map((cat) => {
                     const isSelected = selectedCategory?.includes(cat);
                     return (
@@ -58,7 +71,7 @@ const Step3Category = ({ onNext, onBack }: Step3Props) => {
                                     : [...(selectedCategory || []), cat];
                                 setValue("category", newCategories, { shouldValidate: true });
                             }}
-                            className={`btn-stroke btn-small h-10 px-8 
+                            className={`btn-stroke btn-small h-12 px-8 
                             ${isSelected
                                     ? "bg-black text-white dark:bg-white dark:text-black"
                                     : ""
@@ -69,9 +82,6 @@ const Step3Category = ({ onNext, onBack }: Step3Props) => {
                     );
                 })}
             </div>
-            {errors.category && (
-                <div className="mt-2 text-xs text-pink-1">{errors.category.message}</div>
-            )}
             <StepActions
                 onNext={handleNext}
                 onBack={onBack}

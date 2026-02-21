@@ -11,8 +11,12 @@ const URL_REGEX = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?
 
 export const Step1Schema = z.object({
     email: z.string().min(1, { message: "Email is required" }).regex(EMAIL_REGEX, { message: "Invalid email address" }),
-    displayName: z.string().min(1, "Name is required"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    displayName: z.string().min(2, 'Display name must be at least 2 characters').max(100),
+    password: z
+        .string()
+        .min(8, 'Password must be at least 8 characters')
+        .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .regex(/[0-9]/, 'Password must contain at least one number'),
 });
 
 export const Step2Schema = z.object({

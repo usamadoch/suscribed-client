@@ -47,7 +47,20 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
             <div className={`${className}`}>
                 <div className="">
                     {label && <div className="mb-3 text-xs font-bold">{label}</div>}
-                    <div className="relative">
+                    <div
+                        className={twMerge(
+                            "relative",
+                            prefix &&
+                            "flex items-center w-full bg-white border border-n-1 transition-colors focus-within:border-purple-1 dark:bg-n-1 dark:border-white dark:focus-within:border-purple-1",
+                            prefix && error && "border-pink-1!",
+                            prefix && classInput
+                        )}
+                    >
+                        {prefix && (
+                            <div className="pl-5 text-sm font-bold text-n-3 whitespace-nowrap pointer-events-none">
+                                {prefix}
+                            </div>
+                        )}
                         {textarea ? (
                             <textarea
                                 className={twMerge(
@@ -65,9 +78,10 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                         ) : (
                             <input
                                 className={twMerge(
-                                    `w-full h-16 px-5 bg-white border border-n-1 text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-purple-1 dark:bg-n-1 dark:border-white dark:text-white dark:focus:border-purple-1 dark:placeholder:text-white/75 ${icon || type === "password" ? "pr-15" : ""
+                                    `w-full h-16 bg-white border border-n-1 text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-purple-1 dark:bg-n-1 dark:border-white dark:text-white dark:focus:border-purple-1 dark:placeholder:text-white/75 ${icon || type === "password" ? "pr-15" : ""
                                     } ${error ? "pr-15 border-pink-1!" : ""} ${image || currency ? "pr-15" : ""
-                                    } ${classInput}`
+                                    } ${classInput}`,
+                                    prefix ? "flex-1 h-full bg-transparent border-none pl-0" : "px-5"
                                 )}
                                 type={
                                     (type === "password" &&
@@ -82,11 +96,6 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                                 ref={ref as any}
                                 {...props}
                             />
-                        )}
-                        {prefix && (
-                            <div className="absolute top-1/2 left-5 -translate-y-1/2 text-sm font-bold text-n-3 pointer-events-none z-10">
-                                {prefix}
-                            </div>
                         )}
                         {icon && type !== "password" && !error && (
                             <Icon
@@ -107,12 +116,10 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                             </button>
                         )}
                         {error && (
-                            <div className="absolute top-1/2 right-5 -translate-y-1/2 pointer-events-none">
-                                <Icon
-                                    className="fill-pink-1 icon-20"
-                                    name="info-circle"
-                                />
-                            </div>
+                            <Icon
+                                className="absolute top-1/2 right-5 -translate-y-1/2 icon-20 fill-pink-1 pointer-events-none"
+                                name="info-circle"
+                            />
                         )}
                         {image && (
                             <div className="absolute top-1/2 right-5 w-5 p-0.25 -translate-y-1/2 text-0 dark:bg-white">

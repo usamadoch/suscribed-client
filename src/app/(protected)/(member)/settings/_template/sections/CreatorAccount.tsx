@@ -306,7 +306,7 @@ const CreatorAccount = () => {
                                     label="Profile URL"
 
                                     prefix="example.com/"
-                                    classInput="pl-[7.5rem] h-12"
+                                    classInput="h-12"
                                     icon="link"
                                     error={errors.pageSlug}
                                     {...register("pageSlug", { required: "Profile slug is required" })}

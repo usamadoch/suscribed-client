@@ -4,12 +4,15 @@ import { useQueryClient } from "@tanstack/react-query";
 
 
 import Field from "@/components/Field";
+import Alert from "@/components/Alert";
 import StepActions from "./StepActions";
 
 import { slugify } from "@/lib/utils";
 
 import { SignUpFormValues } from "@/app/(auth)/_validations";
-import { pageApi } from "@/lib/api";
+import { pageApi, authApi } from "@/lib/api";
+import { useAuthStore } from "@/store/auth";
+import { ONBOARDING_STEPS } from "@/lib/types";
 
 
 
@@ -21,6 +24,7 @@ type Step2Props = {
 const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
     const { register, watch, setValue, trigger, getValues, formState: { errors } } = useFormContext<SignUpFormValues>();
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const queryClient = useQueryClient();
 
     const creatorName = watch("creatorName");
@@ -38,6 +42,7 @@ const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
     }, [creatorName, setValue]);
 
     const handleNext = async () => {
+        setError(null);
         setIsLoading(true);
         const valid = await trigger(["creatorName", "pageSlug"]);
 
@@ -48,19 +53,22 @@ const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
                     displayName: creatorName,
                     pageSlug
                 });
+                // Persist onboarding progress
+                const { user } = await authApi.updateOnboardingStep(ONBOARDING_STEPS.DETAILS_DONE);
+                useAuthStore.setState((s) => ({ user: { ...s.user!, onboardingStep: user.onboardingStep } }));
                 // Invalidate cache to reflect new slug elsewhere
                 await queryClient.invalidateQueries({ queryKey: ['my-creation-page'] });
                 onNext();
-            } catch (error: any) {
-                console.error("Failed to update page details", error);
+            } catch (err: any) {
+                console.error("Failed to update page details", err);
 
                 // If the error suggests page not found, it means the page wasn't created during signup.
                 // We could try to create it here or just show an error.
                 // For this quick fix, let's show an error.
-                if (error.status === 404) {
-                    alert("Your creator page could not be found. Please try refreshing or logging in again.");
+                if (err.status === 404) {
+                    setError("Your creator page could not be found. Please try refreshing or logging in again.");
                 } else {
-                    alert("Failed to save details. Please try again.");
+                    setError("Failed to save details. Please try again.");
                 }
             }
         }
@@ -69,10 +77,22 @@ const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
 
     return (
         <div className="animate-in fade-in slide-in-from-right-8 duration-300">
-            <div className="mb-5 text-h3">Creator Profile</div>
+            <h4 className="mb-5 text-h4">Creator Profile</h4>
+
+            {error && (
+                <Alert
+                    type="error"
+                    message={error}
+                    className="mb-4"
+                    onClose={() => setError(null)}
+                />
+            )}
+
             <Field
                 className="mb-4"
-                label="Creator Name"
+                // label="Creator Name"
+                classInput="h-12"
+
                 placeholder="Creator Name"
                 icon="profile"
                 error={errors.creatorName}
@@ -81,10 +101,10 @@ const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
             />
             <Field
                 className="mb-4"
-                label="Profile URL"
+                // label="Profile URL"
                 placeholder="my-page"
-                prefix="example.com/"
-                classInput="pl-[7.5rem]"
+                prefix="suscribed.co/"
+                classInput="h-12"
                 icon="link"
                 error={errors.pageSlug}
                 {...register("pageSlug")}

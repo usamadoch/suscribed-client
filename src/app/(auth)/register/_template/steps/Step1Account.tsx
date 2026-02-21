@@ -17,6 +17,8 @@ import { useAuth, useAuthStore } from "@/store/auth";
 import { authApi } from "@/lib/api";
 import { SignUpFormValues } from "@/app/(auth)/_validations";
 import { generateUsername } from "@/lib/utils";
+import Link from "next/link";
+import Alert from "@/components/Alert";
 
 type Step1Props = {
     onNext: () => void;
@@ -81,6 +83,15 @@ const Step1Account = ({ onNext }: Step1Props) => {
             const username = generateUsername(displayName, email);
 
             try {
+                // If user is already authenticated (e.g., refreshed after step 1),
+                // skip signup and go to next step
+                const currentUser = useAuthStore.getState().user;
+                if (currentUser) {
+                    onNext();
+                    setIsLoading(false);
+                    return;
+                }
+
                 await signup({
                     email,
                     password,
@@ -88,6 +99,7 @@ const Step1Account = ({ onNext }: Step1Props) => {
                     username,
                     role: 'creator'
                 }, { redirect: false });
+
                 onNext();
             } catch (error: any) {
                 console.error("Signup failed", error);
@@ -101,72 +113,90 @@ const Step1Account = ({ onNext }: Step1Props) => {
     };
 
     return (
-        <div className="animate-in fade-in slide-in-from-right-8 duration-300">
-            <div className="mb-5 text-h3">Create your account</div>
-            {googleError && (
-                <div className="mb-4 p-3 bg-pink-1/10 border border-pink-1 rounded text-pink-1 text-sm font-bold">
-                    {googleError}
-                </div>
-            )}
-            <button
-                className="btn-stroke w-full h-14 mb-6"
-                type="button"
-                onClick={() => {
-                    setGoogleError(null);
-                    handleGoogleLogin();
-                }}
-            >
-                {googleLoading ? (
-                    <Loader className="w-6 h-6 text-n-1 dark:text-white" />
-                ) : (
-                    <>
-                        <Icon name="google" />
-                        <span>Log in with Google</span>
-                    </>
+        <>
+            <div className="animate-in fade-in slide-in-from-right-8 duration-300">
+                {googleError && (
+                    <Alert
+                        type="error"
+                        message={googleError}
+                        onClose={() => setGoogleError(null)}
+                    />
                 )}
-            </button>
+                <h4 className="mb-5 text-h4">Create your account</h4>
+                <button
+                    className="btn-stroke w-full h-12 mb-6"
+                    type="button"
+                    onClick={() => {
+                        setGoogleError(null);
+                        handleGoogleLogin();
+                    }}
+                >
+                    {googleLoading ? (
+                        <Loader className="w-6 h-6 text-n-1 dark:text-white" />
+                    ) : (
+                        <>
+                            <Icon name="google" />
+                            <span>Continue with Google</span>
+                        </>
+                    )}
+                </button>
 
-            <div className="flex justify-center items-center pb-6">
-                <span className="w-full max-w-[8.25rem] h-0.25 bg-n-1 dark:bg-white"></span>
-                <span className="mx-4 text-sm font-medium">or</span>
-                <span className="w-full max-w-[8.25rem] h-0.25 bg-n-1 dark:bg-white"></span>
+                <div className="flex justify-center items-center pb-6">
+                    <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-white"></span>
+                    <span className="mx-4 text-sm font-medium">or</span>
+                    <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-white"></span>
+                </div>
+
+                <Field
+                    className="mb-4"
+                    classInput="h-12"
+                    // label="Full Name"
+                    placeholder="Full Name"
+                    type="text"
+                    icon="profile"
+                    error={errors.displayName}
+                    {...register("displayName")}
+                />
+                <Field
+                    className="mb-4"
+                    classInput="h-12"
+                    // label="Email"
+                    type="email"
+                    placeholder="Email address"
+                    icon="email"
+                    error={errors.email}
+                    {...register("email")}
+                    autoFocus
+                />
+
+                <Field
+                    className="mb-4"
+                    classInput="h-12"
+                    // label="Password"
+                    type="password"
+                    placeholder="Password"
+                    icon="lock"
+                    error={errors.password}
+                    {...register("password")}
+                />
+
+                <StepActions
+                    onNext={handleNext}
+                    isLoading={isLoading}
+                />
             </div>
 
-            <Field
-                className="mb-4"
-                label="Full Name"
-                placeholder="Full Name"
-                type="text"
-                icon="profile"
-                error={errors.displayName}
-                {...register("displayName")}
-            />
-            <Field
-                className="mb-4"
-                label="Email"
-                type="email"
-                placeholder="Email address"
-                icon="email"
-                error={errors.email}
-                {...register("email")}
-                autoFocus
-            />
+            <div className="mt-20 text-sm">
+                Not a Creator?
 
-            <Field
-                className="mb-4"
-                label="Password"
-                type="password"
-                placeholder="Password"
-                icon="lock"
-                error={errors.password}
-                {...register("password")}
-            />
-
-            <StepActions
-                onNext={handleNext}
-                isLoading={isLoading}
-            />
-        </div>
+                <Link
+                    href="/login"
+                    className="ml-1.5 font-bold transition-colors hover:text-purple-1"
+                >
+                    Join as a Member
+                </Link>
+            </div>
+        </>
     );
 };
 

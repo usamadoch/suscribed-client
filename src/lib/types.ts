@@ -28,6 +28,16 @@ export interface SocialLink {
 
 export type UserRole = 'member' | 'creator' | 'admin';
 
+// Onboarding step: strict literal union representing each stage of creator onboarding.
+export type OnboardingStep = 0 | 1 | 2 | 3 | 4;
+
+export const ONBOARDING_STEPS = {
+    NOT_STARTED: 0 as const,
+    ACCOUNT_CREATED: 1 as const,
+    DETAILS_DONE: 2 as const,
+    CATEGORY_DONE: 3 as const,
+    COMPLETE: 4 as const,
+};
 export interface NotificationPreferences {
     email: {
         newMembers: boolean;
@@ -65,6 +75,7 @@ export interface User {
     createdAt: string;
     updatedAt: string;
     googleId?: string; // Optional: Only present if user signed up/linked via Google
+    onboardingStep: OnboardingStep;
     notificationPreferences: NotificationPreferences;
 }
 

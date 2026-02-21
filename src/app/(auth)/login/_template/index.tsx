@@ -15,8 +15,10 @@ import Checkbox from "@/components/Checkbox";
 import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
 
+import Alert from "@/components/Alert";
 import { LoginSchema } from "../../_validations";
 import { authApi } from "@/lib/api";
+import { ONBOARDING_STEPS } from "@/lib/types";
 
 import { useAuth, useAuthStore } from "../../../../store/auth";
 import { ApiClientError } from "@/lib/api";
@@ -140,7 +142,11 @@ const LoginPage = () => {
                 });
 
                 if (user?.role === 'creator') {
-                    router.push('/dashboard');
+                    if ((user?.onboardingStep ?? 0) < ONBOARDING_STEPS.COMPLETE) {
+                        router.push('/register');
+                    } else {
+                        router.push('/dashboard');
+                    }
                 } else {
                     router.push('/explore');
                 }
@@ -169,7 +175,7 @@ const LoginPage = () => {
             {step === 1 && (
                 <>
                     <button
-                        className="btn-stroke w-full h-14"
+                        className="btn-stroke w-full h-12"
                         type="button"
                         onClick={() => handleGoogleLogin()}
                         disabled={googleLoading}
@@ -179,14 +185,14 @@ const LoginPage = () => {
                         ) : (
                             <>
                                 <Icon name="google" />
-                                <span>Log in with Google</span>
+                                <span>Continue with Google</span>
                             </>
                         )}
                     </button>
                     <div className="flex justify-center items-center py-6">
-                        <span className="w-full max-w-[8.25rem] h-0.25 bg-n-1 dark:bg-white"></span>
+                        <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-white"></span>
                         <span className="mx-4 text-sm font-medium">or</span>
-                        <span className="w-full max-w-[8.25rem] h-0.25 bg-n-1 dark:bg-white"></span>
+                        <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-white"></span>
                     </div>
                 </>
             )}
@@ -195,14 +201,16 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
                 {errors.root && (
-                    <div className="mb-4 p-3 bg-pink-1/10 border border-pink-1 rounded text-pink-1 text-sm font-bold">
-                        {errors.root.message}
-                    </div>
+                    <Alert
+                        type="error"
+                        message={errors.root.message}
+                    />
                 )}
 
                 <Field
-                    className={`mb-4.5 ${step === 2 && flow === 'signup' ? 'hidden' : ''}`}
-                    label="Email"
+                    className={`mb-6 ${step === 2 && flow === 'signup' ? 'hidden' : ''}`}
+                    // label="Email"
+                    classInput="h-12"
                     type="email"
                     placeholder="Enter your email"
                     icon="email"
@@ -216,8 +224,9 @@ const LoginPage = () => {
                     <>
                         {flow === 'signup' && (
                             <Field
-                                className="mb-4.5"
-                                label="Full Name"
+                                className="mb-6"
+                                // label="Full Name"
+                                classInput="h-12"
                                 type="text"
                                 placeholder="Enter your full name"
                                 icon="profile"
@@ -228,8 +237,9 @@ const LoginPage = () => {
                             />
                         )}
                         <Field
-                            className="mb-6.5"
-                            label="Password"
+                            className="mb-6"
+                            // label="Password"
+                            classInput="h-12"
                             type="password"
                             placeholder="Enter your password"
                             {...register("password")}
@@ -240,8 +250,8 @@ const LoginPage = () => {
                     </>
                 )}
 
-                {step === 2 && flow === 'login' && (
-                    <div className="flex justify-between items-center mb-6.5">
+                {/* {step === 2 && flow === 'login' && (
+                    <div className="flex justify-between items-center mb-6">
                         <Checkbox
                             label="Remember me"
                             {...register("remember")}
@@ -255,10 +265,10 @@ const LoginPage = () => {
                             Recover password
                         </button>
                     </div>
-                )}
+                )} */}
 
                 <button
-                    className="btn-purple btn-shadow w-full h-14"
+                    className="btn-purple btn-shadow w-full h-12"
                     type="submit"
                     disabled={authLoading || isCheckingEmail}
                 >
@@ -273,7 +283,7 @@ const LoginPage = () => {
 
                 {step === 2 && (
                     <button
-                        className="btn-stroke w-full h-14 mt-4"
+                        className="btn-stroke w-full h-12 mt-4"
                         type="button"
                         onClick={() => setStep(1)}
                     >

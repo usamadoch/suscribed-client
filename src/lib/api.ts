@@ -223,6 +223,13 @@ export const authApi = {
             body: JSON.stringify(payload),
         });
     },
+
+    async updateOnboardingStep(step: number): Promise<{ user: User }> {
+        return fetchApi('/auth/onboarding-step', {
+            method: 'PATCH',
+            body: JSON.stringify({ step }),
+        });
+    },
 };
 
 

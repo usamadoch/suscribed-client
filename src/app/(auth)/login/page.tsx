@@ -10,10 +10,10 @@ const SigninPage = () => {
 
     return (
         <RedirectIfAuthenticated>
-            <div className="mb-1 text-h1">Sign in</div>
-            <div className="mb-12 text-sm text-n-2 dark:text-white/50">
+            <h4 className="mb-1 text-h4">Sign in or Sign up</h4>
+            <p className="mb-6 text-sm text-n-2 dark:text-white/50">
                 Enter your email to continue
-            </div>
+            </p>
 
 
             <LoginPage />

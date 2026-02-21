@@ -22,7 +22,7 @@ const StepActions = ({
     onSkip
 }: StepActionsProps) => {
     return (
-        <div className="flex justify-between mt-12 gap-4">
+        <div className="flex justify-between mt-6 gap-4">
             {showSkip ? (
                 <button
                     className="btn-stroke w-full"
@@ -44,7 +44,7 @@ const StepActions = ({
             )}
 
             <button
-                className="btn-purple btn-shadow w-full h-14"
+                className="btn-purple btn-shadow w-full h-12"
                 type="button"
                 onClick={onNext}
                 disabled={isLoading}
