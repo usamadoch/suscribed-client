@@ -33,7 +33,9 @@ const Answer = ({ time, content, author, status }: AnswerProps) => (
         <div className="relative w-8 h-8 ml-2">
             <Image
                 className="object-cover rounded-full"
-                src={author?.avatar || "/images/avatars/avatar.jpg"}
+                family="avatar"
+                slot="profile"
+                src={author?.avatar}
                 fill
                 alt="Avatar"
             />

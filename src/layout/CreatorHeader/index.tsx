@@ -12,9 +12,9 @@ import { usePathname, useParams } from "next/navigation";
 
 import Image from "@/components/Image";
 import { useCreatorPage, usePost } from "@/hooks/useQueries";
-// import { usePageSlug } from "@/hooks/usePageSlug";
+
 import Icon from "@/components/Icon";
-import { useAuth } from "@/store/auth";
+
 import { useCreatorHeader } from "@/context/CreatorHeaderContext";
 
 type CreatorHeaderProps = {
@@ -62,9 +62,7 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
 
 
     const { page } = data || {};
-    const { user } = useAuth();
-
-
+    const isOwner = data?.isOwner;
 
     useWindowScrollPosition(({ currPos }) => {
         setHeaderStyle(currPos.y <= -1);
@@ -81,6 +79,8 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
     if (isHeaderHidden) {
         return null;
     }
+
+    console.log(page);
 
     return (
         <header
@@ -102,7 +102,7 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
                                 <Image
                                     className="object-cover mb-0"
                                     family="avatar"
-                                    slot="dropdown"
+                                    slot="profile"
                                     src={page?.avatarUrl}
                                     fill
                                     alt={page?.displayName || "Avatar"}
@@ -113,7 +113,7 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
                         </Link>
                     )}
 
-                    {user?._id && user?._id === (typeof page?.userId === 'string' ? page?.userId : page?.userId?._id) && (
+                    {isOwner && (
                         <Link href="/dashboard" className="btn-stroke btn-medium gap-1">
                             <Icon name="burger" className="w-5 h-5 " />
                             Dashboard

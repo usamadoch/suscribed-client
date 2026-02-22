@@ -93,8 +93,8 @@ export const constructSlotImageUrl = <F extends SlotFamily>(
     // 1. Resolve Target URL
     let targetUrl = url;
 
-    // Use default if url is missing
-    if (!targetUrl) {
+    // Use default if url is missing or the string 'none'/'null'/'undefined'
+    if (!targetUrl || targetUrl === 'none' || targetUrl === 'null' || targetUrl === 'undefined') {
         // Determine default based on family
         targetUrl = CLOUDINARY_DEFAULTS[family as keyof typeof CLOUDINARY_DEFAULTS] || CLOUDINARY_DEFAULTS.fallback;
     }
@@ -116,39 +116,13 @@ export const constructSlotImageUrl = <F extends SlotFamily>(
     const { width, height, crop } = config;
     const dpr = options.dpr || 2.0;
 
-    // 3. Cloudinary Transformation
-    // We assume if it's NOT a full URL, it might be a public ID we need to construct
-    // OR if it IS a cloudinary URL, we inject params.
-
-    // Check if it's a "clean" Cloudinary Public ID (no slashes, or simple path) vs Full URL
-    // Actually getFullImageUrl might preserve 'http' but prefixes API_URL for others.
-    // If we have a public ID like 'defaults/avatar', getFullImageUrl might make it 'http://api.../defaults/avatar' which is WRONG for Cloudinary.
-    // So we need to detect if it's a Cloudinary asset.
 
     // Heuristic: If it contains 'cloudinary.com', treat as full URL.
     if (fullUrl.includes('cloudinary.com')) {
         return buildCloudinaryUrl(fullUrl, { width, height, crop, ...options, dpr });
     }
 
-    // If it DOESN'T contain cloudinary.com, but we are in "Cloudinary Mode", 
-    // it likely means `url` was a relative path/public ID that got prefixed by getFullImageUrl (bad)
-    // OR it was just the public ID.
-    // We'll assume for this system: IF it's not an external URL (http/https) meant for others, treat as Cloudinary Public ID.
-    // But `getFullImageUrl` forces http prefix.
-
-    // Improved Logic:
-    // Retest the original `targetUrl` (before getFullImageUrl)
     if (!targetUrl.startsWith('http') && !targetUrl.startsWith('data:') && !targetUrl.startsWith('blob:')) {
-        // It's a relative path -> Treat as Cloudinary Public ID
-        // Construct full Cloudinary URL
-        // We need the cloud name. Since we don't have it in env here easily without process.env, 
-        // we'll assume the provided URLs from backend ARE full Cloudinary URLs usually.
-        // BUT for defaults (which are just IDs), we need to construct it.
-
-        // HACK: Use a placeholder base if we don't have one, or assume the user will provide full URLs for defaults.
-        // Better: Expect the user to provide full URLs in CLOUDINARY_DEFAULTS, or set a base.
-        // The user said "depend on setup". I'll use a clearer setup var.
-
         return buildCloudinaryPublicIdUrl(targetUrl, { width, height, crop, ...options, dpr });
     }
 

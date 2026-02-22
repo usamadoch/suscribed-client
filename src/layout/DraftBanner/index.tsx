@@ -36,6 +36,8 @@ const DraftBanner = () => {
     // Only show banner if owner and draft
     const showDraftBanner = isOwner && isDraft;
 
+    console.log(page);
+
     // Check for missing fields for warning
     const missingFields: string[] = [];
     if (page && !page.bannerUrl) missingFields.push('Banner image');
@@ -71,19 +73,19 @@ const DraftBanner = () => {
                 title="Publish Page"
             >
                 <div className="space-y-4">
-                    <p className="text-n-3">
+                    <p className="text-sm text-n-2">
                         Are you sure you want to publish your page? It will become visible to everyone.
                     </p>
 
                     {missingFields.length > 0 && (
-                        <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-100 dark:border-orange-900/30">
-                            <h4 className="text-orange-800 dark:text-orange-200 font-medium mb-2 flex items-center gap-2">
+                        <div className=" p-4  bg-purple-1/20 border border-n-1 shadow-primary-4 ">
+                            <h6 className="text-n-2 text-h6 dark:text-purple-200 font-medium mb-2 flex items-center gap-2">
                                 <span className="text-lg">⚠️</span> Complete your profile
-                            </h4>
-                            <p className="text-sm text-orange-700 dark:text-orange-300 mb-2">
+                            </h6>
+                            <p className="text-sm text-n-2 dark:text-purple-300 mb-2">
                                 Your page is looking a bit empty! Consider adding the following before publishing:
                             </p>
-                            <ul className="list-disc pl-5 text-sm text-orange-700 dark:text-orange-300 space-y-1">
+                            <ul className="list-disc pl-5 text-sm font-medium text-n-2 dark:text-purple-300 space-y-1">
                                 {missingFields.map(field => (
                                     <li key={field}>{field}</li>
                                 ))}
@@ -102,7 +104,7 @@ const DraftBanner = () => {
                         </button>
 
                         <button
-                            className="btn-purple w-full btn-medium px-10 md:!bg-transparent md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
+                            className="btn-purple w-full btn-medium px-10 md:bg-transparent! md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
 
                             onClick={() => publishMutation.mutate()}
                             disabled={publishMutation.isPending}

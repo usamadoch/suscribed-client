@@ -1,8 +1,9 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import Alert from "@/components/Alert";
 
 import { PostVisibility, MediaAttachment, Post, PostType, CreatePostPayload, UpdatePostPayload, getUnlockedMediaAttachments } from "@/lib/types";
 import { postApi } from "@/lib/api";
@@ -15,7 +16,6 @@ export type UsePostFormProps = {
 };
 
 export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps = {}) => {
-    const router = useRouter();
     const queryClient = useQueryClient();
 
     // Use existing ID if editing, otherwise generate a new draft ID for this session
@@ -124,11 +124,24 @@ export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps
 
             if (isUpdate) {
                 queryClient.invalidateQueries({ queryKey: ['post', initialData._id] });
-                toast.success("Post updated successfully");
-                router.push(`/posts/${initialData._id}`);
+                toast.custom((t) => (
+                    <Alert
+                        className="mb-0 shadow-md"
+                        type="success"
+                        message="Post updated successfully"
+                        onClose={() => toast.dismiss(t.id)}
+                    />
+                ), { position: "bottom-right" });
             } else {
-                toast.success("Post created successfully");
-                router.push('/posts');
+                toast.custom((t) => (
+                    <Alert
+                        className="mb-0 shadow-md"
+                        type="success"
+                        message="Post created successfully"
+                        onClose={() => toast.dismiss(t.id)}
+                    />
+                ), { position: "bottom-right" });
+
                 if (!isEditing) {
                     setCaption("");
                     setAttachments([]);
@@ -137,22 +150,50 @@ export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps
         },
         onError: (error) => {
             console.error("Failed to save post:", error);
-            toast.error("Failed to save post");
+            toast.custom((t) => (
+                <Alert
+                    className="mb-0 shadow-md"
+                    type="error"
+                    message="Failed to save post"
+                    onClose={() => toast.dismiss(t.id)}
+                />
+            ), { position: "bottom-right" });
         }
     });
 
     const handleSubmit = async () => {
         // console.log('Submitting post...', attachments);
         if (!caption.trim() && attachments.length === 0) {
-            toast.error("Please add some content to your post");
+            toast.custom((t) => (
+                <Alert
+                    className="mb-0 shadow-md"
+                    type="error"
+                    message="Please add some content to your post"
+                    onClose={() => toast.dismiss(t.id)}
+                />
+            ), { position: "bottom-right" });
             return;
         }
         if (isUploading) {
-            toast.error("Please wait for upload to complete");
+            toast.custom((t) => (
+                <Alert
+                    className="mb-0 shadow-md"
+                    type="error"
+                    message="Please wait for upload to complete"
+                    onClose={() => toast.dismiss(t.id)}
+                />
+            ), { position: "bottom-right" });
             return;
         }
         if (hasUploadError) {
-            toast.error("Please fix upload errors before publishing");
+            toast.custom((t) => (
+                <Alert
+                    className="mb-0 shadow-md"
+                    type="error"
+                    message="Please fix upload errors before publishing"
+                    onClose={() => toast.dismiss(t.id)}
+                />
+            ), { position: "bottom-right" });
             return;
         }
         mutation.mutate();

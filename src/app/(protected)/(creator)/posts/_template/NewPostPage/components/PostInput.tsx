@@ -1,5 +1,5 @@
 import Image from "@/components/Image";
-import { useAuth } from "@/store/auth";
+import { useMyPage } from "@/hooks/useQueries";
 import TextareaAutosize from "react-textarea-autosize";
 
 type PostInputProps = {
@@ -9,16 +9,18 @@ type PostInputProps = {
 };
 
 const PostInput = ({ content, setContent, attachmentCount }: PostInputProps) => {
-    const { user } = useAuth();
+    const { data: page } = useMyPage();
 
     return (
         <div className="flex items-start mt-2 text-sm font-bold">
             <div className="relative ml-2  w-10 h-10 mr-2.5">
                 <Image
                     className="object-cover rounded-full"
-                    src={user?.avatarUrl || "/images/avatar-1.jpg"}
+                    family="avatar"
+                    slot="profile"
+                    src={page?.avatarUrl}
                     fill
-                    alt="Avatar"
+                    alt={page?.displayName || "Avatar"}
                 />
             </div>
 

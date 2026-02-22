@@ -1,22 +1,24 @@
+
+
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import Comment from "@/components/Comment";
 
-// import Answer from "../../../../../messages/_template/sections/Chat/Answer";
-// import Question from "../../../../../(creator)/messages/_template/sections/Chat/Question";
-import { conversationApi, ApiClientError } from '@/lib/api';
+
+import { conversationApi } from '@/lib/api';
 import { Message, User } from "@/lib/types";
 import { formatAppDate } from "@/lib/date";
 
 import { useAuth } from "@/store/auth";
 import { useSocket } from "@/store/socket";
+import { useMyPage } from "@/hooks/useQueries";
 import Loader from "@/components/Loader";
 import Answer from "./Answer";
 import Question from "./Question";
-// import Answer from "../../../../../(creator)/messages/_template/sections/Chat/Answer";
+
 
 
 type MessagesProps = {
@@ -30,6 +32,7 @@ type MessagesProps = {
 
 const Chat = ({ visible, onClose, activeId, recipientUser, setActiveId, onMessageSent }: MessagesProps) => {
     const { user } = useAuth();
+    const { data: page } = useMyPage();
     const { socket, isConnected } = useSocket();
     const [value, setValue] = useState<string>("");
 
@@ -330,7 +333,6 @@ const Chat = ({ visible, onClose, activeId, recipientUser, setActiveId, onMessag
     };
 
     if (isLoading || isPending) {
-
         return (
             <div
                 className={`flex flex-col grow lg:fixed lg:inset-0 lg:z-100 lg:bg-white lg:transition-opacity dark:bg-n-1 ${visible
@@ -353,7 +355,6 @@ const Chat = ({ visible, onClose, activeId, recipientUser, setActiveId, onMessag
                 <div className="grow px-5 space-y-4 overflow-auto" />
 
             </div>
-
         )
     }
 
@@ -415,7 +416,10 @@ const Chat = ({ visible, onClose, activeId, recipientUser, setActiveId, onMessag
                                     key={msg._id}
                                     time={formatTime(msg.createdAt)}
                                     content={msg.content}
-                                    author={{ name: "You", avatar: user?.avatarUrl || "/images/avatars/avatar.jpg" }}
+                                    author={{
+                                        name: (user?.role === 'creator' ? page?.displayName : "You") || "You",
+                                        avatar: (user?.role === 'creator' ? page?.avatarUrl : user?.avatarUrl) || ""
+                                    }}
                                     status={(msg as any).status}
                                 />
                             );
@@ -425,7 +429,10 @@ const Chat = ({ visible, onClose, activeId, recipientUser, setActiveId, onMessag
                                     key={msg._id}
                                     time={formatTime(msg.createdAt)}
                                     content={msg.content}
-                                    author={{ name: sender.displayName || otherUser?.displayName || "User", avatar: sender.avatarUrl || otherUser?.avatarUrl || "/images/avatars/avatar.jpg" }}
+                                    author={{
+                                        name: sender.displayName || otherUser?.displayName || "User",
+                                        avatar: sender.avatarUrl || otherUser?.avatarUrl || "/images/avatars/avatar.jpg"
+                                    }}
                                 />
                             );
                         }
@@ -436,7 +443,7 @@ const Chat = ({ visible, onClose, activeId, recipientUser, setActiveId, onMessag
 
             <Comment
                 className="m-5"
-                avatar={user?.avatarUrl || "/images/avatars/avatar.jpg"}
+                avatar={(user?.role === 'creator' ? page?.avatarUrl : user?.avatarUrl) || ""}
                 placeholder="Type to add something"
                 value={value}
                 setValue={(e: any) => setValue(e.target.value)}

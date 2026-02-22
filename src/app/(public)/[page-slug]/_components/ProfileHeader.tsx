@@ -71,6 +71,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
         });
     };
 
+    console.log(page);
 
     return (
         <div className="relative z-1 flex items-end h-full pb-10 px-16 2xl:px-8 lg:px-6 md:px-5 md:pb-8">
@@ -98,7 +99,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                                     className="object-cover"
                                     family="avatar"
                                     slot="profile"
-                                    src={page.avatarUrl}
+                                    src={page?.avatarUrl}
                                     fill
                                     alt="Avatar"
                                 />

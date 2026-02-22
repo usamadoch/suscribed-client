@@ -36,6 +36,8 @@ const Comment = ({
                 <div className="relative self-center w-8.5 h-8.5 ml-4">
                     <Image
                         className="object-cover rounded-full"
+                        family="avatar"
+                        slot="profile"
                         src={avatar}
                         fill
                         alt="Avatar"

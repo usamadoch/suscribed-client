@@ -46,21 +46,14 @@ export function PageImageUploader<F extends SlotFamily>(props: PageImageUploader
 
     return (
         <div className={`relative group cursor-pointer ${containerClassName}`} onClick={handleClick}>
-            {imageSrc ? (
-                <Image
-                    className={imageClassName}
-                    family={family}
-                    slot={slot}
-                    src={imageSrc}
-                    fill
-                    alt={alt}
-                />
-            ) : (
-                <div className={`w-full h-full flex items-center justify-center bg-n-2 ${imageClassName?.includes('rounded') ? 'rounded-full' : ''}`}>
-                    <Icon name={family === 'avatar' && 'profile'} className="w-8 h-8 fill-n-4/50 relative z-10" />
-                </div>
-            )
-            }
+            <Image
+                className={imageClassName}
+                family={family}
+                slot={slot}
+                src={imageSrc}
+                fill
+                alt={alt}
+            />
 
             {/* Hover/Loading Overlay */}
             <div className={`absolute inset-0 flex items-center justify-center transition-opacity border-2 border-transparent z-20 
