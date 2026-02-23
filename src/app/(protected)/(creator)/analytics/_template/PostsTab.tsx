@@ -6,7 +6,6 @@ import Row from "../../posts/_template/Row";
 
 
 import Icon from "@/components/Icon";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import Empty from "@/components/Empty";
 import {
     useAnalyticsOverview,
@@ -15,7 +14,6 @@ import {
 } from "@/hooks/useQueries";
 import Tabs from "@/components/Tabs";
 
-// import Statistics, { StatisticsItem } from "../../../analytics/_template/Statistics";
 import SimpleChart from "./SimpleChart";
 import { TimeRange } from "./types";
 import Loader from "@/components/Loader";
@@ -107,11 +105,6 @@ const PostsTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Post
             }
         ];
     }, [overview, engagement, chartData]);
-
-    // console.log(statisticsData)
-    // if (isLoading) {
-    //     return <LoadingSpinner />;
-    // }
 
     return (
         <>

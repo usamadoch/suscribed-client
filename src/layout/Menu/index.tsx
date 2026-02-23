@@ -3,7 +3,6 @@ import { usePathname } from "next/navigation";
 import Icon from "@/components/Icon";
 
 import { navigationMobile } from "@/constants/navigation";
-import { twMerge } from "tailwind-merge";
 
 type MenuProps = {};
 
@@ -20,7 +19,7 @@ const Menu = ({ }: MenuProps) => {
                         key={index}
                     >
                         <Icon
-                            className={`icon-22 transition-colors dark:fill-white ${pathname === link.url && "!fill-purple-1"
+                            className={`icon-22 transition-colors dark:fill-white ${pathname === link.url && "fill-purple-1!"
                                 }`}
                             name={link.icon}
                         />
@@ -33,7 +32,7 @@ const Menu = ({ }: MenuProps) => {
                         <Icon
                             className={`icon-22 transition-colors dark:fill-white ${pathname === link.url ||
                                 (pathname.startsWith(link.url)
-                                    ? "!fill-purple-1"
+                                    ? "fill-purple-1!"
                                     : "")
                                 }`}
                             name={link.icon}

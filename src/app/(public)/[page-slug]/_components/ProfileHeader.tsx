@@ -71,7 +71,6 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
         });
     };
 
-    console.log(page);
 
     return (
         <div className="relative z-1 flex items-end h-full pb-10 px-16 2xl:px-8 lg:px-6 md:px-5 md:pb-8">
@@ -122,7 +121,6 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                                         ? truncateText(description, 120)
                                         : description;
 
-                                    console.log(page.about);
                                     return (
                                         <>
                                             {displayText}
@@ -192,7 +190,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                     )}
 
                     {!isOwner && (
-                        <div className="flex shrink-0 w-[20rem] 4xl:w-59">
+                        <div className="flex shrink-0 max-w-[20rem] w-full 4xl:w-59">
                             {isMember ? (
                                 <button
                                     className="btn-purple btn-medium grow opacity-75 "
@@ -223,7 +221,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                                     leaveFrom="transform scale-100 opacity-100"
                                     leaveTo="transform scale-95 opacity-0"
                                 >
-                                    <MenuItems className="absolute right-0 top-full mt-2 w-[14.69rem] py-2 border border-n-1 rounded-sm bg-white shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
+                                    <MenuItems className="absolute right-0 top-full mt-2 w-[14.69rem] py-2 border border-n-1 bg-white shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
                                         <MenuItem
                                             className="flex items-center cursor-pointer w-full h-10 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
                                             as="button"
@@ -242,10 +240,12 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                     )}
 
                     {isOwner && (
-                        <Link href="/settings" className="btn-purple btn-medium ">
-                            <Icon name="setup" />
-                            <span className="">Edit Profile</span>
-                        </Link>
+                        <div className="flex shrink-0 max-w-[20rem] w-full">
+                            <Link href="/settings" className="btn-purple btn-medium grow">
+                                <Icon name="setup" />
+                                <span className="">Edit Profile</span>
+                            </Link>
+                        </div>
                     )}
                 </div>
             </div>
@@ -260,7 +260,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                 shareUrl={`/${page.pageSlug}`}
                 bannerUrl={page.bannerUrl}
                 avatarUrl={page.avatarUrl}
-                title="Share this profile"
+                title={`Share ${page.displayName}'s profile`}
             />
 
         </div>

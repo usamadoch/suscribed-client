@@ -62,7 +62,7 @@ const Menu = ({ visible }: MenuProps) => {
                             {link.suffixIcon ? (
 
                                 <Icon
-                                    className={`ml-auto fill-inherit transition-colors ${visible ? "block" : "xl:hidden"
+                                    className={` ml-auto fill-inherit transition-colors ${visible ? "block" : "xl:hidden"
                                         }`}
                                     name={link.suffixIcon}
                                     viewBox={link.suffixIconViewBox}

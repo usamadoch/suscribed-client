@@ -38,6 +38,7 @@ const Banner = ({ page, isOwner, onUpdate }: CreatorBannerProps) => {
         if (file) await uploadImage(file, 'banner');
     };
 
+
     return (
         <div className="relative w-full aspect-5/1 md:aspect-5/1 bg-n-2">
             {isOwner ? (

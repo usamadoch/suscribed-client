@@ -5,10 +5,10 @@ import { usePost } from "@/hooks/useQueries";
 import { useRouter } from "next/navigation";
 import { useEffect, use, useState } from "react";
 import Modal from "@/components/Modal";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { usePostForm } from "../NewPostPage/usePostForm";
 import PostForm from "../NewPostPage/components/PostForm";
 import { useHeader } from "@/context/HeaderContext";
+import Loader from "@/components/Loader";
 
 
 
@@ -74,7 +74,9 @@ const EditPostPage = ({ params }: EditPostProps) => {
 
     if (isLoading) {
         return (
-            <LoadingSpinner />
+            <div className="flex items-center justify-center py-10">
+                <Loader />
+            </div>
         );
     }
 

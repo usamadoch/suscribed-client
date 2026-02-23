@@ -53,9 +53,9 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                         <Link
                             href={`/posts/${item.id}/edit`}
                             onClick={(e) => e.stopPropagation()}
-                            className="btn-stroke btn-small  ml-auto"
+                            className="btn-stroke btn-small ml-auto"
                         >
-                            <Icon name="edit" /> Edit
+                            <Icon name="edit" viewBox="0 0 24 24" /> Edit
                         </Link>
                     )}
 

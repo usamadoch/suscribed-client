@@ -60,14 +60,12 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
         if (targetLiked === serverLiked.current) return;
 
         try {
-            // Optimistic update already happened. Just sync.
             const res = await postApi.toggleLike(postId);
 
-            // Update server truth based on response
-            // The API returns { liked: boolean } - if it matches our target, we're good.
-            // If it doesn't (race condition?), we might need to revert or sync up.
-            // For now, assume success means the toggle happened.
-            serverLiked.current = targetLiked;
+            // Sync with server truth — use the authoritative liked state & count
+            serverLiked.current = res.liked;
+            setLiked(res.liked);
+            setLikesCount(Math.max(0, res.likeCount));
 
             // Invalidate queries to reflect changes elsewhere (e.g. post list, modal)
             queryClient.invalidateQueries({ queryKey: ['posts'] });
@@ -78,7 +76,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
             console.error('Failed to toggle like', error);
             // Revert UI on error
             setLiked(serverLiked.current);
-            setLikesCount(prev => serverLiked.current ? prev + 1 : prev - 1);
+            setLikesCount(prev => Math.max(0, serverLiked.current ? prev + 1 : prev - 1));
         }
     };
 
@@ -93,7 +91,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
         // 1. Optimistic UI Update
         const nextLiked = !liked;
         setLiked(nextLiked);
-        setLikesCount(prev => nextLiked ? prev + 1 : prev - 1);
+        setLikesCount(prev => nextLiked ? prev + 1 : Math.max(0, prev - 1));
 
         // Trigger animation
         setAnimating(true);
@@ -114,15 +112,15 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
             <div className={`flex items-center ${className || "mt-4"}`}>
 
                 <button
-                    className={`flex gap-1 px-0 cursor-pointer active:scale-90 transition-transform`}
+                    className={`flex items-center gap-1 px-0 cursor-pointer active:scale-90 transition-transform`}
                     onClick={handleLike}
                 >
                     <Icon
                         name={liked ? "like-filled" : "like"}
                         className={twMerge(
-                            "transition-colors",
+                            "transition-colors ",
                             animating && "animate-heart-pop",
-                            liked ? "fill-purple-1" : "fill-n-1 dark:fill-white"
+                            liked ? "fill-purple-1 icon-20" : "fill-n-1 icon-18 dark:fill-white"
                         )}
                         viewBox="0 0 512 512"
                     />
@@ -132,8 +130,8 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
 
 
                 {showComment && (
-                    <button className="flex gap-1 ml-5 px-0">
-                        <Icon name="comments" />
+                    <button className="flex items-center gap-1 ml-4 px-0">
+                        <Icon name="comments" className="icon-20" viewBox="0 0 24 24" />
                         <span className="text-xs">{comments}</span>
                     </button>
                 )}
@@ -141,7 +139,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
 
 
                 <button
-                    className={` ml-auto cursor-pointer`}
+                    className={` ml-4 cursor-pointer`}
                     onClick={(e) => {
                         e.stopPropagation();
                         if (type === 'post') {
@@ -152,7 +150,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
                     }}
                 >
 
-                    <Icon name="reply" />
+                    <Icon name="reply" className="icon-18" viewBox="0 0 512 512" />
                 </button>
             </div>
             {showShareModal && shareUrl && (

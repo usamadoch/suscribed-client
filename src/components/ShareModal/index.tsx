@@ -3,6 +3,8 @@ import { toast } from "react-hot-toast";
 import Modal from "@/components/Modal";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
+import Alert from "@/components/Alert";
+
 
 type ShareModalProps = {
     visible: boolean;
@@ -21,6 +23,8 @@ const ShareModal = ({
     avatarUrl,
     title = "Share this"
 }: ShareModalProps) => {
+
+
     return (
         <Modal
             classWrap="relative border-b-none"
@@ -33,42 +37,47 @@ const ShareModal = ({
             </div>
             <div className="pb-7 md:pt-8">
                 <div className="mb-6 text-center">
-                    {bannerUrl ? (
-                        <div className="relative w-full mt-5 aspect-3/1 overflow-hidden bg-n-2 dark:bg-n-7">
-                            <Image
-                                className="object-cover"
-                                family="banner"
-                                slot="creatorPage"
-                                src={bannerUrl}
-                                fill
-                                alt="Banner"
-                            />
-                        </div>
-                    ) : null}
+                    <div className="relative w-full mt-5 aspect-3/1 overflow-hidden bg-n-2 dark:bg-n-7">
+                        <Image
+                            className="object-cover"
+                            family="banner"
+                            slot="creatorPage"
+                            src={bannerUrl}
+                            fill
+                            alt="Banner"
+                        />
+                    </div>
 
-                    {avatarUrl ? (
-                        <div className={`relative z-1 ${bannerUrl ? "-mt-10" : "mt-5"} w-20 h-20 mx-auto mb-3 border-4 border-white rounded-full dark:border-n-1 bg-n-1`}>
-                            <Image
-                                className="object-cover rounded-full"
-                                family="avatar"
-                                slot="profile"
-                                src={avatarUrl}
-                                fill
-                                alt="Creator Avatar"
-                            />
-                        </div>
-                    ) : null}
+                    <div className="relative z-1 -mt-10 w-20 h-20 mx-auto mb-3 border-4 border-white rounded-full dark:border-n-1 bg-n-1">
+                        <Image
+                            className="object-cover rounded-full"
+                            family="avatar"
+                            slot="profile"
+                            src={avatarUrl}
+                            fill
+                            alt="Creator Avatar"
+                        />
+                    </div>
                 </div>
 
 
                 {[
                     {
                         icon: "copy",
+                        viewBox: "0 0 24 24",
                         text: "Copy link",
                         onClick: () => {
                             const fullUrl = shareUrl.startsWith('http') ? shareUrl : `${window.location.origin}${shareUrl}`;
                             navigator.clipboard.writeText(fullUrl);
-                            toast.success("Link copied to clipboard");
+                            toast.custom((t) => (
+                                <Alert
+                                    className="mb-0 shadow-md"
+                                    type="success"
+                                    message="Link copied to clipboard"
+                                    onClose={() => toast.dismiss(t.id)}
+                                />
+                            ), { position: "bottom-right" });
+
                         }
                     },
                     {
@@ -96,6 +105,7 @@ const ShareModal = ({
                         <Icon
                             className="-mt-0.25 mr-3 fill-n-1 dark:fill-white"
                             name={item.icon}
+                            viewBox={item.viewBox}
                         />
                         {item.text}
                     </button>

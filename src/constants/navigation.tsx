@@ -54,7 +54,7 @@ export const navigation: NavigationItem[] = [
     },
     {
         title: "Messages",
-        icon: "comments",
+        icon: "messages",
         url: "/messages",
     },
     {

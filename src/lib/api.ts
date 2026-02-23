@@ -453,7 +453,7 @@ export const postApi = {
         });
     },
 
-    async toggleLike(id: string): Promise<{ liked: boolean }> {
+    async toggleLike(id: string): Promise<{ liked: boolean; likeCount: number }> {
         return fetchApi(`/posts/${id}/like`, {
             method: 'POST',
         });

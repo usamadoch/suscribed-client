@@ -62,7 +62,7 @@ const Comment = ({
                 required
                 disabled={inputDisabled}
             />
-            <div className="flex items-center shrink-0 h-[3.375rem]">
+            <div className="flex items-center shrink-0 h-13.5">
                 {/* <button
                     className="btn-transparent-dark btn-square btn-small mr-1 md:hidden"
                     type="button"

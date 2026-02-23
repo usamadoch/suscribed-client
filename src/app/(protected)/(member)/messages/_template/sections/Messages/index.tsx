@@ -48,10 +48,7 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user,
     return (
         <div className="flex flex-col w-md border-r border-n-1 4xl:w-92.5 lg:w-full lg:border-none dark:border-white">
             <div className="flex p-5 border-b border-n-1 dark:border-white">
-                {/* <button className="btn-purple btn-small mr-auto px-4">
-                    <Icon name="edit" />
-                    <span>Compose</span>
-                </button> */}
+
                 <div className="grow"></div>
                 <button className="btn-stroke btn-square btn-small mr-1.5">
                     <Icon name="filters" />

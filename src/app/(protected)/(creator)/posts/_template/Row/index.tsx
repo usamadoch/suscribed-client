@@ -100,10 +100,10 @@ const Row = ({ item, showActions = true }: RowProps) => {
 
                 </td>
 
-                <td className="td-custom py-3.5 font-medium">
+                <td className="td-custom py-3.5 text-n-3">
                     {item.publishedAt ? format(new Date(item.publishedAt), 'MMM d, yyyy') : 'Draft'}
                 </td>
-                <td className="td-custom py-3.5 font-medium capitalize">
+                <td className="td-custom py-3.5 text-n-3 capitalize">
                     {item.visibility || 'private'}
                 </td>
 
@@ -129,7 +129,7 @@ const Row = ({ item, showActions = true }: RowProps) => {
                                                 className={`flex items-center w-full px-4 py-2 text-sm font-bold transition-colors ${active ? "bg-n-3/10 dark:bg-white/20" : ""
                                                     } text-n-1 dark:text-white`}
                                             >
-                                                <Icon className="mr-3 fill-n-1 dark:fill-white icon-18" name="edit" />
+                                                <Icon className="mr-3 fill-n-1 dark:fill-white icon-18" name="edit" viewBox="0 0 24 24" />
                                                 Edit
                                             </Link>
                                         )}
@@ -141,7 +141,7 @@ const Row = ({ item, showActions = true }: RowProps) => {
                                                     } text-red-500`}
                                                 onClick={() => setIsOpen(true)}
                                             >
-                                                <Icon className="mr-3 fill-red-500 icon-18" name="delete" />
+                                                <Icon className="mr-3 fill-red-500 icon-18" name="remove" />
                                                 Delete
                                             </button>
                                         )}
@@ -174,6 +174,7 @@ const Row = ({ item, showActions = true }: RowProps) => {
                                     onClick={handleDelete}
                                     disabled={isPending}
                                 >
+                                    <Icon className="mr-3 fill-red-500 icon-18" name="remove" />
                                     Delete
                                 </button>
                             </div>
