@@ -223,6 +223,23 @@ export type VideoPost = BasePost & {
 export type Post = TextPost | ImagePost | VideoPost;
 
 /**
+ * Lean post shape returned by the dashboard endpoint.
+ * Only contains the fields needed by the creator's posts table.
+ */
+export interface DashboardPost {
+    _id: string;
+    caption: string | null;
+    postType: 'text' | 'image' | 'video';
+    mediaAttachments: { type: string; url: string | null }[];
+    viewCount: number;
+    likeCount: number;
+    commentCount: number;
+    visibility: PostVisibility;
+    publishedAt: string | null;
+    createdAt: string;
+}
+
+/**
  * Type guard to check if a post is locked
  */
 export function isLockedPost(post: Post): boolean {

@@ -13,6 +13,7 @@ import Loader from "@/components/Loader";
 import { formatAppDate } from "@/lib/date";
 import Link from "next/link";
 import Icon from "@/components/Icon";
+import RecentVideos from "./RecentVideos";
 
 type CreatorContentProps = {
     pageSlug: string;
@@ -64,96 +65,99 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
         <div className="pb-20 px-16">
             {/* <h4 className="text-h4 mb-8">Latest Posts</h4> */}
 
-            <div className="max-w-4xl pt-10">
+            <div className="grid grid-cols-12 lg:grid-cols-1 gap-8">
+                <div className="col-span-8 lg:col-span-1 pt-10 lg:pt-0">
 
-                {isLoading ? (
-                    <div className="flex items-center justify-center">
-                        <Loader text="Loading posts..." />
-                    </div>
-                ) : posts.length === 0 ? (
-                    <div className="card p-5">
+                    {isLoading ? (
+                        <div className="flex items-center justify-center">
+                            <Loader text="Loading posts..." />
+                        </div>
+                    ) : posts.length === 0 ? (
+                        <div className="card p-5">
 
-                        <div className="text-center py-8 text-n-2">
-                            <Icon name="document" className="w-12 h-12 mx-auto mb-3 " />
-                            <p className="text-sm">No published posts yet</p>
+                            <div className="text-center py-8 text-n-2">
+                                <Icon name="document" className="w-12 h-12 mx-auto mb-3 " />
+                                <p className="text-sm">No published posts yet</p>
+                            </div>
+
+                            <Link
+                                href="/posts/new"
+                                className="mt-4 btn-purple btn-medium w-full flex items-center justify-center gap-2"
+                            >
+                                <Icon name="plus" className="w-4 h-4" />
+                                <span>Create New Post</span>
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 gap-6">
+                            {posts.map((post: Post) => {
+                                let content: string;
+                                let images: string[] = [];
+                                let isLocked = post.isLocked;
+
+                                if (post.isLocked) {
+                                    content = post.teaser || 'Exclusive content for members';
+
+                                    if (post.postType === 'image') {
+                                        const attachments = post.mediaAttachments;
+                                        images = attachments
+                                            .filter(m => m.thumbnailUrl)
+                                            .map(m => m.thumbnailUrl!)
+                                            .filter((url): url is string => !!url);
+                                    }
+                                } else {
+                                    content = post.caption || '';
+                                    if (post.postType === 'image') {
+                                        const attachments = post.mediaAttachments;
+                                        images = attachments
+                                            .filter(m => !isLockedMedia(m) && m.url)
+                                            .map(m => m.url)
+                                            .filter((url): url is string => !!url);
+                                    }
+                                }
+
+                                const postItem = {
+                                    id: post._id,
+                                    author: page?.displayName || "",
+                                    avatar: page?.avatarUrl || "/images/content/avatar-1.jpg",
+                                    time: formatAppDate(post.createdAt, { suffix: true }),
+                                    content: content,
+                                    images: images,
+                                    likes: post.likeCount || 0,
+                                    comments: post.commentCount || 0,
+                                    isLiked: !!post.isLiked,
+                                    isLocked: isLocked,
+                                    shareUrl: `/posts/${post._id}`,
+                                    isOwner: !!isOwner,
+                                };
+
+
+                                return (
+                                    <div className="w-full" key={post._id}>
+                                        <div className="relative">
+                                            <div
+                                                className="cursor-pointer"
+                                                onClick={() => handlePostClick(post)}
+                                            >
+                                                <Review item={postItem} />
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
 
-                        <Link
-                            href="/posts/new"
-                            className="mt-4 btn-purple btn-medium w-full flex items-center justify-center gap-2"
-                        >
-                            <Icon name="plus" className="w-4 h-4" />
-                            <span>Create New Post</span>
-                        </Link>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 gap-6">
-                        {posts.map((post: Post) => {
-                            let content: string;
-                            let images: string[] = [];
-                            let isLocked = post.isLocked;
+                    )}
+                </div>
 
-                            if (post.isLocked) {
-                                content = post.teaser || 'Exclusive content for members';
-
-                                if (post.postType === 'image') {
-                                    // Narrowed to LockedImagePost | UnlockedImagePost (but we are in isLocked branch)
-                                    // Actually post.isLocked narrows to the Locked variant of the union.
-                                    // So post.mediaAttachments are LockedImageAttachment[]
-                                    const attachments = post.mediaAttachments;
-                                    images = attachments
-                                        .filter(m => m.thumbnailUrl)
-                                        .map(m => m.thumbnailUrl!)
-                                        .filter((url): url is string => !!url);
-                                }
-                            } else {
-                                content = post.caption || '';
-                                if (post.postType === 'image') {
-                                    // Narrowed to UnlockedImagePost
-                                    const attachments = post.mediaAttachments;
-                                    images = attachments
-                                        .filter(m => !isLockedMedia(m) && m.url)
-                                        .map(m => m.url)
-                                        .filter((url): url is string => !!url);
-                                }
-                            }
-
-                            const postItem = {
-                                id: post._id,
-                                author: page?.displayName || "",
-                                avatar: page?.avatarUrl || "/images/content/avatar-1.jpg",
-                                time: formatAppDate(post.createdAt, { suffix: true }),
-                                content: content,
-                                images: images,
-                                likes: post.likeCount || 0,
-                                comments: post.commentCount || 0,
-                                isLiked: !!post.isLiked,
-                                isLocked: isLocked,
-                                shareUrl: `/posts/${post._id}`,
-                                isOwner: !!isOwner,
-                            };
-
-                            // console.log(postItem);
-
-
-                            return (
-                                <div className="w-full" key={post._id}>
-                                    <div className="relative">
-                                        <div
-                                            className="cursor-pointer"
-                                            onClick={() => handlePostClick(post)}
-                                        >
-                                            <Review item={postItem} />
-                                        </div>
-
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
+                {/* Right Sidebar - Top Videos */}
+                <div className="col-span-4 lg:col-span-1 pt-10">
+                    <RecentVideos
+                        pageSlug={pageSlug}
+                    />
+                </div>
             </div>
-
             <PostModal
                 visible={!!activePost}
                 post={activePost}

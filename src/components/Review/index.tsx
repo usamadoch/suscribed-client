@@ -41,13 +41,16 @@ const Review = ({ item, imageBig }: ReviewProps) => {
             </div>
             <div className="w-[calc(100%-2.125rem)] pl-3.5">
                 <div className="flex items-center">
-                    <div className="whitespace-nowrap text-sm font-bold">
-                        {item.author}
-                    </div>
-                    <div className="ml-2 pt-0.75 truncate text-xs font-medium text-n-3 dark:text-white/75">
-                        {item.time}
-                    </div>
+                    <div className="flex items-center gap-2">
 
+                        <div className="capitalize whitespace-nowrap text-sm font-bold">
+                            {item.author}
+                        </div>
+                        <div className="text-xs text-n-3">•</div>
+                        <div className="truncate text-xs font-medium text-n-3 dark:text-white/75">
+                            {item.time}
+                        </div>
+                    </div>
 
                     {item.isOwner && (
                         <Link

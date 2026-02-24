@@ -107,8 +107,9 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                             alt={creatorName}
                         />
                     </div>
-                    <div>
-                        <div className="font-bold text-sm text-n-1 dark:text-white">{creatorName}</div>
+                    <div className="flex items-center gap-2">
+                        <div className="capitalize font-bold text-sm text-n-1 dark:text-white">{creatorName}</div>
+                        <div className="text-xs text-n-3">•</div>
                         <div className="text-xs text-n-3">{formatAppDate(post.createdAt, { suffix: true })}</div>
                     </div>
                 </div>

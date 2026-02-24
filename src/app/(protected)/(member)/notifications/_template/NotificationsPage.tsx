@@ -1,6 +1,6 @@
 
 "use client"
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 
 import Empty from "@/components/Empty";
@@ -17,30 +17,53 @@ import Loader from "@/components/Loader";
 import MailTablet from "./MailTablet";
 import MailDesktop from "./MailDesktop";
 
+// --- Isolated child: handles responsive rendering only ---
+const NotificationList = ({
+    notifications,
+    mounted,
+}: {
+    notifications: AppNotification[];
+    mounted: boolean;
+}) => {
+    const isTablet = useMediaQuery({
+        query: "(max-width: 1023px)",
+    });
 
+    return (
+        <div className="card">
+            {notifications.map((notification: AppNotification) =>
+                mounted && isTablet ? (
+                    <MailTablet item={notification} key={notification._id} />
+                ) : (
+                    <MailDesktop item={notification} key={notification._id} />
+                )
+            )}
+        </div>
+    );
+};
+
+// --- Main page component ---
 const NotificationsPage = () => {
     const { mounted } = useHydrated();
     const { data, isLoading, error } = useNotifications();
     const markAllReadMutation = useMarkNotificationsAsRead();
     const { markAllAsReadLocal } = useSocket();
+    const hasMarkedRef = useRef(false);
 
     const notifications = data?.notifications || [];
     useHeader({ title: "Notifications" });
 
-
-    // Auto-mark as read on visit
+    // Auto-mark as read on visit (once only)
     useEffect(() => {
+        if (hasMarkedRef.current) return;
+        hasMarkedRef.current = true;
+
         markAllReadMutation.mutate(undefined, {
             onSuccess: () => {
                 markAllAsReadLocal();
             }
         });
     }, []);
-
-
-    const isTablet = useMediaQuery({
-        query: "(max-width: 1023px)",
-    });
 
     return (
         <>
@@ -56,27 +79,17 @@ const NotificationsPage = () => {
             ) : notifications.length === 0 ? (
                 <Empty
                     title="No notifications yet"
-                    content="You’ll get updates when people join your community, interact with your posts and more."
+                    content="You'll get updates when people join your community, interact with your posts and more."
                     imageSvg={
                         <Icon
                             name="notification"
                             className="w-24 h-24 fill-n-1 dark:fill-white"
                         />
                     }
-                // buttonText="Return Home"
-                // onClick={() => router.push("/")}
                 />
             ) : (
                 <>
-                    <div className="card">
-                        {notifications.map((notification: AppNotification) =>
-                            mounted && isTablet ? (
-                                <MailTablet item={notification} key={notification._id} />
-                            ) : (
-                                <MailDesktop item={notification} key={notification._id} />
-                            )
-                        )}
-                    </div>
+                    <NotificationList notifications={notifications} mounted={mounted} />
                     {/* <TablePagination /> */}
                 </>
             )}

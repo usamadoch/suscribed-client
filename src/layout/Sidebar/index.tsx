@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems, Transition, Portal } from "@headlessui/react";
+import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems } from "@headlessui/react";
 
 import Logo from "@/components/Logo";
 import Image from "@/components/Image";
@@ -64,34 +64,24 @@ const Sidebar = ({ }: SidebarProps) => {
                     <MenuButton className="btn-transparent-light btn-square btn-small cursor-pointer">
                         <Icon name="dots" />
                     </MenuButton>
-                    <Portal>
-                        <Transition
-                            enter="transition duration-100 ease-out"
-                            enterFrom="transform scale-95 opacity-0"
-                            enterTo="transform scale-100 opacity-100"
-                            leave="transition duration-75 ease-out"
-                            leaveFrom="transform scale-100 opacity-100"
-                            leaveTo="transform scale-95 opacity-0"
+                    <MenuItems
+                        transition
+                        portal
+                        anchor="top start"
+                        className="z-100 w-[14.69rem] py-2 border border-n-1 bg-white shadow-primary-4 dark:bg-n-1 dark:border-white [--anchor-gap:10px] transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                    >
+                        <MenuItem
+                            className="flex items-center cursor-pointer w-full h-10 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
+                            as="button"
+                            onClick={logout}
                         >
-                            <MenuItems
-                                anchor="top start"
-                                modal={false}
-                                className="w-[14.69rem] py-2 border border-n-1 rounded-sm bg-white shadow-primary-4 dark:bg-n-1 dark:border-white [--anchor-gap:10px]"
-                            >
-                                <MenuItem
-                                    className="flex items-center cursor-pointer w-full h-10 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
-                                    as="button"
-                                    onClick={logout}
-                                >
-                                    <Icon
-                                        className="-mt-0.25 mr-3 fill-n-1 dark:fill-white"
-                                        name="arrow-next"
-                                    />
-                                    Logout
-                                </MenuItem>
-                            </MenuItems>
-                        </Transition>
-                    </Portal>
+                            <Icon
+                                className="-mt-0.25 mr-3 fill-n-1 dark:fill-white"
+                                name="arrow-next"
+                            />
+                            Logout
+                        </MenuItem>
+                    </MenuItems>
                 </MenuDropdown>
             </div>
         </div>

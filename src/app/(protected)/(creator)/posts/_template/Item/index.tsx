@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "@/components/Image";
 
-import { Post } from "@/lib/types";
+import { DashboardPost } from "@/lib/types";
 
 type ItemProps = {
-    item: Post;
+    item: DashboardPost;
 };
 
 const Item = ({ item }: ItemProps) => {

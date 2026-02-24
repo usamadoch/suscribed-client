@@ -4,7 +4,7 @@ import Image from "@/components/Image";
 
 type CommentProps = {
     className?: string;
-    avatar?: string;
+    avatar?: string | null;
     placeholder: string;
     value: string;
     setValue: React.ChangeEventHandler<HTMLTextAreaElement>;

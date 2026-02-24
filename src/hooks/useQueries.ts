@@ -110,7 +110,7 @@ export const useCreatorPosts = (slug: string, filters?: { type?: PostType | Post
         queryKey: ['creator-posts', slug, filters, user?._id],
         queryFn: async () => {
             if (!slug) return [];
-            const { posts } = await postApi.getAll({ pageSlug: slug, limit: 100, ...filters });
+            const { posts } = await postApi.getCreatorPosts({ pageSlug: slug, limit: 100, ...filters });
             return posts;
         },
         enabled: !!slug,
@@ -144,7 +144,7 @@ export const usePosts = (params: { page: number; limit: number }) => {
     return useQuery({
         queryKey: ['posts', params],
         queryFn: async () => {
-            return await postApi.getAll(params);
+            return await postApi.getMyPosts(params);
         },
         staleTime: 1000 * 60 * 1, // 1 minute
         placeholderData: keepPreviousData,
@@ -176,6 +176,20 @@ export const usePostComments = (postId: string) => {
         },
         enabled: !!postId,
         staleTime: 1000 * 60 * 1, // 1 minute
+    });
+};
+
+// Hook to fetch Recent Videos for Sidebar
+export const useRecentVideos = (pageSlug: string) => {
+    return useQuery({
+        queryKey: ['recent-videos', pageSlug],
+        queryFn: async () => {
+            if (!pageSlug) return [];
+            const { posts } = await postApi.getRecentVideos(pageSlug);
+            return posts;
+        },
+        enabled: !!pageSlug,
+        staleTime: 1000 * 60 * 5, // 5 minutes
     });
 };
 

@@ -20,10 +20,6 @@ import { useJoinPage } from "@/hooks/useQueries";
 import PageImageUploader from "./PageImageUploader";
 
 
-
-
-
-
 type CreatorProfileHeaderProps = {
     page: CreatorPage;
     isOwner: boolean;
@@ -107,10 +103,10 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                     </div>
 
                     <div className="text-n-1 dark:text-white pl-4">
-                        <div className="mb-2 text-h4 md:text-h3">{page.displayName}</div>
-                        <div className="flex items-center text-sm font-medium text-n-3">
-                            <span className="mr-6 md:mr-4">{page.memberCount || 0} Members</span>
-                            <span>{page.postCount || 0} Posts</span>
+                        <div className="capitalize mb-2 text-h4 md:text-h3">{page.displayName}</div>
+                        <div className="flex items-center font-medium text-n-3">
+                            <span className="text-sm mr-6 md:mr-4">{page.memberCount || 0} Members</span>
+                            <span className="text-sm">{page.postCount || 0} Posts</span>
                         </div>
                         <div className="mt-4 text-sm">
                             {(
@@ -260,7 +256,6 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                 shareUrl={`/${page.pageSlug}`}
                 bannerUrl={page.bannerUrl}
                 avatarUrl={page.avatarUrl}
-                title={`Share ${page.displayName}'s profile`}
             />
 
         </div>

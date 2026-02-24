@@ -8,7 +8,7 @@ import { formatAppDate, formatDuration } from "@/lib/date";
 import Icon from "@/components/Icon";
 
 // import CreatorHeader from "@/layout/CreatorHeader";
-import { Post, VideoPost } from "@/lib/types";
+import { VideoPost } from "@/lib/types";
 import Loader from "@/components/Loader";
 import ReadMore from "@/components/ReadMore";
 
@@ -28,13 +28,13 @@ const CreatorsPostsPage = () => {
             <div className="max-w-360 mx-auto px-6 2xl:px-8 lg:px-6 md:px-5">
 
 
-                <div className="grid gap-6">
+                <div className="grid gap-6 pt-10">
                     {isLoading ? (
-                        <div className="flex items-center justify-center pt-10">
+                        <div className="flex items-center justify-center ">
                             <Loader />
                         </div>
                     ) : posts.length === 0 ? (
-                        <div className="flex items-center justify-center pt-10">
+                        <div className="flex items-center justify-center ">
 
                             <div className="text-center py-10 text-n-3">No video posts found.</div>
                         </div>

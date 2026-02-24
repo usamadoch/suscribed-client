@@ -21,7 +21,7 @@ const ShareModal = ({
     shareUrl,
     bannerUrl,
     avatarUrl,
-    title = "Share this"
+    title
 }: ShareModalProps) => {
 
 
@@ -29,15 +29,18 @@ const ShareModal = ({
         <Modal
             classWrap="relative border-b-none"
             classButtonClose="z-2 fill-white"
+            showCloseIcon={false}
             visible={visible}
             onClose={onClose}
         >
-            <div className="relative z-1 card-title text-n-1 dark:text-white ">
-                {title}
-            </div>
+            {title && (
+                <div className="relative z-1 card-title text-n-1 dark:text-white ">
+                    {title}
+                </div>
+            )}
             <div className="pb-7 md:pt-8">
                 <div className="mb-6 text-center">
-                    <div className="relative w-full mt-5 aspect-3/1 overflow-hidden bg-n-2 dark:bg-n-7">
+                    <div className="relative w-full aspect-3/1 overflow-hidden bg-n-2 dark:bg-n-7">
                         <Image
                             className="object-cover"
                             family="banner"

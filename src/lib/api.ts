@@ -12,6 +12,7 @@ import {
     JoinMembershipPayload,
     UploadedFile,
     Post,
+    DashboardPost,
     Comment,
     CreatePostPayload,
     UpdatePostPayload,
@@ -398,31 +399,28 @@ export const mediaApi = {
 
 
 
-interface GetPostsParams {
-    creatorId?: string;
-    pageSlug?: string;
-    status?: string;
-    visibility?: string;
-    page?: number;
-    limit?: number;
-    type?: string | string[];
-}
-
 export const postApi = {
-    async getAll(params: GetPostsParams = {}): Promise<{ posts: Post[] } & { pagination: Pagination }> {
+
+    async getMyPosts(params: { page?: number; limit?: number } = {}): Promise<{ posts: DashboardPost[] } & { pagination: Pagination }> {
         const searchParams = new URLSearchParams();
-        Object.entries(params).forEach(([key, value]) => {
-            if (value !== undefined) {
-                searchParams.set(key, String(value));
-            }
-        });
+        if (params.page) searchParams.set('page', String(params.page));
+        if (params.limit) searchParams.set('limit', String(params.limit));
         const query = searchParams.toString();
-        const response = await fetch(`${API_BASE_URL}/posts${query ? `?${query}` : ''}`, {
+        const response = await fetch(`${API_BASE_URL}/posts/my${query ? `?${query}` : ''}`, {
             credentials: 'include',
         });
         const data = await response.json();
         if (!data.success) throw new ApiClientError(data.error, response.status);
         return { ...data.data, pagination: data.meta?.pagination };
+    },
+
+    async getCreatorPosts(params: { pageSlug: string; limit?: number; type?: string | string[] }): Promise<{ posts: Post[] }> {
+        const searchParams = new URLSearchParams();
+        searchParams.set('pageSlug', params.pageSlug);
+        if (params.limit) searchParams.set('limit', String(params.limit));
+        if (params.type) searchParams.set('type', String(params.type));
+        const query = searchParams.toString();
+        return fetchApi(`/posts/creator?${query}`);
     },
 
     async getById(id: string): Promise<{ post: Post; isLiked: boolean }> {
@@ -484,6 +482,10 @@ export const postApi = {
             method: 'POST',
             body: JSON.stringify(payload),
         });
+    },
+
+    async getRecentVideos(pageSlug: string): Promise<{ posts: Post[] }> {
+        return fetchApi(`/posts/recent-videos?pageSlug=${encodeURIComponent(pageSlug)}`);
     },
 };
 

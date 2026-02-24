@@ -1,6 +1,7 @@
 import CommentInput from "@/components/Comment";
 import CommentItem from "@/components/CommentItem";
 import { User, Comment } from "@/lib/types";
+import { useMyPage } from "@/hooks/useQueries";
 
 interface CommentsSectionProps {
     user: User | null;
@@ -21,12 +22,16 @@ const CommentsSection = ({
     comments,
     allowComments = true
 }: CommentsSectionProps) => {
+    const { data: page } = useMyPage();
+
+    const avatar = user?.role === 'creator' ? page?.avatarUrl : user?.avatarUrl;
+
     return (
         <>
             <div className="text-2xl font-bold mb-6">Comments</div>
             <CommentInput
                 className="mb-6 shadow-none"
-                avatar={user?.avatarUrl || "/images/avatars/avatar.jpg"}
+                avatar={avatar}
                 placeholder={allowComments ? "Type to add something" : "Comments are turned off for this post."}
                 value={value}
                 setValue={(e: any) => setValue(e.target.value)}

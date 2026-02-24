@@ -46,6 +46,7 @@ const CommentItem = ({ comment, variant = 'default' }: CommentItemProps) => {
                 <Actions
                     postId={comment._id}
                     comments={0}
+
                     likes={0}
                     isLiked={false}
                     showComment={false}
