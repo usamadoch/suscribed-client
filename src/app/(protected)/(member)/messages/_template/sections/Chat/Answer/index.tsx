@@ -1,4 +1,5 @@
 import Image from "@/components/Image";
+import Loader from "@/components/Loader";
 
 type AnswerProps = {
     time: string;
@@ -15,7 +16,7 @@ const Answer = ({ time, content, author, status }: AnswerProps) => (
         <div className="flex flex-col items-end grow">
             <div className="flex justify-end mb-1.5 text-xs items-center">
                 {status === 'sending' && (
-                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-n-3 mr-1.5"></div>
+                    <Loader className="w-3 h-3 mr-1.5" />
                 )}
                 <div className="">{time}</div>
                 <div className="ml-1 font-bold">{author?.name || "You"}</div>

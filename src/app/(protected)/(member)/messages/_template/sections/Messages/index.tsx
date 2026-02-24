@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon";
 import Image from "next/image";
-import { Conversation, User } from "@/lib/types";
+import { Conversation, User, AuthUser } from "@/lib/types";
 import { formatAppDate } from "@/lib/date";
 
 type MessagesProps = {
@@ -8,7 +8,7 @@ type MessagesProps = {
     conversations: Conversation[];
     activeId: string | null;
     setActiveId: (id: string | null) => void;
-    user: User | null;
+    user: AuthUser | null;
     isLoading?: boolean;
 };
 

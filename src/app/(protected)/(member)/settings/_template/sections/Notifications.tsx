@@ -5,6 +5,7 @@ import { NotificationPreferences } from "@/lib/types";
 import { userApi } from "@/lib/api";
 
 import { useAuth } from "@/store/auth";
+import { useFullProfile } from "@/hooks/useQueries";
 
 import Switch from "@/components/Switch";
 
@@ -36,36 +37,35 @@ type NotificationCategory = {
 
 const Notifications = () => {
     const { user, refreshUser } = useAuth();
+    const { data: fullUser } = useFullProfile();
     const [isSaving, setIsSaving] = useState(false);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    // Initialize state from user preferences or defaults
-    const [prefs, setPrefs] = useState<NotificationPreferences>(() => {
-        return user?.notificationPreferences || {
-            email: {
-                newMembers: true,
-                newComments: true,
-                newMessages: true,
-                weeklyDigest: true
-            },
-            push: {
-                newMembers: true,
-                newPosts: true,
-                newComments: true,
-                newMessages: true,
-                mentions: true
-            },
-            inApp: { all: true },
-            quietHours: { enabled: false, startTime: '22:00', endTime: '08:00', timezone: 'UTC' }
-        };
+    // Initialize state with defaults
+    const [prefs, setPrefs] = useState<NotificationPreferences>({
+        email: {
+            newMembers: true,
+            newComments: true,
+            newMessages: true,
+            weeklyDigest: true
+        },
+        push: {
+            newMembers: true,
+            newPosts: true,
+            newComments: true,
+            newMessages: true,
+            mentions: true
+        },
+        inApp: { all: true },
+        quietHours: { enabled: false, startTime: '22:00', endTime: '08:00', timezone: 'UTC' }
     });
 
-    // Update state when user loads
+    // Populate prefs when full profile loads
     useEffect(() => {
-        if (user?.notificationPreferences) {
-            setPrefs(user.notificationPreferences);
+        if (fullUser?.notificationPreferences) {
+            setPrefs(fullUser.notificationPreferences);
         }
-    }, [user?.notificationPreferences]);
+    }, [fullUser]);
 
 
     const isCreator = hasPermission(user?.role, 'page:manage');

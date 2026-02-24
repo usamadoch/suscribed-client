@@ -8,14 +8,14 @@ import Icon from "@/components/Icon";
 import { useAuth } from "@/store/auth";
 import { useMyMemberships, useExploreCreators } from "@/hooks/useQueries";
 import { useHydrated } from "@/hooks/useHydrated";
-import { CreatorPage, User } from "@/lib/types";
+import { CreatorPage, AuthUser } from "@/lib/types";
 import Loader from "@/components/Loader";
 
 // ======================
 // WELCOME SECTION
 // ======================
 interface WelcomeSectionProps {
-    user: User;
+    user: AuthUser;
 }
 
 const WelcomeSection = ({ user }: WelcomeSectionProps) => (

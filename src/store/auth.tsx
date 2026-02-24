@@ -121,6 +121,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     refreshUser: async () => {
         try {
             const { user } = await authApi.getMe();
+
             set({ user });
         } catch {
             // Silently fail
@@ -244,6 +245,9 @@ export function RequireAuth({ children, fallback }: RouteGuardProps) {
  */
 export function RequireCreator({ children, fallback }: RouteGuardProps) {
     const { user, isAuthenticated, isLoading } = useAuth();
+
+    console.log(user);
+
     const router = useRouter();
 
     useEffect(() => {

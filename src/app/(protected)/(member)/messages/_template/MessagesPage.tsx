@@ -84,9 +84,10 @@ const MessagesPage = () => {
                         visible={visible}
                         onClose={() => setVisible(false)}
                         activeId={activeId}
-                        recipientUser={recipientUser}
+                        recipientUser={recipientUser ?? null}
                         setActiveId={setActiveId}
                         onMessageSent={handleMessageSent}
+                        recipientId={recipientId}
                     />
                 </div>
             )}

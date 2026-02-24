@@ -28,6 +28,10 @@ const MailDesktop = ({ item }: MailDesktopProps) => {
     };
 
     const getNotificationLink = (notification: AppNotification) => {
+        if (notification.actionUrl) {
+            return notification.actionUrl;
+        }
+
         switch (notification.type) {
             case 'new_member':
                 return '/members';
@@ -36,7 +40,7 @@ const MailDesktop = ({ item }: MailDesktopProps) => {
             case 'new_comment':
             case 'new_like':
             case 'post_liked':
-                return notification.relatedId ? `/posts/${notification.relatedId}` : '#';
+                return notification.metadata?.postId ? `/posts/${notification.metadata.postId}` : '#';
             default:
                 return '#';
         }

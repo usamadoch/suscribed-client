@@ -56,7 +56,7 @@ export const useConversations = (recipientId: string | null) => {
         if (recipientUser && user) {
             const fakeConv: Conversation = {
                 _id: 'new',
-                participants: [user, recipientUser],
+                participants: [user._id, recipientUser],
                 creatorId: user._id,
                 memberId: recipientUser._id,
                 isActive: true,

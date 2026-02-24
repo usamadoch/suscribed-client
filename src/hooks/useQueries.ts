@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
-import { postApi, membershipApi, notificationApi, pageApi, analyticsApi, ApiClientError } from "@/lib/api";
+import { postApi, membershipApi, notificationApi, pageApi, analyticsApi, authApi, ApiClientError } from "@/lib/api";
 import { useAuth } from "@/store/auth";
 import { TimeRange, PostType } from "@/lib/types";
 
@@ -295,3 +295,20 @@ export const useAnalyticsEngagement = () => {
     });
 };
 
+// ======================
+// USER PROFILE QUERIES
+// ======================
+
+// Hook to fetch full user profile (for settings pages)
+export const useFullProfile = () => {
+    const { user } = useAuth();
+    return useQuery({
+        queryKey: ['full-profile', user?._id],
+        queryFn: async () => {
+            const { user } = await authApi.getFullProfile();
+            return user;
+        },
+        enabled: !!user,
+        staleTime: 1000 * 60 * 10, // 10 minutes
+    });
+};

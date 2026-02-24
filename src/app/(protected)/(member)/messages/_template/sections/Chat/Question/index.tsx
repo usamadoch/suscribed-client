@@ -16,7 +16,9 @@ const Question = ({ time, content, images, loading, author }: QuestionProps) => 
         <div className="relative w-8 h-8 mr-2">
             <Image
                 className="object-cover rounded-full"
-                src={author?.avatar || "/images/avatars/avatar-2.jpg"}
+                src={author?.avatar}
+                family="avatar"
+                slot="profile"
                 fill
                 alt="Avatar"
             />

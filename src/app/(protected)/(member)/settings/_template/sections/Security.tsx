@@ -5,19 +5,18 @@ import { authApi } from "@/lib/api";
 
 import Field from "@/components/Field";
 import Loader from "@/components/Loader";
+import { useFullProfile } from "@/hooks/useQueries";
 
-import { useAuth } from "@/store/auth";
 import Alert from "@/components/Alert";
 
 type SecurityProps = {};
 
 const Security = ({ }: SecurityProps) => {
-    const { user } = useAuth();
+    const { data: fullUser, isLoading: isProfileLoading } = useFullProfile();
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-    // If registered via Google, don't show password settings
-    const isGoogleUser = !!user?.googleId;
+    const isGoogleUser = fullUser ? !!fullUser.googleId : null;
 
     const {
         register,
@@ -58,6 +57,17 @@ const Security = ({ }: SecurityProps) => {
             setIsLoading(false);
         }
     };
+
+    if (isGoogleUser === null) {
+        return (
+            <div className="card">
+                <div className="card-title">Security Settings</div>
+                <div className="p-5 flex justify-center">
+                    <Loader />
+                </div>
+            </div>
+        );
+    }
 
     if (isGoogleUser) {
         return (

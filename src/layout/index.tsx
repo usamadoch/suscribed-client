@@ -39,7 +39,7 @@ const Layout = ({
                         {children}
                     </div>
                 </div>
-                {!isPublic && <Footer />}
+                {/* {!isPublic && <Footer />} */}
 
             </div>
             {!isPublic && <Menu />}

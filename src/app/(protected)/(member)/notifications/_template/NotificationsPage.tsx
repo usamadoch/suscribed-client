@@ -65,6 +65,8 @@ const NotificationsPage = () => {
         });
     }, []);
 
+    // console.log(notifications);
+
     return (
         <>
             {isLoading ? (

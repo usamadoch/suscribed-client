@@ -1,16 +1,22 @@
-import { useState } from "react";
-import Checkbox from "@/components/Checkbox";
-import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 
+/**
+ * Props for the Message component.
+ *
+ * Type guide rules applied:
+ * - `content` was optional → required (a message always has content in the domain)
+ * - `images` stays optional (messages may or may not have image attachments)
+ * - Removed unused imports: `useState`, `Checkbox`, `Icon`
+ */
 type MessageProps = {
     user: string;
     email: string;
     avatar: string;
     date: string;
     time: string;
-    content?: string;
-    images?: Array<string>;
+    content: string;
+    /** Optional: only present when the message includes image attachments */
+    images?: string[];
 };
 
 const Message = ({
@@ -52,11 +58,11 @@ const Message = ({
                 <div className="flex flex-wrap mt-1 -ml-2 md:-mx-1">
                     {images.map((image, index) => (
                         <div
-                            className="relative w-[10.375rem] h-[7.75rem] mt-2 ml-2 border border-n-1 md:w-[calc(50%-0.5rem)] md:mx-1"
+                            className="relative w-41.5 h-31 mt-2 ml-2 border border-n-1 md:w-[calc(50%-0.5rem)] md:mx-1"
                             key={index}
                         >
                             <Image
-                                className="object-cover ounded-sm"
+                                className="object-cover rounded-sm"
                                 src={image}
                                 fill
                                 alt=""

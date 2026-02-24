@@ -79,6 +79,18 @@ export interface User {
     notificationPreferences: NotificationPreferences;
 }
 
+// Lean user shape returned by auth endpoints (login, signup, /me)
+// Contains only the fields the auth store needs for routing/guards/sidebar
+export interface AuthUser {
+    _id: string;
+    email: string;
+    role: UserRole;
+    displayName: string;
+    username: string;
+    avatarUrl: string | null;
+    onboardingStep: OnboardingStep;
+}
+
 // ====================
 // MEDIA TYPES
 // ====================
@@ -347,7 +359,7 @@ export interface ChangePasswordPayload {
 }
 
 export interface AuthState {
-    user: User | null;
+    user: AuthUser | null;
     isLoading: boolean;
     isAuthenticated: boolean;
     error: string | null;
@@ -440,6 +452,16 @@ export interface CreatorPage {
     updatedAt: string;
 }
 
+export interface ExploreCreator {
+    _id: string;
+    pageSlug: string;
+    displayName: string;
+    tagline: string;
+    avatarUrl: string | null;
+    memberCount: number;
+    postCount: number;
+}
+
 export interface UpdatePagePayload {
     displayName?: string;
     tagline?: string;
@@ -529,7 +551,7 @@ export interface Message {
     contentType: 'text' | 'image' | 'file';
     attachments: MessageAttachment[];
     status: MessageStatus;
-    isRead?: boolean;
+    isRead: boolean;
     readAt: string | null;
     createdAt: string;
 }

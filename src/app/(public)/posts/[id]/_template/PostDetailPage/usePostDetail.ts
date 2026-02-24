@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, createElement } from "react";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 
+import Alert from "@/components/Alert";
 import { useAuth } from "@/store/auth";
 import { usePost, usePostComments, useJoinPage } from "@/hooks/useQueries";
 import { postApi } from "@/lib/api";
@@ -62,6 +63,8 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
     const queryClient = useQueryClient();
     const { user } = useAuth();
 
+
+
     // ── Validate ID format (skip all requests if invalid) ───
     const isValidId = isValidObjectId(postId);
     const queryId = isValidId ? postId : '';
@@ -69,6 +72,8 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
     // ── Queries (disabled when ID is invalid) ───────────────
     const { data: post, isLoading: isPostLoading } = usePost(queryId);
     const { data: comments, isLoading: isCommentsLoading } = usePostComments(queryId);
+
+
 
     // ── Join mutation ────────────────────────────────────────
     const { mutate: joinPage, isPending: isJoining } = useJoinPage();
@@ -108,7 +113,13 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
             const { comment } = await postApi.addComment(postId, {
                 content: commentValue,
             });
-            toast.success("Comment added");
+            toast.custom((t) =>
+                createElement(Alert, {
+                    type: "success",
+                    message: "Your comment has been successfully.",
+                    onClose: () => toast.dismiss(t.id),
+                })
+            );
             setCommentValue("");
 
             // Optimistic cache update
@@ -123,7 +134,13 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
             queryClient.invalidateQueries({ queryKey: ["post", postId] });
         } catch (error) {
             console.error(error);
-            toast.error("Failed to add comment");
+            toast.custom((t) =>
+                createElement(Alert, {
+                    type: "error",
+                    message: "Failed to publish your comment. Please try again later.",
+                    onClose: () => toast.dismiss(t.id),
+                })
+            );
         } finally {
             setIsSubmittingComment(false);
         }
@@ -142,7 +159,17 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
 
             joinPage(
                 { creatorId, pageId },
-                { onSuccess: () => toast.success("Joined successfully!") }
+                {
+                    onSuccess: () => {
+                        toast.custom((t) =>
+                            createElement(Alert, {
+                                type: "success",
+                                message: "You've successfully joined!",
+                                onClose: () => toast.dismiss(t.id),
+                            })
+                        );
+                    }
+                }
             );
         } else {
             setIsLoginModalOpen(true);

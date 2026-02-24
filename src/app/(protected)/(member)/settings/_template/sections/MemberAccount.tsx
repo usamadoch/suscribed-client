@@ -1,13 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
-// import { useAuth } from "@/stores/auth";
 import Field from "@/components/Field";
 import { useAuth } from "@/store/auth";
 import { userApi } from "@/lib/api";
 import { useImageUpload } from "@/hooks/useImageUpload";
+import { useFullProfile } from "@/hooks/useQueries";
 import Alert from "@/components/Alert";
 
 type AccountFormValues = {
@@ -18,6 +18,7 @@ type AccountFormValues = {
 
 const MemberAccount = () => {
     const { user, refreshUser } = useAuth();
+    const { data: fullUser } = useFullProfile();
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
@@ -29,14 +30,26 @@ const MemberAccount = () => {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors },
     } = useForm<AccountFormValues>({
         defaultValues: {
-            displayName: user?.displayName || "",
-            username: user?.username || "",
-            bio: user?.bio || "",
+            displayName: "",
+            username: "",
+            bio: "",
         },
     });
+
+    // Populate form when full profile loads
+    useEffect(() => {
+        if (fullUser) {
+            reset({
+                displayName: fullUser.displayName || "",
+                username: fullUser.username || "",
+                bio: fullUser.bio || "",
+            });
+        }
+    }, [fullUser, reset]);
 
     const bio = watch("bio");
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -62,7 +75,7 @@ const MemberAccount = () => {
         setMessage(null);
 
         try {
-            let avatarUrl = user?.avatarUrl || undefined;
+            let avatarUrl = fullUser?.avatarUrl || user?.avatarUrl || undefined;
 
             // 1. Upload avatar if selected
             if (selectedFile) {
@@ -109,7 +122,7 @@ const MemberAccount = () => {
                         />
                     )}
                     <div className="flex items-center w-[calc(50%-1.5rem)] -mt-2 mx-3 md:w-full md:mb-6 md:mt-0 md:mx-0 md:last:mb-0">
-                        <div className="mt-8 relative shrink-0 w-[6.875rem] h-[6.875rem] mr-3 cursor-pointer shadow-primary-4 rounded-full group" onClick={handleAvatarClick}>
+                        <div className="mt-8 relative shrink-0 w-27.5 h-27.5 mr-3 cursor-pointer shadow-primary-4 rounded-full group" onClick={handleAvatarClick}>
                             <Image
                                 className="object-cover rounded-full"
                                 src={(previewAvatar || user?.avatarUrl || "/images/avatars/avatar-1.jpg") as string}

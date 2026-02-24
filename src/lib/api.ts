@@ -2,10 +2,12 @@ import {
     ApiError,
     ApiResponse,
     User,
+    AuthUser,
     SignupPayload,
     LoginPayload,
     ChangePasswordPayload,
     CreatorPage,
+    ExploreCreator,
     UpdatePagePayload,
     Pagination,
     Membership,
@@ -174,21 +176,21 @@ async function refreshTokens(): Promise<boolean> {
 // ====================
 
 export const authApi = {
-    async signup(payload: SignupPayload): Promise<{ user: User }> {
+    async signup(payload: SignupPayload): Promise<{ user: AuthUser }> {
         return fetchApi('/auth/signup', {
             method: 'POST',
             body: JSON.stringify(payload),
         });
     },
 
-    async login(payload: LoginPayload): Promise<{ user: User }> {
+    async login(payload: LoginPayload): Promise<{ user: AuthUser }> {
         return fetchApi('/auth/login', {
             method: 'POST',
             body: JSON.stringify(payload),
         });
     },
 
-    async googleLogin(code: string, role?: string): Promise<{ user: User; isNewUser: boolean }> {
+    async googleLogin(code: string, role?: string): Promise<{ user: AuthUser; isNewUser: boolean }> {
         return fetchApi('/auth/google', {
             method: 'POST',
             body: JSON.stringify({ code, role }),
@@ -208,8 +210,12 @@ export const authApi = {
         });
     },
 
-    async getMe(): Promise<{ user: User }> {
+    async getMe(): Promise<{ user: AuthUser }> {
         return fetchApi('/auth/me');
+    },
+
+    async getFullProfile(): Promise<{ user: User }> {
+        return fetchApi('/auth/me/full');
     },
 
     async refresh(): Promise<{ message: string }> {
@@ -225,7 +231,7 @@ export const authApi = {
         });
     },
 
-    async updateOnboardingStep(step: number): Promise<{ user: User }> {
+    async updateOnboardingStep(step: number): Promise<{ user: AuthUser }> {
         return fetchApi('/auth/onboarding-step', {
             method: 'PATCH',
             body: JSON.stringify({ step }),
@@ -239,7 +245,7 @@ export const authApi = {
 // ====================
 
 export const pageApi = {
-    async getAll(): Promise<{ pages: CreatorPage[] }> {
+    async getAll(): Promise<{ pages: ExploreCreator[] }> {
         return fetchApi('/pages');
     },
 

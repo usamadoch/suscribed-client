@@ -23,12 +23,14 @@ const CreatorPage = () => {
     const slug = usePageSlug();
     const queryClient = useQueryClient();
     const { user } = useAuth();
+
     const { setHeaderHidden } = useCreatorHeader();
 
     // ... hooks ...
 
     const { data, isLoading, error } = useCreatorPage(slug);
     const { page, isOwner, isMember } = data || {};
+
 
     useEffect(() => {
         if (error && error instanceof ApiClientError && (error.code === 'NOT_PUBLISHED' || error.code === 'NOT_FOUND')) {

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "@/components/Image";
-import { CreatorPage } from "@/lib/types";
+import { ExploreCreator } from "@/lib/types";
 
 type ItemProps = {
-    item: CreatorPage;
+    item: ExploreCreator;
 };
 
 const Item = ({ item }: ItemProps) => {
