@@ -158,7 +158,7 @@ export const usePost = (id: string) => {
         queryFn: async () => {
             if (!id) return null;
             const data = await postApi.getById(id);
-            return data.post;
+            return { ...data.post, isLiked: data.isLiked };
         },
         enabled: !!id,
         staleTime: 1000 * 60 * 5, // 5 minutes

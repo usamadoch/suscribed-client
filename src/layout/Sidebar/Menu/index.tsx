@@ -73,8 +73,7 @@ const Menu = ({ visible }: MenuProps) => {
                                     className={`min-w-[1.625rem] ml-auto px-1 py-0.25 text-center text-xs font-bold text-n-1 ${visible ? "block" : "xl:hidden"
                                         }`}
                                     style={{
-                                        backgroundColor:
-                                            "#AE7AFF", // Could also be dynamic based on link.counterColor if needed in future
+                                        backgroundColor: link.counterColor || "#AE7AFF",
                                     }}
                                 >
                                     {counterValue}

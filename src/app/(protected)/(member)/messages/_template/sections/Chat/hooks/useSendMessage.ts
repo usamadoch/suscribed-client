@@ -35,6 +35,15 @@ export const useSendMessage = ({
                     recipientId: recipientUser._id,
                 });
                 currentConversationId = conversation._id;
+
+                queryClient.setQueryData(
+                    ["conversations"],
+                    (oldData: any) => {
+                        if (!oldData) return [conversation];
+                        return [conversation, ...oldData];
+                    }
+                );
+
                 setActiveId(currentConversationId);
             }
 

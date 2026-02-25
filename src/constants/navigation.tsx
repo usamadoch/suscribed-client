@@ -8,6 +8,7 @@ type NavigationItem = {
     roles?: string[]; // Keep for backward compatibility if needed, or deprecate
     permissions?: Permission[];
     target?: string;
+    counterColor?: string;
 };
 
 export const navigation: NavigationItem[] = [
@@ -50,11 +51,13 @@ export const navigation: NavigationItem[] = [
         title: "Notifications",
         icon: "notification",
         url: "/notifications",
+        counterColor: "#AE7AFF",
         // No restriction implies everyone, or we can add explicit common permission
     },
     {
         title: "Messages",
         icon: "messages",
+        counterColor: "#98E9AB",
         url: "/messages",
     },
     {
