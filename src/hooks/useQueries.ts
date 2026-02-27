@@ -78,23 +78,38 @@ export const useJoinPage = () => {
             return await membershipApi.join({ creatorId, pageId });
         },
         onSuccess: (data, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['check-membership', variables.pageId] });
-            queryClient.invalidateQueries({ queryKey: ['my-memberships'] });
+            queryClient.invalidateQueries({ queryKey: ['check-member', variables.pageId] });
+            queryClient.invalidateQueries({ queryKey: ['my-members'] });
             queryClient.invalidateQueries({ queryKey: ['post', variables.pageId] }); // Potentially helpful
         },
     });
 };
 
-// Hook to check membership status
+// Hook to check member status
 export const useCheckMembership = (pageId: string) => {
     const { user } = useAuth();
     return useQuery({
-        queryKey: ['check-membership', pageId, user?._id],
+        queryKey: ['check-member', pageId, user?._id],
         queryFn: async () => {
             if (!pageId || !user) return { isMember: false };
             return await membershipApi.checkMembership(pageId);
         },
         enabled: !!pageId && !!user,
+        staleTime: 1000 * 60 * 5,
+    });
+};
+
+// Hook to fetch Creator Plans
+import { membershipPlanApi } from '@/lib/api';
+export const useCreatorPlans = (creatorId?: string) => {
+    return useQuery({
+        queryKey: ['creator-plans', creatorId],
+        queryFn: async () => {
+            if (!creatorId) return [];
+            const { plans } = await membershipPlanApi.getCreatorPlans(creatorId);
+            return plans;
+        },
+        enabled: !!creatorId,
         staleTime: 1000 * 60 * 5,
     });
 };
@@ -125,14 +140,14 @@ export const useCreatorPosts = (slug: string, filters?: { type?: PostType | Post
     });
 };
 
-// Hook for User Memberships (List of pages I joined)
+// Hook for User Members (List of pages I joined)
 export const useMyMemberships = (enabled: boolean = true) => {
     const { user } = useAuth();
     return useQuery({
-        queryKey: ['my-memberships', user?._id],
+        queryKey: ['my-members', user?._id],
         queryFn: async () => {
-            const { memberships } = await membershipApi.getMyMemberships({ limit: 100 });
-            return memberships || [];
+            const { members } = await membershipApi.getMyMemberships({ limit: 100 });
+            return members || [];
         },
         enabled: !!user && enabled,
         staleTime: 1000 * 60 * 15, // 15 minutes

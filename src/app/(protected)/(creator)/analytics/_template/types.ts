@@ -1,7 +1,7 @@
 import { TimeRange } from "@/lib/types";
 
 export type { TimeRange };
-export type TabValue = "membership" | "posts" | "earnings";
+export type TabValue = "member" | "posts" | "earnings";
 
 export interface TimeRangeOption {
     id: string;

@@ -27,11 +27,11 @@ const MemberActivityPanel = ({ page }: MemberActivityPanelProps) => {
     const newMembers = overview ? overview.newMembers : 0;
 
     // Type guard to ensure we have full user objects
-    const hasFullUserData = (membership: any): membership is { memberId: User } => {
-        return membership.memberId && typeof membership.memberId !== 'string';
+    const hasFullUserData = (member: any): member is { memberId: User } => {
+        return member.memberId && typeof member.memberId !== 'string';
     };
 
-    const recentMembers: RecentMemberViewModel[] = (membersData?.memberships || [])
+    const recentMembers: RecentMemberViewModel[] = (membersData?.members || [])
         .filter(hasFullUserData)
         .map((m) => ({
             _id: m._id,

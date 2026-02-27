@@ -10,7 +10,7 @@ import {
     ExploreCreator,
     UpdatePagePayload,
     Pagination,
-    Membership,
+    Member,
     JoinMembershipPayload,
     UploadedFile,
     Post,
@@ -282,7 +282,7 @@ interface GetMembershipsParams {
 
 export const membershipApi = {
     async getMyMemberships(params: GetMembershipsParams = {}): Promise<{
-        memberships: Membership[];
+        members: Member[];
     } & { pagination: Pagination }> {
         const searchParams = new URLSearchParams();
         Object.entries(params).forEach(([key, value]) => {
@@ -291,7 +291,7 @@ export const membershipApi = {
             }
         });
         const query = searchParams.toString();
-        const response = await fetch(`${API_BASE_URL}/memberships${query ? `?${query}` : ''}`, {
+        const response = await fetch(`${API_BASE_URL}/members${query ? `?${query}` : ''}`, {
             credentials: 'include',
         });
 
@@ -310,7 +310,7 @@ export const membershipApi = {
     },
 
     async getMyMembers(params: GetMembershipsParams = {}): Promise<{
-        memberships: Membership[];
+        members: Member[];
     } & { pagination: Pagination }> {
         const searchParams = new URLSearchParams();
         Object.entries(params).forEach(([key, value]) => {
@@ -320,7 +320,7 @@ export const membershipApi = {
         });
         const query = searchParams.toString();
         const response = await fetch(
-            `${API_BASE_URL}/memberships/my-members${query ? `?${query}` : ''}`,
+            `${API_BASE_URL}/members/my-members${query ? `?${query}` : ''}`,
             { credentials: 'include' }
         );
 
@@ -338,21 +338,21 @@ export const membershipApi = {
         return { ...data.data, pagination: data.meta?.pagination };
     },
 
-    async join(payload: JoinMembershipPayload): Promise<{ membership: Membership }> {
-        return fetchApi('/memberships', {
+    async join(payload: JoinMembershipPayload): Promise<{ member: Member }> {
+        return fetchApi('/members', {
             method: 'POST',
             body: JSON.stringify(payload),
         });
     },
 
     async cancel(id: string): Promise<{ message: string }> {
-        return fetchApi(`/memberships/${id}`, {
+        return fetchApi(`/members/${id}`, {
             method: 'DELETE',
         });
     },
 
-    async checkMembership(pageId: string): Promise<{ isMember: boolean; membership?: Membership }> {
-        return fetchApi(`/memberships/check/${pageId}`);
+    async checkMembership(pageId: string): Promise<{ isMember: boolean; member?: Member }> {
+        return fetchApi(`/members/check/${pageId}`);
     },
 };
 
@@ -759,5 +759,85 @@ export const analyticsApi = {
 
     async getEngagement(): Promise<EngagementBreakdown> {
         return fetchApi('/analytics/engagement');
+    },
+};
+
+// ====================
+// PAYOUT API
+// ====================
+
+import { PayoutMethod } from './types';
+
+export const payoutApi = {
+    async getMyPayoutMethod(): Promise<PayoutMethod | null> {
+        return fetchApi('/payouts/me');
+    },
+
+    async submitPayoutMethod(payload: Partial<PayoutMethod>): Promise<PayoutMethod> {
+        return fetchApi('/payouts', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+    },
+
+    async getEarningsSummary(): Promise<{
+        availableBalance: number;
+        pendingBalance: number;
+        lifetimeEarnings: number;
+    }> {
+        return fetchApi('/payouts/summary');
+    }
+};
+
+// ====================
+// ADMIN API
+// ====================
+
+export const adminApi = {
+    async getPendingPayouts(): Promise<{ payouts: PayoutMethod[] }> {
+        return fetchApi('/admin/payouts/pending');
+    },
+
+    async reviewPayout(id: string, payload: { status: 'approved' | 'rejected', rejectionReason?: string }): Promise<PayoutMethod> {
+        return fetchApi(`/admin/payouts/${id}/review`, {
+            method: 'PUT',
+            body: JSON.stringify(payload),
+        });
+    },
+};
+
+// ====================
+// MEMBERSHIP PLAN API
+// ====================
+
+import { Tier, Subscription } from './types';
+
+export const membershipPlanApi = {
+    async createPlan(payload: Partial<Tier>): Promise<Tier> {
+        return fetchApi('/tiers', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+    },
+
+    async getMyPlans(): Promise<{ plans: Tier[] }> {
+        return fetchApi('/tiers/me');
+    },
+
+    async getCreatorPlans(creatorId: string): Promise<{ plans: Tier[] }> {
+        return fetchApi(`/tiers/creator/${creatorId}`);
+    },
+
+    async updatePlan(id: string, payload: Partial<Tier>): Promise<Tier> {
+        return fetchApi(`/tiers/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(payload),
+        });
+    },
+
+    async subscribeMock(planId: string): Promise<Subscription> {
+        return fetchApi(`/tiers/${planId}/subscribe`, {
+            method: 'POST',
+        });
     },
 };

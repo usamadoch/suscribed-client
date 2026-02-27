@@ -17,14 +17,14 @@ import { TimeRange, TimeRangeOption } from "./types";
 import Loader from "@/components/Loader";
 import Statistics, { StatisticsItem } from "./Statistics";
 
-interface MembershipTabProps {
+interface MemberTabProps {
     days: TimeRange;
     timeRange: TimeRangeOption;
     onTimeRangeChange: (value: TimeRangeOption) => void;
     timeRangeOptions: TimeRangeOption[];
 }
 
-const MembershipTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: MembershipTabProps) => {
+const MemberTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: MemberTabProps) => {
     const { data: overview, isLoading: overviewLoading } = useAnalyticsOverview(days);
     const { data: members, isLoading: membersLoading } = useAnalyticsMembers(days);
 
@@ -108,7 +108,7 @@ const MembershipTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }:
             {/* Growth Chart */}
             <div className="card p-6">
                 <h3 className="text-lg font-semibold text-n-1 dark:text-white mb-4">
-                    Membership Growth
+                    Member Growth
                 </h3>
                 <div className="bg-n-7 dark:bg-white/5 rounded-xl p-4">
                     <SimpleChart data={filledChartData} height={200} />
@@ -125,4 +125,4 @@ const MembershipTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }:
     );
 };
 
-export default MembershipTab;
+export default MemberTab;

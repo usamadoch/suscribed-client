@@ -87,10 +87,8 @@ const MembersPage = () => {
     // React Query Hook
     const { data, isLoading } = useMyMembers({ page, limit });
 
-    console.log(data?.memberships);
 
-
-    const memberships = data?.memberships || [];
+    const memberships = data?.members || [];
     const pagination = data?.pagination || {
         page: 1,
         limit,

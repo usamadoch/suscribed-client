@@ -46,7 +46,7 @@ const Row = ({ item }: RowProps) => {
                 </div>
             </td>
             <td className="td-custom font-medium">
-                {item.tier || "-"}
+                {item.tier || "Free"}
             </td>
             <td className="td-custom text-n-3 dark:text-white/75">
                 {formatAppDate(item.joinedAt, { relative: false, dateFormat: 'MMM, d, yyyy' })}

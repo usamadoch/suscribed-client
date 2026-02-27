@@ -10,7 +10,7 @@ export type Permission =
     | 'payouts:view'
     | 'page:manage'
     | 'explore:view'
-    | 'subscriptions:view' // viewing own memberships
+    | 'subscriptions:view' // viewing own members
     | 'security:manage'
     | 'admin:access';
 
@@ -484,7 +484,7 @@ export interface UpdatePagePayload {
 
 export type MembershipStatus = 'active' | 'paused' | 'cancelled';
 
-export interface Membership {
+export interface Member {
     _id: string;
     memberId: string | User;
     creatorId: string | User;
@@ -576,4 +576,74 @@ export interface GetMessagesParams {
     page?: number;
     limit?: number;
     cursor?: string;
+}
+
+// ====================
+// PAYOUT & SUBSCRIPTION TYPES
+// ====================
+
+export type PayoutStatus = 'pending_review' | 'approved' | 'rejected';
+export type IdType = 'id_card' | 'driving_license' | 'passport';
+
+export interface PayoutMethod {
+    _id: string;
+    userId: string | User;
+    pageId: string | CreatorPage;
+
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    address1: string;
+    address2?: string;
+    city: string;
+    postalCode: string;
+
+    bankName: string;
+    accountHolderName: string;
+    iban: string;
+    idType: IdType;
+    idNumber: string;
+
+    status: PayoutStatus;
+    rejectionReason?: string;
+    reviewedBy?: string;
+    reviewedAt?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type TierStatus = 'draft' | 'published';
+
+export interface Tier {
+    _id: string;
+    creatorId: string | User;
+    pageId: string | CreatorPage;
+    name: string;
+    price: number;
+    description: string;
+    benefits: string[];
+    badgeTitle?: string;
+    status: TierStatus;
+    activeSubscribers: number;
+    stripeProductId?: string;
+    stripePriceId?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type SubscriptionStatus = 'active' | 'past_due' | 'canceled' | 'incomplete';
+
+export interface Subscription {
+    _id: string;
+    userId: string | User;
+    creatorId: string | User;
+    planId: string | Tier;
+    status: SubscriptionStatus;
+    currentPeriodStart?: string;
+    currentPeriodEnd?: string;
+    canceledAt?: string;
+    stripeSubscriptionId?: string;
+    stripeCustomerId?: string;
+    createdAt: string;
+    updatedAt: string;
 }

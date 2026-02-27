@@ -88,3 +88,21 @@ export const truncateText = (text: string, maxLength: number) => {
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength) + "...";
 };
+
+
+export const getIdNumberLabel = (selectedIdType: string) => {
+    switch (selectedIdType) {
+        case 'id_card': return 'ID Card Number *';
+        case 'driving_license': return 'Driving License Number *';
+        case 'passport': return 'Passport Number *';
+        default: return 'ID Number *';
+    }
+};
+
+
+
+export const idTypeOptions = [
+    { id: 'id_card', title: 'ID Card' },
+    { id: 'driving_license', title: 'Driving License' },
+    { id: 'passport', title: 'Passport' }
+];

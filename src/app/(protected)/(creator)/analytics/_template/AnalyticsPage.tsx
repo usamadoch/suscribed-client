@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useHeader } from "@/context/HeaderContext";
 import Tabs from "@/components/Tabs";
 
-import MembershipTab from "./MembershipTab";
+import MemberTab from "./MemberTab";
 import PostsTab from "./PostsTab";
 import EarningsTab from "./EarningsTab";
 import { TimeRange, TabValue } from "./types";
@@ -22,11 +22,11 @@ const timeRangeOptions = [
 const AnalyticsPage = () => {
     useHeader({ title: "Analytics" });
     // const { mounted } = useHydrated();
-    const [activeTab, setActiveTab] = useState<TabValue>("membership");
+    const [activeTab, setActiveTab] = useState<TabValue>("member");
     const [timeRange, setTimeRange] = useState(timeRangeOptions[1]);
 
     const tabs = [
-        { title: "Membership", value: "membership" },
+        { title: "Member", value: "member" },
         { title: "Post Performance", value: "posts" },
         { title: "Earnings", value: "earnings" },
     ];
@@ -48,8 +48,8 @@ const AnalyticsPage = () => {
             />
 
             {/* Tab Content */}
-            {activeTab === "membership" && (
-                <MembershipTab
+            {activeTab === "member" && (
+                <MemberTab
                     days={timeRange.value}
                     timeRange={timeRange}
                     onTimeRangeChange={setTimeRange}

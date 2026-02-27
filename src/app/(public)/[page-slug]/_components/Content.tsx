@@ -8,7 +8,7 @@ import { useCreatorPage, useCreatorPosts, useJoinPage } from "@/hooks/useQueries
 import Review from "@/components/Review";
 import PostModal from "@/components/PostModal";
 import LoginModal from "@/components/LoginModal";
-import JoinMembershipModal from "@/components/JoinMembershipModal";
+import JoinTierModal from "@/components/JoinTierModal";
 import Loader from "@/components/Loader";
 import { formatAppDate } from "@/lib/date";
 import Link from "next/link";
@@ -170,7 +170,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
             />
 
             {page && (
-                <JoinMembershipModal
+                <JoinTierModal
                     visible={joinModalVisible}
                     onClose={() => setJoinModalVisible(false)}
                     page={page}

@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/Skeleton";
 
 import { usePermission } from "@/hooks/usePermission";
 import { useMyMemberships } from "@/hooks/useQueries";
-import { Membership, CreatorPage } from "@/lib/types";
+import { Member, CreatorPage } from "@/lib/types";
 
 type TeamMembersProps = {
     visible?: boolean;
@@ -19,7 +19,7 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
     const { data: rawMemberships, isLoading } = useMyMemberships(canViewSubscriptions);
 
     // Filter active and ensure page data exists
-    const memberships = (rawMemberships || []).filter((m: Membership) =>
+    const members = (rawMemberships || []).filter((m: Member) =>
         m.status === 'active' && m.pageId && typeof m.pageId !== 'string'
     );
 
@@ -31,7 +31,7 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
         return (
             <>
                 <div className={`mb-3 overflow-hidden whitespace-nowrap text-xs font-medium text-white/50 ${visible ? "w-full opacity-100" : "xl:w-0 xl:opacity-0"}`}>
-                    My Memberships
+                    My Members
                 </div>
                 <div className="-mx-4">
                     {[1, 2, 3, 4].map((i) => (
@@ -45,7 +45,7 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
         );
     }
 
-    const displayedMemberships = isExpanded ? memberships : memberships.slice(0, 4);
+    const displayedMemberships = isExpanded ? members : members.slice(0, 4);
 
     return (
         <>
@@ -53,10 +53,10 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
                 className={`mb-3 overflow-hidden whitespace-nowrap text-xs font-medium text-white/50 ${visible ? "w-full opacity-100" : "xl:w-0 xl:opacity-0"
                     }`}
             >
-                My Memberships
+                My Members
             </div>
             <div className="-mx-4">
-                {displayedMemberships.map((item: Membership) => {
+                {displayedMemberships.map((item: Member) => {
                     const page = item.pageId as CreatorPage;
                     return (
                         <Link
@@ -83,7 +83,7 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
                     );
                 })}
             </div>
-            {memberships.length > 4 && (
+            {members.length > 4 && (
                 <button
                     className={`group flex items-center w-full mt-4 pl-0.5 text-xs font-medium text-white transition-colors hover:text-purple-1 ${visible ? "text-xs" : "xl:text-0"
                         }`}

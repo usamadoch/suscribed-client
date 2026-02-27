@@ -31,14 +31,14 @@ const WelcomeSection = ({ user }: WelcomeSectionProps) => (
 
 
 interface MySubscriptionsPanelProps {
-    memberships: Array<{
+    members: Array<{
         _id: string;
         pageId: CreatorPage;
         joinedAt: string;
     }>;
 }
 
-const MySubscriptionsPanel = ({ memberships }: MySubscriptionsPanelProps) => (
+const MySubscriptionsPanel = ({ members }: MySubscriptionsPanelProps) => (
     <div className="card p-5">
         <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -48,11 +48,11 @@ const MySubscriptionsPanel = ({ memberships }: MySubscriptionsPanelProps) => (
                 </h2>
             </div>
             <span className="text-sm text-n-2">
-                {memberships.length} creator{memberships.length !== 1 ? 's' : ''}
+                {members.length} creator{members.length !== 1 ? 's' : ''}
             </span>
         </div>
 
-        {memberships.length === 0 && (
+        {members.length === 0 && (
             <div className="text-center">
                 <div className="flex flex-col items-center py-3">
                     <Icon name="team" className="w-12 h-12 mx-auto mb-3 fill-n-2/30" />
@@ -79,7 +79,7 @@ export const HomePage = () => {
     const { mounted } = useHydrated();
     const { user } = useAuth();
 
-    // Fetch my memberships
+    // Fetch my members
     const { data: membershipsData, isLoading: membershipsLoading } = useMyMemberships();
 
     // Fetch explore creators for discovery
@@ -105,7 +105,7 @@ export const HomePage = () => {
         );
     }
 
-    const memberships = (membershipsData || []).filter(m =>
+    const members = (membershipsData || []).filter(m =>
         m.pageId && typeof m.pageId === 'object'
     ).map(m => ({
         _id: m._id,
@@ -122,7 +122,7 @@ export const HomePage = () => {
 
 
 
-                <MySubscriptionsPanel memberships={memberships} />
+                <MySubscriptionsPanel members={members} />
 
             </div>
         </>

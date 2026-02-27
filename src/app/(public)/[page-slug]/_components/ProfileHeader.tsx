@@ -9,6 +9,7 @@ import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
 import LoginModal from "@/components/LoginModal";
 import ShareModal from "@/components/ShareModal";
+import JoinTierModal from "@/components/JoinTierModal";
 
 import { truncateText } from "@/lib/utils";
 import { CreatorPage } from "@/lib/types";
@@ -32,6 +33,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
     const { isAuthenticated } = useAuth();
     const { mutate: joinPage, isPending: isJoining } = useJoinPage();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const [visible, setVisible] = useState(false);
 
@@ -55,13 +57,18 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
         if (file) await uploadImage(file, 'avatar');
     };
 
-    const handleJoin = async () => {
+    const handleOpenJoinModal = () => {
         if (!isAuthenticated) return setIsLoginModalOpen(true);
+        setIsJoinModalOpen(true);
+    };
+
+    const handleJoinForFree = async () => {
         if (!page) return;
 
         const creatorId = typeof page.userId === 'object' ? page.userId._id : page.userId;
         joinPage({ creatorId, pageId: page._id }, {
             onSuccess: () => {
+                setIsJoinModalOpen(false);
                 if (onJoinSuccess) onJoinSuccess();
             }
         });
@@ -197,11 +204,10 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                                 </button>
                             ) : (
                                 <button
-                                    className={`btn-purple btn-medium grow ${isJoining ? "opacity-75 cursor-not-allowed" : ""}`}
-                                    onClick={handleJoin}
-                                    disabled={isJoining}
+                                    className={`btn-purple btn-medium grow`}
+                                    onClick={handleOpenJoinModal}
                                 >
-                                    {isJoining ? <Loader /> : <span>Become a Member</span>}
+                                    <span>Become a Member</span>
                                 </button>
                             )}
 
@@ -247,8 +253,13 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
             </div>
             <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
 
-
-
+            <JoinTierModal
+                visible={isJoinModalOpen}
+                onClose={() => setIsJoinModalOpen(false)}
+                page={page}
+                onJoin={handleJoinForFree}
+                isJoining={isJoining}
+            />
 
             <ShareModal
                 visible={visible}

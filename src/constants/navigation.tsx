@@ -38,6 +38,12 @@ export const navigation: NavigationItem[] = [
         url: "/members",
         permissions: ["members:view"],
     },
+    {
+        title: "Earnings",
+        icon: "card",
+        url: "/earnings",
+        permissions: ["payouts:view"],
+    },
     // Member Pages
     {
         title: "Explore",
