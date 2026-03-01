@@ -3,6 +3,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import Field from '@/components/Field';
+import Checkbox from '@/components/Checkbox';
 import { PayoutFormData } from '../schema';
 
 type Props = {
@@ -76,18 +77,12 @@ const PersonalInfoStep = ({ onNext }: Props) => {
             </div>
 
             <div className="pt-2">
-                <label className="flex items-start gap-3 cursor-pointer">
-                    <div className="pt-1">
-                        <input
-                            type="checkbox"
-                            className="w-4 h-4 text-purple bg-gray-100 border-gray-300 rounded focus:ring-purple dark:focus:ring-purple dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            {...register('termsAgreed')}
-                        />
-                    </div>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">
-                        I agree to the terms and conditions for processing payouts and authorize the platform to verify my identity.
-                    </span>
-                </label>
+                <Checkbox
+                    label="I agree to the terms and conditions for processing payouts and authorize the platform to verify my identity."
+                    checked={requiredFields[6] === true}
+                    className="items-start!"
+                    {...register('termsAgreed')}
+                />
             </div>
 
             <div className="flex justify-end gap-4 pt-4 border-t border-gray-200 dark:border-gray-800">

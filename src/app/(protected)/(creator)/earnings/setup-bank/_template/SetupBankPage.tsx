@@ -96,9 +96,9 @@ const SetupBankPage = () => {
     return (
         <div className="max-w-3xl mx-auto w-full">
             <div className="card p-6 md:p-8">
-                <h2 className="text-h4 font-bold mb-6">
+                <h4 className="text-h4 font-bold mb-6">
                     {payoutMethod ? 'Update Bank Details' : 'Add Bank Details'}
-                </h2>
+                </h4>
 
                 {isUpdating && (
                     <Alert type="warning" className="mb-6">

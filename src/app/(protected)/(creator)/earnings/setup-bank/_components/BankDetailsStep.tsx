@@ -67,7 +67,7 @@ const BankDetailsStep = ({ onPrev, isSubmitting }: Props) => {
                 {...register('idNumber')}
             />
 
-            <div className="flex justify-end gap-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+            <div className="flex justify-end gap-4 pt-4">
                 <button
                     type="button"
                     onClick={onPrev}

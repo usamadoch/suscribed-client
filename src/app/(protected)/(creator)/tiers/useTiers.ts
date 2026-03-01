@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { membershipPlanApi } from '@/lib/api';
 import { Tier } from '@/lib/types';
 import toast from 'react-hot-toast';
+import * as React from 'react';
+import Alert from '@/components/Alert';
 
 export const useTiers = () => {
     const queryClient = useQueryClient();
@@ -21,10 +23,18 @@ export const useTiers = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tiers'] });
-            toast.success('Member plan created');
+            toast.custom((t) => React.createElement(Alert, {
+                type: 'success',
+                message: 'Member plan created',
+                onClose: () => toast.dismiss(t.id)
+            }));
         },
         onError: (err: any) => {
-            toast.error(err.message || 'Failed to create plan');
+            toast.custom((t) => React.createElement(Alert, {
+                type: 'error',
+                message: err.message || 'Failed to create plan',
+                onClose: () => toast.dismiss(t.id)
+            }));
         }
     });
 
@@ -35,10 +45,18 @@ export const useTiers = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tiers'] });
-            toast.success('Member plan updated');
+            toast.custom((t) => React.createElement(Alert, {
+                type: 'success',
+                message: 'Member plan updated',
+                onClose: () => toast.dismiss(t.id)
+            }));
         },
         onError: (err: any) => {
-            toast.error(err.message || 'Failed to update plan');
+            toast.custom((t) => React.createElement(Alert, {
+                type: 'error',
+                message: err.message || 'Failed to update plan',
+                onClose: () => toast.dismiss(t.id)
+            }));
         }
     });
 

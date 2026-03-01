@@ -623,6 +623,7 @@ export interface Tier {
     description: string;
     benefits: string[];
     badgeTitle?: string;
+    isHighlighted: boolean;
     status: TierStatus;
     activeSubscribers: number;
     stripeProductId?: string;
