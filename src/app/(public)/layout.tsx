@@ -11,15 +11,15 @@ import DraftBanner from "@/layout/DraftBanner";
 const PublicLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <CreatorHeaderProvider>
-            {/* <div className="flex flex-col "> */}
-            <DraftBanner />
-            <CreatorHeader />
+            <div className=" bg-background text-base antialiased dark:bg-n-2">
+                <DraftBanner />
+                <CreatorHeader />
 
-            {/* <div className="flex-1 flex flex-col"> */}
-            {children}
-            {/* </div> */}
-            {/* </div> */}
-        </CreatorHeaderProvider >
+                {/* <div className="flex-1 flex flex-col"> */}
+                {children}
+                {/* </div> */}
+            </div>
+        </CreatorHeaderProvider>
     );
 };
 

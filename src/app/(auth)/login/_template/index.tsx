@@ -10,12 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useGoogleLogin, CodeResponse } from "@react-oauth/google";
 
-import Field from "@/components/Field";
-import Checkbox from "@/components/Checkbox";
 import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
 
 import Alert from "@/components/Alert";
+import AuthFields from "../../_components/AuthFields";
 import { LoginSchema } from "../../_validations";
 import { authApi } from "@/lib/api";
 import { ONBOARDING_STEPS } from "@/lib/types";
@@ -207,48 +206,16 @@ const LoginPage = () => {
                     />
                 )}
 
-                <Field
-                    className={`mb-6 ${step === 2 && flow === 'signup' ? 'hidden' : ''}`}
-                    // label="Email"
-                    classInput="h-12"
-                    type="email"
-                    placeholder="Enter your email"
-                    icon="email"
-                    {...register("email")}
-                    error={errors.email}
-                    required
-                    readOnly={step === 2} // Read-only in step 2
+                <AuthFields
+                    register={register}
+                    errors={errors}
+                    showName={step === 2 && flow === 'signup'}
+                    showEmail={!(step === 2 && flow === 'signup')}
+                    showPassword={step === 2}
+                    emailReadOnly={step === 2}
+                    nameAutoFocus={true}
+                    passwordAutoFocus={flow === 'login'}
                 />
-
-                {step === 2 && (
-                    <>
-                        {flow === 'signup' && (
-                            <Field
-                                className="mb-6"
-                                // label="Full Name"
-                                classInput="h-12"
-                                type="text"
-                                placeholder="Enter your full name"
-                                icon="profile"
-                                {...register("displayName")}
-                                error={errors.displayName}
-                                required
-                                autoFocus
-                            />
-                        )}
-                        <Field
-                            className="mb-6"
-                            // label="Password"
-                            classInput="h-12"
-                            type="password"
-                            placeholder="Enter your password"
-                            {...register("password")}
-                            error={errors.password}
-                            required
-                            autoFocus={flow === 'login'}
-                        />
-                    </>
-                )}
 
                 {/* {step === 2 && flow === 'login' && (
                     <div className="flex justify-between items-center mb-6">

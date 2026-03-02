@@ -29,15 +29,15 @@ const Header = ({ back, title, createBtn = true, onBack }: HeaderProps) => {
 
     return (
         <header
-            className={`fixed top-0 right-0 left-[18.75rem] z-20 border-b border-n-1 xl:left-20 md:left-0 md:relative dark:border-white ${headerStyle
+            className={`fixed top-0 right-0 left-75 z-20 border-b border-n-1 xl:left-20 md:left-0 md:relative dark:border-white ${headerStyle
                 ? "bg-white dark:bg-n-1"
                 : ""
                 }`}
         >
-            <div className="flex items-center max-w-[90rem] m-auto w-full h-14 px-16 2xl:px-8 lg:px-6 md:px-5">
+            <div className="flex items-center max-w-360 m-auto w-full h-14 px-16 2xl:px-8 lg:px-6 md:px-5">
                 {back && (
                     <button
-                        className="btn-stroke btn-square btn-medium shrink-0 mr-6 2xl:mr-4 md:!w-6 md:h-6 md:mr-3"
+                        className="btn-stroke btn-square btn-medium shrink-0 mr-6 2xl:mr-4 md:w-6! md:h-6 md:mr-3"
                         onClick={onBack || (() => router.back())}
                     >
                         <Icon name="arrow-prev" />
@@ -53,9 +53,9 @@ const Header = ({ back, title, createBtn = true, onBack }: HeaderProps) => {
                         <Can permission="post:create">
                             <Link
                                 href="/posts/new"
-                                className="btn-purple btn-medium px-5 md:!bg-transparent md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
+                                className="btn-purple btn-medium px-5 md:bg-transparent! md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
                             >
-                                <Icon className="md:!m-0" name="add-circle" />
+                                <Icon className="md:m-0!" name="add-circle" />
                                 <span>Create new</span>
                             </Link>
                         </Can>

@@ -7,7 +7,6 @@ import Menu from "./Menu";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import CreatorHeader from "./CreatorHeader";
-import Footer from "./Footer";
 
 import { RequireAuth } from "@/store/auth";
 import { useHeaderConfig } from "@/context/HeaderContext";
