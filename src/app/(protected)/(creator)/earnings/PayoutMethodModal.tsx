@@ -27,10 +27,9 @@ export function PayoutMethodModal({ onClose, initialData }: Props) {
     const [formData, setFormData] = useState({
         accountHolderName: initialData?.accountHolderName || '',
         bankName: initialData?.bankName || '',
-        accountNumber: initialData?.accountNumber || '',
-        routingNumber: initialData?.routingNumber || '',
-        country: initialData?.country || '',
-        notes: initialData?.notes || ''
+        iban: initialData?.iban || '',
+        idType: initialData?.idType || 'id_card',
+        idNumber: initialData?.idNumber || '',
     });
 
     const isUpdating = !!initialData && initialData.status === 'approved';
@@ -95,55 +94,44 @@ export function PayoutMethodModal({ onClose, initialData }: Props) {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Account Number *
-                                </label>
-                                <input
-                                    required
-                                    type="password"
-                                    className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:text-white"
-                                    value={formData.accountNumber}
-                                    placeholder={initialData && '••••' + initialData.accountNumber.slice(-4) || ''}
-                                    onChange={e => setFormData({ ...formData, accountNumber: e.target.value })}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Routing/SWIFT *
+                                    Account IBAN *
                                 </label>
                                 <input
                                     required
                                     type="text"
                                     className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:text-white"
-                                    value={formData.routingNumber}
-                                    onChange={e => setFormData({ ...formData, routingNumber: e.target.value })}
+                                    value={formData.iban}
+                                    onChange={e => setFormData({ ...formData, iban: e.target.value })}
                                 />
                             </div>
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Country Code (Optional)
+                                ID Type *
                             </label>
-                            <input
-                                type="text"
-                                maxLength={2}
-                                placeholder="US"
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:text-white uppercase"
-                                value={formData.country}
-                                onChange={e => setFormData({ ...formData, country: e.target.value.toUpperCase() })}
-                            />
+                            <select
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:text-white"
+                                value={formData.idType}
+                                onChange={e => setFormData({ ...formData, idType: e.target.value as any })}
+                            >
+                                <option value="id_card">ID Card</option>
+                                <option value="driving_license">Driving License</option>
+                                <option value="passport">Passport</option>
+                            </select>
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Additional Notes
+                                ID Number *
                             </label>
-                            <textarea
-                                rows={2}
+                            <input
+                                required
+                                type="text"
                                 className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:text-white"
-                                value={formData.notes || ''}
-                                onChange={e => setFormData({ ...formData, notes: e.target.value })}
-                                placeholder="Any context administrators should know..."
+                                value={formData.idNumber}
+                                onChange={e => setFormData({ ...formData, idNumber: e.target.value })}
                             />
                         </div>
                     </form>

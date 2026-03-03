@@ -107,11 +107,11 @@ const LikeButton = ({ postId, initialLikes, initialIsLiked }: LikeButtonProps) =
                     className={twMerge(
                         "transition-colors ",
                         animating && "animate-heart-pop",
-                        liked ? "fill-purple-1 icon-20" : "fill-n-1 icon-18 dark:fill-white"
+                        liked ? "fill-purple-1 icon-22" : "fill-n-1 icon-20 dark:fill-white"
                     )}
                     viewBox="0 0 512 512"
                 />
-                <span className="text-xs">{likesCount}</span>
+                <span className="text-sm">{likesCount}</span>
             </button>
             <div
                 onClick={(e) => e.stopPropagation()}

@@ -25,15 +25,15 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
 
     return (
         <>
-            <div className={`flex items-center ${className || "mt-4"}`}>
+            <div className={`flex items-center ${className}`}>
 
                 <LikeButton postId={postId} initialLikes={initialLikes} initialIsLiked={initialIsLiked} />
 
 
                 {showComment && (
                     <button className="flex items-center gap-1 ml-4 px-0">
-                        <Icon name="comments" className="icon-20" viewBox="0 0 24 24" />
-                        <span className="text-xs">{comments}</span>
+                        <Icon name="comments" className="icon-22" viewBox="0 0 24 24" />
+                        <span className="text-sm">{comments}</span>
                     </button>
                 )}
 

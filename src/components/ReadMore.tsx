@@ -36,7 +36,7 @@ const ReadMore = ({
                         setIsExpanded(!isExpanded);
                     }}
                     className={twMerge(
-                        "inline-block ml-1 font-bold text-n-1 dark:text-white hover:text-purple-1 cursor-pointer",
+                        "inline-block ml-1 font-bold text-purple-1 dark:text-white hover:text-purple-1 cursor-pointer",
                         buttonClass
                     )}
                 >

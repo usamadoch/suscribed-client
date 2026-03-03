@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Tier } from '@/lib/types';
 import { useTiers } from '../useTiers';
 import Loader from '@/components/Loader';
-import Icon from '@/components/Icon';
+import PlanCard from '@/components/PlanCard';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
 export default function TiersPage() {
@@ -82,47 +82,19 @@ export default function TiersPage() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {plans.map(plan => (
-                        <div key={plan._id} className="card flex flex-col relative">
-                            <div className="p-6 flex-1 flex flex-col">
-                                {plan.isHighlighted && (
-                                    <span className="label-purple mb-4 self-start">
-                                        Highlighted
-                                    </span>
-                                )}
-                                <div className="flex justify-between items-start mb-2 gap-4">
-                                    <h3 className="text-h5">{plan.name}</h3>
-                                    <button
-                                        onClick={() => handleEdit(plan)}
-                                        className="btn-stroke btn-small shrink-0"
-                                    >
-                                        Edit
-                                    </button>
-                                </div>
-                                <div className="mb-5">
-                                    <span className="text-h2">${(plan.price / 100).toFixed(2)}</span>
-                                    <span className="text-n-3 dark:text-n-4 lg:font-bold">/mo</span>
-                                </div>
-
-                                <p className="text-sm text-n-3 dark:text-n-4 mb-6 flex-1">
-                                    {plan.description}
-                                </p>
-
-                                <div>
-                                    <h4 className="text-xs font-bold uppercase tracking-wide mb-4">What you get</h4>
-                                    <ul className="space-y-3">
-                                        {plan.benefits.map((benefit, i) => (
-                                            <li key={i} className="flex items-start gap-3 text-sm text-n-1 dark:text-white">
-                                                <Icon name="task" className="shrink-0 mt-0.5" />
-                                                <span>{benefit}</span>
-                                            </li>
-                                        ))}
-                                        {plan.benefits.length === 0 && (
-                                            <li className="text-sm text-n-3 dark:text-n-4 italic">No specific benefits listed.</li>
-                                        )}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        <PlanCard
+                            className="max-w-full"
+                            key={plan._id}
+                            plan={plan}
+                            headerAction={
+                                <button
+                                    onClick={() => handleEdit(plan)}
+                                    className="btn-stroke btn-small shrink-0"
+                                >
+                                    Edit
+                                </button>
+                            }
+                        />
                     ))}
                 </div>
             )}
@@ -131,6 +103,8 @@ export default function TiersPage() {
                 visible={isHighlightModalOpen}
                 onClose={() => setIsHighlightModalOpen(false)}
                 title="Highlight a Tier"
+                classOverlay="!bg-n-1/60 dark:!bg-n-1/60"
+                classWrap=" border border-n-1"
             >
                 <div className="space-y-6">
                     <Select

@@ -52,8 +52,8 @@ export function AdminReviewModal({ payout, onClose, onReview, isReviewing }: Rev
                                 <span className="font-medium text-gray-900 dark:text-white break-all">{typeof payout.userId === 'string' ? payout.userId : payout.userId._id}</span>
                             </div>
                             <div className="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
-                                <span className="block text-gray-500 dark:text-gray-400 mb-1">Country</span>
-                                <span className="font-medium text-gray-900 dark:text-white">{payout.country || 'N/A'}</span>
+                                <span className="block text-gray-500 dark:text-gray-400 mb-1">Account IBAN</span>
+                                <span className="font-medium text-gray-900 dark:text-white">{payout.iban || 'N/A'}</span>
                             </div>
                         </div>
 
@@ -68,20 +68,16 @@ export function AdminReviewModal({ payout, onClose, onReview, isReviewing }: Rev
                                     <div className="text-gray-900 dark:text-white font-medium">{payout.bankName}</div>
                                 </div>
                                 <div>
-                                    <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Routing Number</span>
-                                    <div className="text-gray-900 dark:text-white font-medium">{payout.routingNumber}</div>
+                                    <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">ID Type / Number</span>
+                                    <div className="text-gray-900 dark:text-white font-medium">{payout.idType} - {payout.idNumber}</div>
                                 </div>
-                            </div>
-                            <div>
-                                <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Account Number</span>
-                                <div className="text-gray-900 dark:text-white font-medium font-mono">{payout.accountNumber}</div>
                             </div>
                         </div>
 
-                        {payout.notes && (
-                            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-                                <span className="block text-xs text-blue-500 dark:text-blue-400 font-bold uppercase tracking-wider mb-1">Creator Notes</span>
-                                <p className="text-sm text-blue-900 dark:text-blue-100">{payout.notes}</p>
+                        {payout.rejectionReason && (
+                            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
+                                <span className="block text-xs text-red-500 dark:text-red-400 font-bold uppercase tracking-wider mb-1">Rejection Reason</span>
+                                <p className="text-sm text-red-900 dark:text-red-100">{payout.rejectionReason}</p>
                             </div>
                         )}
                     </div>

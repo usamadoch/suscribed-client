@@ -33,7 +33,7 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                 <Image
                     className="object-cover rounded-full"
                     family="avatar"
-                    slot="comment"
+                    slot="dropdown"
                     src={item.avatar}
                     fill
                     alt="Avatar"
@@ -43,11 +43,11 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                 <div className="flex items-center">
                     <div className="flex items-center gap-2">
 
-                        <div className="capitalize whitespace-nowrap text-sm font-bold">
+                        <div className="capitalize whitespace-nowrap text-base font-bold">
                             {item.author}
                         </div>
-                        <div className="text-xs text-n-3">•</div>
-                        <div className="truncate text-xs font-medium text-n-3 dark:text-white/75">
+                        <div className="text-sm text-n-3">•</div>
+                        <div className="truncate text-sm font-medium text-n-3 dark:text-white/75">
                             {item.time}
                         </div>
                     </div>
@@ -64,8 +64,8 @@ const Review = ({ item, imageBig }: ReviewProps) => {
 
                 </div>
 
-                <div className={`text-sm ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
-                    <ReadMore>{item.content}</ReadMore>
+                <div className={`text-base py-2.5 ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
+                    <ReadMore words={100} buttonClass="text-n-1">{item.content}</ReadMore>
                 </div>
 
                 {item.images && (

@@ -3,168 +3,41 @@
 
 "use client"
 
-import { useState } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useGoogleLogin, CodeResponse } from "@react-oauth/google";
 
 import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
 
 import Alert from "@/components/Alert";
 import AuthFields from "../../_components/AuthFields";
-import { LoginSchema } from "../../_validations";
-import { authApi } from "@/lib/api";
 import { ONBOARDING_STEPS } from "@/lib/types";
 
-import { useAuth, useAuthStore } from "../../../../store/auth";
-import { ApiClientError } from "@/lib/api";
-
-
-// Extended schema for signup flow (name + password)
-const SignupSchema = LoginSchema.extend({
-    displayName: z.string().min(1, "Full name is required"),
-});
-
-type FormData = z.infer<typeof SignupSchema>;
+import { useAuthForm } from "@/hooks/useAuthForm";
 
 const LoginPage = () => {
-    const { login, signup, isLoading: authLoading } = useAuth();
     const router = useRouter();
 
-    // State
-    const [step, setStep] = useState<1 | 2>(1);
-    const [flow, setFlow] = useState<'login' | 'signup'>('login');
-    const [isCheckingEmail, setIsCheckingEmail] = useState(false);
-    const [googleLoading, setGoogleLoading] = useState(false);
-
     const {
-        register,
-        handleSubmit,
-        watch,
-        setError,
-        trigger,
-        getValues,
-        formState: { errors },
-    } = useForm<FormData>({
-        resolver: zodResolver(step === 1 ? LoginSchema.pick({ email: true }) : (flow === 'login' ? LoginSchema : SignupSchema)) as any,
-        defaultValues: {
-            email: "",
-            password: "",
-            displayName: "",
-            remember: false,
-        },
-        mode: "onChange"
-    });
-
-    const handleEmailCheck = async () => {
-        setIsCheckingEmail(true);
-        const valid = await trigger("email");
-        if (!valid) {
-            setIsCheckingEmail(false);
-            return;
-        }
-
-        const email = getValues("email");
-        try {
-            const { exists } = await authApi.checkEmail(email);
-            setFlow(exists ? 'login' : 'signup');
-            setStep(2);
-        } catch (error) {
-            console.error("Email check failed", error);
-            setError("root", { message: "Failed to verify email. Please try again." });
-        } finally {
-            setIsCheckingEmail(false);
-        }
-    };
-
-    const onSubmit = async (data: any) => {
-        if (step === 1) {
-            await handleEmailCheck();
-            return;
-        }
-
-        try {
-            if (flow === 'login') {
-                await login(data);
-            } else {
-                // Generate username from name or email
-                const base = data.displayName.toLowerCase().replace(/[^a-z0-9]/g, '') || data.email.split('@')[0];
-                const username = `user${base}${Math.floor(Math.random() * 1000)}`;
-
-                await signup({
-                    email: data.email,
-                    password: data.password,
-                    displayName: data.displayName,
-                    username,
-                    role: 'member'
-                });
-                router.push('/dashboard');
-            }
-        } catch (error) {
-            if (error instanceof ApiClientError) {
-                // Handle API errors...
-                if (error.details) {
-                    Object.keys(error.details).forEach((key) => {
-                        // Cast to any to handle extended schema keys
-                        setError(key as any, {
-                            type: "manual",
-                            message: error.details![key][0],
-                        });
-                    });
+        form,
+        step, setStep, flow, authLoading, isCheckingEmail, googleLoading,
+        onSubmit, handleGoogleLogin
+    } = useAuthForm({
+        redirect: true,
+        onSignupSuccess: () => router.push('/dashboard'),
+        onGoogleSuccess: (user) => {
+            if (user?.role === 'creator') {
+                if ((user?.onboardingStep ?? 0) < ONBOARDING_STEPS.COMPLETE) {
+                    router.push('/register');
                 } else {
-                    setError("root", {
-                        type: "manual",
-                        message: error.message,
-                    });
+                    router.push('/dashboard');
                 }
             } else {
-                setError("root", { message: "An unexpected error occurred." });
+                router.push('/explore');
             }
-        }
-    };
-
-    const handleGoogleLogin = useGoogleLogin({
-        flow: 'auth-code',
-        onSuccess: async (codeResponse: CodeResponse) => {
-            setGoogleLoading(true);
-            try {
-                const { user } = await authApi.googleLogin(codeResponse.code);
-                // Manually update store state since we bypassed the wrapper
-                useAuthStore.setState({
-                    user,
-                    isAuthenticated: true,
-                    isLoading: false,
-                    error: null
-                });
-
-                if (user?.role === 'creator') {
-                    if ((user?.onboardingStep ?? 0) < ONBOARDING_STEPS.COMPLETE) {
-                        router.push('/register');
-                    } else {
-                        router.push('/dashboard');
-                    }
-                } else {
-                    router.push('/explore');
-                }
-            } catch (error: any) {
-                console.error("Google login failed", error);
-                if (error.code === 'DUPLICATE_EMAIL') {
-                    setError("root", { message: error.message });
-                } else {
-                    setError("root", { message: "Google login failed" });
-                }
-                setGoogleLoading(false);
-            }
-        },
-        onError: () => {
-            setError("root", { message: "Google login failed" });
-            setGoogleLoading(false);
         }
     });
 
+    const { register, handleSubmit, watch, formState: { errors } } = form;
     const remember = watch("remember");
 
     return (

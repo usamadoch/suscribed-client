@@ -65,7 +65,6 @@ export default function AdminPayoutsPage() {
                                         </td>
                                         <td className="px-6 py-4">
                                             {payout.bankName}
-                                            {payout.country && <span className="ml-2 text-xs text-gray-500">({payout.country})</span>}
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">

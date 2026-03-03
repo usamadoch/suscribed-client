@@ -48,17 +48,16 @@ const DraftBanner = () => {
 
     return (
         <>
-            <div className="w-full bg-yellow-100 border-b border-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-900 text-yellow-800 dark:text-yellow-200 py-3 px-4 z-40 relative">
-                <div className="max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="w-full py-2 px-4 bg-[#daf464] text-n-1 z-40 relative">
+                <div className="max-w-lg mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div className="flex items-center justify-between w-full gap-4">
                         <div className="flex items-center gap-2">
-                            <span className="bg-yellow-200 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wide">Draft</span>
-                            <span className="font-medium">Your page is unpublished. Only you can see it.</span>
+                            <span className="text-base font-medium">Your page is unpublished. Only you can see it.</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setShowPublishModal(true)}
-                                className="btn-purple btn-medium bg-yellow-600 hover:bg-yellow-700 px-12"
+                                className="btn-purple btn-small px-8 mb-1 bg-white shadow-primary-4 rounded-sm hover:shadow-none hover:bg-white transition-shadow duration-100 cursor-pointer"
                             >
                                 Publish Page
                             </button>
@@ -71,21 +70,23 @@ const DraftBanner = () => {
                 visible={showPublishModal}
                 onClose={() => setShowPublishModal(false)}
                 title="Publish Page"
+                classOverlay="!bg-white/70 dark:!bg-n-1/85"
+                classWrap=" border border-n-1"
             >
                 <div className="space-y-4">
-                    <p className="text-sm text-n-2">
+                    <p className="text-base text-n-2">
                         Are you sure you want to publish your page? It will become visible to everyone.
                     </p>
 
                     {missingFields.length > 0 && (
-                        <div className=" p-4  bg-purple-1/20 border border-n-1 shadow-primary-4 ">
+                        <div className=" p-4 border border-n-1 shadow-primary-4 ">
                             <h6 className="text-n-2 text-h6 dark:text-purple-200 font-medium mb-2 flex items-center gap-2">
                                 <span className="text-lg">⚠️</span> Complete your profile
                             </h6>
-                            <p className="text-sm text-n-2 dark:text-purple-300 mb-2">
+                            <p className="text-base text-n-2 dark:text-purple-300 mb-2">
                                 Your page is looking a bit empty! Consider adding the following before publishing:
                             </p>
-                            <ul className="list-disc pl-5 text-sm font-medium text-n-2 dark:text-purple-300 space-y-1">
+                            <ul className="list-[square] pl-5 text-sm font-medium text-n-2 dark:text-purple-300 space-y-1">
                                 {missingFields.map(field => (
                                     <li key={field}>{field}</li>
                                 ))}
@@ -93,7 +94,7 @@ const DraftBanner = () => {
                         </div>
                     )}
 
-                    <div className="flex gap-3 mt-6 pt-4 border-t border-n-3/10">
+                    <div className="flex gap-3 pt-4">
 
                         <button
                             className="btn-stroke w-full btn-medium px-10"

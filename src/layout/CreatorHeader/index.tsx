@@ -42,18 +42,12 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
     const paramSlug = params?.["page-slug"] as string | undefined;
     const postId = params?.id as string | undefined;
 
-    // Use the prop if available, otherwise try to get it from the URL
     let slug = (pageSlug || paramSlug) as string | undefined;
 
-    // If no slug but we have a post ID, try to fetch post to get the slug
-    // Check if postId is valid MongoID (24 hex chars) to avoid unnecessary requests
     const isValidPostId = !slug && postId && /^[a-f\d]{24}$/i.test(postId);
-
-    // We only fetch if we don't have a slug yet and have a valid post ID
     const { data: postData, isLoading: isPostLoading } = usePost(isValidPostId ? postId! : "");
 
     if (!slug && postData?.pageId && typeof postData.pageId === 'object') {
-        // Type assertion needed if types aren't fully strict on population
         slug = (postData.pageId as any).pageSlug;
     }
 
@@ -63,6 +57,7 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
 
     const { page } = data || {};
     const isOwner = data?.isOwner;
+    const isMember = data?.isMember;
 
     useWindowScrollPosition(({ currPos }) => {
         setHeaderStyle(currPos.y <= -1);
@@ -79,8 +74,6 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
     if (isHeaderHidden) {
         return null;
     }
-
-    console.log(page);
 
     return (
         <header
@@ -113,10 +106,9 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
                         </Link>
                     )}
 
-                    {isOwner && (
-                        <Link href="/dashboard" className="btn-stroke btn-medium gap-1">
-                            <Icon name="burger" className="w-5 h-5 " />
-                            Dashboard
+                    {(isOwner || isMember) && (
+                        <Link href="/dashboard" className="text-h6 font-medium underline hover:no-underline transition-all duration-100 cursor-pointer flex items-center gap-2">
+                            {isOwner ? "Dashboard" : "Home"}
                         </Link>
                     )}
 

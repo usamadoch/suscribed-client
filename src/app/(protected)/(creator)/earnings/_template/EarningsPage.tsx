@@ -22,16 +22,16 @@ export default function EarningsPage() {
 
     const renderBanner = () => {
         return (
-            <div className="bg-white border border-n-1 px-5 py-4 mb-6">
-                <div className='flex items-center justify-between'>
+            <div className="bg-[#daf464] border border-n-1 px-5 py-4 mb-6 shadow-primary-4 ">
+                <div className='flex flex-col items-start gap-2 justify-between'>
 
-                    <div>
-                        <h5 className="text-h5 font-bold  mb-1">Setup Payout Method</h5>
-                        <p className="text-sm">Add your bank details to receive payments from your fans.</p>
-                    </div>
+
+                    <h5 className="text-h5 font-bold ">Setup Payout Method</h5>
+                    <p className="text-sm">Add your bank details to receive payments from your fans.</p>
+
                     <button
                         onClick={() => router.push('/earnings/setup-bank')}
-                        className="btn-stroke btn-medium px-12 disabled:opacity-50 disabled:cursor-not-allowed capitalize"
+                        className="btn-stroke bg-white btn-medium px-12 disabled:opacity-50 disabled:cursor-not-allowed capitalize"
                         disabled={!!payoutMethod}
                     >
                         {payoutMethod ? payoutMethod.status.replace('_', ' ') : 'Setup Now'}

@@ -27,11 +27,13 @@ const ShareModal = ({
 
     return (
         <Modal
-            classWrap="relative border-b-none"
+            classWrap="relative border border-n-1"
             classButtonClose="z-2 fill-white"
             showCloseIcon={false}
             visible={visible}
             onClose={onClose}
+            classOverlay="!bg-n-1/40 dark:!bg-n-1/85"
+
         >
             {title && (
                 <div className="relative z-1 card-title text-n-1 dark:text-white ">

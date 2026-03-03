@@ -56,14 +56,9 @@ export interface SlotDimension {
 
 // --- 2. Configuration & Defaults ---
 
-// These are Public IDs or Full URLs for Cloudinary defaults.
-// They act as the "Setup" the user requested.
-export const CLOUDINARY_DEFAULTS = {
-    [IMAGE_FAMILIES.AVATAR]: 'https://ui-avatars.com/api/?name=User&background=random',
-    [IMAGE_FAMILIES.BANNER]: 'https://picsum.photos/1920/320',
-    [IMAGE_FAMILIES.POST]: 'https://picsum.photos/800/800',
-    fallback: 'https://picsum.photos/400/400',
-};
+// Defaults are now handled by the Image component's fallback div+icon.
+// No external URLs needed here.
+export const CLOUDINARY_DEFAULTS: Record<string, string> = {};
 
 
 // --- 3. Transformation Logic ---
@@ -93,10 +88,9 @@ export const constructSlotImageUrl = <F extends SlotFamily>(
     // 1. Resolve Target URL
     let targetUrl = url;
 
-    // Use default if url is missing or the string 'none'/'null'/'undefined'
+    // If no valid src, return empty — the Image component handles fallback rendering
     if (!targetUrl || targetUrl === 'none' || targetUrl === 'null' || targetUrl === 'undefined') {
-        // Determine default based on family
-        targetUrl = CLOUDINARY_DEFAULTS[family as keyof typeof CLOUDINARY_DEFAULTS] || CLOUDINARY_DEFAULTS.fallback;
+        return '';
     }
 
     // Ensure we have a full URL or proper Cloudinary ID handling

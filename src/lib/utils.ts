@@ -12,6 +12,20 @@ export const getPlatformFromUrl = (url: string): SocialLink['platform'] => {
     return 'website';
 };
 
+export const getSocialIcon = (platform: string) => {
+    switch (platform.toLowerCase()) {
+        case 'facebook': return '/socialSVGs/facebook.svg';
+        case 'instagram': return '/socialSVGs/instagram.svg';
+        case 'linkedin': return '/socialSVGs/linkedin.svg';
+        case 'pinterest': return '/socialSVGs/pinterest.svg';
+        case 'tiktok': return '/socialSVGs/tiktok.svg';
+        case 'twitter':
+        case 'x': return '/socialSVGs/x.svg';
+        case 'youtube': return '/socialSVGs/youtube.svg';
+        default: return null;
+    }
+};
+
 export const getFullImageUrl = (url: string | null | undefined): string | undefined => {
     if (!url) return undefined;
     if (url.startsWith('http') || url.startsWith('blob:') || url.startsWith('data:')) {

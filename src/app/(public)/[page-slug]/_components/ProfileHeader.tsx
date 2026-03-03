@@ -6,12 +6,12 @@ import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems, Transition } fro
 
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
-import Loader from "@/components/Loader";
 import LoginModal from "@/components/LoginModal";
 import ShareModal from "@/components/ShareModal";
 import JoinTierModal from "@/components/JoinTierModal";
+import ReadMore from "@/components/ReadMore";
 
-import { truncateText } from "@/lib/utils";
+import { getSocialIcon } from "@/lib/utils";
 import { CreatorPage } from "@/lib/types";
 
 import { usePageImageUpload } from "@/hooks/usePageImageUpload";
@@ -34,7 +34,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
     const { mutate: joinPage, isPending: isJoining } = useJoinPage();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isSocialsExpanded, setIsSocialsExpanded] = useState(false);
     const [visible, setVisible] = useState(false);
 
     const handleSuccess = useCallback((type: 'banner' | 'avatar', url: string) => {
@@ -80,139 +80,121 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
             <div className="flex items-start justify-between w-full pt-4">
                 <div className="flex flex-1 items-start">
                     {/* Avatar Section */}
-                    <div className="relative shrink-0 w-27.5 h-27.5 rounded-full shadow-primary-4 bg-n-1">
-                        {isOwner ? (
-                            <PageImageUploader
-                                containerClassName="w-full h-full rounded-full"
-                                imageClassName="object-cover rounded-full"
-                                imageSrc={optimisticAvatar || page.avatarUrl}
+                    <div className="relative shrink-0 w-27.5 h-27.5">
+                        {(optimisticAvatar || page.avatarUrl) && (
+                            <div className="absolute top-1 left-1 w-full h-full rounded-full bg-[#4ADBC8] border border-black"></div>
+                        )}
+                        <div className="relative w-full h-full rounded-full z-10">
+                            {isOwner ? (
+                                <PageImageUploader
+                                    containerClassName="w-full h-full rounded-full"
+                                    imageClassName="object-cover rounded-full"
+                                    imageSrc={optimisticAvatar || page.avatarUrl}
 
-                                alt="Avatar"
-                                onFileChange={handleAvatarUpload}
-                                uploadIconWrapperClassName="w-8 h-8"
-                                iconClassName="w-4 h-4 fill-n-1"
-                                isLoading={uploadingType === 'avatar'}
-                                family="avatar"
-                                slot="profile"
-                            />
-                        ) : (
-                            <div className="relative w-full h-full rounded-full overflow-hidden">
-                                <Image
-                                    className="object-cover"
+                                    alt="Avatar"
+                                    onFileChange={handleAvatarUpload}
+                                    uploadIconWrapperClassName="w-8 h-8"
+                                    iconClassName="w-4 h-4 fill-n-1"
+                                    isLoading={uploadingType === 'avatar'}
                                     family="avatar"
                                     slot="profile"
-                                    src={page?.avatarUrl}
-                                    fill
-                                    alt="Avatar"
                                 />
-                            </div>
-                        )}
+                            ) : (
+                                <div className="relative w-full h-full rounded-full overflow-hidden">
+                                    <Image
+                                        className="object-cover"
+                                        family="avatar"
+                                        slot="profile"
+                                        src={page?.avatarUrl}
+                                        fill
+                                        alt="Avatar"
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="text-n-1 dark:text-white pl-4">
-                        <div className="capitalize mb-2 text-h4 md:text-h3">{page.displayName}</div>
+                        <h4 className="capitalize mb-2 text-h4 font-medium md:text-h3">{page.displayName}</h4>
                         <div className="flex items-center font-medium text-n-3">
                             <span className="text-sm mr-6 md:mr-4">{page.memberCount || 0} Members</span>
                             <span className="text-sm">{page.postCount || 0} Posts</span>
                         </div>
-                        <div className="mt-4 text-sm">
-                            {(
-                                () => {
-                                    const description = page.tagline || page.about || "No description available.";
-                                    const shouldTruncate = description.length > 120;
-                                    const displayText = !isExpanded && shouldTruncate
-                                        ? truncateText(description, 120)
-                                        : description;
-
-                                    return (
-                                        <>
-                                            {displayText}
-                                            {shouldTruncate && (
-                                                <button
-                                                    onClick={() => setIsExpanded(!isExpanded)}
-                                                    className="inline-block ml-1 font-bold text-n-1 dark:text-white hover:text-purple-1 cursor-pointer"
-                                                >
-                                                    {isExpanded ? "See less" : "See more"}
-                                                </button>
-                                            )}
-                                        </>
-                                    );
-                                }
-                            )()}
-                        </div>
+                        <p className="mt-4 text-base text-n-3 ">
+                            <ReadMore words={20} >
+                                {page.tagline || page.about || "No description available."}
+                            </ReadMore>
+                        </p>
                     </div>
                 </div>
 
                 <div className="flex-1 flex items-center justify-end  shrink-0">
                     {page.socialLinks && page.socialLinks.length > 0 && (
                         <div className="flex items-center mr-8 space-x-5 md:mr-4 md:space-x-3">
-                            {page.socialLinks.map((link, index) => {
-                                const getSocialIcon = (platform: string) => {
-                                    switch (platform.toLowerCase()) {
-                                        case 'facebook': return '/socialSVGs/facebook.svg';
-                                        case 'instagram': return '/socialSVGs/instagram.svg';
-                                        case 'linkedin': return '/socialSVGs/linkedin.svg';
-                                        case 'pinterest': return '/socialSVGs/pinterest.svg';
-                                        case 'tiktok': return '/socialSVGs/tiktok.svg';
-                                        case 'twitter':
-                                        case 'x': return '/socialSVGs/x.svg';
-                                        case 'youtube': return '/socialSVGs/youtube.svg';
-                                        default: return null;
-                                    }
-                                };
-
-                                const iconPath = getSocialIcon(link.platform);
+                            {(() => {
+                                const shouldTruncate = page.socialLinks.length > 3;
+                                const displayedLinks = !isSocialsExpanded && shouldTruncate
+                                    ? page.socialLinks.slice(0, 3)
+                                    : page.socialLinks;
 
                                 return (
-                                    <Link
-                                        key={index}
-                                        href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
-                                        className="group relative"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        {iconPath ? (
-                                            <div className="relative w-6 h-6 transition-transform group-hover:scale-110">
-                                                <Image
-                                                    src={iconPath}
-                                                    fill
-                                                    alt={link.platform}
-                                                    className="object-contain"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <Icon
-                                                className="w-5 h-5 fill-n-4 transition-colors group-hover:fill-purple-1 dark:fill-n-3"
-                                                name={link.platform === 'website' ? 'link' : link.platform}
-                                            />
+                                    <>
+                                        {displayedLinks.map((link, index) => {
+                                            const iconPath = getSocialIcon(link.platform);
+
+                                            return (
+                                                <Link
+                                                    key={index}
+                                                    href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                                                    className="group relative shrink-0"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    {iconPath ? (
+                                                        <div className="relative w-7 h-7 shadow-primary-4 rounded-full transition-shadow duration-100 group-hover:shadow-none">
+                                                            <Image
+                                                                src={iconPath}
+                                                                fill
+                                                                alt={link.platform}
+                                                                className="object-contain"
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <Icon
+                                                            className="w-5 h-5 fill-n-4 transition-colors group-hover:fill-purple-1 dark:fill-n-3"
+                                                            name={link.platform === 'website' ? 'link' : link.platform}
+                                                        />
+                                                    )}
+                                                </Link>
+                                            );
+                                        })}
+                                        {shouldTruncate && (
+                                            <button
+                                                onClick={() => setIsSocialsExpanded(!isSocialsExpanded)}
+                                                className="inline-block ml-1 font-semibold text-purple-1 dark:text-white cursor-pointer text-sm"
+                                            >
+                                                {isSocialsExpanded ? "Less" : "More"}
+                                            </button>
                                         )}
-                                    </Link>
+                                    </>
                                 );
-                            })}
+                            })()}
                         </div>
                     )}
 
                     {!isOwner && (
-                        <div className="flex shrink-0 max-w-[20rem] w-full 4xl:w-59">
-                            {isMember ? (
-                                <button
-                                    className="btn-purple btn-medium grow opacity-75 "
-                                    disabled
-                                >
-                                    <Icon name="check" />
-                                    <span>Member</span>
-                                </button>
-                            ) : (
-                                <button
-                                    className={`btn-purple btn-medium grow`}
-                                    onClick={handleOpenJoinModal}
-                                >
-                                    <span>Become a Member</span>
-                                </button>
-                            )}
+                        <div className="flex shrink-0 max-w-80 w-full 4xl:w-59">
+                            <button
+                                className={`btn-purple h-12 grow ${isMember ? "opacity-75" : ""}`}
+                                onClick={isMember ? undefined : handleOpenJoinModal}
+                                disabled={isMember}
+                            >
+                                {isMember && <Icon name="check" />}
+                                <span>{isMember ? "Member" : "Become a Member"}</span>
+                            </button>
 
                             <MenuDropdown className="relative ml-1.5 shrink-0" as="div">
-                                <MenuButton className="btn-purple btn-medium btn-square">
+                                <MenuButton className="btn-purple h-12 px-4">
                                     <Icon name="dots" />
                                 </MenuButton>
                                 <Transition
@@ -242,8 +224,8 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                     )}
 
                     {isOwner && (
-                        <div className="flex shrink-0 max-w-[20rem] w-full">
-                            <Link href="/settings" className="btn-purple btn-medium grow">
+                        <div className="flex shrink-0 max-w-60 w-full">
+                            <Link href="/settings" className="btn-purple grow">
                                 <Icon name="setup" />
                                 <span className="">Edit Profile</span>
                             </Link>
