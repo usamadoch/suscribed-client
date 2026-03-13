@@ -55,7 +55,7 @@ const Alert = ({
                     className="ml-3 cursor-pointer shrink-0 hover:opacity-70 transition-opacity"
                     aria-label="Close alert"
                 >
-                    <Icon name="close" className="w-4 h-4" />
+                    <Icon name="close" className="icon-20" />
                 </button>
             )}
         </div>

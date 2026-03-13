@@ -1,12 +1,14 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
+import { UseFormRegister, FieldErrors, FormState } from "react-hook-form";
 import Field from "@/components/Field";
 
 type AuthFieldsProps = {
     register: UseFormRegister<any>;
     errors: FieldErrors<any>;
+    touchedFields?: FormState<any>["touchedFields"];
+    dirtyFields?: FormState<any>["dirtyFields"];
     showName?: boolean;
     showEmail?: boolean;
     showPassword?: boolean;
@@ -15,38 +17,52 @@ type AuthFieldsProps = {
     nameAutoFocus?: boolean;
     emailAutoFocus?: boolean;
     passwordAutoFocus?: boolean;
+    onExitComplete?: () => void;
 };
 
 const AuthFields = ({
     register,
     errors,
+    touchedFields,
+    dirtyFields,
     showName = false,
     showEmail = true,
     showPassword = false,
     emailReadOnly = false,
-    className = "gap-6 mb-4",
+    className = "gap-4 mb-4",
     nameAutoFocus = false,
     emailAutoFocus = false,
     passwordAutoFocus = false,
+    onExitComplete,
 }: AuthFieldsProps) => {
+    // Only show error for a field if the user actually interacted with it
+    const getError = (fieldName: string) => {
+        if (touchedFields || dirtyFields) {
+            const isTouched = touchedFields?.[fieldName];
+            const isDirty = dirtyFields?.[fieldName];
+            if (!isTouched && !isDirty) return undefined;
+        }
+        return errors[fieldName];
+    };
+
     return (
         <div className={`flex flex-col ${className}`}>
-            <AnimatePresence initial={false} mode="popLayout">
+            <AnimatePresence initial={false} onExitComplete={onExitComplete}>
                 {showName && (
                     <motion.div
                         key="name-field"
-                        layout
-                        initial={{ opacity: 0, y: -15, filter: "blur(4px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)", transition: { duration: 0.15 } }}
-                        transition={{ duration: 0.3, type: "spring", bounce: 0.1 }}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        style={{ overflow: "hidden" }}
                     >
                         <Field
                             classInput="h-12"
                             placeholder="Full Name"
                             type="text"
                             icon="profile"
-                            error={errors.displayName}
+                            error={getError("displayName")}
                             autoFocus={nameAutoFocus}
                             required
                             {...register("displayName")}
@@ -57,18 +73,18 @@ const AuthFields = ({
                 {showEmail && (
                     <motion.div
                         key="email-field"
-                        layout
-                        initial={{ opacity: 0, y: -15, filter: "blur(4px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)", transition: { duration: 0.15 } }}
-                        transition={{ duration: 0.3, type: "spring", bounce: 0.1 }}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        style={{ overflow: "hidden" }}
                     >
                         <Field
                             classInput="h-12"
                             type="email"
                             placeholder="Email address"
                             icon="email"
-                            error={errors.email}
+                            error={getError("email")}
                             autoFocus={emailAutoFocus}
                             required
                             readOnly={emailReadOnly}
@@ -80,18 +96,18 @@ const AuthFields = ({
                 {showPassword && (
                     <motion.div
                         key="password-field"
-                        layout
-                        initial={{ opacity: 0, y: -15, filter: "blur(4px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)", transition: { duration: 0.15 } }}
-                        transition={{ duration: 0.3, type: "spring", bounce: 0.1 }}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        style={{ overflow: "hidden" }}
                     >
                         <Field
                             classInput="h-12"
                             type="password"
                             placeholder="Password"
                             icon="lock"
-                            error={errors.password}
+                            error={getError("password")}
                             autoFocus={passwordAutoFocus}
                             required
                             {...register("password")}

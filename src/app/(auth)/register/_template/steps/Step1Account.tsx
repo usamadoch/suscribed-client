@@ -26,7 +26,7 @@ type Step1Props = {
 };
 
 const Step1Account = ({ onNext }: Step1Props) => {
-    const { register, trigger, getValues, setError, setValue, formState: { errors } } = useFormContext<SignUpFormValues>();
+    const { register, trigger, getValues, setError, setValue, formState: { errors, touchedFields, dirtyFields } } = useFormContext<SignUpFormValues>();
     const { signup } = useAuth();
     const router = useRouter(); // Initialize router here
     const [isLoading, setIsLoading] = useState(false);
@@ -151,6 +151,8 @@ const Step1Account = ({ onNext }: Step1Props) => {
                 <AuthFields
                     register={register}
                     errors={errors}
+                    touchedFields={touchedFields}
+                    dirtyFields={dirtyFields}
                     showName={true}
                     showEmail={true}
                     showPassword={true}

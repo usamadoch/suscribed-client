@@ -3,6 +3,7 @@
 
 "use client"
 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import Icon from "@/components/Icon";
@@ -37,8 +38,28 @@ const LoginPage = () => {
         }
     });
 
-    const { register, handleSubmit, watch, formState: { errors } } = form;
+    const { register, handleSubmit, watch, clearErrors, formState: { errors } } = form;
     const remember = watch("remember");
+
+    // Clear stale root errors when the page mounts (e.g., user navigated away and came back)
+    useEffect(() => {
+        clearErrors("root");
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Two-phase back: first trigger exit animations, then change step
+    const [isGoingBack, setIsGoingBack] = useState(false);
+
+    const handleBack = () => {
+        clearErrors("root");
+        setIsGoingBack(true);
+    };
+
+    const handleFieldsExitComplete = () => {
+        if (isGoingBack) {
+            setStep(1);
+            setIsGoingBack(false);
+        }
+    };
 
     return (
         <>
@@ -76,18 +97,20 @@ const LoginPage = () => {
                     <Alert
                         type="error"
                         message={errors.root.message}
+                        onClose={() => clearErrors("root")}
                     />
                 )}
 
                 <AuthFields
                     register={register}
                     errors={errors}
-                    showName={step === 2 && flow === 'signup'}
+                    showName={step === 2 && flow === 'signup' && !isGoingBack}
                     showEmail={!(step === 2 && flow === 'signup')}
-                    showPassword={step === 2}
+                    showPassword={step === 2 && !isGoingBack}
                     emailReadOnly={step === 2}
                     nameAutoFocus={true}
                     passwordAutoFocus={flow === 'login'}
+                    onExitComplete={handleFieldsExitComplete}
                 />
 
                 {/* {step === 2 && flow === 'login' && (
@@ -121,11 +144,11 @@ const LoginPage = () => {
                     )}
                 </button>
 
-                {step === 2 && (
+                {step === 2 && !isGoingBack && (
                     <button
                         className="btn-stroke w-full h-12 mt-4"
                         type="button"
-                        onClick={() => setStep(1)}
+                        onClick={handleBack}
                     >
                         Back
                     </button>
