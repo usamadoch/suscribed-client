@@ -63,6 +63,9 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
             onClose={onClose}
             showCloseIcon={false}
             classWrap="max-w-[80rem] bg-n-1 dark:bg-n-1 w-full flex flex-row !p-0 h-[80vh] overflow-hidden md:flex-col md:h-auto md:max-h-[90vh]"
+            classOverlay="!bg-n-1/40 dark:!bg-n-1/85"
+
+
         // classButtonClose="z-20 text-n-1 dark:text-white bg-white/50 dark:bg-n-1/50 rounded-full p-2 hover:bg-white dark:hover:bg-n-1"
         >
             {/* Left Section: Image */}

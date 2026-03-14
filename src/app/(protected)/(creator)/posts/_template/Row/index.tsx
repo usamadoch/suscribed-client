@@ -138,10 +138,10 @@ const Row = ({ item, showActions = true }: RowProps) => {
                                         {({ active }) => (
                                             <button
                                                 className={`flex items-center w-full px-4 py-2 text-sm font-bold transition-colors ${active ? "bg-n-3/10 dark:bg-white/20" : ""
-                                                    } text-red-500`}
+                                                    } text-pink-1`}
                                                 onClick={() => setIsOpen(true)}
                                             >
-                                                <Icon className="mr-3 fill-red-500 icon-18" name="remove" />
+                                                <Icon className="mr-3 fill-pink-1 icon-18" name="remove" />
                                                 Delete
                                             </button>
                                         )}
@@ -154,6 +154,9 @@ const Row = ({ item, showActions = true }: RowProps) => {
                             title="Delete Post"
                             visible={isOpen}
                             onClose={() => setIsOpen(false)}
+                            classOverlay="!bg-n-1/40 dark:!bg-n-1/85"
+                            classWrap=" border border-n-1 shadow-primary-4"
+
                         >
                             <div className="text-sm text-n-3">
                                 Are you sure you want to delete this post? This action cannot be undone.
@@ -170,11 +173,11 @@ const Row = ({ item, showActions = true }: RowProps) => {
 
 
                                 <button
-                                    className="flex-1 btn-purple btn-medium bg-red-500 hover:bg-red-500/80 cursor-pointer px-5 md:bg-transparent! md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
+                                    className="flex-1 btn-purple btn-medium bg-pink-1 hover:bg-pink-1/80 cursor-pointer px-5 md:bg-transparent! md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
                                     onClick={handleDelete}
                                     disabled={isPending}
                                 >
-                                    <Icon className="mr-3 fill-red-500 icon-18" name="remove" />
+                                    <Icon className="mr-3 fill-pink-1 icon-18" name="remove" />
                                     Delete
                                 </button>
                             </div>

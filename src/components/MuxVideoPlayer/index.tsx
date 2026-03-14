@@ -66,7 +66,7 @@ const MuxVideoPlayer = ({
     // Show processing indicator when no fallback available (post detail page while Mux processes)
     // This happens after post is created but before Mux webhook updates with playbackId
     return (
-        <div className={`relative bg-gradient-to-b from-gray-800 to-gray-900 flex items-center justify-center ${className}`}>
+        <div className={`relative bg-linear-to-b from-gray-800 to-gray-900 flex items-center justify-center ${className}`}>
             <div className="flex flex-col items-center gap-4 p-8 text-center">
                 <div className="relative">
                     <div className="w-16 h-16 border-4 border-purple-500/30 rounded-full" />

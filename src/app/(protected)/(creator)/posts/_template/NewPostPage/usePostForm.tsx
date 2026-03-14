@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -19,7 +19,7 @@ export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps
     const queryClient = useQueryClient();
 
     // Use existing ID if editing, otherwise generate a new draft ID for this session
-    const draftId = useMemo(() => initialData?._id || generateObjectId(), [initialData]);
+    const [draftId, setDraftId] = useState(() => initialData?._id || generateObjectId());
 
     // State
     const [caption, setCaption] = useState("");
@@ -48,6 +48,7 @@ export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps
             setCaption(initialData.caption || "");
             setVisibility(initialData.visibility || "public");
             setAllowComments(initialData.allowComments ?? true);
+            setDraftId(initialData._id || generateObjectId());
         }
     }, [initialData]);
 
@@ -145,6 +146,7 @@ export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps
                 if (!isEditing) {
                     setCaption("");
                     setAttachments([]);
+                    setDraftId(generateObjectId());
                 }
             }
         },

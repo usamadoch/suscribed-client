@@ -70,7 +70,7 @@ const DraftBanner = () => {
                 visible={showPublishModal}
                 onClose={() => setShowPublishModal(false)}
                 title="Publish Page"
-                classOverlay="!bg-white/70 dark:!bg-n-1/85"
+                classOverlay="!bg-white/50 dark:!bg-n-1/85"
                 classWrap=" border border-n-1"
             >
                 <div className="space-y-4">

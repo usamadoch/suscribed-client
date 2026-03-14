@@ -98,19 +98,22 @@ const EditPostPage = ({ params }: EditPostProps) => {
                 title="Unsaved Changes"
                 visible={showUnsavedModal}
                 onClose={() => setShowUnsavedModal(false)}
+                classOverlay="!bg-n-1/40 dark:!bg-n-1/85"
+                classWrap=" border border-n-1 shadow-primary-4"
             >
                 <div className="text-n-1 dark:text-white mb-8">
                     Are you sure you want to leave this page? Your changes will not be saved.
                 </div>
                 <div className="flex justify-end gap-3">
                     <button
-                        className="btn-stroke btn-medium"
+                        type="button"
+                        className="flex-1 btn-stroke px-5 btn-medium cursor-pointer"
                         onClick={() => setShowUnsavedModal(false)}
                     >
                         Cancel
                     </button>
                     <button
-                        className="btn-purple btn-medium"
+                        className="btn-purple btn-medium cursor-pointer flex-1"
                         onClick={confirmNavigation}
                     >
                         OK
@@ -120,6 +123,8 @@ const EditPostPage = ({ params }: EditPostProps) => {
         </>
     );
 };
+
+
 
 
 export default EditPostPage;

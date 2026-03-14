@@ -38,7 +38,7 @@ const LoginModal = ({ visible, onClose }: LoginModalProps) => {
             visible={visible}
             onClose={handleClose}
             //title={step === 1 ? "Sign in / Sign up" : (flow === "login" ? "Sign in" : "Sign up")}
-            classOverlay="!bg-white/20 backdrop-blur-xs dark:!bg-n-1/40"
+            classOverlay="!bg-n-1/40 dark:!bg-n-1/85"
             classWrap=" border border-n-1 shadow-primary-4"
         >
 

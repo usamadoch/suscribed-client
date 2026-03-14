@@ -27,12 +27,13 @@ const ShareModal = ({
 
     return (
         <Modal
-            classWrap="relative border border-n-1"
             classButtonClose="z-2 fill-white"
             showCloseIcon={false}
             visible={visible}
             onClose={onClose}
             classOverlay="!bg-n-1/40 dark:!bg-n-1/85"
+            classWrap=" border border-n-1 shadow-primary-4"
+
 
         >
             {title && (

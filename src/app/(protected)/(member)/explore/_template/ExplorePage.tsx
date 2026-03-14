@@ -29,7 +29,7 @@ export const ExplorePage = () => {
 
     return (
         <>
-            <div className="">
+            <div className="max-w-260 mx-auto w-full">
                 <Search
                     className="w-full mb-5 md:w-[64%]"
                     placeholder="Search Creators..."

@@ -18,7 +18,7 @@ const Sidebar = ({ }: SidebarProps) => {
 
     return (
         <div
-            className={`fixed top-0 left-0 bottom-0 flex flex-col w-75 pt-6 px-8 pb-4.5 bg-n-1 overflow-auto scroll-smooth xl:z-30 md:hidden ${visible ? "w-75" : "xl:w-20"
+            className={`fixed top-0 left-0 bottom-0 flex flex-col w-75 pt-6 px-8 pb-4.5 bg-n-1  overflow-auto scroll-smooth xl:z-30 md:hidden ${visible ? "w-75" : "xl:w-20"
                 }`}
         >
             <div className="flex justify-between items-center h-[1.625rem] mb-11">
@@ -28,7 +28,7 @@ const Sidebar = ({ }: SidebarProps) => {
                     onClick={() => setVisible(!visible)}
                 >
                     <Icon
-                        className="fill-white"
+                        className="fill-n-1"
                         name={visible ? "close" : "burger"}
                     />
                 </button>

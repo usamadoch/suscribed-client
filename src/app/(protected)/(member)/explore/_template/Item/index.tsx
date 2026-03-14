@@ -12,8 +12,8 @@ const Item = ({ item }: ItemProps) => {
             className="flex flex-col w-[calc(25%-1.25rem)] mt-5 mx-2.5 card text-center lg:w-[calc(50%-1.25rem)] md:w-[calc(100%-1.25rem)] md:mt-3"
             href={`/${item.pageSlug}`}
         >
-            <div className="relative grow pt-12 px-5 pb-7 md:pt-4 md:pb-4">
-                <div className="relative w-32 h-32 mx-auto mb-3.5">
+            <div className="relative grow pt-12 pb-7 md:pt-4 md:pb-4">
+                <div className="relative w-24 h-24 mx-auto mb-3.5">
                     <Image
                         className="object-cover rounded-full"
                         family="avatar"
@@ -29,18 +29,14 @@ const Item = ({ item }: ItemProps) => {
                 </div>
             </div>
 
-            <div className="flex border-t border-n-1 dark:border-white/10">
-                <div className="flex-1 p-3 border-r border-n-1 dark:border-white/10">
-                    <div className="text-sm font-bold">{item.postCount}</div>
-                    <div className="text-xs font-medium text-n-3 dark:text-white/75">
-                        Posts
-                    </div>
+            <div className="flex">
+                <div className="p-3 flex items-center gap-1 text-xs font-medium text-n-3 dark:text-white/75">
+                    <span className="text-sm font-bold">{item.postCount}</span>
+                    Posts
                 </div>
-                <div className="flex-1 p-3">
-                    <div className="text-sm font-bold">{item.memberCount}</div>
-                    <div className="text-xs font-medium text-n-3 dark:text-white/75">
-                        Members
-                    </div>
+                <div className="p-3 flex items-center gap-1 text-xs font-medium text-n-3 dark:text-white/75">
+                    <span className="text-sm font-bold">{item.memberCount}</span>
+                    Members
                 </div>
             </div>
         </Link>

@@ -41,11 +41,13 @@ const Menu = ({ visible }: MenuProps) => {
                     const showCounter = hasDynamicCounter ? dynamicCount > 0 : !!link.counter;
                     const counterValue = hasDynamicCounter ? dynamicCount : link.counter;
 
+                    // Check if the current pathname matches the link exactly, or if it's a sub-route of the link.
+                    const isActive = pathname === link.url || (link.url !== "/" && pathname.startsWith(`${link.url}/`));
+
                     return (
                         <Link
                             className={twMerge(
-                                `flex items-center h-9.5 mb-2 px-4 text-sm text-white fill-white font-bold last:mb-0 transition-colors hover:bg-n-2 ${pathname === link.url &&
-                                "bg-n-2 text-purple-1 fill-purple-1"
+                                `flex items-center h-9.5 mb-2 px-4 text-sm text-white fill-white font-bold last:mb-0 transition-colors hover:bg-n-2 ${isActive ? "bg-n-2 text-purple-1 fill-purple-1" : ""
                                 } ${visible ? "text-sm" : "xl:text-0"}`
                             )}
                             href={link.url}

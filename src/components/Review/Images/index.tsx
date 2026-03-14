@@ -27,7 +27,7 @@ const Images = ({ items, imageBig }: ImagesProps) => {
     if (!items || items.length === 0) return null;
 
     return (
-        <div className={`relative mt-4 group w-full ${imageBig ? "h-80" : "h-120"}`}>
+        <div className={`relative pb-2.5 group w-full ${imageBig ? "h-80" : "h-120"}`}>
             <div className="w-full h-full relative border border-n-1 dark:border-white overflow-hidden">
                 <Image
                     className="object-contain"
