@@ -13,8 +13,6 @@ export const ExplorePage = () => {
     useHeader({ title: "Explore" });
     const { creators, isLoading, error } = useExploreCreators();
 
-    console.log(creators);
-
     const [search, setSearch] = useState("");
 
     const filteredCreators = useMemo(() => {

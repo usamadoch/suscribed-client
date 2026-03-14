@@ -1,17 +1,15 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import Link from "next/link";
-import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems, Transition } from "@headlessui/react";
 
 import Image from "@/components/Image";
-import Icon from "@/components/Icon";
+import ProfileSocials from "./ProfileSocials";
+import ProfileHeaderActions from "./ProfileHeaderActions";
 import LoginModal from "@/components/LoginModal";
 import ShareModal from "@/components/ShareModal";
 import JoinTierModal from "@/components/JoinTierModal";
 import ReadMore from "@/components/ReadMore";
 
-import { getSocialIcon } from "@/lib/utils";
 import { CreatorPage } from "@/lib/types";
 
 import { usePageImageUpload } from "@/hooks/usePageImageUpload";
@@ -34,7 +32,6 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
     const { mutate: joinPage, isPending: isJoining } = useJoinPage();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
-    const [isSocialsExpanded, setIsSocialsExpanded] = useState(false);
     const [visible, setVisible] = useState(false);
 
     const handleSuccess = useCallback((type: 'banner' | 'avatar', url: string) => {
@@ -130,107 +127,15 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
 
                 <div className="flex-1 flex items-center justify-end  shrink-0">
                     {page.socialLinks && page.socialLinks.length > 0 && (
-                        <div className="flex items-center mr-8 space-x-5 md:mr-4 md:space-x-3">
-                            {(() => {
-                                const shouldTruncate = page.socialLinks.length > 3;
-                                const displayedLinks = !isSocialsExpanded && shouldTruncate
-                                    ? page.socialLinks.slice(0, 3)
-                                    : page.socialLinks;
-
-                                return (
-                                    <>
-                                        {displayedLinks.map((link, index) => {
-                                            const iconPath = getSocialIcon(link.platform);
-
-                                            return (
-                                                <Link
-                                                    key={index}
-                                                    href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
-                                                    className="group relative shrink-0"
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                >
-                                                    {iconPath ? (
-                                                        <div className="relative w-7 h-7 shadow-primary-4 rounded-full transition-shadow duration-100 group-hover:shadow-none">
-                                                            <Image
-                                                                src={iconPath}
-                                                                fill
-                                                                alt={link.platform}
-                                                                className="object-contain"
-                                                            />
-                                                        </div>
-                                                    ) : (
-                                                        <Icon
-                                                            className="w-5 h-5 fill-n-4 transition-colors group-hover:fill-purple-1 dark:fill-n-3"
-                                                            name={link.platform === 'website' ? 'link' : link.platform}
-                                                        />
-                                                    )}
-                                                </Link>
-                                            );
-                                        })}
-                                        {shouldTruncate && (
-                                            <button
-                                                onClick={() => setIsSocialsExpanded(!isSocialsExpanded)}
-                                                className="inline-block ml-1 font-semibold text-purple-1 dark:text-white cursor-pointer text-sm"
-                                            >
-                                                {isSocialsExpanded ? "Less" : "More"}
-                                            </button>
-                                        )}
-                                    </>
-                                );
-                            })()}
-                        </div>
+                        <ProfileSocials socialLinks={page.socialLinks} />
                     )}
 
-                    {!isOwner && (
-                        <div className="flex shrink-0 max-w-80 w-full 4xl:w-59">
-                            <button
-                                className={`btn-purple h-12 grow ${isMember ? "opacity-75" : ""}`}
-                                onClick={isMember ? undefined : handleOpenJoinModal}
-                                disabled={isMember}
-                            >
-                                {isMember && <Icon name="check" />}
-                                <span>{isMember ? "Member" : "Become a Member"}</span>
-                            </button>
-
-                            <MenuDropdown className="relative ml-1.5 shrink-0" as="div">
-                                <MenuButton className="btn-purple h-12 px-4">
-                                    <Icon name="dots" />
-                                </MenuButton>
-                                <Transition
-                                    enter="transition duration-100 ease-out"
-                                    enterFrom="transform scale-95 opacity-0"
-                                    enterTo="transform scale-100 opacity-100"
-                                    leave="transition duration-75 ease-out"
-                                    leaveFrom="transform scale-100 opacity-100"
-                                    leaveTo="transform scale-95 opacity-0"
-                                >
-                                    <MenuItems className="absolute right-0 top-full mt-2 w-[14.69rem] py-2 border border-n-1 bg-white shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
-                                        <MenuItem
-                                            className="flex items-center cursor-pointer w-full h-10 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
-                                            as="button"
-                                            onClick={() => setVisible(true)}
-                                        >
-                                            <Icon
-                                                className="-mt-0.25 mr-3 fill-n-1 dark:fill-white"
-                                                name="share"
-                                            />
-                                            Share
-                                        </MenuItem>
-                                    </MenuItems>
-                                </Transition>
-                            </MenuDropdown>
-                        </div>
-                    )}
-
-                    {isOwner && (
-                        <div className="flex shrink-0 max-w-60 w-full">
-                            <Link href="/settings" className="btn-purple grow">
-                                <Icon name="setup" />
-                                <span className="">Edit Profile</span>
-                            </Link>
-                        </div>
-                    )}
+                    <ProfileHeaderActions
+                        isOwner={isOwner}
+                        isMember={isMember}
+                        onJoinClick={handleOpenJoinModal}
+                        onShareClick={() => setVisible(true)}
+                    />
                 </div>
             </div>
             <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />

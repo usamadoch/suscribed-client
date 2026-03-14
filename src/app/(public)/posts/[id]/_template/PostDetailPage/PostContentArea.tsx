@@ -1,10 +1,9 @@
 import Image from "@/components/Image";
 import Actions from "@/components/Review/Actions";
-
-import MediaBlock from "./MediaBlock";
-import MediaCarousel from "./MediaCarousel";
-import LockedContent from "./LockedContent";
 import ReadMore from "@/components/ReadMore";
+
+import PostMediaGallery from "./PostMediaGallery";
+import PostMetadata from "./PostMetadata";
 
 import {
     Post,
@@ -48,15 +47,10 @@ const PostContentArea = ({
 
             {/* ── Caption, Actions, Metadata ───────────────── */}
             <div className="max-w-4xl mx-auto p-5 pt-0">
-
-
-
                 <div className="flex items-start justify-between w-full">
                     <div className="flex items-start w-full">
                         {/* Avatar Section */}
-
                         <div className="relative shrink-0 w-16 h-16 mb-3 rounded-full shadow-primary-4 bg-n-1">
-
                             <div className="relative w-full h-full rounded-full overflow-hidden">
                                 <Image
                                     className="object-cover"
@@ -65,10 +59,8 @@ const PostContentArea = ({
                                     src={page?.avatarUrl}
                                     fill
                                     alt={displayName}
-
                                 />
                             </div>
-
                         </div>
 
                         <div className="flex flex-col w-full pl-4 gap-2">
@@ -100,73 +92,10 @@ const PostContentArea = ({
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
     );
 };
-
-// ─── Sub-components ─────────────────────────────────────────
-
-interface PostMediaGalleryProps {
-    locked: boolean;
-    mediaItems: AnyMediaAttachment[];
-    unlockedMediaItems: MediaAttachment[];
-}
-
-const PostMediaGallery = ({
-    locked,
-    mediaItems,
-    unlockedMediaItems,
-}: PostMediaGalleryProps) => {
-    if (mediaItems.length === 0) return null;
-
-    if (locked) {
-        return (
-            <div className="relative w-full h-[512px] bg-n-2 mb-6 overflow-hidden">
-                <LockedContent
-                    type="overlay"
-                    text="Join to unlock this content"
-                />
-                <Image
-                    className="object-contain"
-                    src={mediaItems[0].thumbnailUrl || "/images/img-1.jpg"}
-                    fill
-                    alt="Locked content preview"
-                    unoptimized
-                />
-            </div>
-        );
-    }
-
-    if (unlockedMediaItems.length > 1) {
-        return <MediaCarousel items={unlockedMediaItems} />;
-    }
-
-    return (
-        <>
-            {unlockedMediaItems.map((media: MediaAttachment, index: number) => (
-                <MediaBlock key={index} media={media} className="mb-4" />
-            ))}
-        </>
-    );
-};
-
-interface PostMetadataProps {
-    viewCount: number;
-}
-
-const PostMetadata = ({ viewCount }: PostMetadataProps) => (
-    <div className="flex gap-3 justify-end items-center text-sm text-n-3">
-
-        <div className="flex gap-1">
-            <strong className="text-purple-1">{viewCount}</strong> views
-        </div>
-
-
-    </div>
-);
 
 export default PostContentArea;

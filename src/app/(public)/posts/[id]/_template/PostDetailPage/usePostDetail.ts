@@ -1,13 +1,7 @@
 "use client";
 
-import { useState, createElement } from "react";
-import { toast } from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
-
-import Alert from "@/components/Alert";
-import { useAuth } from "@/store/auth";
-import { usePost, usePostComments, useJoinPage } from "@/hooks/useQueries";
-import { postApi } from "@/lib/api";
+import { usePost, usePostComments } from "@/hooks/useQueries";
+import { isValidObjectId } from "@/lib/validation";
 import {
     Post,
     MediaAttachment,
@@ -17,8 +11,9 @@ import {
     Comment as PostComment,
 } from "@/lib/types";
 
-/** MongoDB ObjectId: exactly 24 hex characters */
-const isValidObjectId = (id: string): boolean => /^[a-f\d]{24}$/i.test(id);
+import { usePostComment } from "./hooks/usePostComment";
+import { usePostJoin } from "./hooks/usePostJoin";
+import { useAuth } from "@/store/auth";
 
 interface UsePostDetailReturn {
     // Data
@@ -60,11 +55,6 @@ interface UsePostDetailReturn {
  * for the post detail page.
  */
 export const usePostDetail = (postId: string): UsePostDetailReturn => {
-    const queryClient = useQueryClient();
-    const { user } = useAuth();
-
-
-
     // ── Validate ID format (skip all requests if invalid) ───
     const isValidId = isValidObjectId(postId);
     const queryId = isValidId ? postId : '';
@@ -73,15 +63,21 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
     const { data: post, isLoading: isPostLoading } = usePost(queryId);
     const { data: comments, isLoading: isCommentsLoading } = usePostComments(queryId);
 
+    // ── Sub Hooks ────────────────────────────────────────────
+    const {
+        commentValue,
+        setCommentValue,
+        isSubmittingComment,
+        handleCommentSubmit,
+    } = usePostComment(postId);
 
-
-    // ── Join mutation ────────────────────────────────────────
-    const { mutate: joinPage, isPending: isJoining } = useJoinPage();
-
-    // ── Local state ──────────────────────────────────────────
-    const [commentValue, setCommentValue] = useState("");
-    const [isSubmittingComment, setIsSubmittingComment] = useState(false);
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const {
+        user,
+        isJoining,
+        handleJoin,
+        isLoginModalOpen,
+        setIsLoginModalOpen,
+    } = usePostJoin(post);
 
     // ── Derived values ───────────────────────────────────────
     const locked = post?.isLocked ?? false;
@@ -102,79 +98,6 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
         post && typeof post.pageId === "object"
             ? (post.pageId as Pick<CreatorPage, "_id" | "pageSlug">).pageSlug
             : undefined;
-
-    // ── Handlers ─────────────────────────────────────────────
-
-    const handleCommentSubmit = async () => {
-        if (!commentValue.trim()) return;
-
-        setIsSubmittingComment(true);
-        try {
-            const { comment } = await postApi.addComment(postId, {
-                content: commentValue,
-            });
-            toast.custom((t) =>
-                createElement(Alert, {
-                    type: "success",
-                    message: "Your comment has been successfully.",
-                    onClose: () => toast.dismiss(t.id),
-                })
-            );
-            setCommentValue("");
-
-            // Optimistic cache update
-            queryClient.setQueryData(
-                ["post-comments", postId],
-                (oldComments: PostComment[] | undefined) =>
-                    oldComments ? [comment, ...oldComments] : [comment]
-            );
-
-            // Revalidate for consistency
-            queryClient.invalidateQueries({ queryKey: ["post-comments", postId] });
-            queryClient.invalidateQueries({ queryKey: ["post", postId] });
-        } catch (error) {
-            console.error(error);
-            toast.custom((t) =>
-                createElement(Alert, {
-                    type: "error",
-                    message: "Failed to publish your comment. Please try again later.",
-                    onClose: () => toast.dismiss(t.id),
-                })
-            );
-        } finally {
-            setIsSubmittingComment(false);
-        }
-    };
-
-    const handleJoin = () => {
-        if (!post) return;
-
-        if (user) {
-            const creatorId =
-                typeof post.creatorId === "object"
-                    ? post.creatorId._id
-                    : post.creatorId;
-            const pageId =
-                typeof post.pageId === "object" ? post.pageId._id : post.pageId;
-
-            joinPage(
-                { creatorId, pageId },
-                {
-                    onSuccess: () => {
-                        toast.custom((t) =>
-                            createElement(Alert, {
-                                type: "success",
-                                message: "You've successfully joined!",
-                                onClose: () => toast.dismiss(t.id),
-                            })
-                        );
-                    }
-                }
-            );
-        } else {
-            setIsLoginModalOpen(true);
-        }
-    };
 
     return {
         post,

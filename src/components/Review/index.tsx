@@ -4,6 +4,7 @@ import Images from "./Images";
 import Actions from "./Actions";
 import ReadMore from "@/components/ReadMore";
 import Icon from "../Icon";
+import { formatDuration } from "@/lib/date";
 
 
 type ReviewItem = {
@@ -19,6 +20,10 @@ type ReviewItem = {
     isLocked: boolean;
     shareUrl?: string;
     isOwner?: boolean;
+    video?: {
+        thumbnailUrl?: string;
+        duration?: number;
+    };
 }
 
 type ReviewProps = {
@@ -68,8 +73,29 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                     <ReadMore words={100} buttonClass="text-n-1">{item.content}</ReadMore>
                 </div>
 
-                {item.images && (
+                {item.images && item.images.length > 0 && (
                     <Images items={item.images} imageBig={imageBig} />
+                )}
+
+                {item.video && (
+                    <div className={`relative aspect-video bg-n-2 overflow-hidden mb-4 ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
+                        {item.video.thumbnailUrl ? (
+                            <img
+                                src={item.video.thumbnailUrl}
+                                alt="Video thumbnail"
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-black">
+                                <Icon name="play" className="w-12 h-12 fill-white/80" />
+                            </div>
+                        )}
+                        {item.video.duration && (
+                            <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 rounded text-xs font-semibold text-white">
+                                {formatDuration(item.video.duration)}
+                            </div>
+                        )}
+                    </div>
                 )}
 
 

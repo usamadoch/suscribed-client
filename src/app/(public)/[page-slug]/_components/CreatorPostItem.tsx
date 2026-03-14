@@ -1,21 +1,18 @@
-import { Post, CreatorPage, isLockedMedia } from "@/lib/types";
+import { Post, isLockedMedia, CreatorPage } from "@/lib/types";
 import { formatAppDate } from "@/lib/date";
 import Review from "@/components/Review";
 
-interface FeedItemProps {
+type CreatorPostItemProps = {
     post: Post;
+    page: CreatorPage | undefined;
+    isOwner: boolean;
     onClick: (post: Post) => void;
-}
+};
 
-const FeedItem = ({ post, onClick }: FeedItemProps) => {
-    // Extract page info (populated from API)
-    const pageInfo = typeof post.pageId === 'object'
-        ? post.pageId as Pick<CreatorPage, '_id' | 'pageSlug' | 'displayName' | 'avatarUrl'>
-        : null;
-
+const CreatorPostItem = ({ post, page, isOwner, onClick }: CreatorPostItemProps) => {
     let content: string;
     let images: string[] = [];
-    let video: { thumbnailUrl?: string; duration?: number } | undefined;
+    let isLocked = post.isLocked;
 
     if (post.isLocked) {
         content = post.teaser || 'Exclusive content for members';
@@ -26,14 +23,6 @@ const FeedItem = ({ post, onClick }: FeedItemProps) => {
                 .filter(m => m.thumbnailUrl)
                 .map(m => m.thumbnailUrl!)
                 .filter((url): url is string => !!url);
-        } else if (post.postType === 'video') {
-            const videoAttachment = post.mediaAttachments?.[0];
-            if (videoAttachment) {
-                video = {
-                    thumbnailUrl: videoAttachment.thumbnailUrl,
-                    duration: videoAttachment.duration
-                };
-            }
         }
     } else {
         content = post.caption || '';
@@ -43,31 +32,22 @@ const FeedItem = ({ post, onClick }: FeedItemProps) => {
                 .filter(m => !isLockedMedia(m) && m.url)
                 .map(m => m.url)
                 .filter((url): url is string => !!url);
-        } else if (post.postType === 'video') {
-            const videoAttachment = post.mediaAttachments?.[0];
-            if (videoAttachment) {
-                video = {
-                    thumbnailUrl: videoAttachment.thumbnailUrl,
-                    duration: videoAttachment.duration
-                };
-            }
         }
     }
 
     const postItem = {
         id: post._id,
-        author: pageInfo?.displayName || "",
-        avatar: pageInfo?.avatarUrl || "/images/content/avatar-1.jpg",
+        author: page?.displayName || "",
+        avatar: page?.avatarUrl || "/images/content/avatar-1.jpg",
         time: formatAppDate(post.createdAt, { suffix: true }),
         content: content,
         images: images,
-        video: video,
         likes: post.likeCount || 0,
         comments: post.commentCount || 0,
         isLiked: !!post.isLiked,
-        isLocked: post.isLocked,
+        isLocked: isLocked,
         shareUrl: `/posts/${post._id}`,
-        isOwner: false,
+        isOwner: !!isOwner,
     };
 
     return (
@@ -84,4 +64,4 @@ const FeedItem = ({ post, onClick }: FeedItemProps) => {
     );
 };
 
-export default FeedItem;
+export default CreatorPostItem;

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePostComments } from "@/hooks/useQueries";
 import Modal from "@/components/Modal";
+import MuxVideoPlayer from "@/components/MuxVideoPlayer";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Comment from "@/components/Comment";
@@ -51,6 +52,10 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
         ? post.mediaAttachments.find(m => !isLockedMedia(m) && m.url)?.url
         : undefined;
 
+    const displayedVideo = post.postType === 'video' && !post.isLocked
+        ? post.mediaAttachments.find(m => !isLockedMedia(m) && m.url)
+        : undefined;
+
     // Helper to get creator info safely
     // post.pageId can be string or object depending on population
     const page = typeof post.pageId === 'object' ? post.pageId : null;
@@ -81,6 +86,16 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                             alt="Post content"
                         />
                     </div>
+                ) : displayedVideo ? (
+                    <div className="relative w-full h-full bg-black flex items-center justify-center">
+                        <MuxVideoPlayer
+                            fallbackSrc={displayedVideo.url || undefined}
+                            playbackId={(displayedVideo as import("@/lib/types").VideoAttachment).muxPlaybackId}
+                            status={(displayedVideo as import("@/lib/types").VideoAttachment).status}
+                            className="w-full h-full object-contain"
+                            autoPlay
+                        />
+                    </div>
                 ) : (
                     <div className="text-n-3">
                         {post.isLocked ? (
@@ -90,7 +105,7 @@ const PostModal = ({ visible, onClose, post }: PostModalProps) => {
                                 <div className="text-sm text-white/70">Join to unlock this content</div>
                             </div>
                         ) : (
-                            <span>No image content</span>
+                            <span>No content available</span>
                         )}
                     </div>
                 )}
