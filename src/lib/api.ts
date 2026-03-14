@@ -493,6 +493,33 @@ export const postApi = {
     async getRecentVideos(pageSlug: string): Promise<{ posts: Post[] }> {
         return fetchApi(`/posts/recent-videos?pageSlug=${encodeURIComponent(pageSlug)}`);
     },
+
+    async getHomeFeed(params: { cursor?: string; limit?: number } = {}): Promise<{
+        posts: Post[];
+        meta: { hasNextPage: boolean; nextCursor: string | null };
+    }> {
+        const searchParams = new URLSearchParams();
+        if (params.cursor) searchParams.set('cursor', params.cursor);
+        if (params.limit) searchParams.set('limit', String(params.limit));
+        const query = searchParams.toString();
+
+        const response = await fetch(`${API_BASE_URL}/posts/feed${query ? `?${query}` : ''}`, {
+            credentials: 'include',
+        });
+
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new ApiClientError(
+                { code: 'PARSE_ERROR', message: 'Invalid response from server' },
+                response.status
+            );
+        }
+
+        if (!data.success) throw new ApiClientError(data.error, response.status);
+        return { posts: data.data.posts, meta: data.meta };
+    },
 };
 
 

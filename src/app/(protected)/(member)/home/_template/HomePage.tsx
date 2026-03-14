@@ -1,75 +1,19 @@
 "use client";
 
-import Link from "next/link";
-
+import { useEffect, useRef, useCallback, useState } from "react";
 import { useHeader } from "@/context/HeaderContext";
-import Icon from "@/components/Icon";
 
 import { useAuth } from "@/store/auth";
-import { useMyMemberships, useExploreCreators } from "@/hooks/useQueries";
+import { useMyMemberships, useHomeFeed } from "@/hooks/useQueries";
 import { useHydrated } from "@/hooks/useHydrated";
-import { CreatorPage, AuthUser } from "@/lib/types";
+import { Post } from "@/lib/types";
 import Loader from "@/components/Loader";
+import PostModal from "@/components/PostModal";
 
-// ======================
-// WELCOME SECTION
-// ======================
-interface WelcomeSectionProps {
-    user: AuthUser;
-}
-
-const WelcomeSection = ({ user }: WelcomeSectionProps) => (
-    <div className="mb-8">
-        <h1 className="text-3xl font-bold text-n-1 dark:text-white mb-2">
-            Welcome, {user.displayName}!
-        </h1>
-        <p className="text-n-2">
-            Discover new creators and stay connected with your subscriptions
-        </p>
-    </div>
-);
-
-
-interface MySubscriptionsPanelProps {
-    members: Array<{
-        _id: string;
-        pageId: CreatorPage;
-        joinedAt: string;
-    }>;
-}
-
-const MySubscriptionsPanel = ({ members }: MySubscriptionsPanelProps) => (
-    <div className="card p-5">
-        <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-                <Icon name="team" className="w-5 h-5 fill-purple-1" />
-                <h2 className="text-lg font-semibold text-n-1 dark:text-white">
-                    My Subscriptions
-                </h2>
-            </div>
-            <span className="text-sm text-n-2">
-                {members.length} creator{members.length !== 1 ? 's' : ''}
-            </span>
-        </div>
-
-        {members.length === 0 && (
-            <div className="text-center">
-                <div className="flex flex-col items-center py-3">
-                    <Icon name="team" className="w-12 h-12 mx-auto mb-3 fill-n-2/30" />
-                    <p className="text-n-2">You haven&apos;t joined any creators yet</p>
-                </div>
-                <Link href="/explore" className="btn-purple btn-medium inline-flex w-full items-center gap-2 mt-4">
-                    <Icon name="search" className="w-4 h-4" />
-                    <span>Explore Creators</span>
-                </Link>
-            </div>
-        )}
-
-    </div>
-);
-
-
-
+import WelcomeSection from "../_components/WelcomeSection";
+import EmptySubscriptions from "../_components/EmptySubscriptions";
+import CaughtUpMessage from "../_components/CaughtUpMessage";
+import FeedItem from "../_components/FeedItem";
 
 // ======================
 // MAIN HOMEPAGE COMPONENT (MEMBERS)
@@ -79,13 +23,58 @@ export const HomePage = () => {
     const { mounted } = useHydrated();
     const { user } = useAuth();
 
-    // Fetch my members
+    // Fetch memberships to check if user has any
     const { data: membershipsData, isLoading: membershipsLoading } = useMyMemberships();
 
-    // Fetch explore creators for discovery
-    const { data: exploreCreators, isLoading: creatorsLoading } = useExploreCreators();
+    // Fetch home feed (infinite scrolling)
+    const {
+        data: feedData,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading: feedLoading,
+    } = useHomeFeed();
 
-    const isLoading = membershipsLoading || creatorsLoading;
+    // Post modal state
+    const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+
+    // Sentinel ref for infinite scroll
+    const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+    // Flatten all pages of posts into a single array
+    const allPosts: Post[] = feedData?.pages.flatMap(page => page.posts) ?? [];
+
+    // Find the active post for the modal
+    const activePost = allPosts.find(p => p._id === selectedPostId) || null;
+
+    const handlePostClick = (post: Post) => {
+        if (!post.isLocked) {
+            setSelectedPostId(post._id);
+        }
+    };
+
+    // Intersection Observer for infinite scroll
+    const observerCallback = useCallback(
+        (entries: IntersectionObserverEntry[]) => {
+            const [entry] = entries;
+            if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+                fetchNextPage();
+            }
+        },
+        [hasNextPage, isFetchingNextPage, fetchNextPage]
+    );
+
+    useEffect(() => {
+        const sentinel = sentinelRef.current;
+        if (!sentinel) return;
+
+        const observer = new IntersectionObserver(observerCallback, {
+            rootMargin: "200px",
+        });
+        observer.observe(sentinel);
+
+        return () => observer.disconnect();
+    }, [observerCallback]);
 
     if (!mounted) return null;
 
@@ -97,7 +86,7 @@ export const HomePage = () => {
         );
     }
 
-    if (isLoading) {
+    if (membershipsLoading) {
         return (
             <div className="flex justify-center items-center pt-10">
                 <Loader />
@@ -107,24 +96,70 @@ export const HomePage = () => {
 
     const members = (membershipsData || []).filter(m =>
         m.pageId && typeof m.pageId === 'object'
-    ).map(m => ({
-        _id: m._id,
-        pageId: m.pageId as CreatorPage,
-        joinedAt: m.joinedAt,
-    }));
+    );
+
+    const hasSubscriptions = members.length > 0;
 
     return (
         <>
-            <div className="max-w-md w-full mx-auto">
+            <div className="pb-20 px-16">
 
-                {/* Welcome Section */}
-                <WelcomeSection user={user} />
+                <div className="max-w-2xl mx-auto">
 
+                    {/* Welcome Section */}
+                    <WelcomeSection user={user} />
 
+                    {/* No subscriptions */}
+                    {!hasSubscriptions && <EmptySubscriptions />}
 
-                <MySubscriptionsPanel members={members} />
+                    {/* Feed */}
+                    {hasSubscriptions && (
+                        <>
+                            {feedLoading ? (
+                                <div className="flex items-center justify-center py-10">
+                                    <Loader text="Loading your feed..." />
+                                </div>
+                            ) : allPosts.length === 0 ? (
+                                <CaughtUpMessage />
+                            ) : (
+                                <div className="grid grid-cols-1 gap-6">
+                                    {allPosts.map((post: Post) => (
+                                        <FeedItem
+                                            key={post._id}
+                                            post={post}
+                                            onClick={handlePostClick}
+                                        />
+                                    ))}
+
+                                    {/* Infinite scroll sentinel */}
+                                    <div ref={sentinelRef} className="h-1" />
+
+                                    {/* Loading more */}
+                                    {isFetchingNextPage && (
+                                        <div className="flex justify-center py-6">
+                                            <Loader text="Loading more posts..." />
+                                        </div>
+                                    )}
+
+                                    {/* End of feed */}
+                                    {!hasNextPage && allPosts.length > 0 && !isFetchingNextPage && (
+                                        <CaughtUpMessage />
+                                    )}
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                </div>
 
             </div>
+
+            {/* Post Modal */}
+            <PostModal
+                visible={!!activePost}
+                post={activePost}
+                onClose={() => setSelectedPostId(null)}
+            />
         </>
     );
 };

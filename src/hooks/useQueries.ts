@@ -154,6 +154,28 @@ export const useMyMemberships = (enabled: boolean = true) => {
     });
 };
 
+// Hook for Home Feed (infinite scrolling, cursor-based)
+import { useInfiniteQuery } from "@tanstack/react-query";
+
+export const useHomeFeed = () => {
+    const { user } = useAuth();
+    return useInfiniteQuery({
+        queryKey: ['home-feed', user?._id],
+        queryFn: async ({ pageParam }) => {
+            return await postApi.getHomeFeed({ cursor: pageParam as string | undefined, limit: 10 });
+        },
+        initialPageParam: undefined as string | undefined,
+        getNextPageParam: (lastPage) => {
+            if (lastPage.meta.hasNextPage && lastPage.meta.nextCursor) {
+                return lastPage.meta.nextCursor;
+            }
+            return undefined;
+        },
+        enabled: !!user,
+        staleTime: 1000 * 60 * 2, // 2 minutes
+    });
+};
+
 // Hook to fetch Posts (Paginated)
 export const usePosts = (params: { page: number; limit: number }) => {
     return useQuery({
