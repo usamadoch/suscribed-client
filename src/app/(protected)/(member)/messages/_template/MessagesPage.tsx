@@ -5,8 +5,6 @@ import { useSearchParams } from "next/navigation";
 
 import Empty from "@/components/Empty";
 
-import { useHeader } from "@/context/HeaderContext";
-
 import { useConversations } from "./hooks/useConversations";
 import { useConversationSocket } from "./hooks/useConversationSocket";
 import { useMessagesPageEffects } from "./hooks/useMessagesPageEffects";
@@ -19,7 +17,6 @@ const MessagesPage = () => {
     const searchParams = useSearchParams();
     const recipientId = searchParams.get("to");
 
-    useHeader({ title: "Inbox" });
 
     // UI-only state — kept in this component
     const [visible, setVisible] = useState<boolean>(false);

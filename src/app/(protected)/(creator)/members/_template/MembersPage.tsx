@@ -6,7 +6,6 @@ import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useMyMembers } from "@/hooks/useQueries";
 
-import { useHeader } from "@/context/HeaderContext";
 
 import TablePagination from "@/components/TablePagination";
 import Sorting from "@/components/Sorting";
@@ -77,7 +76,6 @@ const MembersTable = ({ memberships, isLoading }: { memberships: any[]; isLoadin
 // --- Main page component: orchestration only ---
 
 const MembersPage = () => {
-    useHeader({ title: "Members" });
     const { mounted } = useHydrated();
 
     // Pagination State

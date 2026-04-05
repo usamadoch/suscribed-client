@@ -12,7 +12,6 @@ import { useNotifications, useMarkNotificationsAsRead } from "@/hooks/useQueries
 
 import { useSocket } from "@/store/socket";
 
-import { useHeader } from "@/context/HeaderContext";
 import Loader from "@/components/Loader";
 import MailTablet from "./MailTablet";
 import MailDesktop from "./MailDesktop";
@@ -51,7 +50,6 @@ const NotificationsPage = () => {
     const hasMarkedRef = useRef(false);
 
     const notifications = data?.notifications || [];
-    useHeader({ title: "Notifications" });
 
     // Auto-mark as read on visit (once only)
     useEffect(() => {

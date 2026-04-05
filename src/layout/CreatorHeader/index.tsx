@@ -16,7 +16,6 @@ import { useCreatorPage, usePost } from "@/hooks/useQueries";
 import { useCreatorHeader } from "@/context/CreatorHeaderContext";
 
 type CreatorHeaderProps = {
-    pageName?: string;
     pageSlug?: string;
 };
 
@@ -31,7 +30,7 @@ const navLinks = [
     },
 ];
 
-const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderProps) => {
+const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
     const [headerStyle, setHeaderStyle] = useState<boolean>(false);
     const { isHeaderHidden } = useCreatorHeader();
     const pathname = usePathname();
@@ -99,7 +98,7 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
                                     alt={page?.displayName || "Avatar"}
                                 />
                             </div>
-                            <div className="font-bold">{page?.displayName || pageName}</div>
+                            <div className="font-bold">{page?.displayName || "Creator Page"}</div>
 
                         </Link>
                     )}

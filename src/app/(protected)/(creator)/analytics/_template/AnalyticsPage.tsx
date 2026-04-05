@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { useHeader } from "@/context/HeaderContext";
 import Tabs from "@/components/Tabs";
 
 import MemberTab from "./MemberTab";
@@ -20,7 +19,6 @@ const timeRangeOptions = [
 ];
 
 const AnalyticsPage = () => {
-    useHeader({ title: "Analytics" });
     // const { mounted } = useHydrated();
     const [activeTab, setActiveTab] = useState<TabValue>("member");
     const [timeRange, setTimeRange] = useState(timeRangeOptions[1]);

@@ -4,11 +4,9 @@ import { useRouter } from 'next/navigation';
 
 import { useEarningsSummary, usePayoutMethod } from '../usePayout';
 import Loader from '@/components/Loader';
-import { useHeader } from '@/context/HeaderContext';
 
 
 export default function EarningsPage() {
-    useHeader({ title: "Earnings" });
     const router = useRouter();
 
     const { payoutMethod, isLoading: isPayoutLoading } = usePayoutMethod();

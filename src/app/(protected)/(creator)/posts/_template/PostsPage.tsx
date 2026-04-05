@@ -7,7 +7,6 @@ import Item from "./Item";
 
 import { usePosts } from "@/hooks/useQueries";
 
-import { useHeader } from "@/context/HeaderContext";
 import Sorting from "@/components/Sorting";
 import Icon from "@/components/Icon";
 import Empty from "@/components/Empty";
@@ -87,7 +86,6 @@ const PostsTable = ({ posts, isLoading }: { posts: DashboardPost[]; isLoading: b
 // --- Main page component: orchestration only ---
 
 const PostsPage = () => {
-    useHeader({ title: "Posts" });
 
     // Pagination State
     const [page, setPage] = useState(1);

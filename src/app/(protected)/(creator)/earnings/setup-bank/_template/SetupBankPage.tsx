@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { usePayoutMethod } from '../../usePayout';
-import { useHeader } from '@/context/HeaderContext';
 import Loader from '@/components/Loader';
 import { toast } from 'react-hot-toast';
 import Alert from '@/components/Alert';
@@ -15,7 +14,6 @@ import PersonalInfoStep from '../_components/PersonalInfoStep';
 import BankDetailsStep from '../_components/BankDetailsStep';
 
 const SetupBankPage = () => {
-    useHeader({ title: "Setup Bank" });
     const router = useRouter();
 
     const [step, setStep] = useState(1);

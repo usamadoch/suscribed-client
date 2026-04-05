@@ -10,7 +10,6 @@ import CreatorAccount from "./sections/CreatorAccount";
 
 import { usePermission } from "@/hooks/usePermission";
 
-import { useHeader } from "@/context/HeaderContext";
 
 import Tabs from "@/components/Tabs";
 
@@ -31,7 +30,6 @@ const allTypes: { title: string; value: SettingsTab }[] = [
 ];
 
 const SettingsPage = () => {
-    useHeader({ title: "Profile Settings" });
     const canManagePage = usePermission('page:manage');
     const canManageSecurity = usePermission('security:manage');
 
