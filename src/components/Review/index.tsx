@@ -4,37 +4,21 @@ import Images from "./Images";
 import Actions from "./Actions";
 import ReadMore from "@/components/ReadMore";
 import Icon from "../Icon";
+import ActionMenu from "@/components/ActionMenu";
 import { formatDuration } from "@/lib/date";
 
-
-type ReviewItem = {
-    id: string;
-    avatar: string;
-    author: string;
-    time: string;
-    content: string;
-    images: string[];
-    likes: number;
-    comments: number;
-    isLiked: boolean;
-    isLocked: boolean;
-    shareUrl?: string;
-    isOwner?: boolean;
-    video?: {
-        thumbnailUrl?: string;
-        duration?: number;
-    };
-}
+import { ReviewItem } from "@/lib/types";
 
 type ReviewProps = {
     item: ReviewItem;
     imageBig?: boolean;
+    onCommentClick?: () => void;
 };
 
-const Review = ({ item, imageBig }: ReviewProps) => {
+const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
     return (
-        <div className="flex mb-4 p-5 pb-3 card last:mb-0">
-            <div className="relative shrink-0 w-8.5 h-8.5">
+        <div className="flex py-5 card bg-white border border-n-4 rounded-sm last:mb-0">
+            <div className="relative shrink-0 w-8.5 h-8.5 ml-5">
                 <Image
                     className="object-cover rounded-full"
                     family="avatar"
@@ -45,9 +29,8 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                 />
             </div>
             <div className="w-[calc(100%-2.125rem)] pl-3.5">
-                <div className="flex items-center">
+                <div className="flex items-center mr-5">
                     <div className="flex items-center gap-2">
-
                         <div className="capitalize whitespace-nowrap text-base font-bold">
                             {item.author}
                         </div>
@@ -57,16 +40,33 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                         </div>
                     </div>
 
-                    {item.isOwner && (
-                        <Link
-                            href={`/posts/${item.id}/edit`}
-                            onClick={(e) => e.stopPropagation()}
-                            className="btn-stroke btn-small ml-auto"
-                        >
-                            <Icon name="edit" viewBox="0 0 24 24" /> Edit
-                        </Link>
-                    )}
+                    <div className="flex items-center gap-2 ml-auto">
+                        {item.isOwner && (
+                            <Link
+                                href={`/posts/${item.id}/edit`}
+                                onClick={(e) => e.stopPropagation()}
+                                className="btn-stroke btn-small"
+                            >
+                                <Icon name="edit" viewBox="0 0 24 24" /> Edit
+                            </Link>
+                        )}
+                        <ActionMenu
+                            className="-mt-1.5 -mr-2"
+                            items={[
+                                {
+                                    label: "Copy link",
+                                    icon: "copy",
+                                    onClick: () => {
+                                        const shareUrl = item.shareUrl;
+                                        const fullUrl = shareUrl ? (shareUrl.startsWith('http') ? shareUrl : `${window.location.origin}${shareUrl}`) : window.location.href;
+                                        navigator.clipboard.writeText(fullUrl);
 
+                                    },
+                                    viewBox: "0 0 24 24",
+                                }
+                            ]}
+                        />
+                    </div>
                 </div>
 
                 <div className={`text-base py-2.5 ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
@@ -105,6 +105,7 @@ const Review = ({ item, imageBig }: ReviewProps) => {
                     likes={item.likes}
                     isLiked={item.isLiked}
                     shareUrl={item.shareUrl}
+                    onCommentClick={onCommentClick}
                 />
 
             </div>

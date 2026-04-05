@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems } from "@headlessui/react";
+import ActionMenu from "@/components/ActionMenu";
 import { toast } from "react-hot-toast";
 import Icon from "@/components/Icon";
 import Alert from "@/components/Alert";
 import Comment from "@/components/Comment";
 import LikeButton from "@/components/LikeButton";
+import { getSocialShareItems } from "@/utils/share";
 
 type ActionsProps = {
     postId: string;
@@ -15,13 +16,28 @@ type ActionsProps = {
     showComment?: boolean;
     shareUrl?: string;
     type?: 'post' | 'comment';
+    onCommentClick?: () => void;
 };
 
-const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLiked, className, showComment = true, shareUrl, type = 'post' }: ActionsProps) => {
+const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLiked, className, showComment = true, shareUrl, type = 'post', onCommentClick }: ActionsProps) => {
 
     // Comment state
     const [isCommentOpen, setIsCommentOpen] = useState(false);
     const [commentValue, setCommentValue] = useState("");
+
+    const shareItems = getSocialShareItems({
+        url: shareUrl || `/post/${postId}`,
+        onCopySuccess: () => {
+            toast.custom((t) => (
+                <Alert
+                    className="mb-0 shadow-md"
+                    type="success"
+                    message="Link copied to clipboard"
+                    onClose={() => toast.dismiss(t.id)}
+                />
+            ), { position: "bottom-right" });
+        }
+    });
 
     return (
         <>
@@ -31,7 +47,15 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
 
 
                 {showComment && (
-                    <button className="flex items-center gap-1 ml-4 px-0">
+                    <button
+                        className="flex items-center gap-1 ml-4 px-0 cursor-pointer"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (onCommentClick) {
+                                onCommentClick();
+                            }
+                        }}
+                    >
                         <Icon name="comments" className="icon-22" viewBox="0 0 24 24" />
                         <span className="text-sm">{comments}</span>
                     </button>
@@ -40,65 +64,17 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
 
 
                 {type === 'post' ? (
-                    <MenuDropdown as="div" className="ml-4 relative">
-                        <MenuButton
-                            className="px-0 cursor-pointer flex items-center"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <Icon name="reply" className="icon-18 dark:fill-white" viewBox="0 0 512 512" />
-                        </MenuButton>
-                        <MenuItems
-                            transition
-                            portal
-                            anchor="bottom end"
-                            className="z-100 w-[14.69rem] py-2 border border-n-1 bg-white shadow-primary-4 dark:bg-n-1 dark:border-white [--anchor-gap:10px] transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
-                        >
-                            <MenuItem
-                                className="flex items-center cursor-pointer w-full h-10 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
-                                as="button"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    const fullUrl = shareUrl ? (shareUrl.startsWith('http') ? shareUrl : `${window.location.origin}${shareUrl}`) : window.location.href;
-                                    navigator.clipboard.writeText(fullUrl);
-                                    toast.custom((t) => (
-                                        <Alert
-                                            className="mb-0 shadow-md"
-                                            type="success"
-                                            message="Link copied to clipboard"
-                                            onClose={() => toast.dismiss(t.id)}
-                                        />
-                                    ), { position: "bottom-right" });
-                                }}
-                            >
-                                <Icon className="-mt-0.25 mr-3 fill-n-1 dark:fill-white" name="copy" viewBox="0 0 24 24" />
-                                Copy link
-                            </MenuItem>
-                            <MenuItem
-                                className="flex items-center cursor-pointer w-full h-10 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
-                                as="button"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    const fullUrl = shareUrl ? (shareUrl.startsWith('http') ? shareUrl : `${window.location.origin}${shareUrl}`) : window.location.href;
-                                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`, '_blank');
-                                }}
-                            >
-                                <Icon className="-mt-0.25 mr-3 fill-n-1 dark:fill-white" name="facebook" />
-                                Share on Facebook
-                            </MenuItem>
-                            <MenuItem
-                                className="flex items-center cursor-pointer w-full h-10 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
-                                as="button"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    const fullUrl = shareUrl ? (shareUrl.startsWith('http') ? shareUrl : `${window.location.origin}${shareUrl}`) : window.location.href;
-                                    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(fullUrl)}`, '_blank');
-                                }}
-                            >
-                                <Icon className="-mt-0.25 mr-3 fill-n-1 dark:fill-white" name="twitter" />
-                                Share on Twitter
-                            </MenuItem>
-                        </MenuItems>
-                    </MenuDropdown>
+                    <ActionMenu
+                        className="ml-4"
+                        buttonClass="px-0 cursor-pointer flex items-center focus:outline-none"
+                        iconName="reply"
+                        iconClass="icon-18 dark:fill-white"
+                        iconViewBox="0 0 512 512"
+                        anchor="bottom end"
+                        portal
+                        menuItemsClass="z-[9999] border border-n-4 rounded-sm w-[14.69rem] py-2 bg-white dark:bg-n-1 focus:outline-none [--anchor-gap:10px] transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                        items={shareItems}
+                    />
                 ) : (
                     showComment && (
                         <button
@@ -106,12 +82,16 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setIsCommentOpen(!isCommentOpen);
+                                if (onCommentClick) {
+                                    onCommentClick();
+                                }
                             }}
                         >
                             <Icon name="reply" className="icon-18 dark:fill-white" viewBox="0 0 512 512" />
                         </button>
                     )
                 )}
+
             </div>
             {isCommentOpen && type === 'comment' && (
                 <Comment
