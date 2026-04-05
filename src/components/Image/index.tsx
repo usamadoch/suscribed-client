@@ -88,7 +88,7 @@ const Image = (props: ImageProps) => {
     const { src, alt, ...legacyProps } = props as LegacyImageProps;
     return (
         <NextImage
-            className={`inline-block align-top transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"
+            className={`inline-block align-top transition-opacity  border border-n-4 duration-300 ${loaded ? "opacity-100" : "opacity-0"
                 } ${className || ''}`}
             src={src || ''}
             alt={alt || ''}
