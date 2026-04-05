@@ -5,8 +5,8 @@ import { useParams } from "next/navigation";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useCreatorPage } from "@/hooks/useQueries";
 
-import Modal from "@/components/Modal";
 import Loader from "@/components/Loader";
+import PublishModal from "@/components/modals/PublishModal";
 
 import { pageApi } from "@/lib/api";
 
@@ -66,55 +66,13 @@ const DraftBanner = () => {
                 </div>
             </div>
 
-            <Modal
+            <PublishModal
                 visible={showPublishModal}
                 onClose={() => setShowPublishModal(false)}
-                title="Publish Page"
-                classOverlay="!bg-white/50 dark:!bg-n-1/85"
-                classWrap=" border border-n-1"
-            >
-                <div className="space-y-4">
-                    <p className="text-base text-n-2">
-                        Are you sure you want to publish your page? It will become visible to everyone.
-                    </p>
-
-                    {missingFields.length > 0 && (
-                        <div className=" p-4 border border-n-1 shadow-primary-4 ">
-                            <h6 className="text-n-2 text-h6 dark:text-purple-200 font-medium mb-2 flex items-center gap-2">
-                                <span className="text-lg">⚠️</span> Complete your profile
-                            </h6>
-                            <p className="text-base text-n-2 dark:text-purple-300 mb-2">
-                                Your page is looking a bit empty! Consider adding the following before publishing:
-                            </p>
-                            <ul className="list-[square] pl-5 text-sm font-medium text-n-2 dark:text-purple-300 space-y-1">
-                                {missingFields.map(field => (
-                                    <li key={field}>{field}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-
-                    <div className="flex gap-3 pt-4">
-
-                        <button
-                            className="btn-stroke w-full btn-medium px-10"
-                            type="button"
-                            onClick={() => setShowPublishModal(false)}
-                        >
-                            Cancel
-                        </button>
-
-                        <button
-                            className="btn-purple w-full btn-medium px-10 md:bg-transparent! md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
-
-                            onClick={() => publishMutation.mutate()}
-                            disabled={publishMutation.isPending}
-                        >
-                            {publishMutation.isPending ? <Loader /> : 'Publish'}
-                        </button>
-                    </div>
-                </div>
-            </Modal>
+                missingFields={missingFields}
+                onPublish={() => publishMutation.mutate()}
+                isPending={publishMutation.isPending}
+            />
         </>
     );
 };

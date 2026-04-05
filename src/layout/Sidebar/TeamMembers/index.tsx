@@ -30,9 +30,9 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
     if (isLoading) {
         return (
             <>
-                <div className={`mb-3 overflow-hidden whitespace-nowrap text-xs font-medium text-white/50 ${visible ? "w-full opacity-100" : "xl:w-0 xl:opacity-0"}`}>
+                {/* <div className={`mb-3 overflow-hidden whitespace-nowrap uppercase text-xs font-medium text-white/50 ${visible ? "w-full opacity-100" : "xl:w-0 xl:opacity-0"}`}>
                     My Members
-                </div>
+                </div> */}
                 <div className="-mx-4">
                     {[1, 2, 3, 4].map((i) => (
                         <div key={i} className={`flex items-center h-9.5 mb-1.5 px-4 ${visible ? "px-4" : "xl:px-0"}`}>
@@ -49,12 +49,12 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
 
     return (
         <>
-            <div
+            {/* <div
                 className={`mb-3 overflow-hidden whitespace-nowrap text-xs font-medium text-white/50 ${visible ? "w-full opacity-100" : "xl:w-0 xl:opacity-0"
                     }`}
             >
                 My Members
-            </div>
+            </div> */}
             <div className="-mx-4">
                 {displayedMemberships.map((item: Member) => {
                     const page = item.pageId as CreatorPage;

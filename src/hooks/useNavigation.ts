@@ -12,6 +12,7 @@ export type NavigationItem = {
     title: string;
     icon: string;
     url: string;
+    category?: string;
     roles?: string[];
     permissions?: Permission[];
     target?: string;
@@ -20,6 +21,9 @@ export type NavigationItem = {
     counterColor?: string;
     suffixIcon?: string;
     suffixIconViewBox?: string;
+    suffixIconBg?: boolean;
+    suffixText?: string;
+    suffixUrl?: string;
 };
 
 export const useNavigation = () => {
@@ -47,29 +51,42 @@ export const useNavigation = () => {
             return true;
         });
 
+        let newNav = [...filteredNav];
+
         // Inject "Your Page" for creators (or those with page:manage)
         if (hasPermission(user.role, 'page:manage') && pageSlug) {
             // Find index of Dashboard to insert after
-            const dashboardIndex = filteredNav.findIndex(item => item.url === '/dashboard');
+            const dashboardIndex = newNav.findIndex(item => item.url === '/dashboard');
 
             if (dashboardIndex !== -1) {
                 const yourPageLink: NavigationItem = {
                     title: "Your Page",
                     icon: "profile", // Ensure this icon exists in your Icon component
                     url: `/${pageSlug}`,
+                    category: "Creator",
                     target: "_blank",
                     suffixIcon: "new-window",
                     suffixIconViewBox: "0 0 24 24"
                 };
 
                 // Insert after Dashboard
-                const newNav = [...filteredNav];
                 newNav.splice(dashboardIndex + 1, 0, yourPageLink);
-                return newNav;
             }
         }
 
-        return filteredNav;
+        // Add suffix to posts
+        const postsIndex = newNav.findIndex(item => item.url === '/posts');
+        if (postsIndex !== -1) {
+            newNav[postsIndex] = {
+                ...newNav[postsIndex],
+                suffixIcon: "plus",
+                suffixIconBg: true,
+                suffixText: "Create Post",
+                suffixUrl: "/posts/new"
+            };
+        }
+
+        return newNav;
     }, [user?.role, pageSlug]);
 
     return navItems;

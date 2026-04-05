@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems } from "@headlessui/react";
+import ActionMenu from "@/components/ActionMenu";
 
 import Logo from "@/components/Logo";
 import Image from "@/components/Image";
@@ -18,7 +18,7 @@ const Sidebar = ({ }: SidebarProps) => {
 
     return (
         <div
-            className={`fixed top-0 left-0 bottom-0 flex flex-col w-75 pt-6 px-8 pb-4.5 bg-n-1  overflow-auto scroll-smooth xl:z-30 md:hidden ${visible ? "w-75" : "xl:w-20"
+            className={`fixed top-0 left-0 bottom-0 flex flex-col w-75 py-6 px-8 bg-background border-r border-n-4 overflow-auto scroll-smooth xl:z-30 md:hidden ${visible ? "w-75" : "xl:w-20"
                 }`}
         >
             <div className="flex justify-between items-center h-[1.625rem] mb-11">
@@ -38,16 +38,15 @@ const Sidebar = ({ }: SidebarProps) => {
             <TeamMembers visible={visible} />
             {/* </div> */}
             <div
-                className={`flex items-center h-18 mt-auto mx-0 pt-10 ${visible ? "mx-0" : "xl:-mx-4"
+                className={`flex items-center mt-auto mx-0 pt-10 ${visible ? "mx-0" : "xl:-mx-4"
                     }`}
             >
                 <div
-                    className={`inline-flex items-center font-bold text-white text-sm transition-colors ${visible ? "mx-0 text-sm" : "xl:mx-auto xl:text-0"
+                    className={`inline-flex items-center font-semibold text-n-1 text-sm transition-colors ${visible ? "mx-0 text-sm" : "xl:mx-auto xl:text-0"
                         }`}
-                // href="/settings"
                 >
                     <div
-                        className={`relative w-5.5 h-5.5 mr-2.5 rounded-full overflow-hidden ${visible ? "mr-2.5" : "xl:mr-0"
+                        className={`relative w-5.5 h-5.5 mr-2.5  border border-n-4 rounded-full overflow-hidden ${visible ? "mr-2.5" : "xl:mr-0"
                             }`}
                     >
                         <Image
@@ -60,29 +59,23 @@ const Sidebar = ({ }: SidebarProps) => {
                     {user?.displayName || "User"}
                 </div>
 
-                <MenuDropdown className={`relative ml-auto ${visible ? "block" : "xl:hidden"}`} as="div">
-                    <MenuButton className="btn-transparent-light btn-square btn-small cursor-pointer">
-                        <Icon name="dots" />
-                    </MenuButton>
-                    <MenuItems
-                        transition
-                        portal
-                        anchor="top start"
-                        className="z-100 w-[14.69rem] py-2 border border-n-1 bg-white shadow-primary-4 dark:bg-n-1 dark:border-white [--anchor-gap:10px] transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
-                    >
-                        <MenuItem
-                            className="flex items-center cursor-pointer w-full h-10 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
-                            as="button"
-                            onClick={logout}
-                        >
-                            <Icon
-                                className="-mt-0.25 mr-3 fill-n-1 dark:fill-white"
-                                name="arrow-next"
-                            />
-                            Logout
-                        </MenuItem>
-                    </MenuItems>
-                </MenuDropdown>
+                <ActionMenu
+                    className={`ml-auto ${visible ? "block" : "xl:hidden"}`}
+                    buttonClass="btn-transparent-light fill-n-1 btn-square btn-small cursor-pointer"
+                    anchor="top start"
+                    showFooterLinks
+
+                    menuItemsClass="z-[9999] w-[14.69rem] py-2 bg-white dark:bg-n-1 focus:outline-none [--anchor-gap:10px] transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                    portal
+
+                    items={[
+                        {
+                            label: "Logout",
+                            icon: "arrow-next",
+                            onClick: logout,
+                        }
+                    ]}
+                />
             </div>
         </div>
     );

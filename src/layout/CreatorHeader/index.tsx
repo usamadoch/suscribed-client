@@ -13,8 +13,6 @@ import { usePathname, useParams } from "next/navigation";
 import Image from "@/components/Image";
 import { useCreatorPage, usePost } from "@/hooks/useQueries";
 
-import Icon from "@/components/Icon";
-
 import { useCreatorHeader } from "@/context/CreatorHeaderContext";
 
 type CreatorHeaderProps = {
@@ -77,7 +75,7 @@ const CreatorHeader = ({ pageName = "Creator Page", pageSlug }: CreatorHeaderPro
 
     return (
         <header
-            className={`top-0 left-0 right-0 z-20 border-b border-n-1 dark:border-white transition-colors ${headerStyle ? "bg-white dark:bg-n-1" : "bg-transparent"
+            className={`top-0 left-0 right-0 z-20 border-b border-n-4 dark:border-white transition-colors ${headerStyle ? "bg-white dark:bg-n-1" : "bg-transparent"
                 }`}
         >
             <div className="flex justify-between items-center mx-auto w-full h-14 px-6 2xl:px-8 lg:px-6 md:px-5">
