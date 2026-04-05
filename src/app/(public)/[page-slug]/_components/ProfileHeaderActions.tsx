@@ -4,7 +4,7 @@
 
 
 import Link from "next/link";
-import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems, Transition } from "@headlessui/react";
+import ActionMenu from "@/components/ActionMenu";
 import Icon from "@/components/Icon";
 
 type ProfileHeaderActionsProps = {
@@ -29,7 +29,7 @@ const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: 
     return (
         <div className="flex shrink-0 max-w-80 w-full 4xl:w-59">
             <button
-                className={`btn-purple h-12 grow ${isMember ? "opacity-75" : ""}`}
+                className={`btn-purple btn-medium grow ${isMember ? "opacity-75" : ""}`}
                 onClick={isMember ? undefined : onJoinClick}
                 disabled={isMember}
             >
@@ -37,33 +37,18 @@ const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: 
                 <span>{isMember ? "Member" : "Become a Member"}</span>
             </button>
 
-            <MenuDropdown className="relative ml-1.5 shrink-0" as="div">
-                <MenuButton className="btn-purple h-12 px-4">
-                    <Icon name="dots" />
-                </MenuButton>
-                <Transition
-                    enter="transition duration-100 ease-out"
-                    enterFrom="transform scale-95 opacity-0"
-                    enterTo="transform scale-100 opacity-100"
-                    leave="transition duration-75 ease-out"
-                    leaveFrom="transform scale-100 opacity-100"
-                    leaveTo="transform scale-95 opacity-0"
-                >
-                    <MenuItems className="absolute right-0 top-full mt-2 w-[14.69rem] py-2 border border-n-1 bg-white shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
-                        <MenuItem
-                            className="flex items-center cursor-pointer w-full h-10 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
-                            as="button"
-                            onClick={onShareClick}
-                        >
-                            <Icon
-                                className="-mt-0.25 mr-3 fill-n-1 dark:fill-white"
-                                name="share"
-                            />
-                            Share
-                        </MenuItem>
-                    </MenuItems>
-                </Transition>
-            </MenuDropdown>
+            <ActionMenu
+                className="ml-4 shrink-0"
+                buttonClass="btn-purple btn-medium px-4 focus:outline-none"
+                items={[
+                    {
+                        icon: "share",
+                        label: "Share",
+                        onClick: onShareClick,
+                        className: "flex items-center cursor-pointer w-full h-8 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
+                    }
+                ]}
+            />
         </div>
     );
 };

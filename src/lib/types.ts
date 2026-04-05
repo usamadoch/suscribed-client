@@ -626,7 +626,8 @@ export interface Tier {
     isHighlighted: boolean;
     status: TierStatus;
     activeSubscribers: number;
-    stripeProductId?: string;
+    safepayPlanId?: string;
+    safepayYearlyPlanId?: string;
     stripePriceId?: string;
     createdAt: string;
     updatedAt: string;
@@ -647,4 +648,22 @@ export interface Subscription {
     stripeCustomerId?: string;
     createdAt: string;
     updatedAt: string;
+}
+export interface ReviewItem {
+    id: string;
+    avatar: string;
+    author: string;
+    time: string;
+    content: string;
+    images: string[];
+    likes: number;
+    comments: number;
+    isLiked: boolean;
+    isLocked: boolean;
+    shareUrl?: string;
+    isOwner?: boolean;
+    video?: {
+        thumbnailUrl?: string;
+        duration?: number;
+    };
 }

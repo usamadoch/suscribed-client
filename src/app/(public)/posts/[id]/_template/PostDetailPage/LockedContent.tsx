@@ -1,5 +1,5 @@
 import Loader from "@/components/Loader";
-import LoginModal from "@/components/LoginModal";
+import LoginModal from "@/components/modals/LoginModal";
 import Icon from "@/components/Icon";
 
 interface LockedContentProps {

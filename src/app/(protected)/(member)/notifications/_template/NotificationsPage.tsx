@@ -67,35 +67,44 @@ const NotificationsPage = () => {
 
     // console.log(notifications);
 
+    if (isLoading) {
+        return (
+            <div className="flex grow items-center justify-center">
+                <Loader />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex grow items-center justify-center gap-3">
+                <Icon name="info-circle" className="w-6 h-6 fill-n-1 dark:fill-white" />
+                <p className="text-n-1 dark:text-white">Failed to load notifications</p>
+            </div>
+        );
+    }
+
+    if (notifications.length === 0) {
+        return (
+            <Empty
+                title="No notifications yet"
+                content="You'll get updates when people join your community, interact with your posts and more."
+                imageSvg={
+                    <Icon
+                        name="notification"
+                        className="w-8 h-8 fill-n-1 dark:fill-white"
+                    />
+                }
+            />
+        );
+    }
+
     return (
-        <>
-            {isLoading ? (
-                <div className="flex items-center justify-center">
-                    <Loader />
-                </div>
-            ) : error ? (
-                <div className="flex items-center justify-center gap-3">
-                    <Icon name="info-circle" className="w-6 h-6 fill-n-1 dark:fill-white" />
-                    <p className="text-n-1 dark:text-white">Failed to load notifications</p>
-                </div>
-            ) : notifications.length === 0 ? (
-                <Empty
-                    title="No notifications yet"
-                    content="You'll get updates when people join your community, interact with your posts and more."
-                    imageSvg={
-                        <Icon
-                            name="notification"
-                            className="w-24 h-24 fill-n-1 dark:fill-white"
-                        />
-                    }
-                />
-            ) : (
-                <>
-                    <NotificationList notifications={notifications} mounted={mounted} />
-                    {/* <TablePagination /> */}
-                </>
-            )}
-        </>
+        <div className="flex pt-4 lg:block">
+            <div className="w-[calc(100%-20rem)] pl-26.5 4xl:w-[calc(100%-14.7rem)] 2xl:pl-10 lg:w-full lg:pl-0">
+                <NotificationList notifications={notifications} mounted={mounted} />
+            </div>
+        </div>
     );
 };
 

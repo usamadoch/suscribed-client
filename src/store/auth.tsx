@@ -246,7 +246,7 @@ export function RequireAuth({ children, fallback }: RouteGuardProps) {
 export function RequireCreator({ children, fallback }: RouteGuardProps) {
     const { user, isAuthenticated, isLoading } = useAuth();
 
-    console.log(user);
+    // console.log(user);
 
     const router = useRouter();
 

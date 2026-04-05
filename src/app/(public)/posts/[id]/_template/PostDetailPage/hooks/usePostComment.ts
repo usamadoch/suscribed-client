@@ -18,13 +18,7 @@ export const usePostComment = (postId: string) => {
             const { comment } = await postApi.addComment(postId, {
                 content: commentValue,
             });
-            toast.custom((t) =>
-                createElement(Alert, {
-                    type: "success",
-                    message: "Your comment has been successfully.",
-                    onClose: () => toast.dismiss(t.id),
-                })
-            );
+
             setCommentValue("");
 
             // Optimistic cache update
@@ -39,13 +33,7 @@ export const usePostComment = (postId: string) => {
             queryClient.invalidateQueries({ queryKey: ["post", postId] });
         } catch (error) {
             console.error(error);
-            toast.custom((t) =>
-                createElement(Alert, {
-                    type: "error",
-                    message: "Failed to publish your comment. Please try again later.",
-                    onClose: () => toast.dismiss(t.id),
-                })
-            );
+
         } finally {
             setIsSubmittingComment(false);
         }

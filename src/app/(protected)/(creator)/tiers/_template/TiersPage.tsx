@@ -6,8 +6,14 @@ import { Tier } from '@/lib/types';
 import { useTiers } from '../useTiers';
 import Loader from '@/components/Loader';
 import PlanCard from '@/components/PlanCard';
-import Modal from '@/components/Modal';
-import Select from '@/components/Select';
+import HighlightTierModal from '@/components/modals/HighlightTierModal';
+
+
+
+
+
+
+
 export default function TiersPage() {
     const { plans, isLoading, updatePlan, isUpdating } = useTiers();
     const router = useRouter();
@@ -99,41 +105,15 @@ export default function TiersPage() {
                 </div>
             )}
 
-            <Modal
+            <HighlightTierModal
                 visible={isHighlightModalOpen}
                 onClose={() => setIsHighlightModalOpen(false)}
-                title="Highlight a Tier"
-                classOverlay="!bg-n-1/60 dark:!bg-n-1/60"
-                classWrap=" border border-n-1"
-            >
-                <div className="space-y-6">
-                    <Select
-                        label="Select Highlighted Tier"
-                        items={plans.map(p => ({ id: p._id, title: p.name }))}
-                        value={selectedTier}
-                        onChange={setSelectedTier}
-                        classButton='h-12'
-                        placeholder="Choose a tier..."
-                    />
-                    <div className="flex justify-end gap-3 pt-2">
-                        <button
-                            type="button"
-                            onClick={() => setIsHighlightModalOpen(false)}
-                            className="btn-stroke btn-medium min-w-[100px]"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="button"
-                            disabled={!selectedTier || isUpdating}
-                            onClick={handleHighlightSave}
-                            className="btn-purple btn-medium min-w-[100px] disabled:opacity-50 disabled:pointer-events-none"
-                        >
-                            Save
-                        </button>
-                    </div>
-                </div>
-            </Modal>
+                plans={plans}
+                selectedTier={selectedTier}
+                setSelectedTier={setSelectedTier}
+                onSave={handleHighlightSave}
+                isUpdating={isUpdating}
+            />
         </div>
     );
 }

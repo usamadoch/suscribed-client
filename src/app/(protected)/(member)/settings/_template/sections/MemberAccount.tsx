@@ -122,7 +122,7 @@ const MemberAccount = () => {
                         />
                     )}
                     <div className="flex items-center w-[calc(50%-1.5rem)] -mt-2 mx-3 md:w-full md:mb-6 md:mt-0 md:mx-0 md:last:mb-0">
-                        <div className="mt-8 relative shrink-0 w-27.5 h-27.5 mr-3 cursor-pointer shadow-primary-4 rounded-full group" onClick={handleAvatarClick}>
+                        <div className="mt-8 relative shrink-0 w-27.5 h-27.5 mr-3 cursor-pointer rounded-full group" onClick={handleAvatarClick}>
                             <Image
                                 className="object-cover rounded-full"
                                 src={(previewAvatar || user?.avatarUrl || "/images/avatars/avatar-1.jpg") as string}
@@ -151,7 +151,7 @@ const MemberAccount = () => {
                             <Field
                                 className="w-[calc(50%-1.25rem)] mx-2.5 mt-4"
                                 label="Display Name"
-                                classInput="h-12"
+                                classInput="h-12 border-n-4"
                                 placeholder="Enter display name"
                                 error={errors.displayName}
                                 {...register("displayName", { required: "Display name is required" })}
@@ -160,7 +160,7 @@ const MemberAccount = () => {
                                 className="w-[calc(50%-1.25rem)] mx-2.5 mt-4"
                                 label="Username"
                                 placeholder="Enter username"
-                                classInput="h-12"
+                                classInput="h-12 border-n-4"
                                 error={errors.username}
                                 {...register("username", { required: "Username is required" })}
                             />
@@ -168,7 +168,7 @@ const MemberAccount = () => {
                                 className="w-[calc(100%-1.25rem)] mt-4 mx-2.5"
                                 label={`Bio (${bio?.length || 0}/500)`}
                                 placeholder="Enter bio"
-
+                                classInput=" border-n-4"
                                 textarea
                                 maxLength={500}
                                 {...register("bio", { maxLength: 500 })}

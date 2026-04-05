@@ -22,7 +22,7 @@ export default function EarningsPage() {
 
     const renderBanner = () => {
         return (
-            <div className="bg-[#daf464] border border-n-1 px-5 py-4 mb-6 shadow-primary-4 ">
+            <div className="bg-[#daf464] border border-n-4 px-5 py-4 mb-6">
                 <div className='flex flex-col items-start gap-2 justify-between'>
 
 
@@ -50,33 +50,33 @@ export default function EarningsPage() {
             <div className='card'>
                 <div className="flex lg:block dark:border-white">
                     {/* Available Balance Box */}
-                    <div className="flex-1 px-5 py-4 border-r border-n-1 last:border-none lg:border-r-0 lg:border-b dark:border-white">
-                        <div className="flex justify-between items-center mb-3">
-                            <div className="text-sm text-n-3 dark:text-white/75">
+                    <div className="flex-1 px-5 py-4 border-r border-n-4 last:border-none lg:border-r-0 lg:border-b dark:border-white">
+                        <div className="flex justify-between items-center mb-2">
+                            <div className="text-sm capitalize dark:text-white/75">
                                 Available Balance
                             </div>
                         </div>
-                        <div className="mb-1 text-h5">${((summary?.availableBalance || 0) / 100).toFixed(2)}</div>
+                        <div className="text-h5">${((summary?.availableBalance || 0) / 100).toFixed(2)}</div>
                     </div>
 
                     {/* Pending Balance Box */}
-                    <div className="flex-1 px-5 py-4 border-r border-n-1 last:border-none lg:border-r-0 lg:border-b dark:border-white">
-                        <div className="flex justify-between items-center mb-3">
-                            <div className="text-sm text-n-3 dark:text-white/75">
+                    <div className="flex-1 px-5 py-4 border-r border-n-4 last:border-none lg:border-r-0 lg:border-b dark:border-white">
+                        <div className="flex justify-between items-center mb-2">
+                            <div className="text-sm capitalize dark:text-white/75">
                                 Pending Balance
                             </div>
                         </div>
-                        <div className="mb-1 text-h5">${((summary?.pendingBalance || 0) / 100).toFixed(2)}</div>
+                        <div className="text-h5 ">${((summary?.pendingBalance || 0) / 100).toFixed(2)}</div>
                     </div>
 
                     {/* Lifetime Earnings Box */}
-                    <div className="flex-1 px-5 py-4 border-r border-n-1 last:border-none lg:border-r-0 lg:border-b dark:border-white">
-                        <div className="flex justify-between items-center mb-3">
-                            <div className="text-sm text-n-3 dark:text-white/75">
+                    <div className="flex-1 px-5 py-4 border-r border-n-4 last:border-none lg:border-r-0 lg:border-b dark:border-white">
+                        <div className="flex justify-between items-center mb-2">
+                            <div className="text-sm capitalize dark:text-white/75">
                                 Lifetime Earnings
                             </div>
                         </div>
-                        <div className="mb-1 text-h5">${((summary?.lifetimeEarnings || 0) / 100).toFixed(2)}</div>
+                        <div className="text-h5">${((summary?.lifetimeEarnings || 0) / 100).toFixed(2)}</div>
                     </div>
                 </div>
             </div>

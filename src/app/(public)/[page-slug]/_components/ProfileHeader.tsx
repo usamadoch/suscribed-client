@@ -5,9 +5,9 @@ import React, { useState, useCallback } from "react";
 import Image from "@/components/Image";
 import ProfileSocials from "./ProfileSocials";
 import ProfileHeaderActions from "./ProfileHeaderActions";
-import LoginModal from "@/components/LoginModal";
-import ShareModal from "@/components/ShareModal";
-import JoinTierModal from "@/components/JoinTierModal";
+import LoginModal from "@/components/modals/LoginModal";
+import ShareModal from "@/components/modals/ShareModal";
+import JoinTierModal from "@/components/modals/JoinTierModal";
 import ReadMore from "@/components/ReadMore";
 
 import { CreatorPage } from "@/lib/types";
@@ -78,9 +78,9 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                 <div className="flex flex-1 items-start">
                     {/* Avatar Section */}
                     <div className="relative shrink-0 w-27.5 h-27.5">
-                        {(optimisticAvatar || page.avatarUrl) && (
+                        {/* {(optimisticAvatar || page.avatarUrl) && (
                             <div className="absolute top-1 left-1 w-full h-full rounded-full bg-[#4ADBC8] border border-black"></div>
-                        )}
+                        )} */}
                         <div className="relative w-full h-full rounded-full z-10">
                             {isOwner ? (
                                 <PageImageUploader
@@ -112,12 +112,12 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                     </div>
 
                     <div className="text-n-1 dark:text-white pl-4">
-                        <h4 className="capitalize mb-2 text-h4 font-medium md:text-h3">{page.displayName}</h4>
+                        <h5 className="capitalize mb-4 text-h5 md:text-h3">{page.displayName}</h5>
                         <div className="flex items-center font-medium text-n-3">
-                            <span className="text-sm mr-6 md:mr-4">{page.memberCount || 0} Members</span>
+                            <span className="text-sm mr-2 md:mr-4">{page.memberCount || 0} Members</span>
                             <span className="text-sm">{page.postCount || 0} Posts</span>
                         </div>
-                        <p className="mt-4 text-base text-n-3 ">
+                        <p className="mt-1 text-base text-n-3 ">
                             <ReadMore words={20} >
                                 {page.tagline || page.about || "No description available."}
                             </ReadMore>

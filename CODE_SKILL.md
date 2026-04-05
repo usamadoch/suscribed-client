@@ -229,3 +229,21 @@ Magic value?            → Move to constants/
 ---
 
 *Last updated: 2026 | Version: 1.0 | Apply to all projects unless a project-specific override exists.*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

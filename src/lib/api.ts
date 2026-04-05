@@ -862,9 +862,35 @@ export const membershipPlanApi = {
         });
     },
 
-    async subscribeMock(planId: string): Promise<Subscription> {
-        return fetchApi(`/tiers/${planId}/subscribe`, {
+    async updatePlanPrice(id: string, price: number): Promise<Tier> {
+        return fetchApi(`/tiers/${id}/price`, {
+            method: 'PUT',
+            body: JSON.stringify({ price }),
+        });
+    },
+
+    async subscribeToPlan(tierId: string, interval: 'MONTHLY' | 'YEARLY' = 'MONTHLY'): Promise<{ checkoutUrl: string }> {
+        return fetchApi<{ checkoutUrl: string }>(`/tiers/${tierId}/subscribe`, {
+            method: 'POST',
+            body: JSON.stringify({ interval }),
+        });
+    },
+
+    async confirmSubscription(tierId: string, tracker?: string): Promise<Subscription> {
+        const query = tracker ? `?tracker=${tracker}` : "";
+        return fetchApi(`/tiers/${tierId}/confirm${query}`, {
             method: 'POST',
         });
+    },
+
+    async createTokenizationSession(tierId: string): Promise<any> {
+        return fetchApi('/tokenization/session', {
+            method: 'POST',
+            body: JSON.stringify({ tierId }),
+        });
+    },
+
+    async getSubscriptionStatus(tracker: string): Promise<{ status: string; tracker: string }> {
+        return fetchApi(`/subscription/status?tracker=${tracker}`);
     },
 };

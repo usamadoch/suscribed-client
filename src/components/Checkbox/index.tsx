@@ -29,7 +29,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 <span
                     className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${isChecked
                         ? "bg-green-1 border-green-1 dark:border-green-1!"
-                        : "bg-transparent border-n-1 dark:border-white"
+                        : "bg-transparent border-n-4 dark:border-white"
                         }`}
                 >
                     <Icon

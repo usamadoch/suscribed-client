@@ -17,7 +17,7 @@ const CommentItem = ({ comment, variant = 'default' }: CommentItemProps) => {
     // "default" applies the card style (border, shadow, padding)
     // "modal" applies a cleaner style (no border, minimal padding/margin)
     const containerClasses = variant === 'default'
-        ? "flex p-5 pb-3 card last:mb-0"
+        ? "flex p-5 pb-3 card bg-background border-none last:mb-0"
         : "flex last:mb-0";
 
     return (

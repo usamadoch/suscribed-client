@@ -18,7 +18,7 @@ export default function TierPreview({ name, price, description, benefits }: Tier
                             <h3 className="text-h5">{name || 'Tier Name'}</h3>
                         </div>
                         <div className="mb-4">
-                            <span className="text-h2">${Number.isNaN(price) ? 0 : price}</span>
+                            <span className="text-h2">PKR {Number.isNaN(price) ? 0 : price}</span>
                             <span className="text-n-3 dark:text-n-4 lg:font-bold">/mo</span>
                         </div>
 

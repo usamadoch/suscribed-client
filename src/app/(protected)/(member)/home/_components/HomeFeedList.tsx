@@ -3,7 +3,7 @@ import { useHomeFeed } from "@/hooks/useQueries";
 import { Post } from "@/lib/types";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Loader from "@/components/Loader";
-import PostModal from "@/components/PostModal";
+import PostModal from "@/components/modals/PostModal";
 
 import CaughtUpMessage from "./CaughtUpMessage";
 import FeedItem from "./FeedItem";

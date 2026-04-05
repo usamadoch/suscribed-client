@@ -54,12 +54,27 @@ module.exports = {
                     1: "#98E9AB",
                     2: "#EAFBEE",
                 },
+                // n: {
+                //     1: "#000000",
+                //     2: "#161616",
+                //     3: "#5F646D",
+                //     4: "#E7E8E9",
+                //     5: "#9A9EA5",
+                //     6: "#C8CACD",
+                //     7: "#F7F7F8",
+                // },
+
                 n: {
-                    1: "#000000",
-                    2: "#161616",
-                    3: "#5F646D",
-                    4: "#E7E8E9",
+                    1: "#1A1714",
+                    2: "#2C2622",
+                    3: "#726C67",
+                    4: "#E2DDD8",
+                    5: "#A5A09B",
+                    6: "#C5C0BB",
+                    7: "#F5F2EF",
                 },
+
+
                 white: "#FFFFFF",
                 background: "#FAF4F0",
             },
@@ -233,7 +248,7 @@ module.exports = {
                         {},
                 },
                 ".label-stroke": {
-                    "@apply label border-n-1 dark:border-white dark:text-white":
+                    "@apply label border-n-4 dark:border-white dark:text-white":
                         {},
                 },
                 ".label-stroke-yellow": {
@@ -262,7 +277,7 @@ module.exports = {
                         {},
                 },
                 ".table-custom": {
-                    "@apply table w-full border border-n-1 bg-white dark:bg-n-1 dark:border-white":
+                    "@apply table w-full border border-n-4 bg-white dark:bg-n-1 dark:border-white":
                         {},
                 },
                 ".table-select": {
@@ -274,19 +289,19 @@ module.exports = {
                         {},
                 },
                 ".td-custom": {
-                    "@apply table-cell h-[3.875rem] px-3 py-2.5 align-middle border-t border-n-1 text-sm first:pl-5 last:pr-5 dark:border-white":
+                    "@apply table-cell h-[3.875rem] px-3 py-2.5 align-middle border-t border-n-4 text-sm first:pl-5 last:pr-5 dark:border-white":
                         {},
                 },
                 ".card": {
-                    "@apply bg-white border border-n-1 dark:bg-n-1 dark:border-white":
+                    "@apply bg-white border border-n-4 dark:bg-n-1 dark:border-white":
                         {},
                 },
                 ".card-head": {
-                    "@apply flex justify-between items-center min-h-[4rem] px-5 py-3 border-b border-n-1 dark:border-white":
+                    "@apply flex justify-between items-center min-h-[4rem] px-5 py-3 border-b border-n-4 dark:border-white":
                         {},
                 },
                 ".card-title": {
-                    "@apply p-5 border-b border-n-1 text-h6 dark:border-white":
+                    "@apply p-5 border-b border-n-4 text-h6 dark:border-white":
                         {},
                 },
                 ".icon-16": {

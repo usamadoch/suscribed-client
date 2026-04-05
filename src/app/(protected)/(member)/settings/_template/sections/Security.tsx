@@ -73,9 +73,9 @@ const Security = ({ }: SecurityProps) => {
         return (
             <div className="card">
                 <div className="card-title">Security Settings</div>
-                <div className="p-5 text-n-3 dark:text-white/75">
+                <p className="p-5 text-sm text-n-1 dark:text-white/75">
                     Your account is managed via Google Login. You don't need to set a password.
-                </div>
+                </p>
             </div>
         );
     }
@@ -97,7 +97,7 @@ const Security = ({ }: SecurityProps) => {
                             className="w-[calc(100%-1.25rem)] mt-4 mx-2.5"
                             label="Current Password"
                             type="password"
-                            classInput="h-12"
+                            classInput="h-12 border-n-4"
                             placeholder="Enter current password"
                             error={errors.currentPassword}
                             {...register("currentPassword", { required: "Current password is required" })}
@@ -106,7 +106,7 @@ const Security = ({ }: SecurityProps) => {
                             className="w-[calc(50%-1.25rem)] mt-4 mx-2.5 md:w-[calc(100%-1.25rem)]"
                             label="New Password"
                             type="password"
-                            classInput="h-12"
+                            classInput="h-12 border-n-4"
                             placeholder="Enter new password"
                             error={errors.newPassword}
                             {...register("newPassword", {
@@ -120,7 +120,7 @@ const Security = ({ }: SecurityProps) => {
                         <Field
                             className="w-[calc(50%-1.25rem)] mt-4 mx-2.5 md:w-[calc(100%-1.25rem)]"
                             label="Confirm New Password"
-                            classInput="h-12"
+                            classInput="h-12 border-n-4"
                             type="password"
                             placeholder="Confirm new password"
                             error={errors.confirmPassword}

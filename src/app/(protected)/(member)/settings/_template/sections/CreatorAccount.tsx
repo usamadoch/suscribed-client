@@ -295,7 +295,7 @@ const CreatorAccount = () => {
                             <div className="flex flex-wrap -mt-4 -mx-2.5">
                                 <Field
                                     className="w-[calc(50%-1.25rem)] mx-2.5 mt-4"
-                                    classInput="h-12"
+                                    classInput="h-12 border-n-4"
                                     label="Creator Name"
                                     error={errors.creatorName}
                                     {...register("creatorName", { required: "Creator name is required" })}
@@ -306,7 +306,7 @@ const CreatorAccount = () => {
                                     label="Profile URL"
 
                                     prefix="example.com/"
-                                    classInput="h-12"
+                                    classInput="h-12 border-n-4"
                                     icon="link"
                                     error={errors.pageSlug}
                                     {...register("pageSlug", { required: "Profile slug is required" })}
@@ -316,6 +316,7 @@ const CreatorAccount = () => {
                                     className="w-[calc(100%-1.25rem)]  mt-4 mx-2.5"
                                     label={`About your page (${about?.length || 0}/500)`}
                                     textarea
+                                    classInput="border-n-4"
                                     maxLength={500}
                                     {...register("about", { maxLength: 500 })}
                                 />
@@ -337,10 +338,10 @@ const CreatorAccount = () => {
                                         {fields.map((field, index) => (
                                             <div key={field.id} className="relative">
                                                 <div className="flex justify-between items-center mb-1.5">
-                                                    <div className="text-xs font-bold">New Link</div>
+                                                    <div className="text-xs font-semibold">New Link</div>
                                                     <button
                                                         type="button"
-                                                        className="group flex items-center text-xs font-bold hover:text-pink-1 transition-colors"
+                                                        className="group flex items-center text-xs font-semibold hover:text-pink-1 transition-colors"
                                                         onClick={() => remove(index)}
                                                     >
                                                         <Icon name="trash" className="mr-1.5 w-4 h-4 fill-n-3 transition-colors group-hover:fill-pink-1" />
@@ -349,7 +350,7 @@ const CreatorAccount = () => {
                                                 </div>
                                                 <Field
                                                     className="w-full"
-                                                    classInput="h-12"
+                                                    classInput="h-12 border-n-4"
                                                     {...register(`socialLinks.${index}.value` as const)}
                                                 />
                                             </div>
@@ -358,7 +359,7 @@ const CreatorAccount = () => {
                                     {fields.length < 4 && (
                                         <button
                                             type="button"
-                                            className="group inline-flex items-center font-bold transition-colors hover:text-purple-1 mt-4"
+                                            className="group inline-flex items-center font-semibold transition-colors hover:text-purple-1 mt-4 cursor-pointer"
                                             onClick={() => append({ value: "" })}
                                         >
                                             <Icon name="add-circle" className="icon-18 mr-1.5 transition-colors group-hover:fill-purple-1 dark:fill-white dark:group-hover:fill-purple-1" />
@@ -371,7 +372,7 @@ const CreatorAccount = () => {
                             <div className="flex justify-between mt-16 md:block md:mt-8">
                                 <button
                                     type="submit"
-                                    className=" btn-medium btn-purple min-w-[11.7rem] md:w-full"
+                                    className="cursor-pointer btn-medium btn-purple min-w-[11.7rem] md:w-full"
                                     disabled={isUpdating || isUploadingImage}
                                 >
                                     {

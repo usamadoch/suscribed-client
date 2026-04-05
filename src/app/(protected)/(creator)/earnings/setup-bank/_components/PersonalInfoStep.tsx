@@ -23,14 +23,14 @@ const PersonalInfoStep = ({ onNext }: Props) => {
                 <Field
                     label="First Name"
                     type="text"
-                    classInput='h-12'
+                    classInput='h-12 border-n-4'
                     // placeholder="John"
                     {...register('firstName')}
                 />
                 <Field
                     label="Last Name"
                     type="text"
-                    classInput='h-12'
+                    classInput='h-12 border-n-4'
                     // placeholder="Doe"
                     {...register('lastName')}
                 />
@@ -39,14 +39,14 @@ const PersonalInfoStep = ({ onNext }: Props) => {
             <Field
                 label="Date of Birth"
                 type="date"
-                classInput='h-12 dark:[color-scheme:dark]'
+                classInput='h-12 dark:[color-scheme:dark] border-n-4'
                 {...register('dateOfBirth')}
             />
 
             <Field
                 label="Address 1"
                 type="text"
-                classInput='h-12'
+                classInput='h-12 border-n-4'
                 // placeholder="123 Main St"
                 {...register('address1')}
             />
@@ -54,7 +54,7 @@ const PersonalInfoStep = ({ onNext }: Props) => {
             <Field
                 label="Address 2"
                 type="text"
-                classInput='h-12'
+                classInput='h-12 border-n-4'
                 // placeholder="Apt 4B (Optional)"
                 {...register('address2')}
             />
@@ -63,14 +63,14 @@ const PersonalInfoStep = ({ onNext }: Props) => {
                 <Field
                     label="City"
                     type="text"
-                    classInput='h-12'
+                    classInput='h-12 border-n-4'
                     // placeholder="New York"
                     {...register('city')}
                 />
                 <Field
                     label="Postal Code"
                     type="text"
-                    classInput='h-12'
+                    classInput='h-12 border-n-4'
                     // placeholder="10001"
                     {...register('postalCode')}
                 />

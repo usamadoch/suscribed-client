@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import Field from '@/components/Field';
@@ -17,7 +17,7 @@ const NewTierPage = () => {
         resolver: zodResolver(tierSchema),
         defaultValues: {
             name: '',
-            price: 5,
+            price: 250,
             description: '',
             benefits: []
         }
@@ -33,7 +33,7 @@ const NewTierPage = () => {
 
         const payload = {
             ...data,
-            price: Math.round(data.price * 100),
+            price: data.price,
             benefits: filteredBenefits,
             status: 'published' as const
         };
@@ -65,12 +65,13 @@ const NewTierPage = () => {
                             />
 
                             <Field
-                                label="Monthly Price"
+                                label="Monthly Price (PKR)"
                                 type="number"
                                 classInput='h-12'
                                 error={errors.price}
                                 {...register('price', { valueAsNumber: true })}
                             />
+
 
                             <Field
                                 label="Description"

@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useParams } from 'next/navigation';
 import Field from '@/components/Field';
 import Loader from '@/components/Loader';
+import ChangePriceModal from '@/components/modals/ChangePriceModal';
 import { tierSchema, TierFormData } from '../../../schema';
 import { useTiers } from '../../../useTiers';
 import TierPerks from '../../../new/_components/TierPerks';
@@ -18,10 +19,13 @@ const EditTierPage = () => {
     const params = useParams();
     const tierId = params.id as string;
 
-    const { plans, isLoading, updatePlan, isUpdating } = useTiers();
+    const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
+    const [newPrice, setNewPrice] = useState<number | string>("");
+
+    const { plans, isLoading, updatePlan, isUpdating, updatePlanPrice, isUpdatingPrice } = useTiers();
     const plan = plans.find(p => p._id === tierId);
 
-    const { register, control, handleSubmit, watch, reset, formState: { errors } } = useForm<TierFormData>({
+    const { register, control, handleSubmit, watch, reset, setValue, formState: { errors } } = useForm<TierFormData>({
         resolver: zodResolver(tierSchema),
         defaultValues: {
             name: '',
@@ -36,7 +40,7 @@ const EditTierPage = () => {
         if (plan) {
             reset({
                 name: plan.name,
-                price: plan.price / 100,
+                price: plan.price,
                 description: plan.description || '',
                 benefits: plan.benefits.map(b => ({ value: b }))
             });
@@ -51,9 +55,9 @@ const EditTierPage = () => {
             ?.map(b => b.value.trim())
             .filter(b => b !== '') || [];
 
+        const { price, ...restData } = data;
         const payload = {
-            ...data,
-            price: Math.round(data.price * 100),
+            ...restData,
             benefits: filteredBenefits,
         };
 
@@ -97,21 +101,38 @@ const EditTierPage = () => {
                             <Field
                                 label="Tier Name"
                                 type="text"
-                                classInput='h-12'
+                                classInput='h-12 border-n-4'
                                 error={errors.name}
                                 {...register('name')}
                             />
 
-                            <Field
-                                label="Monthly Price"
-                                type="number"
-                                classInput='h-12'
-                                error={errors.price}
-                                {...register('price', { valueAsNumber: true })}
-                            />
+                            <div className="flex items-end gap-3">
+                                <div className="flex-1">
+                                    <Field
+                                        label="Monthly Price (PKR)"
+                                        type="number"
+                                        classInput='h-12 bg-n-2/10 dark:bg-n-2/50 border-n-3/10 cursor-not-allowed opacity-70'
+                                        disabled
+                                        error={errors.price}
+                                        {...register('price', { valueAsNumber: true })}
+                                    />
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setNewPrice(plan ? plan.price : 0);
+                                        setIsPriceModalOpen(true);
+                                    }}
+                                    className="btn-stroke h-12 px-5 mb-0"
+                                >
+                                    Edit
+                                </button>
+                            </div>
+
 
                             <Field
                                 label="Description"
+                                classInput='border-n-4'
                                 textarea
                                 error={errors.description}
                                 {...register('description')}
@@ -148,6 +169,23 @@ const EditTierPage = () => {
                     benefits={liveBenefits}
                 />
             </div>
+
+            <ChangePriceModal
+                visible={isPriceModalOpen}
+                onClose={() => setIsPriceModalOpen(false)}
+                plan={plan}
+                newPrice={newPrice}
+                setNewPrice={setNewPrice as any}
+                isUpdatingPrice={isUpdatingPrice}
+                onUpdate={() => {
+                    updatePlanPrice({ id: tierId, price: Number(newPrice) }, {
+                        onSuccess: () => {
+                            setValue('price', Number(newPrice));
+                            setIsPriceModalOpen(false);
+                        }
+                    });
+                }}
+            />
         </div>
     );
 };

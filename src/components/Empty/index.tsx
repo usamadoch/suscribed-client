@@ -28,7 +28,7 @@ const Empty = ({
     onClick,
 }: EmptyProps) => (
     <div className="flex items-center justify-center grow">
-        <div className="w-full max-w-[32rem] text-center">
+        <div className="w-full max-w-lg text-center">
             {imageSrc && (
                 <div className="mb-6">
                     <Image
@@ -42,8 +42,8 @@ const Empty = ({
             {imageSvg && (
                 <div className="flex justify-center mb-6">{imageSvg}</div>
             )}
-            <div className="mb-2 -mx-4 text-h1 md:text-h3">{title}</div>
-            <div className="max-w-[23.5rem] mx-auto mb-12">{content}</div>
+            <h4 className="mb-2 -mx-4 text-h4 md:text-h3">{title}</h4>
+            <p className="max-w-94 mx-auto mb-12 text-n-3">{content}</p>
             {buttonUrl ? (
                 <Link className="btn-purple btn-shadow" href={buttonUrl}>
                     <Icon name={buttonIcon || "add-circle"} />

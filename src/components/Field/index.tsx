@@ -46,7 +46,7 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
         return (
             <div className={`${className}`}>
                 <div className="">
-                    {label && <div className="mb-3 text-xs font-bold">{label}</div>}
+                    {label && <div className="mb-2 text-xs font-semibold">{label}</div>}
                     <div
                         className={twMerge(
                             "relative",

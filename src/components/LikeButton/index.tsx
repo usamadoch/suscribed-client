@@ -4,7 +4,8 @@ import { twMerge } from "tailwind-merge";
 import Icon from "@/components/Icon";
 import { postApi } from "@/lib/api";
 import { useAuth } from "@/store/auth";
-import LoginModal from "@/components/LoginModal";
+import LoginModal from "../modals/LoginModal";
+
 
 interface LikeButtonProps {
     postId: string;

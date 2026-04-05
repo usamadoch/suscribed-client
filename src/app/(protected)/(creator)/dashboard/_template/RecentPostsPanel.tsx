@@ -41,8 +41,8 @@ const RecentPostsPanel = () => {
     const publishedPosts = recentPosts.filter((p) => p.status === 'published');
 
     return (
-        <div className="card p-5">
-            <div className="flex items-center justify-between mb-4">
+        <div className="card ">
+            <div className="flex items-center justify-between p-5">
                 <div className="flex items-center gap-3">
                     <Icon name="document" className="w-5 h-5 fill-purple-1" />
                     <h3 className="font-semibold text-n-1 dark:text-white">Recent Posts</h3>
@@ -59,69 +59,60 @@ const RecentPostsPanel = () => {
             ) : (
                 <>
                     {publishedPosts.length > 0 ? (
-                        <div className="flex flex-col gap-3 py-3">
+                        <div className="flex flex-col gap-3">
                             {publishedPosts.slice(0, 4).map((post) => (
                                 <Link
                                     key={post._id}
                                     href={`/posts/${post._id}`}
-                                    className="flex items-center justify-between bg-n-7 dark:bg-white/5 rounded-xl hover:bg-n-6 dark:hover:bg-white/10 transition-colors"
+                                    className=" hover:bg-n-3/10 dark:hover:bg-white/10 transition-colors"
                                 >
-                                    <div className="flex-1 min-w-0 mr-4">
-                                        <div className="text-sm font-medium text-n-1 dark:text-white truncate">
-                                            {post.caption}
+                                    <div className="flex items-end justify-between px-5">
+
+                                        <div className="flex-1 min-w-0 mr-4">
+                                            <div className="text-sm font-medium text-n-1 dark:text-white truncate">
+                                                {post.caption}
+                                            </div>
+                                            <div className="text-xs text-n-3 mt-1">
+                                                {post.publishedAt
+                                                    ? formatDistanceToNow(new Date(post.publishedAt), {
+                                                        addSuffix: true,
+                                                    })
+                                                    : 'Draft'}
+                                            </div>
                                         </div>
-                                        <div className="text-xs text-n-3 mt-1">
-                                            {post.publishedAt
-                                                ? formatDistanceToNow(new Date(post.publishedAt), {
-                                                    addSuffix: true,
-                                                })
-                                                : 'Draft'}
+                                        <div className="flex items-center gap-3 text-xs text-n-4">
+                                            <span className="flex text-n-2 dark:text-white items-center gap-1">
+                                                views
+                                                <strong>{post.viewCount}</strong>
+                                            </span>
+                                            <span className="flex text-n-2 dark:text-white items-center gap-1">
+                                                likes
+
+                                                <strong>{post.likeCount}</strong>
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div className="flex items-center gap-3 text-xs text-n-4">
-                                        <span className="flex text-n-2 dark:text-white items-center gap-1">
-                                            <Icon name="eye" className="w-3.5 h-3.5" />
-                                            {post.viewCount}
-                                        </span>
-                                        <span className="flex text-n-2 dark:text-white items-center gap-1">
-                                            <Icon name="like" className="w-3.5 h-3.5" />
-                                            {post.likeCount}
-                                        </span>
                                     </div>
                                 </Link>
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-8 text-n-4">
-                            <Icon name="document" className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                        <div className="text-center py-8 text-n-3 fill-n-3">
+                            <Icon name="document" className="w-12 h-12 mx-auto mb-3" />
                             <p className="text-sm">No published posts yet</p>
                         </div>
                     )}
 
-                    {draftsCount > 0 && (
-                        <div className="border-t border-n-6 dark:border-white/10 pt-4">
-                            <Link
-                                href="/posts?status=draft"
-                                className="flex items-center justify-between p-3 bg-yellow-500/10 rounded-xl hover:bg-yellow-500/20 transition-colors"
-                            >
-                                <div className="flex items-center gap-2">
-                                    <Icon name="file" className="w-4 h-4 fill-yellow-500" />
-                                    <span className="text-sm font-medium text-n-1 dark:text-white">
-                                        {draftsCount} draft{draftsCount > 1 ? 's' : ''} pending
-                                    </span>
-                                </div>
-                                <Icon name="arrow-next" className="w-4 h-4 fill-n-4" />
-                            </Link>
-                        </div>
-                    )}
 
-                    <Link
-                        href="/posts/new"
-                        className="mt-4 btn-purple btn-medium w-full flex items-center justify-center gap-2"
-                    >
-                        <Icon name="plus" className="w-4 h-4" />
-                        <span>Create New Post</span>
-                    </Link>
+                    <div className="p-5">
+
+                        <Link
+                            href="/posts/new"
+                            className="btn-purple btn-medium w-full flex items-center justify-center gap-2"
+                        >
+                            <Icon name="plus" className="w-4 h-4" />
+                            <span>Create New Post</span>
+                        </Link>
+                    </div>
                 </>
             )}
         </div>

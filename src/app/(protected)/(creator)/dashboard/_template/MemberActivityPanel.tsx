@@ -42,7 +42,7 @@ const MemberActivityPanel = ({ page }: MemberActivityPanelProps) => {
 
     return (
         <div className="card p-5 mt-4">
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 pb-5">
                 <Icon name="team" className="w-5 h-5 fill-purple-1" />
                 <h3 className="font-semibold text-n-1 dark:text-white">Members</h3>
             </div>
@@ -53,7 +53,7 @@ const MemberActivityPanel = ({ page }: MemberActivityPanelProps) => {
                 </div>
             ) : (
                 <>
-                    <div className="flex flex-col gap-3 py-3">
+                    <div className="flex flex-col gap-3">
                         <div className="flex justify-between items-center">
                             <span className="text-sm">Total members</span>
                             <span className="font-bold text-lg text-n-1 dark:text-white">
@@ -66,9 +66,9 @@ const MemberActivityPanel = ({ page }: MemberActivityPanelProps) => {
                         </div>
                     </div>
 
-                    <hr className="border-t border-n-6 my-3" />
-                    <div className="py-3">
-                        <h4 className="text-sm font-bold mb-3">Recent Activity</h4>
+                    <hr className="border-t border-n-4 my-5" />
+                    <div className="">
+                        <h4 className="text-sm font-bold mb-5">Recent Activity</h4>
                         {recentMembers.length > 0 ? (
                             <div className="space-y-3">
                                 {recentMembers.slice(0, 5).map((member) => (
@@ -105,16 +105,16 @@ const MemberActivityPanel = ({ page }: MemberActivityPanelProps) => {
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-sm text-n-4">No recent activity</p>
+                            <p className="text-sm text-n-3">No recent activity</p>
                         )}
                     </div>
 
                     <Link
                         href="/members"
-                        className="mt-4 flex items-center justify-center gap-2 text-sm text-purple-1 hover:text-purple-2 transition-colors"
+                        className="mt-5 flex items-center justify-center text-sm text-purple-1 hover:text-purple-2 transition-colors"
                     >
                         <span>View all members</span>
-                        <Icon name="arrow-next" className="w-4 h-4" />
+                        <Icon name="arrow-next" className="icon-18 fill-purple-1 hover:fill-purple-2" />
                     </Link>
                 </>
             )}

@@ -5,12 +5,10 @@ import { toast } from "react-hot-toast";
 import { Post } from "@/lib/types";
 import { useAuth } from "@/store/auth";
 import { useCreatorPage, useCreatorPosts, useJoinPage } from "@/hooks/useQueries";
-import PostModal from "@/components/PostModal";
-import LoginModal from "@/components/LoginModal";
-import JoinTierModal from "@/components/JoinTierModal";
+import PostModal from "@/components/modals/PostModal";
+import LoginModal from "@/components/modals/LoginModal";
+import JoinTierModal from "@/components/modals/JoinTierModal";
 import Loader from "@/components/Loader";
-import Link from "next/link";
-import Icon from "@/components/Icon";
 import RecentVideos from "./RecentVideos";
 import CreatorPostItem from "./CreatorPostItem";
 
@@ -71,24 +69,9 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                         <div className="flex items-center justify-center">
                             <Loader text="Loading posts..." />
                         </div>
-                    ) : posts.length === 0 ? (
-                        <div className="card p-5">
-
-                            <div className="text-center py-8 text-n-2">
-                                <Icon name="document" className="w-12 h-12 mx-auto mb-3 " />
-                                <p className="text-sm">No published posts yet</p>
-                            </div>
-
-                            <Link
-                                href="/posts/new"
-                                className="mt-4 btn-purple btn-medium w-full flex items-center justify-center gap-2"
-                            >
-                                <Icon name="plus" className="w-4 h-4" />
-                                <span>Create New Post</span>
-                            </Link>
-                        </div>
                     ) : (
-                        <div className="grid grid-cols-1 gap-6">
+
+                        <div className="grid grid-cols-1 gap-5">
                             {posts.map((post: Post) => (
                                 <CreatorPostItem
                                     key={post._id}
@@ -99,6 +82,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                                 />
                             ))}
                         </div>
+
 
                     )}
                 </div>
@@ -113,6 +97,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
             <PostModal
                 visible={!!activePost}
                 post={activePost}
+                page={page}
                 onClose={() => setSelectedPostId(null)}
             />
 

@@ -18,12 +18,11 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import Select from '@/components/Select';
-import Modal from '@/components/Modal';
+
 import { TierFormData } from '../../schema';
-import Field from '@/components/Field';
 import SortableItem from './SortableItem';
 import { predefinedPerks } from './constants';
+import PerkModal from '@/components/modals/PerkModal';
 
 
 interface TierPerksProps {
@@ -147,79 +146,32 @@ export default function TierPerks({ control, register }: TierPerksProps) {
                 </button>
             </div>
 
-            <Modal
+            <PerkModal
                 visible={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                title={editingIndex !== null ? "Edit Perk" : "Add Perk"}
-            >
-                <div className="space-y-6">
-                    <div>
-                        <div className="flex items-center justify-between mb-2">
-                            <label className="block text-xs font-bold text-gray-900 dark:text-white">
-                                {isCustomPerk ? "Custom Perk" : "Select a Perk"}
-                            </label>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setIsCustomPerk(!isCustomPerk);
-                                    setSelectedPerk(null);
-                                    setCustomPerkText('');
-                                }}
-                                className="text-xs text-purple-1 hover:text-purple-2 font-medium"
-                            >
-                                {isCustomPerk ? "Select predefined perk instead" : "Create custom perk"}
-                            </button>
-                        </div>
-                        {isCustomPerk ? (
-                            <Field
-                                value={customPerkText}
-                                classInput="h-12"
-                                onChange={(e: any) => setCustomPerkText(e.target.value)}
-                            // placeholder="Enter your custom perk..."
-                            />
-                        ) : (
-                            <Select
-                                items={predefinedPerks}
-                                value={selectedPerk}
-                                classButton="h-12"
-                                onChange={setSelectedPerk}
-                                placeholder="Choose a perk..."
-                                classOptions="max-h-[250px] overflow-y-auto custom-scrollbar"
-                            />
-                        )}
-                    </div>
-                    <div className="flex justify-end gap-3 pt-2">
-                        <button
-                            type="button"
-                            onClick={() => setIsModalOpen(false)}
-                            className="btn-stroke btn-medium min-w-[100px]"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="button"
-                            disabled={!selectedPerk && (!isCustomPerk || !customPerkText.trim())}
-                            onClick={() => {
-                                const finalPerkTitle = isCustomPerk ? customPerkText.trim() : selectedPerk?.title;
-                                if (finalPerkTitle) {
-                                    if (editingIndex !== null) {
-                                        update(editingIndex, { ...perkFields[editingIndex], value: finalPerkTitle } as any);
-                                    } else {
-                                        append({ value: finalPerkTitle });
-                                    }
-                                    setSelectedPerk(null);
-                                    setCustomPerkText('');
-                                    setIsModalOpen(false);
-                                    setEditingIndex(null);
-                                }
-                            }}
-                            className="btn-purple btn-medium min-w-[100px] disabled:opacity-50 disabled:pointer-events-none"
-                        >
-                            {editingIndex !== null ? "Save" : "Add"}
-                        </button>
-                    </div>
-                </div>
-            </Modal>
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setEditingIndex(null);
+                }}
+                editingIndex={editingIndex}
+                isCustomPerk={isCustomPerk}
+                setIsCustomPerk={setIsCustomPerk}
+                selectedPerk={selectedPerk}
+                setSelectedPerk={setSelectedPerk}
+                customPerkText={customPerkText}
+                setCustomPerkText={setCustomPerkText}
+                predefinedPerks={predefinedPerks}
+                onSave={(perkTitle) => {
+                    if (editingIndex !== null) {
+                        update(editingIndex, { ...perkFields[editingIndex], value: perkTitle } as any);
+                    } else {
+                        append({ value: perkTitle });
+                    }
+                    setSelectedPerk(null);
+                    setCustomPerkText('');
+                    setIsModalOpen(false);
+                    setEditingIndex(null);
+                }}
+            />
         </>
     );
 }

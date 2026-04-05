@@ -60,6 +60,28 @@ export const useTiers = () => {
         }
     });
 
+    const updatePriceMutation = useMutation({
+        mutationFn: async ({ id, price }: { id: string, price: number }) => {
+            const res = await membershipPlanApi.updatePlanPrice(id, price);
+            return res;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['tiers'] });
+            toast.custom((t) => React.createElement(Alert, {
+                type: 'success',
+                message: 'Tier price updated',
+                onClose: () => toast.dismiss(t.id)
+            }));
+        },
+        onError: (err: any) => {
+            toast.custom((t) => React.createElement(Alert, {
+                type: 'error',
+                message: err.message || 'Failed to update price',
+                onClose: () => toast.dismiss(t.id)
+            }));
+        }
+    });
+
     return {
         plans,
         isLoading,
@@ -67,6 +89,8 @@ export const useTiers = () => {
         createPlan: createMutation.mutate,
         isCreating: createMutation.isPending,
         updatePlan: updateMutation.mutate,
-        isUpdating: updateMutation.isPending
+        isUpdating: updateMutation.isPending,
+        updatePlanPrice: updatePriceMutation.mutate,
+        isUpdatingPrice: updatePriceMutation.isPending
     };
 };

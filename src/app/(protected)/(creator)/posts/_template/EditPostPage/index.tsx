@@ -4,7 +4,7 @@
 import { usePost } from "@/hooks/useQueries";
 import { useRouter } from "next/navigation";
 import { useEffect, use, useState } from "react";
-import Modal from "@/components/Modal";
+import UnsavedChangesModal from "@/components/modals/UnsavedChangesModal";
 import { usePostForm } from "../NewPostPage/usePostForm";
 import PostForm from "../NewPostPage/components/PostForm";
 import { useHeader } from "@/context/HeaderContext";
@@ -94,32 +94,11 @@ const EditPostPage = ({ params }: EditPostProps) => {
         <>
             <PostForm formState={formState} submitLabel="Update Post" />
 
-            <Modal
-                title="Unsaved Changes"
+            <UnsavedChangesModal
                 visible={showUnsavedModal}
                 onClose={() => setShowUnsavedModal(false)}
-                classOverlay="!bg-n-1/40 dark:!bg-n-1/85"
-                classWrap=" border border-n-1 shadow-primary-4"
-            >
-                <div className="text-n-1 dark:text-white mb-8">
-                    Are you sure you want to leave this page? Your changes will not be saved.
-                </div>
-                <div className="flex justify-end gap-3">
-                    <button
-                        type="button"
-                        className="flex-1 btn-stroke px-5 btn-medium cursor-pointer"
-                        onClick={() => setShowUnsavedModal(false)}
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        className="btn-purple btn-medium cursor-pointer flex-1"
-                        onClick={confirmNavigation}
-                    >
-                        OK
-                    </button>
-                </div>
-            </Modal>
+                onConfirm={confirmNavigation}
+            />
         </>
     );
 };

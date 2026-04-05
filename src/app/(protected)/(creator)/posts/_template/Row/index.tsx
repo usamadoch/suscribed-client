@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
+import ActionMenu from "@/components/ActionMenu";
 import { format } from "date-fns";
 
 import { useDeletePost } from "@/hooks/useQueries";
 
-import Modal from "@/components/Modal";
+import DeletePostModal from "@/components/modals/DeletePostModal";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 
@@ -109,79 +109,29 @@ const Row = ({ item, showActions = true }: RowProps) => {
 
                 {showActions && (
                     <td className="td-custom py-3.5 text-right">
-                        <Menu as="div" className="relative inline-block text-left">
-                            <MenuButton className="btn-stroke btn-small btn-square">
-                                <Icon name="dots" />
-                            </MenuButton>
-                            <Transition
-                                enter="transition duration-100 ease-out"
-                                enterFrom="transform scale-95 opacity-0"
-                                enterTo="transform scale-100 opacity-100"
-                                leave="transition duration-75 ease-out"
-                                leaveFrom="transform scale-100 opacity-100"
-                                leaveTo="transform scale-95 opacity-0"
-                            >
-                                <MenuItems className="absolute right-0 mt-2 w-48 origin-top-right bg-white border border-n-1 shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
-                                    <MenuItem>
-                                        {({ active }) => (
-                                            <Link
-                                                href={`/posts/${item._id}/edit`}
-                                                className={`flex items-center w-full px-4 py-2 text-sm font-bold transition-colors ${active ? "bg-n-3/10 dark:bg-white/20" : ""
-                                                    } text-n-1 dark:text-white`}
-                                            >
-                                                <Icon className="mr-3 fill-n-1 dark:fill-white icon-18" name="edit" viewBox="0 0 24 24" />
-                                                Edit
-                                            </Link>
-                                        )}
-                                    </MenuItem>
-                                    <MenuItem>
-                                        {({ active }) => (
-                                            <button
-                                                className={`flex items-center w-full px-4 py-2 text-sm font-bold transition-colors ${active ? "bg-n-3/10 dark:bg-white/20" : ""
-                                                    } text-pink-1`}
-                                                onClick={() => setIsOpen(true)}
-                                            >
-                                                <Icon className="mr-3 fill-pink-1 icon-18" name="remove" />
-                                                Delete
-                                            </button>
-                                        )}
-                                    </MenuItem>
-                                </MenuItems>
-                            </Transition>
-                        </Menu>
+                        <ActionMenu
+                            buttonClass="btn-stroke btn-small btn-square"
+                            items={[
+                                {
+                                    icon: "edit",
+                                    label: "Edit",
+                                    onClick: () => window.location.href = `/posts/${item._id}/edit`
+                                },
+                                {
+                                    icon: "remove",
+                                    label: "Delete",
+                                    className: "flex items-center cursor-pointer w-full px-4 py-2 text-sm font-bold text-pink-1 hover:bg-n-3/10 dark:hover:bg-white/20 transition-colors",
+                                    onClick: () => setIsOpen(true)
+                                }
+                            ]}
+                        />
 
-                        <Modal
-                            title="Delete Post"
+                        <DeletePostModal
                             visible={isOpen}
                             onClose={() => setIsOpen(false)}
-                            classOverlay="!bg-n-1/40 dark:!bg-n-1/85"
-                            classWrap=" border border-n-1 shadow-primary-4"
-
-                        >
-                            <div className="text-sm text-n-3">
-                                Are you sure you want to delete this post? This action cannot be undone.
-                            </div>
-                            <div className="mt-6 flex justify-end gap-3">
-                                <button
-                                    type="button"
-                                    className="flex-1 btn-stroke px-5 btn-medium cursor-pointer"
-                                    onClick={() => setIsOpen(false)}
-                                    disabled={isPending}
-                                >
-                                    Cancel
-                                </button>
-
-
-                                <button
-                                    className="flex-1 btn-purple btn-medium bg-pink-1 hover:bg-pink-1/80 cursor-pointer px-5 md:bg-transparent! md:border-none md:w-6 md:h-6 md:p-0 md:text-0"
-                                    onClick={handleDelete}
-                                    disabled={isPending}
-                                >
-                                    <Icon className="mr-3 fill-pink-1 icon-18" name="remove" />
-                                    Delete
-                                </button>
-                            </div>
-                        </Modal>
+                            onDelete={handleDelete}
+                            isPending={isPending}
+                        />
                     </td>
                 )}
             </tr >

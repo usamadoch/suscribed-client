@@ -24,7 +24,7 @@ const BankDetailsStep = ({ onPrev, isSubmitting }: Props) => {
             <Field
                 label="Bank Name *"
                 type="text"
-                classInput='h-12'
+                classInput='h-12 border-n-4'
                 // placeholder="e.g. Chase Bank"
                 {...register('bankName')}
             />
@@ -32,7 +32,7 @@ const BankDetailsStep = ({ onPrev, isSubmitting }: Props) => {
             <Field
                 label="Account Holder Name *"
                 type="text"
-                classInput='h-12'
+                classInput='h-12 border-n-4'
                 // placeholder="John Doe"
                 {...register('accountHolderName')}
             />
@@ -40,7 +40,7 @@ const BankDetailsStep = ({ onPrev, isSubmitting }: Props) => {
             <Field
                 label="IBAN *"
                 type="text"
-                classInput='h-12'
+                classInput='h-12 border-n-4'
                 // placeholder="IBAN Number"
                 {...register('iban')}
             />
@@ -51,7 +51,8 @@ const BankDetailsStep = ({ onPrev, isSubmitting }: Props) => {
                 render={({ field }) => (
                     <Select
                         label="ID Type *"
-                        classButton='h-12'
+                        classButton='h-12 border-n-4'
+                        classOptions='border-n-4'
                         items={idTypeOptions}
                         value={idTypeOptions.find(opt => opt.id === field.value)}
                         onChange={(val: any) => field.onChange(val.id)}
@@ -62,7 +63,7 @@ const BankDetailsStep = ({ onPrev, isSubmitting }: Props) => {
             <Field
                 label={getIdNumberLabel(selectedIdType)}
                 type="text"
-                classInput='h-12'
+                classInput='h-12 border-n-4'
                 // placeholder={getIdNumberPlaceholder(selectedIdType)}
                 {...register('idNumber')}
             />

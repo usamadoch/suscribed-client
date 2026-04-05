@@ -12,6 +12,7 @@ import {
 } from "@/lib/types";
 
 import { formatAppDate } from "@/lib/date";
+import { getCreatorInfo } from "@/lib/post-mapper";
 
 // ─── Types ──────────────────────────────────────────────────
 
@@ -33,9 +34,7 @@ const PostContentArea = ({
     displayCaption,
 }: PostContentAreaProps) => {
 
-    const page = typeof post.pageId === 'object' ? post.pageId : null;
-
-    const displayName = page?.displayName || "Member";
+    const creator = getCreatorInfo(post);
     return (
         <div className="w-full">
             {/* ── Media Gallery ─────────────────────────────── */}
@@ -56,9 +55,9 @@ const PostContentArea = ({
                                     className="object-cover"
                                     slot="profile"
                                     family="avatar"
-                                    src={page?.avatarUrl}
+                                    src={creator.avatarUrl}
                                     fill
-                                    alt={displayName}
+                                    alt={creator.displayName}
                                 />
                             </div>
                         </div>
@@ -66,7 +65,7 @@ const PostContentArea = ({
                         <div className="flex flex-col w-full pl-4 gap-2">
                             <div className="flex justify-between w-full">
                                 <div className="flex items-center gap-3">
-                                    <h5 className="text-h5 md:text-h4">{displayName}</h5>
+                                    <h5 className="capitalize text-h5 md:text-h4">{creator.displayName}</h5>
                                     <span>•</span>
                                     <span className="text-sm text-n-3">
                                         {formatAppDate(post.publishedAt || post.createdAt, { suffix: true })}

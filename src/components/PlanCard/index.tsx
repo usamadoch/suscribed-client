@@ -4,6 +4,8 @@ import { ReactNode } from "react";
 
 type PlanCardProps = {
     plan: Tier;
+    /** The billing interval selected by the subscriber */
+    interval?: 'MONTHLY' | 'YEARLY';
     /** Optional action rendered below the price (e.g. Subscribe button) */
     action?: ReactNode;
     /** Optional action rendered next to the plan name / highlighted label (e.g. Edit button) */
@@ -11,7 +13,10 @@ type PlanCardProps = {
     className?: string;
 };
 
-const PlanCard = ({ plan, action, headerAction, className = "" }: PlanCardProps) => {
+const PlanCard = ({ plan, interval = 'MONTHLY', action, headerAction, className = "" }: PlanCardProps) => {
+    const displayPrice = interval === 'YEARLY' ? plan.price * 12 : plan.price;
+    const periodLabel = interval === 'YEARLY' ? 'year' : 'month';
+
     return (
         <div className={`relative w-full max-w-80 p ${className}`}>
             {plan.isHighlighted && (
@@ -30,7 +35,7 @@ const PlanCard = ({ plan, action, headerAction, className = "" }: PlanCardProps)
                     </div>
 
                     <h4 className="text-h4">
-                        ${(plan.price / 100).toFixed(2)}<span className="text-sm font-medium"> /month</span>
+                        PKR {displayPrice}<span className="text-sm font-medium"> /{periodLabel}</span>
                     </h4>
                 </div>
 
