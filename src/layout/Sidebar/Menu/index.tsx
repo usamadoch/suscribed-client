@@ -1,9 +1,12 @@
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Icon from "@/components/Icon";
 import { twMerge } from "tailwind-merge";
 import { useNavigation, NavigationItem } from "@/hooks/useNavigation";
 import { useSocket } from "@/store/socket";
+import { useAuth } from "@/store/auth";
+import LoginModal from "@/components/modals/LoginModal";
 
 type MenuProps = {
     visible?: boolean;
@@ -13,8 +16,19 @@ const Menu = ({ visible }: MenuProps) => {
     const pathname = usePathname();
     const router = useRouter();
     const navigationItems = useNavigation();
+    const { isAuthenticated } = useAuth();
 
     const { unreadCount, messageUnreadCount } = useSocket();
+
+    const [showLoginModal, setShowLoginModal] = useState(false);
+
+    const handleNavClick = (e: React.MouseEvent, link: NavigationItem) => {
+        // If the user is not authenticated and the route is NOT public, intercept
+        if (!isAuthenticated && !link.isPublicRoute) {
+            e.preventDefault();
+            setShowLoginModal(true);
+        }
+    };
 
     return (
         <>
@@ -64,6 +78,7 @@ const Menu = ({ visible }: MenuProps) => {
                                         href={link.url}
                                         key={index}
                                         target={link.target}
+                                        onClick={(e) => handleNavClick(e, link)}
                                     >
                                         <Icon
                                             className={`mr-3 fill-inherit ${visible ? "mr-3" : "xl:mr-0"
@@ -83,6 +98,11 @@ const Menu = ({ visible }: MenuProps) => {
                                                     if (link.suffixUrl) {
                                                         e.preventDefault();
                                                         e.stopPropagation();
+
+                                                        if (!isAuthenticated) {
+                                                            setShowLoginModal(true);
+                                                            return;
+                                                        }
                                                         router.push(link.suffixUrl);
                                                     }
                                                 }}
@@ -119,6 +139,12 @@ const Menu = ({ visible }: MenuProps) => {
                     ));
                 })()}
             </div>
+
+            {/* Login Modal for guests clicking protected routes */}
+            <LoginModal
+                visible={showLoginModal}
+                onClose={() => setShowLoginModal(false)}
+            />
         </>
     );
 };

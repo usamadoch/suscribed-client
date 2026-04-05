@@ -3,11 +3,13 @@
 
 
 
+import Layout from "@/layout";
+import { RootHomePage } from "./_template/RootHomePage";
 
 export default function Home() {
-  return (
-    <div>
-      Hello World
-    </div>
-  );
+    return (
+        <Layout requireAuth={false}>
+            <RootHomePage />
+        </Layout>
+    );
 }

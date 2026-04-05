@@ -1,7 +1,7 @@
 
 import { Permission } from "@/lib/types";
 
-type NavigationItem = {
+export type NavigationItem = {
     title: string;
     icon: string;
     url: string;
@@ -9,12 +9,15 @@ type NavigationItem = {
     roles?: string[]; // Keep for backward compatibility if needed, or deprecate
     permissions?: Permission[];
     target?: string;
+    counter?: number;
     counterColor?: string;
     suffixIcon?: string;
     suffixIconViewBox?: string;
     suffixIconBg?: boolean;
     suffixText?: string;
     suffixUrl?: string;
+    /** If true, this route is accessible to guests without auth */
+    isPublicRoute?: boolean;
 };
 
 export const navigation: NavigationItem[] = [
@@ -30,9 +33,9 @@ export const navigation: NavigationItem[] = [
     {
         title: "Home",
         icon: "dashboard",
-        url: "/home",
+        url: "/",
         category: "Discover",
-        permissions: ["explore:view"], // Or feed:view? Using explore:view based on previous analysis
+        isPublicRoute: true,
     },
     {
         title: "Posts",
@@ -63,7 +66,7 @@ export const navigation: NavigationItem[] = [
         icon: "search",
         url: "/explore",
         category: "Discover",
-        permissions: ["explore:view"],
+        isPublicRoute: true,
     },
 
     // Shared Pages
@@ -73,7 +76,6 @@ export const navigation: NavigationItem[] = [
         url: "/notifications",
         category: "General",
         counterColor: "#AE7AFF",
-        // No restriction implies everyone, or we can add explicit common permission
     },
     {
         title: "Messages",

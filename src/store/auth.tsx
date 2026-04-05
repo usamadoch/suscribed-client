@@ -156,7 +156,7 @@ export function useAuth() {
                 router.push('/dashboard');
             }
         } else {
-            router.push('/explore');
+            router.push('/');
         }
     };
 
@@ -178,7 +178,7 @@ export function useAuth() {
 
     const logoutWithRedirect = async () => {
         await store.logout();
-        router.push('/login');
+        router.push('/');
     };
 
     return {
@@ -331,7 +331,7 @@ export function RedirectIfAuthenticated({ children, fallback }: RouteGuardProps)
                     router.push('/dashboard');
                 }
             } else {
-                router.push('/explore');
+                router.push('/');
             }
         }
     }, [isLoading, isAuthenticated, user, router, isOnboarding, isOnRegisterPage]);

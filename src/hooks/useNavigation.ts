@@ -1,33 +1,16 @@
 
 import { useMemo } from 'react';
-import { navigation } from '@/constants/navigation';
+import { navigation, NavigationItem } from '@/constants/navigation';
 import { useAuth } from '@/store/auth';
 import { hasPermission } from '@/constants/permissions';
-
 
 import { Permission } from '@/lib/types';
 import { useMyPage } from '@/hooks/useQueries';
 
-export type NavigationItem = {
-    title: string;
-    icon: string;
-    url: string;
-    category?: string;
-    roles?: string[];
-    permissions?: Permission[];
-    target?: string;
-    onClick?: () => void;
-    counter?: number;
-    counterColor?: string;
-    suffixIcon?: string;
-    suffixIconViewBox?: string;
-    suffixIconBg?: boolean;
-    suffixText?: string;
-    suffixUrl?: string;
-};
+export type { NavigationItem } from '@/constants/navigation';
 
 export const useNavigation = () => {
-    const { user } = useAuth();
+    const { user, isAuthenticated } = useAuth();
 
     // Fetch user's page data using cached query
     const { data: myPage } = useMyPage();
@@ -37,9 +20,24 @@ export const useNavigation = () => {
 
     // Compute Final Navigation
     const navItems = useMemo(() => {
-        if (!user?.role) return [];
+        // ── GUEST MODE: Show member-level sidebar items ──
+        // Guests see the same sidebar as members, but clicks on protected
+        // items are intercepted by the Menu component to show LoginModal.
+        if (!isAuthenticated || !user?.role) {
+            return navigation
+                .filter((link) => {
+                    // Hide items that require creator/admin permissions
+                    if (link.permissions) return false;
+                    // Show public routes + shared routes (no permissions = member-level)
+                    return true;
+                })
+                .map((link) => ({ ...link }));
+        }
 
+        // ── AUTHENTICATED MODE: Filter by permissions/roles as before ──
         const filteredNav = navigation.filter((link) => {
+            // Public routes are always visible
+            if (link.isPublicRoute) return true;
             // Check permissions first
             if (link.permissions) {
                 return link.permissions.some(permission => hasPermission(user.role, permission));
@@ -87,7 +85,7 @@ export const useNavigation = () => {
         }
 
         return newNav;
-    }, [user?.role, pageSlug]);
+    }, [user?.role, isAuthenticated, pageSlug]);
 
     return navItems;
 };
