@@ -8,13 +8,12 @@ import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Comment from "@/components/Comment";
 import { postApi } from "@/lib/api";
-import { Post, Comment as CommentType, isLockedMedia, CreatorPage } from "@/lib/types";
+import { Post, isLockedMedia, CreatorPage } from "@/lib/types";
 import Actions from "@/components/Review/Actions";
-import Loader from "../Loader";
+import Loader from "@/components/Loader";
 import CommentItem from "@/components/CommentItem";
 import ReadMore from "@/components/ReadMore";
 import ActionMenu from "@/components/ActionMenu";
-import { getSocialShareItems } from "@/utils/share";
 import { getCreatorInfo } from "@/lib/post-mapper";
 
 type PostModalProps = {
@@ -177,8 +176,6 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
                         type="post"
                     />
                 </div>
-
-
 
                 {/* 3. Fixed Comment Input */}
                 <div className="p-4 shrink-0">

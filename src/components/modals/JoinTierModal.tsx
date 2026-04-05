@@ -1,12 +1,12 @@
 
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import { CreatorPage, Tier } from "@/lib/types";
 import { useCreatorPlans } from "@/hooks/useQueries";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { membershipPlanApi } from "@/lib/api";
 import { toast } from "react-hot-toast";
-import Icon from "../Icon";
+import Icon from "@/components/Icon";
 import { AnimatePresence, motion } from "framer-motion";
 import PlanCard from "@/components/PlanCard";
 import Switch from "@/components/Switch";
@@ -45,9 +45,8 @@ const JoinTierModal = ({
 
 
     const creatorId = typeof page.userId === 'object' ? page.userId._id : page.userId;
-    const { data: plans = [], isLoading: loadingPlans } = useCreatorPlans(creatorId);
+    const { data: plans = [], isLoading: loadingPlans } = useCreatorPlans(creatorId || "");
 
-    const queryClient = useQueryClient();
     const [interval, setInterval] = useState<'MONTHLY' | 'YEARLY'>('MONTHLY');
 
     const subscribeMutation = useMutation({
@@ -73,7 +72,7 @@ const JoinTierModal = ({
                 <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden">
                     {/* Overlay */}
                     <motion.div
-                        className="fixed inset-0 bg-n-1/20 backdrop-blur-xs dark:bg-n-1/40"
+                        className="fixed inset-0 bg-n-1/72"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -107,21 +106,27 @@ const JoinTierModal = ({
 
                             <div className="flex justify-center mb-10">
                                 <div className="flex items-center gap-3">
+                                    <span
+                                        className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'MONTHLY' ? 'text-purple-1' : 'text-n-1 hover:text-n-1 dark:hover:text-white'}`}
+                                        onClick={() => setInterval('MONTHLY')}
+                                    >
+                                        Monthly
+                                    </span>
                                     <Switch
                                         value={interval === 'YEARLY'}
                                         setValue={() => setInterval(interval === 'MONTHLY' ? 'YEARLY' : 'MONTHLY')}
                                     />
                                     <span
                                         className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'YEARLY' ? 'text-purple-1' : 'text-n-1 hover:text-n-1 dark:hover:text-white'}`}
-                                        onClick={() => setInterval(interval === 'MONTHLY' ? 'YEARLY' : 'MONTHLY')}
+                                        onClick={() => setInterval('YEARLY')}
                                     >
-                                        Pay Yearly
+                                        Yearly
                                     </span>
                                 </div>
                             </div>
 
                             <div className="flex items-center justify-center">
-                                <div className="flex justify-center gap-6 w-full">
+                                <div className="flex justify-center gap-6 w-full max-w-6xl px-6 flex-wrap pb-20">
                                     {loadingPlans ? (
                                         <div className="flex justify-center p-4"><Loader /></div>
                                     ) : plans.length > 0 ? (
@@ -164,5 +169,3 @@ const JoinTierModal = ({
 };
 
 export default JoinTierModal;
-
-

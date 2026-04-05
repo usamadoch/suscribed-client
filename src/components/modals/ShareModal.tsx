@@ -33,15 +33,16 @@ const ShareModal = ({
             onClose={onClose}
 
 
+
         >
             {title && (
                 <div className="relative z-1 card-title text-n-1 dark:text-white ">
                     {title}
                 </div>
             )}
-            <div className="pb-7 md:pt-8">
-                <div className="mb-6 text-center">
-                    <div className="relative w-full aspect-3/1 overflow-hidden bg-n-2 dark:bg-n-7">
+            <div className="pb-5 md:pt-8">
+                <div className="p-5 text-center">
+                    <div className=" border border-n-4 relative w-full aspect-3/1 overflow-hidden bg-n-2 dark:bg-n-7">
                         <Image
                             className="object-cover"
                             family="banner"
@@ -52,7 +53,7 @@ const ShareModal = ({
                         />
                     </div>
 
-                    <div className="relative z-1 -mt-10 w-20 h-20 mx-auto mb-3 border-4 border-white rounded-full dark:border-n-1 bg-n-1">
+                    <div className="relative z-1 -mt-10 w-20 h-20 ml-5 mb-3 border-4 border-white rounded-full dark:border-n-1 bg-n-1">
                         <Image
                             className="object-cover rounded-full"
                             family="avatar"

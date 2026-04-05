@@ -37,9 +37,7 @@ const LoginModal = ({ visible, onClose }: LoginModalProps) => {
             key="login-modal"
             visible={visible}
             onClose={handleClose}
-            //title={step === 1 ? "Sign in / Sign up" : (flow === "login" ? "Sign in" : "Sign up")}
-            classOverlay="!bg-n-1/40 dark:!bg-n-1/85"
-            classWrap=" border border-n-1 shadow-primary-4"
+            showCloseIcon={false}
         >
 
             <div className="px-5 pb-5 pt-18">
