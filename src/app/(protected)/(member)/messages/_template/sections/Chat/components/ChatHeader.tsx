@@ -8,7 +8,7 @@ type ChatHeaderProps = {
 };
 
 const ChatHeader = ({ onClose, otherUser }: ChatHeaderProps) => (
-    <div className="flex mb-5 p-5 border-b border-n-1 dark:border-white">
+    <div className="flex mb-5 p-5 border-b border-n-1 dark:border-n-6">
         <button
             className="btn-stroke btn-square btn-small hidden mr-2 lg:block"
             onClick={onClose}
@@ -19,15 +19,14 @@ const ChatHeader = ({ onClose, otherUser }: ChatHeaderProps) => (
         <div className="flex items-center mx-auto pl-12 pr-2 text-sm font-bold lg:px-3">
             {otherUser && (
                 <>
-                    <div className="relative w-6 h-6 mr-2">
+                    <div className="relative w-6 h-6 mr-2 dark:text-n-9">
                         <Image
                             className="object-cover rounded-full"
-                            src={
-                                otherUser.avatarUrl ||
-                                "/images/avatars/avatar.jpg"
-                            }
+                            family="avatar"
+                            slot="navbar"
+                            src={otherUser.avatarUrl}
                             fill
-                            alt="Avatar"
+                            alt={otherUser.displayName || "Avatar"}
                         />
                     </div>
                     {otherUser.displayName}

@@ -90,7 +90,7 @@ const NotificationsPage = () => {
                 imageSvg={
                     <Icon
                         name="notification"
-                        className="w-8 h-8 fill-n-1 dark:fill-white"
+                        className="w-8 h-8 fill-n-1 dark:fill-n-8"
                     />
                 }
             />

@@ -33,16 +33,11 @@ const AnalyticsPage = () => {
 
     return (
         <>
-
-            {/* <div className="max-w-[90rem]"> */}
-            {/* Header with Tabs and Time Range */}
-            {/* <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6"> */}
             <Tabs
                 items={tabs}
                 value={activeTab}
                 setValue={(value) => setActiveTab(value as TabValue)}
                 className="flex-wrap!"
-                classButton={activeTab === "earnings" ? "!opacity-60" : ""}
             />
 
             {/* Tab Content */}
@@ -63,8 +58,6 @@ const AnalyticsPage = () => {
                 />
             )}
             {activeTab === "earnings" && <EarningsTab />}
-
-            {/* </div> */}
 
         </>
     );

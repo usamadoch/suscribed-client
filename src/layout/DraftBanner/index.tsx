@@ -36,8 +36,6 @@ const DraftBanner = () => {
     // Only show banner if owner and draft
     const showDraftBanner = isOwner && isDraft;
 
-    console.log(page);
-
     // Check for missing fields for warning
     const missingFields: string[] = [];
     if (page && !page.bannerUrl) missingFields.push('Banner image');

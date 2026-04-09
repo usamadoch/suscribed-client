@@ -17,16 +17,16 @@ const TablePagination = ({
 }: TablePaginationProps) => (
     <div className="flex justify-between items-center mt-6 md:mt-5">
         <button
-            className={`btn-stroke btn-small  rounded-full ${!hasPrevPage ? "opacity-50 pointer-events-none" : ""}`}
+            className={`btn-stroke btn-small rounded-full ${!hasPrevPage && "opacity-50 pointer-events-none"}`}
             onClick={() => onPageChange(page - 1)}
             disabled={!hasPrevPage}
         >
             {/* <Icon name="arrow-prev" /> */}
             <span>Prev</span>
         </button>
-        <div className="text-sm font-medium">Page {page} of {totalPages || 1}</div>
+        <div className="text-sm dark:text-n-9 font-medium">Page {page} of {totalPages || 1}</div>
         <button
-            className={`btn-stroke btn-small  rounded-full ${!hasNextPage ? "opacity-50 pointer-events-none" : ""}`}
+            className={`btn-stroke btn-small rounded-full ${!hasNextPage && "opacity-50 pointer-events-none"}`}
             onClick={() => onPageChange(page + 1)}
             disabled={!hasNextPage}
         >

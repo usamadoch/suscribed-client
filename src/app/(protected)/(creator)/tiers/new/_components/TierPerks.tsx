@@ -71,10 +71,10 @@ export default function TierPerks({ control, register }: TierPerksProps) {
     return (
         <>
             <div className="space-y-4">
-                <label className="block text-xs font-bold text-gray-900 dark:text-white mb-2">
+                <label className="block text-xs font-bold text-n-1 dark:text-n-9 mb-2">
                     Tier perks (optional)
                 </label>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                <p className="text-xs text-n-3 dark:text-n-8 mb-5">
                     Let your members know what they can expect from this membership tier
                 </p>
                 <div className="space-y-3">
@@ -137,7 +137,7 @@ export default function TierPerks({ control, register }: TierPerksProps) {
                         setIsCustomPerk(false);
                         setIsModalOpen(true);
                     }}
-                    className="text-sm text-purple-1 font-medium hover:text-purple-2 transition-colors flex items-center gap-1 mt-3"
+                    className="text-sm text-purple-1 font-medium cursor-pointer flex items-center gap-1 mt-3"
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

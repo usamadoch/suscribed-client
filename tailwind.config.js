@@ -64,19 +64,35 @@ module.exports = {
                 //     7: "#F7F7F8",
                 // },
 
+                // n: {
+                //     1: "#1A1714",
+                //     2: "#151515",
+                //     3: "#726C67",
+                //     4: "#E2DDD8",
+                //     5: "#A5A09B",
+                //     6: "#C5C0BB",
+                //     7: "#F5F2EF",
+                // },
+
+
+                //apple
+
                 n: {
-                    1: "#1A1714",
-                    2: "#2C2622",
-                    3: "#726C67",
-                    4: "#E2DDD8",
-                    5: "#A5A09B",
-                    6: "#C5C0BB",
-                    7: "#F5F2EF",
+
+
+                    1: "#151515",  // slightly lighter dark
+                    2: "#1b1b1c",  // Apple's primary text — warm near-black (not pure #000)
+                    3: "#212121",  // Apple's tertiary/muted
+                    4: "#2d2c2d",  // Apple's secondary text
+                    5: "#323232",  // Apple's divider/border
+                    6: "#ffffff26",  // Apple's tertiary/mute
+                    7: "#fffff666",  // Apple's light surface
+                    8: "#ffffffa3",  // Apple's disabled/placeholder
+                    9: "#ffffffeb",  // Apple's tertiary/muted
                 },
 
-
                 white: "#FFFFFF",
-                background: "#FAF4F0",
+                background: "#151515",
             },
             zIndex: {
                 1: "1",
@@ -193,7 +209,7 @@ module.exports = {
             });
             addComponents({
                 ".btn": {
-                    "@apply inline-flex items-center justify-center h-13 px-5 border border-n-1 text-base text-n-1 fill-n-1 font-bold transition-colors":
+                    "@apply cursor-pointer inline-flex items-center justify-center h-13 px-5 border border-n-1 text-base text-n-1 fill-n-1 font-bold transition-colors":
                         {},
                 },
                 ".btn svg": {
@@ -216,7 +232,7 @@ module.exports = {
                         {},
                 },
                 ".btn-stroke": {
-                    "@apply btn hover:bg-n-1 hover:text-white hover:fill-white dark:border-white dark:text-white dark:fill-white dark:hover:bg-white dark:hover:text-n-1 dark:hover:fill-n-1":
+                    "@apply btn hover:bg-n-1 hover:text-white hover:fill-white dark:border-n-6 dark:text-n-9 dark:fill-n-9 ":
                         {},
                 },
                 ".btn-shadow": {
@@ -248,7 +264,7 @@ module.exports = {
                         {},
                 },
                 ".label-stroke": {
-                    "@apply label border-n-4 dark:border-white dark:text-white":
+                    "@apply label border-n-4 dark:border-n-6 dark:text-n-9":
                         {},
                 },
                 ".label-stroke-yellow": {
@@ -277,7 +293,7 @@ module.exports = {
                         {},
                 },
                 ".table-custom": {
-                    "@apply table w-full border border-n-4 bg-white dark:bg-n-1 dark:border-white":
+                    "@apply table w-full border border-n-6 bg-white dark:bg-n-1":
                         {},
                 },
                 ".table-select": {
@@ -289,19 +305,19 @@ module.exports = {
                         {},
                 },
                 ".td-custom": {
-                    "@apply table-cell h-[3.875rem] px-3 py-2.5 align-middle border-t border-n-4 text-sm first:pl-5 last:pr-5 dark:border-white":
+                    "@apply table-cell h-[3.875rem] px-3 py-2.5 align-middle border-t border-n-4 text-sm first:pl-5 last:pr-5 dark:border-n-6 dark:text-n-9":
                         {},
                 },
                 ".card": {
-                    "@apply bg-white border border-n-4 dark:bg-n-1 dark:border-white":
+                    "@apply bg-white border border-n-4 dark:bg-n-4":
                         {},
                 },
                 ".card-head": {
-                    "@apply flex justify-between items-center min-h-[4rem] px-5 py-3 border-b border-n-4 dark:border-white":
+                    "@apply flex justify-between items-center min-h-[4rem] px-5 py-3 border-b border-n-4":
                         {},
                 },
                 ".card-title": {
-                    "@apply p-5 border-b border-n-4 text-h6 dark:border-white":
+                    "@apply p-5 border-b border-n-4 text-h6 dark:text-n-9":
                         {},
                 },
                 ".icon-16": {

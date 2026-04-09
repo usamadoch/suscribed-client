@@ -869,8 +869,8 @@ export const membershipPlanApi = {
         });
     },
 
-    async subscribeToPlan(tierId: string, interval: 'MONTHLY' | 'YEARLY' = 'MONTHLY'): Promise<{ checkoutUrl: string }> {
-        return fetchApi<{ checkoutUrl: string }>(`/tiers/${tierId}/subscribe`, {
+    async subscribeToPlan(tierId: string, interval: 'MONTHLY' | 'YEARLY' = 'MONTHLY'): Promise<{ checkoutUrl?: string; trackerToken?: string; authToken?: string }> {
+        return fetchApi<{ checkoutUrl?: string; trackerToken?: string; authToken?: string }>(`/tiers/${tierId}/subscribe`, {
             method: 'POST',
             body: JSON.stringify({ interval }),
         });

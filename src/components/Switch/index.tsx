@@ -17,7 +17,7 @@ const Switch = ({ className, value, setValue }: SwitchProps) => (
         <SwitchReact
             checked={value}
             onChange={setValue}
-            className={`relative inline-flex items-center w-10 h-6 pl-0.75 cursor-pointer rounded-sm border border-n-3 transition-colors outline-none dark:border-white ${value ? "bg-purple-1" : "bg-purple-3"
+            className={`relative inline-flex items-center w-10 h-6 pl-0.75 cursor-pointer rounded-sm border border-n-3 transition-colors outline-none ${value ? "bg-purple-1" : "bg-purple-3"
                 }`}
         >
             <span

@@ -32,7 +32,7 @@ const Modal = ({
         <Transition show={visible} as={Fragment}>
             <Dialog
                 initialFocus={initialFocus}
-                className={twMerge(`fixed inset-0 z-50 flex p-6  overflow-auto scroll-smooth md:px-4`, className)}
+                className={twMerge(`fixed inset-0 z-50 flex p-6 overflow-auto scroll-smooth md:px-4`, className)}
                 onClose={onClose}
             >
                 <TransitionChild
@@ -60,7 +60,7 @@ const Modal = ({
                 >
                     <DialogPanel
                         className={twMerge(
-                            `relative z-10 w-full m-auto bg-white rounded-sm border border-transparent dark:border-white dark:bg-n-1 ${video
+                            `relative z-10 w-full m-auto bg-white rounded-sm border border-transparent dark:border-n-6 dark:bg-n-1 ${video
                                 ? "static max-w-5xl aspect-video bg-n-1 overflow-hidden shadow-[0_2.5rem_8rem_rgba(0,0,0,0.5)] dark:border-transparent"
                                 : "max-w-110.5"
                             } ${classWrap}`
@@ -68,7 +68,7 @@ const Modal = ({
                     >
                         {title ? (
                             <>
-                                <div className="p-5 pr-12 border-b border-n-4 text-h6 dark:border-white">
+                                <div className="p-5 pr-12 border-b border-n-4 text-h6 dark:border-n-6">
                                     {title}
                                 </div>
                                 <div className="p-5">{children}</div>
@@ -79,7 +79,7 @@ const Modal = ({
                         {showCloseIcon && (
                             <button
                                 className={twMerge(
-                                    `absolute top-6 right-5 text-0 hover:fill-purple-1 outline-none dark:fill-white dark:hover:fill-purple-1 ${video
+                                    `absolute top-6 right-5 text-0 hover:fill-purple-1 outline-none dark:fill-n-9 dark:hover:fill-purple-1 ${video
                                         ? "absolute top-6 right-6 w-10 h-10 fill-white"
                                         : ""
                                     } ${classButtonClose}`

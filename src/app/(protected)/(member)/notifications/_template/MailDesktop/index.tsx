@@ -49,21 +49,21 @@ const MailDesktop = ({ item }: MailDesktopProps) => {
 
 
     return (
-        <div className="flex items-start border-b border-n-4 text-sm last:border-none dark:border-white">
+        <div className="flex items-start border-b border-n-4 text-sm last:border-none dark:border-n-6">
             <Link
                 href={getNotificationLink(item)}
-                className="flex items-start grow p-4 transition-colors hover:bg-n-3/5 dark:hover:bg-white/10"
+                className="flex items-start grow p-4"
             >
                 <div className="flex items-center shrink-0 pr-4  w-[14.7rem]">
-                    <div className="relative flex items-center justify-center shrink-0 w-8 h-8 mr-3 text-h6">
+                    <div className="relative flex items-center justify-center shrink-0 w-8 h-8 mr-3 text-h6 dark:text-n-9">
                         {getNotificationIcon(item.type)}
                     </div>
                     {item.title || "Notification"}
                 </div>
-                <div className="grow pt-1.5 truncate font-medium" >
+                <div className="grow pt-1.5 truncate font-medium dark:text-n-9" >
                     {item.body || item.message}{" "}
                 </div>
-                <div className="shrink-0 w-28 ml-4 pt-1.5 text-right text-n-3">
+                <div className="shrink-0 w-28 ml-4 pt-1.5 text-right text-n-3 dark:text-n-8">
                     {formatAppDate(item.createdAt, { suffix: true })}
                 </div>
             </Link>

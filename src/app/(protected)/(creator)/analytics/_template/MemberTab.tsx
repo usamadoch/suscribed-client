@@ -107,7 +107,7 @@ const MemberTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Mem
 
             {/* Growth Chart */}
             <div className="card p-6">
-                <h3 className="text-lg font-semibold text-n-1 dark:text-white mb-4">
+                <h3 className="text-lg font-semibold text-n-1 dark:text-n-9 mb-4">
                     Member Growth
                 </h3>
                 <div className="bg-n-7 dark:bg-white/5 rounded-xl p-4">

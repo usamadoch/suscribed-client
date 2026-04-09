@@ -38,49 +38,34 @@ const PostsMobileList = ({ posts }: { posts: DashboardPost[] }) => (
     </div>
 );
 
-const PostsTable = ({ posts, isLoading }: { posts: DashboardPost[]; isLoading: boolean }) => (
-    <table className="table-custom">
-        <thead>
-            <tr>
-                <th className="th-custom w-[60%] text-left">
-                    <Sorting title="Caption" />
-                </th>
+import Table from "@/components/Table";
 
-                <th className="th-custom text-left">
-                    <Sorting title="Published At" />
-                </th>
-                <th className="th-custom text-left">
-                    <Sorting title="Visibility" />
-                </th>
-                <th className="th-custom text-left"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {isLoading ? (
-                <tr>
-                    <td colSpan={5} className="td-custom py-10 h-full">
-                        <div className="flex justify-center items-center">
-                            <Loader />
-                        </div>
-                    </td>
-                </tr>
-            ) : (
-                <>
-                    {posts.length > 0 ? (
-                        posts.map((post) => (
-                            <Row item={post} key={post._id} />
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan={5} className="td-custom py-10 text-center">
-                                No posts found.
-                            </td>
-                        </tr>
-                    )}
-                </>
-            )}
-        </tbody>
-    </table>
+const PostsTable = ({ posts, isLoading }: { posts: DashboardPost[]; isLoading: boolean }) => (
+    <Table
+        isLoading={isLoading}
+        items={posts}
+        emptyMessage="No posts found."
+        headers={[
+            {
+                className: "w-[60%] text-left",
+                render: () => <Sorting title="Caption" />
+            },
+            {
+                className: "text-left",
+                render: () => <Sorting title="Published At" />
+            },
+            {
+                className: "text-left",
+                render: () => <Sorting title="Visibility" />
+            },
+            {
+                className: "text-left"
+            }
+        ]}
+        renderRow={(post) => (
+            <Row item={post} key={post._id} />
+        )}
+    />
 );
 
 // --- Main page component: orchestration only ---
@@ -93,9 +78,6 @@ const PostsPage = () => {
 
     // React Query Hook
     const { data, isLoading } = usePosts({ page, limit });
-
-    console.log(data);
-
 
     const posts: DashboardPost[] = data?.posts || [];
 
@@ -123,11 +105,11 @@ const PostsPage = () => {
 
     return (
         <>
-            {isTablet ? (
-                <PostsMobileList posts={posts} />
-            ) : (
-                <PostsTable posts={posts} isLoading={isLoading} />
-            )}
+
+            {/* <PostsMobileList posts={posts} /> */}
+
+            <PostsTable posts={posts} isLoading={isLoading} />
+
             <TablePagination
                 page={pagination.page}
                 totalPages={pagination.totalPages}

@@ -23,54 +23,38 @@ const MembersMobileList = ({ memberships }: { memberships: any[] }) => (
     </div>
 );
 
+import Table from "@/components/Table";
+
 const MembersTable = ({ memberships, isLoading }: { memberships: any[]; isLoading: boolean }) => (
-    <table className="table-custom">
-        <thead>
-            <tr>
-                <th className="th-custom">
-                    {/* <Checkbox /> */}
-                </th>
-                <th className="th-custom">
-                    <Sorting title="Name" />
-                </th>
-                <th className="th-custom">
-                    <Sorting title="Tier" />
-                </th>
-                <th className="th-custom">
-                    <Sorting title="Joined" />
-                </th>
-                <th className="th-custom text-right">
-                    <Sorting title="Status" />
-                </th>
-                <th className="th-custom text-right"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {isLoading ? (
-                <tr>
-                    <td colSpan={6} className="td-custom text-center text-gray-500">
-                        <div className="flex items-center justify-center">
-                            <Loader />
-                        </div>
-                    </td>
-                </tr>
-            ) : (
-                <>
-                    {memberships.length > 0 ? (
-                        memberships.map((membership) => (
-                            <Row item={membership} key={membership._id} />
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan={6} className=" py-12 text-center text-gray-500">
-                                No members found.
-                            </td>
-                        </tr>
-                    )}
-                </>
-            )}
-        </tbody>
-    </table>
+    <Table
+        isLoading={isLoading}
+        items={memberships}
+        emptyMessage="No members found."
+        headers={[
+            {
+                render: () => null // Placeholder for Checkbox
+            },
+            {
+                render: () => <Sorting title="Name" />
+            },
+            {
+                render: () => <Sorting title="Tier" />
+            },
+            {
+                render: () => <Sorting title="Joined" />
+            },
+            {
+                className: "text-right",
+                render: () => <Sorting title="Status" />
+            },
+            {
+                className: "text-right"
+            }
+        ]}
+        renderRow={(membership) => (
+            <Row item={membership} key={membership._id} />
+        )}
+    />
 );
 
 // --- Main page component: orchestration only ---

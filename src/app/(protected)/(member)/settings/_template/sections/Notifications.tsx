@@ -158,20 +158,20 @@ const Notifications = () => {
                 {categories.map((category, index) => (
                     <div key={index} className="mb-8 last:mb-0">
                         <div className="mb-6">
-                            <div className="text-h6">{category.title}</div>
-                            <div className="text-sm text-n-3 dark:text-white/50">{category.description}</div>
+                            <div className="text-h6 dark:text-n-9">{category.title}</div>
+                            <div className="text-sm text-n-3 dark:text-n-7">{category.description}</div>
                         </div>
                         <div>
                             {category.items.map((setting) => (
                                 <div
-                                    className="flex items-center justify-between mb-4 pb-4 border-b border-n-4 dark:border-white last:mb-0 last:pb-0 last:border-0"
+                                    className="flex items-center justify-between mb-4 pb-4 border-b border-n-4 dark:border-n-6 last:mb-0 last:pb-0 last:border-0"
                                     key={`${setting.type}-${setting.id}`}
                                 >
                                     <div className="mr-8">
-                                        <div className="text-sm font-bold mb-1">
+                                        <div className="text-sm font-bold mb-1 dark:text-n-9">
                                             {setting.label}
                                         </div>
-                                        <div className="text-xs text-n-3 dark:text-white/75">
+                                        <div className="text-xs text-n-3 dark:text-n-8">
                                             {setting.description}
                                         </div>
                                     </div>

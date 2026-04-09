@@ -28,7 +28,7 @@ const VideoPostCard = ({ post }: VideoPostCardProps) => {
     return (
         <Link
             href={`/posts/${post._id}`}
-            className="card group"
+            className="card group dark:bg-n-1 border-none"
         >
             <div className="relative aspect-video bg-n-2 overflow-hidden">
                 {/* Video thumbnail or placeholder */}
@@ -50,11 +50,16 @@ const VideoPostCard = ({ post }: VideoPostCardProps) => {
                     </div>
                 )}
             </div>
-            <div className="p-5">
+            <div className="py-5">
                 <p className={`text-sm font-semibold mb-2 ${isLocked ? "blur-xs select-none" : ""}`}>
-                    <ReadMore words={12}>{displayCaption}</ReadMore>
+                    <ReadMore
+                        words={12}
+                        blurClass="bg-linear-to-r from-transparent to-white dark:to-n-1"
+                    >
+                        {displayCaption}
+                    </ReadMore>
                 </p>
-                <div className="flex items-center text-xs text-n-3">
+                <div className="flex items-center text-xs text-n-3 dark:text-n-8">
                     <span>{formatAppDate(post.createdAt, { suffix: true })}</span>
                     <span className="mx-2">•</span>
                     <span className="flex items-center">
@@ -62,9 +67,9 @@ const VideoPostCard = ({ post }: VideoPostCardProps) => {
                     </span>
                     {isLocked && (
                         <>
-                            <span className="mx-2">•</span>
-                            <span className="flex items-center text-accent">
-                                <Icon name="lock" className="w-3 h-3 mr-1 fill-accent" />
+                            <span className="mx-2 dark:text-n-8">•</span>
+                            <span className="flex items-center text-accent dark:text-n-9">
+                                <Icon name="lock" className="w-3 h-3 mr-1 fill-accent dark:fill-n-9" />
                                 Locked
                             </span>
                         </>

@@ -18,9 +18,9 @@ const PlanCard = ({ plan, interval = 'MONTHLY', action, headerAction, className 
     const periodLabel = interval === 'YEARLY' ? 'year' : 'month';
 
     return (
-        <div className={`relative w-full max-w-80 p ${className}`}>
+        <div className={`relative w-full max-w-80 border-2 border-n-1 dark:border-n-6 p ${className}`}>
             {plan.isHighlighted && (
-                <div className="absolute top-1.5 left-1.5 w-full h-full bg-white border border-n-1 dark:border-white"></div>
+                <div className="absolute top-1.5 left-1.5 w-full h-full bg-white dark:bg-n-6 border border-n-1 dark:border-n-6"></div>
             )}
             <div className={`card relative z-10 px-4 py-6 w-full h-full ${plan.isHighlighted ? 'border-2' : ''}`}>
                 <div className="flex flex-col justify-between items-start mb-3">

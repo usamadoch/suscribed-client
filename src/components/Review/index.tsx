@@ -31,11 +31,11 @@ const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
             <div className="w-[calc(100%-2.125rem)] pl-3.5">
                 <div className="flex items-center mr-5">
                     <div className="flex items-center gap-2">
-                        <div className="capitalize whitespace-nowrap text-base font-bold">
+                        <div className="capitalize whitespace-nowrap text-base font-bold dark:text-n-9">
                             {item.author}
                         </div>
-                        <div className="text-sm text-n-3">•</div>
-                        <div className="truncate text-sm font-medium text-n-3 dark:text-white/75">
+                        <div className="text-sm text-n-3 dark:text-n-8">•</div>
+                        <div className="truncate text-sm font-medium text-n-3 dark:text-n-8">
                             {item.time}
                         </div>
                     </div>
@@ -70,7 +70,7 @@ const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
                 </div>
 
                 <div className={`text-base py-2.5 ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
-                    <ReadMore words={100} buttonClass="text-n-1">{item.content}</ReadMore>
+                    <ReadMore words={100} buttonClass="text-n-1 dark:text-purple-1">{item.content}</ReadMore>
                 </div>
 
                 {item.images && item.images.length > 0 && (
@@ -91,7 +91,7 @@ const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
                             </div>
                         )}
                         {item.video.duration && (
-                            <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 rounded text-xs font-semibold text-white">
+                            <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 rounded text-xs font-semibold text-white dark:text-n-8">
                                 {formatDuration(item.video.duration)}
                             </div>
                         )}

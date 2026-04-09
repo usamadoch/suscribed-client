@@ -21,7 +21,7 @@ const Layout = ({
 }: LayoutProps) => {
 
     const content = (
-        <div className="relative pl-75 xl:pl-20 md:pl-0 md:pb-20">
+        <div className="relative pl-75 xl:pl-20 md:pl-0 md:pb-20 bg-n-1">
             <Sidebar />
             <div className="flex flex-col min-h-screen md:pt-0 md:min-h-[calc(100vh-5rem)]">
                 <div className="flex grow">

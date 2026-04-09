@@ -17,7 +17,7 @@ const CommentItem = ({ comment, variant = 'default' }: CommentItemProps) => {
     // "default" applies the card style (border, shadow, padding)
     // "modal" applies a cleaner style (no border, minimal padding/margin)
     const containerClasses = variant === 'default'
-        ? "flex p-5 pb-3 card bg-background border-none last:mb-0"
+        ? "flex p-5 pb-3 card bg-background dark:bg-n-4 border-none last:mb-0"
         : "flex last:mb-0";
 
     return (
@@ -34,14 +34,14 @@ const CommentItem = ({ comment, variant = 'default' }: CommentItemProps) => {
             </div>
             <div className="w-[calc(100%-2.125rem)] pl-3.5">
                 <div className="flex items-baseline">
-                    <div className="whitespace-nowrap text-sm font-bold text-n-1 dark:text-white">
+                    <div className="whitespace-nowrap text-sm font-bold text-n-1 dark:text-n-9">
                         {authorName}
                     </div>
-                    <div className="ml-2 pt-0.75 truncate text-xs font-medium text-n-3 dark:text-white/75">
+                    <div className="ml-2 pt-0.75 truncate text-xs font-medium text-n-3 dark:text-n-8">
                         {timeAgo}
                     </div>
                 </div>
-                <div className="text-sm text-n-1 dark:text-white/80">{comment.content}</div>
+                <div className="text-sm text-n-1 dark:text-n-9">{comment.content}</div>
 
                 <Actions
                     postId={comment._id}

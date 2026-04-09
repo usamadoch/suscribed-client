@@ -95,7 +95,7 @@ const ChatMessageList = ({
                 }
             })}
             {isTyping && (
-                <div className="text-xs text-n-3 ml-12">Typing...</div>
+                <div className="text-xs text-n-3 dark:text-n-8 ml-12">Typing...</div>
             )}
         </div>
     </div>

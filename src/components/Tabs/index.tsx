@@ -28,10 +28,10 @@ const Tabs = ({
         <div className={`flex flex-wrap -ml-1 ${className}`}>
             {items.map((item, index) => (
                 <button
-                    className={`h-8 ml-1 px-5 whitespace-nowrap text-xs font-bold transition-colors outline-none tap-highlight-color hover:text-n-3 dark:hover:text-purple-1 ${value === item.value
-                        ? "bg-n-1 !text-white dark:bg-white/[0.08]"
+                    className={`h-8 ml-1 px-5 whitespace-nowrap cursor-pointer text-xs font-bold transition-colors outline-none tap-highlight-color ${value === item.value
+                        ? "bg-n-1 text-white! dark:bg-n-5 dark:text-n-9"
                         : ""
-                        } ${classButton}`}
+                        }`}
                     onClick={() => handleClick(item.value, item.onClick)}
                     key={index}
                 >

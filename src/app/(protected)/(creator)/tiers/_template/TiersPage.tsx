@@ -7,6 +7,7 @@ import { useTiers } from '../useTiers';
 import Loader from '@/components/Loader';
 import PlanCard from '@/components/PlanCard';
 import HighlightTierModal from '@/components/modals/HighlightTierModal';
+import Icon from '@/components/Icon';
 
 
 
@@ -48,7 +49,7 @@ export default function TiersPage() {
     return (
         <div className="max-w-3xl w-full mx-auto p-4 md:p-8">
             <div className="flex  justify-between items-start md:items-center mb-6 gap-4">
-                <h4 className="text-h4 font-bold">Subscription Tiers</h4>
+                <h4 className="text-h4 font-bold dark:text-n-9">Subscription Tiers</h4>
                 <div className="flex gap-4">
 
                     <button
@@ -69,19 +70,15 @@ export default function TiersPage() {
 
             {plans.length === 0 ? (
                 <div className="card p-8 flex flex-col items-center justify-center min-h-[400px]">
-                    {/* <div className="mx-auto w-16 h-16 bg-purple-3 dark:bg-white/10 rounded-full flex items-center justify-center mb-4">
-                        <svg className="w-8 h-8 text-purple-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                    </div> */}
-                    <h3 className="text-h5 mb-2">No Subscription Tiers Yet</h3>
-                    <p className="text-center text-sm text-n-3 dark:text-n-4 mb-6 max-w-md mx-auto">
+                    <h3 className="text-h5 mb-2 dark:text-n-9">No Subscription Tiers Yet</h3>
+                    <p className="text-center text-sm text-n-3 dark:text-n-8 mb-6 max-w-md mx-auto">
                         Create subscription tiers to allow fans to support you on a monthly basis and unlock exclusive content.
                     </p>
                     <button
                         onClick={handleCreate}
-                        className="btn-purple px-5"
+                        className="btn-purple btn-medium px-5"
                     >
+                        <Icon name="plus" className=" fill-white dark:fill-n-9" />
                         Create Your First Tier
                     </button>
                 </div>

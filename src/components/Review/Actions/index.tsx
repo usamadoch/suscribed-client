@@ -87,7 +87,7 @@ const Actions = ({ postId, comments, likes: initialLikes, isLiked: initialIsLike
                                 }
                             }}
                         >
-                            <Icon name="reply" className="icon-18 dark:fill-white" viewBox="0 0 512 512" />
+                            <Icon name="reply" className="icon-18 dark:fill-n-9" viewBox="0 0 512 512" />
                         </button>
                     )
                 )}

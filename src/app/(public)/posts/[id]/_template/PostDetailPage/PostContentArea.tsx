@@ -65,9 +65,9 @@ const PostContentArea = ({
                         <div className="flex flex-col w-full pl-4 gap-2">
                             <div className="flex justify-between w-full">
                                 <div className="flex items-center gap-3">
-                                    <h5 className="capitalize text-h5 md:text-h4">{creator.displayName}</h5>
-                                    <span>•</span>
-                                    <span className="text-sm text-n-3">
+                                    <h5 className="capitalize text-h5 md:text-h4 dark:text-n-9">{creator.displayName}</h5>
+                                    <span className="dark:text-n-8">•</span>
+                                    <span className="text-sm text-n-3 dark:text-n-8">
                                         {formatAppDate(post.publishedAt || post.createdAt, { suffix: true })}
                                     </span>
                                 </div>
@@ -82,8 +82,8 @@ const PostContentArea = ({
                             </div>
 
                             <div className="flex justify-between items-start w-full">
-                                <div className={`text-sm whitespace-pre-wrap text-n-1 dark:text-white w-[60%] ${locked ? "blur-xs select-none" : ""}`}>
-                                    <ReadMore words={20}>{displayCaption}</ReadMore>
+                                <div className={`text-sm whitespace-pre-wrap text-n-1 dark:text-n-9 w-[60%] ${locked ? "blur-xs select-none" : ""}`}>
+                                    <ReadMore words={20} className="dark:text-n-9">{displayCaption}</ReadMore>
                                 </div>
                                 <div className="shrink-0">
                                     <PostMetadata viewCount={post.viewCount} />

@@ -18,8 +18,8 @@ const Answer = ({ time, content, author, status }: AnswerProps) => (
                 {status === 'sending' && (
                     <Loader className="w-3 h-3 mr-1.5" />
                 )}
-                <div className="">{time}</div>
-                <div className="ml-1 font-bold">{author?.name || "You"}</div>
+                <div className="dark:text-n-8">{time}</div>
+                <div className="ml-1 font-bold dark:text-n-9">{author?.name || "You"}</div>
             </div>
             <div
                 className="inline-block px-4 py-1.5 bg-purple-1 text-sm font-medium text-n-1"

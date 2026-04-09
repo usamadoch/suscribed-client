@@ -48,7 +48,7 @@ const NewTierPage = () => {
     return (
         <div className='max-w-3xl mx-auto w-full'>
             <div className="mb-6">
-                <h4 className="text-h4 font-bold text-gray-900 dark:text-white">Create Subscription Tier</h4>
+                <h4 className="text-h4 font-bold text-gray-900 dark:text-n-9">Create Subscription Tier</h4>
             </div>
 
             <div className="flex  lg:flex-row gap-8">

@@ -46,8 +46,8 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user,
     };
 
     return (
-        <div className="flex flex-col w-md border-r border-n-1 4xl:w-92.5 lg:w-full lg:border-none dark:border-white">
-            <div className="flex p-5 border-b border-n-1 dark:border-white">
+        <div className="flex flex-col w-md border-r border-n-1 4xl:w-92.5 lg:w-full lg:border-none dark:bg-n-1 dark:border-n-6">
+            <div className="flex p-5 border-b border-n-1 dark:border-n-6">
 
                 <div className="grow"></div>
                 <button className="btn-stroke btn-square btn-small mr-1.5">
@@ -63,13 +63,13 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user,
             <div className="grow overflow-auto scroll-smooth">
                 {isLoading ? Array.from({ length: 8 }).map((_, index) => (
                     <div className="flex w-full px-5 py-3 border-b border-n-1 last:border-none" key={index}>
-                        <div className="border border-n-1 dark:border-white w-8 h-8 rounded-full animate-skeleton bg-n-4/10"></div>
+                        <div className="border border-n-1 dark:border-n-6 w-8 h-8 rounded-full animate-skeleton bg-n-4/10"></div>
                         <div className="w-[calc(100%-2rem)] pl-3">
                             <div className="flex justify-between mb-1">
-                                <div className="border border-n-1 dark:border-white w-20 h-4 animate-skeleton bg-n-4/10"></div>
-                                <div className="border border-n-1 dark:border-white w-8 h-4 animate-skeleton bg-n-4/10"></div>
+                                <div className="border border-n-1 dark:border-n-6 w-20 h-4 animate-skeleton bg-n-4/10"></div>
+                                <div className="border border-n-1 dark:border-n-6 w-8 h-4 animate-skeleton bg-n-4/10"></div>
                             </div>
-                            <div className="border border-n-1 dark:border-white w-3/4 h-4 animate-skeleton bg-n-4/10"></div>
+                            <div className="border border-n-1 dark:border-n-6 w-3/4 h-4 animate-skeleton bg-n-4/10"></div>
                         </div>
                     </div>
                 )) : conversations.map((conversation: Conversation) => {
@@ -79,8 +79,8 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user,
 
                     return (
                         <button
-                            className={`flex w-full px-5 py-3 border-b border-n-1 text-left last:border-none transition-colors hover:bg-n-3/5 dark:border-white dark:hover:bg-white/10 ${conversation._id === activeId
-                                ? "bg-n-3/20! dark:bg-white/20!"
+                            className={`flex w-full px-5 py-3 border-b border-n-1 text-left last:border-none transition-colors dark:border-n-6 ${conversation._id === activeId
+                                ? "bg-n-4! dark:bg-n-4!"
                                 : ""
                                 }`}
                             key={conversation._id}
@@ -96,8 +96,8 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user,
                             </div>
                             <div className="w-[calc(100%-2rem)] pl-3">
                                 <div className="flex justify-between mb-1 text-xs font-medium text-n-3 dark:text-white/75">
-                                    <div className="line-clamp-1 mr-2 capitalize">{otherUser.displayName || 'Unknown'}</div>
-                                    <div className="shrink-0">{formatAppDate(lastMessage?.sentAt || conversation.createdAt)}</div>
+                                    <div className="line-clamp-1 mr-2 capitalize dark:text-n-8">{otherUser.displayName || 'Unknown'}</div>
+                                    <div className="shrink-0 dark:text-n-8">{formatAppDate(lastMessage?.sentAt || conversation.createdAt)}</div>
                                 </div>
                                 <div className="truncate text-sm">
                                     {/* Using display name as title for now, or last message preview */}
@@ -107,7 +107,7 @@ const Messages = ({ setVisible, conversations = [], activeId, setActiveId, user,
                                             {lastMessage.content}
                                         </span>
                                     ) : (
-                                        <span className="italic text-n-3">No messages yet</span>
+                                        <span className="text-n-9 dark:text-n-9">No messages yet</span>
                                     )}
                                 </div>
                             </div>

@@ -111,14 +111,14 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                         </div>
                     </div>
 
-                    <div className="text-n-1 dark:text-white pl-4">
+                    <div className="text-n-1 dark:text-n-9 pl-4">
                         <h5 className="capitalize mb-4 text-h5 md:text-h3">{page.displayName}</h5>
                         <div className="flex items-center font-medium text-n-3">
-                            <span className="text-sm mr-2 md:mr-4">{page.memberCount || 0} Members</span>
-                            <span className="text-sm">{page.postCount || 0} Posts</span>
+                            <span className="text-sm mr-2 md:mr-4 dark:text-n-7">{page.memberCount || 0} Members</span>
+                            <span className="text-sm dark:text-n-7">{page.postCount || 0} Posts</span>
                         </div>
-                        <p className="mt-1 text-base text-n-3 ">
-                            <ReadMore words={20} >
+                        <p className="mt-1 text-base text-n-3 dark:text-n-9">
+                            <ReadMore words={20}>
                                 {page.tagline || page.about || "No description available."}
                             </ReadMore>
                         </p>

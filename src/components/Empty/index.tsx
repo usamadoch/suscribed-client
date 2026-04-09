@@ -42,8 +42,8 @@ const Empty = ({
             {imageSvg && (
                 <div className="flex justify-center mb-6">{imageSvg}</div>
             )}
-            <h4 className="mb-2 -mx-4 text-h4 md:text-h3">{title}</h4>
-            <p className="max-w-94 mx-auto mb-12 text-n-3">{content}</p>
+            <h4 className="mb-2 -mx-4 text-h4 md:text-h3 dark:text-n-9">{title}</h4>
+            <p className="max-w-94 mx-auto mb-12 text-n-3 dark:text-n-7">{content}</p>
             {buttonUrl ? (
                 <Link className="btn-purple btn-shadow" href={buttonUrl}>
                     <Icon name={buttonIcon || "add-circle"} />

@@ -1,9 +1,8 @@
-
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import MuxVideoPlayer from "@/components/MuxVideoPlayer";
 import { MediaFile } from "../hooks/useMediaUpload";
+import ActionMenu from "@/components/ActionMenu";
 
 type MediaItemProps = {
     file: MediaFile;
@@ -27,7 +26,7 @@ const MediaItem = ({
             className={`relative w-full group ${index === 0 ? 'col-span-full' : ''}`}
         >
             {/* Media Preview */}
-            <div className={`relative ${index === 0 ? 'h-96' : 'h-40'} rounded-lg border border-n-1 overflow-hidden`}>
+            <div className={`relative ${index === 0 ? 'h-96' : 'h-40'} rounded-lg border border-n-1 dark:border-n-6 overflow-hidden`}>
                 {file.type === "image" ? (
                     <Image
                         family="post"
@@ -51,14 +50,14 @@ const MediaItem = ({
                 {/* Error State Overlay */}
                 {file.uploadStatus === 'error' && (
                     <div className="absolute inset-0 bg-red-500/80 flex flex-col items-center justify-center">
-                        <span className="text-white text-2xl mb-2">⚠</span>
-                        <span className="text-white text-sm mb-2">Upload failed</span>
+                        <span className="text-white dark:text-n-9 text-2xl mb-2">⚠</span>
+                        <span className="text-white dark:text-n-9 text-sm mb-2">Upload failed</span>
                         {retryUpload && (
                             <button
                                 onClick={() => retryUpload(file.id)}
-                                className="px-3 py-1 bg-white text-red-500 rounded text-sm font-medium hover:bg-gray-100"
+                                className="px-3 py-1 bg-white text-red-500 text-sm font-medium cursor-pointer"
                             >
-                                Retry
+                                Try Again
                             </button>
                         )}
                     </div>
@@ -67,43 +66,27 @@ const MediaItem = ({
                 {/* Actions Menu - Moved inside media container for absolute positioning */}
                 <div className="absolute top-2 right-2 z-10">
                     {index === 0 && attachmentsLength > 1 ? (
-                        <Menu className="relative" as="div">
-                            <MenuButton className="btn-square border border-black btn-small cursor-pointer bg-purple-1 rounded-sm text-0 transition-colors hover:bg-purple-2">
-                                <Icon name="dots" />
-                            </MenuButton>
-                            <Transition
-                                enter="transition duration-100 ease-out"
-                                enterFrom="transform scale-95 opacity-0"
-                                enterTo="transform scale-100 opacity-100"
-                                leave="transition duration-75 ease-out"
-                                leaveFrom="transform scale-100 opacity-100"
-                                leaveTo="transform scale-95 opacity-0"
-                            >
-                                <MenuItems className="absolute right-0 mt-2 w-32 py-2 border border-n-1 rounded-sm bg-white shadow-primary-4 dark:bg-n-1 dark:border-white z-10">
-                                    <MenuItem>
-                                        <button
-                                            className="flex items-center w-full px-4 py-2 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
-                                            onClick={() => removeAttachment(file.id)}
-                                        >
-                                            <Icon className="w-4 h-4 mr-2 fill-n-1 dark:fill-white" name="trash" />
-                                            Delete
-                                        </button>
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <button
-                                            className="flex items-center w-full px-4 py-2 text-sm font-bold text-red-500 transition-colors hover:bg-n-3/10 dark:text-red-500 dark:hover:bg-white/20"
-                                            onClick={removeAllAttachments}
-                                        >
-                                            <Icon className="w-4 h-4 mr-2 fill-red-500" name="trash" />
-                                            Delete All
-                                        </button>
-                                    </MenuItem>
-                                </MenuItems>
-                            </Transition>
-                        </Menu>
+                        <ActionMenu
+                            buttonClass="btn-square border border-black btn-small bg-purple-1 rounded-sm text-0 dark:text-n-1 cursor-pointer"
+                            menuItemsClass="absolute right-0 top-8 mt-2 w-32 py-2 border border-n-1 rounded-sm bg-white dark:bg-n-1 dark:border-n-6 z-10 focus:outline-none"
+                            items={[
+                                {
+                                    // icon: "trash",
+                                    label: "Delete",
+                                    className: "flex items-center w-full px-7 py-2 text-sm font-bold text-n-1 cursor-pointer dark:text-n-9",
+                                    onClick: () => removeAttachment(file.id),
+                                },
+                                {
+                                    // icon: "trash",
+                                    label: "Delete All",
+                                    className: "flex items-center w-full px-7 py-2 text-sm font-bold text-pink-1 cursor-pointer dark:text-n-9",
+                                    onClick: removeAllAttachments,
+                                }
+                            ]}
+                        />
                     ) : (
                         <button
-                            className="w-8 h-8 bg-purple-1 border border-n-1 rounded-sm text-0 transition-colors hover:bg-purple-2 flex items-center justify-center"
+                            className="w-8 h-8 bg-purple-1 border border-n-1 cursor-pointer rounded-sm text-0 flex items-center justify-center dark:text-n-1 "
                             onClick={() => removeAttachment(file.id)}
                             type="button"
                         >
@@ -115,16 +98,16 @@ const MediaItem = ({
 
             {/* File Info & Actions */}
             <div className="flex items-center justify-between mt-2 px-1">
-                <div className="flex-1 min-w-0 pr-3">
+                <div className="flex-1 min-w-0">
                     {file.isNew && (file.uploadStatus === 'uploading' || file.uploadStatus === 'completed') && (
                         <div className="flex flex-col gap-1 w-full">
-                            <div className="flex justify-between items-center text-xs text-n-3 dark:text-white/60">
-                                <p className="text-xs text-n-3 dark:text-white/60 truncate">
+                            <div className="flex justify-between items-center text-xs text-n-3 dark:text-n-7">
+                                <p className="text-xs text-n-3 dark:text-n-7 truncate">
                                     {file.file?.name || 'Existing file'}
                                 </p>
                                 <span>{file.uploadProgress}%</span>
                             </div>
-                            <div className="h-1 w-full bg-n-3/20 rounded-full overflow-hidden dark:bg-white/20">
+                            <div className="h-1 w-full bg-n-3/20 rounded-full overflow-hidden dark:bg-n-7">
                                 <div
                                     className="h-full bg-purple-1 rounded-full transition-all duration-300 ease-out"
                                     style={{ width: `${file.uploadProgress}%` }}

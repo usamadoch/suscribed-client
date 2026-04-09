@@ -57,8 +57,8 @@ const NewPostSettings = ({
                 {getButtonText()}
             </button>
 
-            <div className="mb-5 text-h5">Settings</div>
-            <div className="mb-3 text-xs">Who can see this?</div>
+            <div className="mb-5 text-h5 dark:text-n-9">Settings</div>
+            <div className="mb-3 text-xs dark:text-n-8">Who can see this?</div>
             <RadioGroup
                 value={plans.find(p => p.id === visibility) || plans[0]}
                 onChange={(plan) => setVisibility(plan.id as PostVisibility)}
@@ -69,7 +69,7 @@ const NewPostSettings = ({
                         key={plan.id}
                         value={plan}
                         className={({ checked }) =>
-                            `group border border-n-1 p-4 dark:border-white relative flex items-start mb-4 last:mb-0 cursor-pointer select-none transition-colors ${checked ? "bg-purple-1" : "bg-transparent"
+                            `group border border-n-1 p-4 dark:border-n-6 relative flex items-start mb-4 last:mb-0 cursor-pointer select-none transition-colors ${checked ? "bg-purple-1" : "bg-transparent"
                             }`
                         }
                     >
@@ -78,7 +78,7 @@ const NewPostSettings = ({
                                 <div
                                     className={`flex justify-center items-center w-5 h-5 mt-0.5 mr-3 rounded-full border transition-colors ${checked
                                         ? "border-n-1"
-                                        : "bg-transparent border-n-3 dark:border-white"
+                                        : "bg-transparent border-n-3 dark:border-n-6"
                                         }`}
                                 >
                                     {checked && (
@@ -89,7 +89,7 @@ const NewPostSettings = ({
                                     <div
                                         className={`text-sm font-bold transition-colors ${checked
                                             ? "text-n-1"
-                                            : "text-n-3 dark:text-white/50"
+                                            : "text-n-3 dark:text-n-7"
                                             }`}
                                     >
                                         {plan.label}
@@ -109,9 +109,9 @@ const NewPostSettings = ({
                 ))}
             </RadioGroup>
 
-            <div className="mt-5 pt-5 border-t border-dashed border-n-1 dark:border-white">
+            <div className="mt-5 pt-5 border-t border-dashed border-n-1 dark:border-n-6">
                 <div className="flex justify-between items-center mb-5">
-                    <div className="text-sm font-bold">Allow comments</div>
+                    <div className="text-sm font-bold dark:text-n-9">Allow comments</div>
                     <Switch value={allowComments} setValue={setAllowComments} />
                 </div>
 

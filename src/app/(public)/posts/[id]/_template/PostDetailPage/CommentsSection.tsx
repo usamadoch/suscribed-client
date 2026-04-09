@@ -28,7 +28,7 @@ const CommentsSection = ({
 
     return (
         <>
-            <div className="text-2xl font-bold mb-6">Comments</div>
+            <div className="text-2xl font-bold mb-6 dark:text-n-9">Comments</div>
             <CommentInput
                 className="mb-6 shadow-none"
                 avatar={avatar}
@@ -46,7 +46,7 @@ const CommentsSection = ({
                         <CommentItem key={comment._id} comment={comment} />
                     ))
                 ) : (
-                    <div className="text-n-3 text-sm">No comments yet.</div>
+                    <div className="text-n-3 text-sm dark:text-n-8">No comments yet.</div>
                 )}
             </div>
         </>

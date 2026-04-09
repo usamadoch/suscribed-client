@@ -28,7 +28,7 @@ const Categories = ({
                         <ListboxButton
                             as="div"
                             className={twMerge(
-                                `relative w-full h-12 px-5 py-3 text-left bg-white border border-n-4 text-sm text-n-1 font-bold outline-none transition-colors cursor-pointer dark:bg-n-1 dark:border-white dark:text-white ${open ? "border-purple-1 dark:border-purple-1" : ""
+                                `relative w-full h-12 px-5 py-3 text-left bg-white border border-n-4 text-sm text-n-1 font-bold outline-none transition-colors cursor-pointer dark:bg-[#1f1f1f] dark:border-n-6 dark:text-n-9 ${open ? "border-purple-1 dark:border-purple-1" : ""
                                 }`
                             )}
                         >
@@ -49,7 +49,7 @@ const Categories = ({
                                                 }}
                                             >
                                                 <Icon
-                                                    className="transition-colors dark:fill-white group-hover:fill-pink-1"
+                                                    className="transition-colors dark:fill-n-9 group-hover:fill-pink-1"
                                                     name="close"
                                                 />
                                             </button>
@@ -57,7 +57,7 @@ const Categories = ({
                                         </div>
                                     ))
                                 ) : (
-                                    <span className="mt-1.5 mx-0.75 text-n-3 dark:text-white/75">
+                                    <span className="mt-1.5 mx-0.75 text-n-3 dark:text-n-9">
                                         {/* Select options... */}
                                     </span>
                                 )}
@@ -76,7 +76,7 @@ const Categories = ({
                             <ListboxOptions className="absolute left-0 right-0 z-10 mt-1 p-2 bg-white border border-n-4 shadow-lg dark:bg-n-1 dark:border-white">
                                 {options.map((item) => (
                                     <ListboxOption
-                                        className="flex items-start px-3 py-2 text-sm font-bold text-n-3 transition-colors cursor-pointer hover:text-n-1 ui-selected:!bg-n-3/20 ui-selected:!text-n-1 tap-highlight-color dark:text-white/50 dark:hover:text-white dark:ui-selected:!text-white"
+                                        className="flex items-start px-3 py-2 text-sm font-bold text-n-3 transition-colors cursor-pointer ui-selected:bg-n-3/20! ui-selected:text-n-1! tap-highlight-color dark:text-n-7  dark:ui-selected:text-white!"
                                         key={item.id}
                                         value={item}
                                     >

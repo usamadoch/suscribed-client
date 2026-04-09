@@ -26,15 +26,15 @@ const QuickActions = ({ pageSlug }: QuickActionsProps) => {
                 </Link>
                 <Link
                     href="/settings"
-                    className="btn-stroke btn-medium btn-square shrink-0 ml-1.5 flex items-center justify-center"
+                    className="btn-stroke btn-medium btn-square cursor-pointer shrink-0 ml-1.5 flex items-center justify-center"
                 >
                     <Icon name="setup" className="w-5 h-5" />
                 </Link>
                 <button
                     onClick={handleCopyLink}
-                    className="btn-stroke btn-medium btn-square shrink-0 ml-1.5 flex items-center justify-center"
+                    className="btn-stroke btn-medium btn-square cursor-pointer shrink-0 ml-1.5 flex items-center justify-center"
                 >
-                    <Icon name="arrow-up-right" className="w-5 h-5" />
+                    <Icon name="copy" viewBox="0 0 24 24" className="w-5 h-5" />
                 </button>
             </div>
 

@@ -25,11 +25,11 @@ const Question = ({ time, content, images, loading, author }: QuestionProps) => 
         </div>
         <div className="flex flex-col items-start grow">
             <div className="flex justify-end mb-1.5 text-xs">
-                <div className="mr-1 font-bold">{author?.name || "User"}</div>
-                <div className="">{time}</div>
+                <div className="mr-1 font-bold dark:text-n-9">{author?.name || "User"}</div>
+                <div className="dark:text-n-8">{time}</div>
             </div>
             <div
-                className="inline-block px-4 py-1.5 bg-background text-sm font-medium dark:bg-white/25"
+                className="inline-block px-4 py-1.5 bg-background text-sm font-medium dark:bg-white/25 dark:text-n-9"
                 style={{
                     clipPath:
                         "polygon(0.7rem 0, 100% 0, 100% 100%, 0 100%, 0 0.7rem)",

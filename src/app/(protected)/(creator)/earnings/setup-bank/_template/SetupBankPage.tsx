@@ -94,7 +94,7 @@ const SetupBankPage = () => {
     return (
         <div className="max-w-3xl mx-auto w-full">
             <div className="card p-6 md:p-8">
-                <h4 className="text-h4 font-bold mb-6">
+                <h4 className="text-h4 font-bold mb-6 dark:text-n-9">
                     {payoutMethod ? 'Update Bank Details' : 'Add Bank Details'}
                 </h4>
 

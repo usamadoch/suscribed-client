@@ -39,7 +39,7 @@ const PerkModal = ({
             <div className="space-y-5">
                 <div>
                     <div className="flex items-center justify-between mb-2">
-                        <label className="block text-xs font-bold text-gray-900 dark:text-white">
+                        <label className="block text-xs font-bold text-n-1 dark:text-n-9">
                             {isCustomPerk ? "Custom Perk" : "Select a Perk"}
                         </label>
                         <button
@@ -49,7 +49,7 @@ const PerkModal = ({
                                 setSelectedPerk(null);
                                 setCustomPerkText('');
                             }}
-                            className="text-xs text-purple-1 hover:text-purple-2 font-medium"
+                            className="text-xs text-purple-1 font-medium cursor-pointer"
                         >
                             {isCustomPerk ? "Select predefined perk instead" : "Create custom perk"}
                         </button>

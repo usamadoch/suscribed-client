@@ -20,16 +20,16 @@ export default function EarningsPage() {
 
     const renderBanner = () => {
         return (
-            <div className="bg-[#daf464] border border-n-4 px-5 py-4 mb-6">
+            <div className="bg-[#daf464] dark:bg-n-4 border border-n-4 px-5 py-4 mb-6">
                 <div className='flex flex-col items-start gap-2 justify-between'>
 
 
-                    <h5 className="text-h5 font-bold ">Setup Payout Method</h5>
-                    <p className="text-sm">Add your bank details to receive payments from your fans.</p>
+                    <h5 className="text-h5 font-bold dark:text-n-9">Setup Payout Method</h5>
+                    <p className="text-sm dark:text-n-8">Add your bank details to receive payments from your fans.</p>
 
                     <button
                         onClick={() => router.push('/earnings/setup-bank')}
-                        className="btn-stroke bg-white btn-medium px-12 disabled:opacity-50 disabled:cursor-not-allowed capitalize"
+                        className="btn-stroke btn-medium px-12 dark:hover:bg-n-1 disabled:opacity-50 disabled:cursor-not-allowed capitalize"
                         disabled={!!payoutMethod}
                     >
                         {payoutMethod ? payoutMethod.status.replace('_', ' ') : 'Setup Now'}
@@ -48,33 +48,33 @@ export default function EarningsPage() {
             <div className='card'>
                 <div className="flex lg:block dark:border-white">
                     {/* Available Balance Box */}
-                    <div className="flex-1 px-5 py-4 border-r border-n-4 last:border-none lg:border-r-0 lg:border-b dark:border-white">
+                    <div className="flex-1 px-5 py-4 border-r border-n-4 dark:border-n-6 last:border-none lg:border-r-0 lg:border-b ">
                         <div className="flex justify-between items-center mb-2">
                             <div className="text-sm capitalize dark:text-white/75">
                                 Available Balance
                             </div>
                         </div>
-                        <div className="text-h5">${((summary?.availableBalance || 0) / 100).toFixed(2)}</div>
+                        <div className="text-h5 dark:text-n-9">${((summary?.availableBalance || 0) / 100).toFixed(2)}</div>
                     </div>
 
                     {/* Pending Balance Box */}
-                    <div className="flex-1 px-5 py-4 border-r border-n-4 last:border-none lg:border-r-0 lg:border-b dark:border-white">
+                    <div className="flex-1 px-5 py-4 border-r border-n-4 dark:border-n-6 last:border-none lg:border-r-0 lg:border-b ">
                         <div className="flex justify-between items-center mb-2">
                             <div className="text-sm capitalize dark:text-white/75">
                                 Pending Balance
                             </div>
                         </div>
-                        <div className="text-h5 ">${((summary?.pendingBalance || 0) / 100).toFixed(2)}</div>
+                        <div className="text-h5 dark:text-n-9">${((summary?.pendingBalance || 0) / 100).toFixed(2)}</div>
                     </div>
 
                     {/* Lifetime Earnings Box */}
-                    <div className="flex-1 px-5 py-4 border-r border-n-4 last:border-none lg:border-r-0 lg:border-b dark:border-white">
+                    <div className="flex-1 px-5 py-4 border-r border-n-4 dark:border-n-6 last:border-none lg:border-r-0 lg:border-b ">
                         <div className="flex justify-between items-center mb-2">
                             <div className="text-sm capitalize dark:text-white/75">
                                 Lifetime Earnings
                             </div>
                         </div>
-                        <div className="text-h5">${((summary?.lifetimeEarnings || 0) / 100).toFixed(2)}</div>
+                        <div className="text-h5 dark:text-n-9">${((summary?.lifetimeEarnings || 0) / 100).toFixed(2)}</div>
                     </div>
                 </div>
             </div>

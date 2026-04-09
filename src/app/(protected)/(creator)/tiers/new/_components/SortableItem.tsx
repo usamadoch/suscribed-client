@@ -30,19 +30,19 @@ export default function SortableItem({ id, value, onRemove, onEdit, isOverlay = 
         <div
             ref={setNodeRef}
             style={style}
-            className={`flex gap-3 items-center group bg-white dark:bg-n-1 p-2 border border-n-1 transition-colors ${isOverlay ? 'border-purple-1 ring-1 ring-purple-1/20 shadow-xl cursor-grabbing' : ''
+            className={`flex gap-3 items-center group bg-white dark:bg-[#1f1f1f] p-2 border border-n-1 dark:border-n-6 transition-colors ${isOverlay ? 'border-purple-1 ring-1 ring-purple-1/20 shadow-xl cursor-grabbing' : ''
                 }`}
         >
             <div
                 {...attributes}
                 {...listeners}
-                className={`px-1 text-n-1 transition-opacity outline-none ${isOverlay ? 'opacity-100 cursor-grabbing' : 'opacity-50 hover:opacity-100 cursor-grab active:cursor-grabbing'}`}
+                className={`px-1 text-n-8 transition-opacity outline-none ${isOverlay ? 'opacity-100 cursor-grabbing' : 'opacity-50 hover:opacity-100 cursor-grab active:cursor-grabbing'}`}
             >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
                 </svg>
             </div>
-            <div className="flex-1 text-sm font-medium text-gray-900 dark:text-white truncate">
+            <div className="flex-1 text-sm font-medium text-gray-900 dark:text-n-9 truncate">
                 {value || 'Empty perk'}
             </div>
 
@@ -50,7 +50,7 @@ export default function SortableItem({ id, value, onRemove, onEdit, isOverlay = 
                 type="button"
                 onClick={onEdit}
                 title="Edit"
-                className="w-8 h-8 bg-purple-1 border border-n-1 text-0 transition-colors hover:bg-purple-2">
+                className="w-8 h-8 bg-purple-1 border border-n-1 text-0 cursor-pointer transition-colors hover:bg-purple-2">
                 <Icon name="edit" viewBox='0 0 24 24' />
             </button>
 
@@ -58,7 +58,7 @@ export default function SortableItem({ id, value, onRemove, onEdit, isOverlay = 
                 onClick={onRemove}
                 type="button"
                 title="Remove"
-                className="w-8 h-8 bg-purple-1 border border-n-1 text-0 transition-colors hover:bg-purple-2">
+                className="w-8 h-8 bg-purple-1 border border-n-1 text-0 cursor-pointer transition-colors hover:bg-purple-2">
                 <Icon name="remove" />
             </button>
         </div>

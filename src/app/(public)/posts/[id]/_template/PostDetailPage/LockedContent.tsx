@@ -31,17 +31,17 @@ const LockedContent = ({
                 <div className="w-12 h-12 rounded-full bg-n-1 flex items-center justify-center mb-3 shadow-lg">
                     <Icon name="lock" className="w-6 h-6 fill-purple-1" />
                 </div>
-                <h3 className="text-h6 text-white mb-1">{title}</h3>
-                {text && <p className="text-sm text-n-3">{text}</p>}
+                <h3 className="text-h6 text-white dark:text-n-9 mb-1">{title}</h3>
+                {text && <p className="text-sm text-n-3 dark:text-n-8">{text}</p>}
             </div>
         );
     }
 
     return (
-        <div className="flex items-center justify-between text-center p-10 border rounded border-n-1 dark:border-white/10 mt-6 md:p-12 bg-n-1/5">
+        <div className="flex items-center justify-between text-center p-10 border rounded border-n-1 dark:bg-n-3 mt-6 md:p-12 bg-n-1/5">
             <div className="flex flex-col items-start  max-w-[50%]">
-                <h4 className="text-h6 mb-2">{title} Content</h4>
-                <p className="text-n-3 mb-4 text-left">{text || "Join this creator's community to access full posts, excessive media, and comments."}</p>
+                <h4 className="text-h6 mb-2 dark:text-n-9">{title} Content</h4>
+                <p className="text-n-3 mb-4 text-left dark:text-n-8">{text || "Join this creator's community to access full posts, excessive media, and comments."}</p>
             </div>
 
             <button

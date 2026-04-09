@@ -41,14 +41,12 @@ const RecentPostsPanel = () => {
     const publishedPosts = recentPosts.filter((p) => p.status === 'published');
 
     return (
-        <div className="card ">
+        <div className="card">
             <div className="flex items-center justify-between p-5">
-                <div className="flex items-center gap-3">
-                    <Icon name="document" className="w-5 h-5 fill-purple-1" />
-                    <h3 className="font-semibold text-n-1 dark:text-white">Recent Posts</h3>
-                </div>
-                <Link href="/posts" className="text-sm text-purple-1 hover:text-purple-2">
-                    View all
+                <h3 className="font-semibold text-n-1 dark:text-n-9">Recent Posts</h3>
+                <Link href="/posts" className="text-sm text-purple-1 capitalize flex items-center ">
+                    View All
+                    <Icon name="arrow-next" className="icon-20 " />
                 </Link>
             </div>
 
@@ -66,13 +64,13 @@ const RecentPostsPanel = () => {
                                     href={`/posts/${post._id}`}
                                     className=" hover:bg-n-3/10 dark:hover:bg-white/10 transition-colors"
                                 >
-                                    <div className="flex items-end justify-between px-5">
+                                    <div className="flex items-end justify-between px-5 py-2">
 
                                         <div className="flex-1 min-w-0 mr-4">
-                                            <div className="text-sm font-medium text-n-1 dark:text-white truncate">
+                                            <div className="text-sm font-medium text-n-1 dark:text-n-9 truncate">
                                                 {post.caption}
                                             </div>
-                                            <div className="text-xs text-n-3 mt-1">
+                                            <div className="text-xs text-n-8 mt-1">
                                                 {post.publishedAt
                                                     ? formatDistanceToNow(new Date(post.publishedAt), {
                                                         addSuffix: true,
@@ -81,11 +79,11 @@ const RecentPostsPanel = () => {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3 text-xs text-n-4">
-                                            <span className="flex text-n-2 dark:text-white items-center gap-1">
+                                            <span className="flex text-n-2 dark:text-n-9 items-center gap-1">
                                                 views
                                                 <strong>{post.viewCount}</strong>
                                             </span>
-                                            <span className="flex text-n-2 dark:text-white items-center gap-1">
+                                            <span className="flex text-n-2 dark:text-n-9 items-center gap-1">
                                                 likes
 
                                                 <strong>{post.likeCount}</strong>
@@ -96,7 +94,7 @@ const RecentPostsPanel = () => {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-8 text-n-3 fill-n-3">
+                        <div className="text-center py-8 text-n-3 dark:text-n-8 fill-n-3 dark:fill-n-8">
                             <Icon name="document" className="w-12 h-12 mx-auto mb-3" />
                             <p className="text-sm">No published posts yet</p>
                         </div>

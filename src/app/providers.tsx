@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ColorModeProvider } from "@chakra-ui/color-mode";
+import { ThemeProvider } from "next-themes";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "react-hot-toast";
@@ -21,18 +21,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
     }));
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
-                <AuthProvider>
-                    <SocketProvider>
-                        <ColorModeProvider>
+        <ThemeProvider attribute="data-theme" forcedTheme="dark" enableSystem={false}>
+            <QueryClientProvider client={queryClient}>
+                <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+                    <AuthProvider>
+                        <SocketProvider>
                             <Toaster />
                             {children}
-                        </ColorModeProvider>
-                    </SocketProvider>
-                </AuthProvider>
-            </GoogleOAuthProvider>
-        </QueryClientProvider>
+                        </SocketProvider>
+                    </AuthProvider>
+                </GoogleOAuthProvider>
+            </QueryClientProvider>
+        </ThemeProvider>
     );
 }
-

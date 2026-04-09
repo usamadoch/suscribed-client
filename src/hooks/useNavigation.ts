@@ -20,40 +20,28 @@ export const useNavigation = () => {
 
     // Compute Final Navigation
     const navItems = useMemo(() => {
-        // ── GUEST MODE: Show member-level sidebar items ──
-        // Guests see the same sidebar as members, but clicks on protected
-        // items are intercepted by the Menu component to show LoginModal.
+
         if (!isAuthenticated || !user?.role) {
             return navigation
                 .filter((link) => {
-                    // Hide items that require creator/admin permissions
                     if (link.permissions) return false;
-                    // Show public routes + shared routes (no permissions = member-level)
                     return true;
                 })
                 .map((link) => ({ ...link }));
         }
-
-        // ── AUTHENTICATED MODE: Filter by permissions/roles as before ──
         const filteredNav = navigation.filter((link) => {
-            // Public routes are always visible
-            if (link.isPublicRoute) return true;
-            // Check permissions first
+            if (link.roles && !link.roles.includes(user.role)) return false;
+
             if (link.permissions) {
                 return link.permissions.some(permission => hasPermission(user.role, permission));
             }
-            // Fallback to roles
-            if (link.roles) {
-                return link.roles.includes(user.role);
-            }
+            if (link.isPublicRoute) return true;
             return true;
         });
 
         let newNav = [...filteredNav];
 
-        // Inject "Your Page" for creators (or those with page:manage)
         if (hasPermission(user.role, 'page:manage') && pageSlug) {
-            // Find index of Dashboard to insert after
             const dashboardIndex = newNav.findIndex(item => item.url === '/dashboard');
 
             if (dashboardIndex !== -1) {

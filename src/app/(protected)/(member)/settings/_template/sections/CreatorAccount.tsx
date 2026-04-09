@@ -251,7 +251,7 @@ const CreatorAccount = () => {
         <>
 
             <div className="card">
-                <div className="card-title">Profile Settings</div>
+                <div className="card-title border-b dark:border-n-6">Profile Settings</div>
                 <div className="">
                     {/* Banner Image */}
                     <PageImageUploader
@@ -333,18 +333,18 @@ const CreatorAccount = () => {
 
                                 {/* Social Links Section */}
                                 <div className="w-[calc(100%-1.25rem)] mt-8 mx-2.5">
-                                    <div className="mb-3 text-h6 font-bold">Social Links</div>
+                                    <div className="mb-3 text-h6 font-bold dark:text-n-9">Social Links</div>
                                     <div className="space-y-4">
                                         {fields.map((field, index) => (
                                             <div key={field.id} className="relative">
                                                 <div className="flex justify-between items-center mb-1.5">
-                                                    <div className="text-xs font-semibold">New Link</div>
+                                                    <div className="text-xs font-semibold dark:text-n-9">New Link</div>
                                                     <button
                                                         type="button"
-                                                        className="group flex items-center text-xs font-semibold hover:text-pink-1 transition-colors"
+                                                        className="group flex items-center text-xs font-semibold cursor-pointer"
                                                         onClick={() => remove(index)}
                                                     >
-                                                        <Icon name="trash" className="mr-1.5 w-4 h-4 fill-n-3 transition-colors group-hover:fill-pink-1" />
+                                                        <Icon name="trash" className="mr-1.5 w-4 h-4 fill-n-3" />
                                                         Remove
                                                     </button>
                                                 </div>
@@ -359,10 +359,10 @@ const CreatorAccount = () => {
                                     {fields.length < 4 && (
                                         <button
                                             type="button"
-                                            className="group inline-flex items-center font-semibold transition-colors hover:text-purple-1 mt-4 cursor-pointer"
+                                            className="group inline-flex items-center font-semibold mt-4 cursor-pointer"
                                             onClick={() => append({ value: "" })}
                                         >
-                                            <Icon name="add-circle" className="icon-18 mr-1.5 transition-colors group-hover:fill-purple-1 dark:fill-white dark:group-hover:fill-purple-1" />
+                                            <Icon name="add-circle" className="icon-18 mr-1.5 dark:fill-n-9" />
                                             Add Another
                                         </button>
                                     )}

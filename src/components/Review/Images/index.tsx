@@ -40,7 +40,7 @@ const Images = ({ items, imageBig }: ImagesProps) => {
 
     return (
         <div className={`relative pb-2.5 group w-full pr-5 ${imageBig ? "h-80" : "h-120"}`}>
-            <div className="w-full h-full relative border border-n-4 dark:border-white overflow-hidden bg-n-8">
+            <div className="w-full h-full relative border border-n-4 dark:border-n-1 overflow-hidden bg-n-8">
                 <AnimatePresence initial={false} custom={direction}>
                     <motion.div
                         key={page}
@@ -71,7 +71,7 @@ const Images = ({ items, imageBig }: ImagesProps) => {
             {items.length > 1 && (
                 <>
                     {/* Image Count */}
-                    <div className="absolute top-4 right-8 bg-n-1/50 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-white pointer-events-none z-10">
+                    <div className="absolute top-4 right-8 bg-n-1/60 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold text-white dark:text-n-9 pointer-events-none z-10">
                         {currentIndex + 1} / {items.length}
                     </div>
 
@@ -82,9 +82,9 @@ const Images = ({ items, imageBig }: ImagesProps) => {
                                 e.preventDefault();
                                 paginate(-1); // Previous
                             }}
-                            className="absolute top-[50%] -translate-y-[50%] left-4 w-8 h-8 rounded-full bg-n-1/50 hover:bg-n-1/75 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 duration-300 z-20"
+                            className="absolute top-[50%] -translate-y-[50%] left-4 w-8 h-8 rounded-full bg-n-1/60 hover:bg-n-1/75 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 duration-300 z-20"
                         >
-                            <Icon name="arrow-prev" className="w-4 h-4 fill-white" />
+                            <Icon name="arrow-prev" className="w-4 h-4 fill-n-9" />
                         </button>
                     )}
 
@@ -95,9 +95,9 @@ const Images = ({ items, imageBig }: ImagesProps) => {
                                 e.preventDefault();
                                 paginate(1); // Next
                             }}
-                            className="absolute top-[50%] -translate-y-[50%] right-8 w-8 h-8 rounded-full bg-n-1/50 hover:bg-n-1/75 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 duration-300 z-20"
+                            className="absolute top-[50%] -translate-y-[50%] right-8 w-8 h-8 rounded-full bg-n-1/60 hover:bg-n-1/75 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 duration-300 z-20"
                         >
-                            <Icon name="arrow-next" className="w-4 h-4 fill-white" />
+                            <Icon name="arrow-next" className="w-4 h-4 fill-n-9" />
                         </button>
                     )}
 
@@ -111,9 +111,9 @@ const Images = ({ items, imageBig }: ImagesProps) => {
                                     const dir = slideIndex > currentIndex ? 1 : -1;
                                     setPage([slideIndex, dir]);
                                 }}
-                                className={`h-2 w-2 rounded-full cursor-pointer shadow-sm transition-all ${currentIndex === slideIndex
-                                    ? "bg-white scale-125"
-                                    : "bg-white/60 hover:bg-white/80"
+                                className={`h-2 w-2 rounded-full cursor-pointer shadow-sm border border-n-6 transition-all ${currentIndex === slideIndex
+                                    ? "bg-n-9 scale-125"
+                                    : "bg-n-9/60 hover:bg-n-9/80"
                                     }`}
                             />
                         ))}

@@ -21,10 +21,10 @@ const Alert = ({
     onClose,
 }: AlertProps) => {
     const styles = {
-        success: "bg-green-1 text-n-1 border-n-1",
-        error: "bg-pink-1 text-n-1 border-n-1",
-        warning: "bg-yellow-1 text-n-1 border-n-1",
-        info: "bg-purple-3 text-n-1 border-n-1",
+        success: "bg-green-1 dark:bg-green-500 text-n-1 dark:text-n-9 border-n-1",
+        error: "bg-pink-1 dark:bg-pink-500 text-n-1 dark:text-n-9 border-n-1",
+        warning: "bg-yellow-1 dark:bg-yellow-500 text-n-1 dark:text-n-9 border-n-1",
+        info: "bg-purple-3 dark:bg-purple-500 text-n-1 dark:text-n-9 border-n-1",
     };
 
     const icons = {

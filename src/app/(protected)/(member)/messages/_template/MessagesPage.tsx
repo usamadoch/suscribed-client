@@ -54,7 +54,7 @@ const MessagesPage = () => {
                     content="Try to add more contacts from your personal account or start new discussion"
                     imageSvg={
                         <svg
-                            className="fill-n-1 dark:fill-white"
+                            className="fill-n-1 dark:fill-n-8"
                             xmlns="http://www.w3.org/2000/svg"
                             width="92"
                             height="72"

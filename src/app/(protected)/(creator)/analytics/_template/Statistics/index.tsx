@@ -39,8 +39,8 @@ const Statistics = ({ items, timeRangeValue, onTimeRangeChange, timeRangeOptions
                     key={item.id}
                 >
                     <div className="mr-auto">
-                        <div className="mb-1.5 text-sm">{item.title}</div>
-                        <div className="mb-1.5 text-h4 lg:text-h5 md:text-h4">
+                        <div className="mb-1.5 text-sm dark:text-n-9">{item.title}</div>
+                        <div className="mb-1.5 text-h4 lg:text-h5 md:text-h4 dark:text-n-8">
                             {item.value}
                         </div>
                         <div

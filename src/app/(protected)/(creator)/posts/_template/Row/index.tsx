@@ -64,13 +64,11 @@ const Row = ({ item, showActions = true }: RowProps) => {
             <tr className="">
                 <td className="td-custom py-3.5">
                     <Link
-                        className="inline-flex items-center text-sm  transition-colors hover:text-purple-1"
+                        className="inline-flex items-center text-sm transition-colors "
                         href={`/posts/${item._id}`}
                     >
-                        <div className={`shrink-0 w-32 mr-5 border border-n-1 overflow-hidden aspect-video relative flex justify-center items-center ${isVideo ? 'bg-n-2 dark:bg-n-7' : 'bg-n-2 dark:bg-n-7'}`}>
-                            {isVideo ? (
-                                <Icon name="video" className="w-8 h-8 fill-n-4 dark:fill-n-4" />
-                            ) : (
+                        <div className="shrink-0 w-32 mr-5 border border-n-1 dark:border-n-6 overflow-hidden aspect-video relative flex justify-center items-center bg-n-2 dark:bg-n-7">
+                            {isImage && mediaUrl && (
                                 <Image
                                     className="object-cover"
                                     family="thumb"
@@ -80,17 +78,18 @@ const Row = ({ item, showActions = true }: RowProps) => {
                                     alt={item.caption || "Post thumbnail"}
                                 />
                             )}
+
                             <div className="absolute top-1 right-1 bg-black/50 p-1 rounded-lg flex items-center justify-center">
-                                <Icon name={postTypeIcon} className="w-3 h-3 fill-white" />
+                                <Icon name={postTypeIcon} className="w-3 h-3 fill-white dark:fill-n-9" />
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-1 w-full">
-                            <div className="text-n-2 4xl:max-w-70 dark:text-white/75">
+                            <div className="text-n-2 4xl:max-w-70 dark:text-n-9">
                                 {truncatedPreview}
                             </div>
 
-                            <div className="text-xs text-n-3 flex items-center gap-3">
+                            <div className="text-xs text-n-3 dark:text-n-8 flex items-center gap-3">
                                 <span>{item.viewCount || 0} views</span>
                                 <span>{item.likeCount || 0} likes</span>
                                 <span>{item.commentCount || 0} comments</span>
@@ -100,10 +99,10 @@ const Row = ({ item, showActions = true }: RowProps) => {
 
                 </td>
 
-                <td className="td-custom py-3.5 text-n-3">
+                <td className="td-custom py-3.5 text-n-3 dark:text-n-8">
                     {item.publishedAt ? format(new Date(item.publishedAt), 'MMM d, yyyy') : 'Draft'}
                 </td>
-                <td className="td-custom py-3.5 text-n-3 capitalize">
+                <td className="td-custom py-3.5 text-n-3 dark:text-n-8 capitalize">
                     {item.visibility || 'private'}
                 </td>
 
@@ -113,14 +112,14 @@ const Row = ({ item, showActions = true }: RowProps) => {
                             buttonClass="btn-stroke btn-small btn-square"
                             items={[
                                 {
-                                    icon: "edit",
+                                    // icon: "edit",
                                     label: "Edit",
                                     onClick: () => window.location.href = `/posts/${item._id}/edit`
                                 },
                                 {
-                                    icon: "remove",
+                                    // icon: "remove",
                                     label: "Delete",
-                                    className: "flex items-center cursor-pointer w-full px-4 py-2 text-sm font-bold text-pink-1 hover:bg-n-3/10 dark:hover:bg-white/20 transition-colors",
+                                    className: "flex items-center cursor-pointer w-full px-7 py-2 text-sm font-bold text-pink-1",
                                     onClick: () => setIsOpen(true)
                                 }
                             ]}

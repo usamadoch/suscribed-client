@@ -1,10 +1,7 @@
 import { useState, useMemo } from "react";
 import { format, subDays } from "date-fns";
-
 import Sorting from "@/components/Sorting";
 import Row from "../../posts/_template/Row";
-
-
 import Icon from "@/components/Icon";
 import Empty from "@/components/Empty";
 import {
@@ -13,11 +10,10 @@ import {
     useAnalyticsEngagement
 } from "@/hooks/useQueries";
 import Tabs from "@/components/Tabs";
-
 import SimpleChart from "./SimpleChart";
 import { TimeRange } from "./types";
-import Loader from "@/components/Loader";
 import Statistics, { StatisticsItem } from "./Statistics";
+import Table from "@/components/Table";
 
 interface PostsTabProps {
     days: TimeRange;
@@ -39,7 +35,25 @@ const PostsTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Post
         { title: "Recent", value: "recent" },
     ];
 
+    // Common headers for both tables
+    const tableHeaders = [
+        {
+            title: "Caption",
+            className: "w-[60%] text-left",
+            render: () => <Sorting title="Caption" />
+        },
+        {
+            title: "Views",
+            className: "text-left",
+            render: () => <Sorting title="Views" />
+        },
+        {
+            title: "Likes",
+            className: "text-left",
+            render: () => <Sorting title="Likes" />
+        },
 
+    ];
 
     // Generate chart data from overview
     const chartData = useMemo(() => {
@@ -118,7 +132,7 @@ const PostsTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Post
 
             {/* Views Chart */}
             <div className="card p-6 mt-5">
-                <h3 className="text-lg font-semibold text-n-1 dark:text-white mb-4">
+                <h3 className="text-lg font-semibold text-n-1 dark:text-n-9 mb-4">
                     Views Over Time
                 </h3>
                 <div className="bg-n-7 dark:bg-white/5 rounded-xl p-4">
@@ -142,47 +156,26 @@ const PostsTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Post
 
                 {activePostTab === "top" && (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <h3 className="text-lg font-semibold text-n-1 dark:text-white mb-4">
-                            🏆 Top Performing Posts
+                        <h3 className="text-lg font-semibold text-n-1 dark:text-n-9 mb-4">
+                            Top Performing Posts
                         </h3>
 
-                        {isLoading ? (
-                            <div className="flex items-center justify-center py-10">
-                                <Loader />
-                            </div>
-                        ) : posts?.topPosts && posts.topPosts.length > 0 ? (
-                            <div className="overflow-x-auto">
-                                <table className="table-custom">
-                                    <thead>
-                                        <tr>
-                                            <th className="th-custom w-[60%] text-left">
-                                                <Sorting title="Caption" />
-                                            </th>
-                                            <th className="th-custom text-left">
-                                                <Sorting title="Views" />
-                                            </th>
-                                            <th className="th-custom text-left">
-                                                <Sorting title="Likes" />
-                                            </th>
-                                            <th className="th-custom text-left">
-                                                <Sorting title="Comments" />
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {posts.topPosts.map((post) => (
-                                            <Row item={post} key={post._id} showActions={false} />
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        ) : (
+                        {!isLoading && (!posts?.topPosts || posts.topPosts.length === 0) ? (
                             <Empty
                                 title="No posts yet"
                                 content="Create your first post to start tracking performance"
                                 imageSvg={<Icon name="document" className="w-16 h-16 fill-n-4/30" />}
                                 buttonText="Create Post"
                                 buttonUrl="/posts/new"
+                            />
+                        ) : (
+                            <Table
+                                isLoading={isLoading}
+                                items={posts?.topPosts || []}
+                                headers={tableHeaders}
+                                renderRow={(post) => (
+                                    <Row item={post} key={post._id} showActions={false} />
+                                )}
                             />
                         )}
                     </div>
@@ -191,44 +184,23 @@ const PostsTab = ({ days, timeRange, onTimeRangeChange, timeRangeOptions }: Post
                 {activePostTab === "recent" && (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <h3 className="text-lg font-semibold text-n-1 dark:text-white mb-4">
-                            🕒 Recent Posts
+                            Recent Posts
                         </h3>
 
-                        {isLoading ? (
-                            <div className="flex items-center justify-center py-10">
-                                <Loader />
-                            </div>
-                        ) : posts?.recentPosts && posts.recentPosts.length > 0 ? (
-                            <div className="overflow-x-auto">
-                                <table className="table-custom">
-                                    <thead>
-                                        <tr>
-                                            <th className="th-custom w-[60%] text-left">
-                                                <Sorting title="Caption" />
-                                            </th>
-                                            <th className="th-custom text-left">
-                                                <Sorting title="Views" />
-                                            </th>
-                                            <th className="th-custom text-left">
-                                                <Sorting title="Likes" />
-                                            </th>
-                                            <th className="th-custom text-left">
-                                                <Sorting title="Comments" />
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {posts.recentPosts.map((post) => (
-                                            <Row item={post} key={post._id} showActions={false} />
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        ) : (
+                        {!isLoading && (!posts?.recentPosts || posts.recentPosts.length === 0) ? (
                             <Empty
                                 title="No recent posts"
                                 content="Start posting to see your recent activity"
                                 imageSvg={<Icon name="document" className="w-16 h-16 fill-n-4/30" />}
+                            />
+                        ) : (
+                            <Table
+                                isLoading={isLoading}
+                                items={posts?.recentPosts || []}
+                                headers={tableHeaders}
+                                renderRow={(post) => (
+                                    <Row item={post} key={post._id} showActions={false} />
+                                )}
                             />
                         )}
                     </div>

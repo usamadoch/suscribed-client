@@ -36,6 +36,7 @@ export const navigation: NavigationItem[] = [
         url: "/",
         category: "Discover",
         isPublicRoute: true,
+        roles: ["member", "admin"],
     },
     {
         title: "Posts",
@@ -67,6 +68,7 @@ export const navigation: NavigationItem[] = [
         url: "/explore",
         category: "Discover",
         isPublicRoute: true,
+        roles: ["member", "admin"],
     },
 
     // Shared Pages

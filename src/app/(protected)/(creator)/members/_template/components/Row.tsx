@@ -9,14 +9,14 @@ type RowProps = {
 };
 
 const Row = ({ item }: RowProps) => {
-    const member = item.memberId || {};
+    const member = (item.memberId && typeof item.memberId === 'object') ? item.memberId : {};
 
     const getStatusColor = (status: string) => {
         switch (status?.toLowerCase()) {
-            case 'active': return 'bg-green-1 text-white';
-            case 'paused': return 'bg-yellow-1 text-white';
+            case 'active': return 'bg-green-500 text-white dark:bg-green-500 dark:text-n-1';
+            case 'paused': return 'bg-yellow-500 text-white dark:bg-yellow-500 dark:text-n-1';
             case 'cancelled':
-            default: return 'bg-pink-1 text-white';
+            default: return 'bg-pink-500 text-white dark:bg-pink-500 dark:text-n-1';
         }
     };
 
@@ -30,7 +30,9 @@ const Row = ({ item }: RowProps) => {
                     <div className="relative w-10 h-10 mr-4">
                         <Image
                             className="object-cover rounded-full"
-                            src={member.avatarUrl || "/images/avatars/avatar.jpg"}
+                            family="avatar"
+                            slot="sidebar"
+                            src={member.avatarUrl}
                             fill
                             alt={member.displayName || "Member"}
                         />
@@ -39,20 +41,20 @@ const Row = ({ item }: RowProps) => {
                         <div className="text-sm font-bold text-n-1 dark:text-white">
                             {member.displayName || "Unknown Member"}
                         </div>
-                        <div className="text-xs text-n-3 dark:text-white/50">
+                        <div className="text-xs text-n-3 dark:text-n-8">
                             @{member.username || "unknown"}
                         </div>
                     </div>
                 </div>
             </td>
-            <td className="td-custom font-medium">
+            <td className="td-custom font-medium dark:text-n-8">
                 {item.tier || "Free"}
             </td>
-            <td className="td-custom text-n-3 dark:text-white/75">
+            <td className="td-custom text-n-3 dark:text-n-8">
                 {formatAppDate(item.joinedAt, { relative: false, dateFormat: 'MMM, d, yyyy' })}
             </td>
             <td className="td-custom text-right">
-                <div className={`inline-block px-3 py-1 text-xs font-bold ${getStatusColor(item.status)}`}>
+                <div className={`inline-block px-3 py-1 text-xs font-bold capitalize ${getStatusColor(item.status)}`}>
                     {item.status}
                 </div>
             </td>

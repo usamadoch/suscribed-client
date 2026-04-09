@@ -11,7 +11,7 @@ import DraftBanner from "@/layout/DraftBanner";
 const PublicLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <CreatorHeaderProvider>
-            <div className=" bg-background text-base antialiased dark:bg-n-2">
+            <div className="min-h-screen flex flex-col bg-background text-base antialiased dark:bg-n-1">
                 <DraftBanner />
                 <CreatorHeader />
 
