@@ -9,7 +9,7 @@
 import Loader from "@/components/Loader";
 import { useMyMemberships } from "@/hooks/useQueries";
 import { useAuth } from "@/store/auth";
-import WelcomeSection from "./_components/WelcomeSection";
+// import WelcomeSection from "./_components/WelcomeSection";
 import EmptySubscriptions from "./_components/EmptySubscriptions";
 import HomeFeedList from "./_components/HomeFeedList";
 
@@ -35,7 +35,7 @@ const AuthenticatedFeed = () => {
 
     return (
         <>
-            <WelcomeSection user={user} />
+            {/* <WelcomeSection user={user} /> */}
             {!hasSubscriptions ? (
                 <EmptySubscriptions />
             ) : (

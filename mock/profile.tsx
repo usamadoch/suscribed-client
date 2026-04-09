@@ -353,12 +353,7 @@ export const socialProfiles = [
         label: "Twitter",
         icon: "twitter",
     },
-    {
-        id: "2",
-        label: "Dropbox",
-        link: "@whiteui.store",
-        icon: "dropbox",
-    },
+
     {
         id: "3",
         label: "Google",

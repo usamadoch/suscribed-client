@@ -123,7 +123,7 @@ const Step1Account = ({ onNext }: Step1Props) => {
                         onClose={() => setGoogleError(null)}
                     />
                 )}
-                <h4 className="mb-5 text-h4">Create your account</h4>
+                <h4 className="mb-5 text-h4 dark:text-n-9">Create your account</h4>
                 <button
                     className="btn-stroke w-full h-12 mb-6"
                     type="button"
@@ -133,7 +133,7 @@ const Step1Account = ({ onNext }: Step1Props) => {
                     }}
                 >
                     {googleLoading ? (
-                        <Loader className="w-6 h-6 text-n-1 dark:text-white" />
+                        <Loader className="w-6 h-6 text-n-1 dark:text-n-9" />
                     ) : (
                         <>
                             <Icon name="google" />
@@ -143,9 +143,9 @@ const Step1Account = ({ onNext }: Step1Props) => {
                 </button>
 
                 <div className="flex justify-center items-center pb-6">
-                    <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-white"></span>
-                    <span className="mx-4 text-sm font-medium">or</span>
-                    <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-white"></span>
+                    <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-n-6"></span>
+                    <span className="mx-4 text-sm font-medium dark:text-n-6">or</span>
+                    <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-n-6"></span>
                 </div>
 
                 <AuthFields
@@ -166,16 +166,16 @@ const Step1Account = ({ onNext }: Step1Props) => {
                 />
             </div>
 
-            <div className="mt-20 text-sm">
+            {/* <div className="mt-20 text-sm dark:text-n-8">
                 Not a Creator?
 
                 <Link
                     href="/login"
-                    className="ml-1.5 font-bold transition-colors hover:text-purple-1"
+                    className="ml-1.5 font-bold transition-colors dark:text-n-9"
                 >
                     Join as a Member
                 </Link>
-            </div>
+            </div> */}
         </>
     );
 };

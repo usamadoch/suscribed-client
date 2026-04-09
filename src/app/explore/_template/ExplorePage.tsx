@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 
 import Search from "@/components/Search";
-
 import Loader from "@/components/Loader";
 import Item from "./Item";
 import { useExploreCreators } from "./useExploreCreators";
@@ -41,13 +40,13 @@ export const ExplorePage = () => {
                 ) : error ? (
                     <div className="text-center text-red-500 py-10">{error}</div>
                 ) : (
-                    <div className="flex flex-wrap -mt-5 -mx-2.5 md:-mt-3">
+                    <div className="grid grid-cols-4 gap-8">
                         {filteredCreators.length > 0 ? (
                             filteredCreators.map((creator) => (
                                 <Item item={creator} key={creator._id} />
                             ))
                         ) : (
-                            <div className="w-full text-center py-10 text-n-3">
+                            <div className="w-full text-center py-10 text-n-3 dark:text-n-8">
                                 No creators found.
                             </div>
                         )}

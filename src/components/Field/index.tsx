@@ -51,13 +51,13 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                         className={twMerge(
                             "relative",
                             prefix &&
-                            "flex items-center w-full bg-white border border-n-1 transition-colors focus-within:border-purple-1 dark:bg-n-1 dark:border-n-6 dark:focus-within:border-purple-1",
+                            "flex items-center w-full bg-white border border-n-1 transition-colors focus-within:border-purple-1 dark:bg-n-4 dark:border-n-6 dark:focus-within:border-purple-1",
                             prefix && error && "border-pink-1!",
                             prefix && classInput
                         )}
                     >
                         {prefix && (
-                            <div className="pl-5 text-sm font-bold text-n-3 whitespace-nowrap pointer-events-none">
+                            <div className="pl-5 text-sm font-bold text-n-8 whitespace-nowrap pointer-events-none">
                                 {prefix}
                             </div>
                         )}
@@ -99,7 +99,7 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                         )}
                         {icon && type !== "password" && !error && (
                             <Icon
-                                className="absolute top-1/2 right-5 -translate-y-1/2 icon-20 fill-n-1 pointer-events-none dark:fill-white"
+                                className="absolute top-1/2 right-5 -translate-y-1/2 icon-20 fill-n-1 pointer-events-none dark:fill-n-9"
                                 name={icon}
                             />
                         )}
@@ -110,7 +110,7 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                                 onClick={() => setVisiblePassword(!visiblePassword)}
                             >
                                 <Icon
-                                    className="icon-20 fill-n-2 transition-colors group-hover:fill-n-1 dark:fill-white/75 dark:group-hover:fill-white"
+                                    className="icon-20 fill-n-2 transition-colors group-hover:fill-n-1 dark:fill-n-9/75 dark:group-hover:fill-n-9"
                                     name={visiblePassword ? "eye" : "eye-slash"}
                                 />
                             </button>
@@ -122,7 +122,7 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                             />
                         )}
                         {image && (
-                            <div className="absolute top-1/2 right-5 w-5 p-0.25 -translate-y-1/2 text-0 dark:bg-white">
+                            <div className="absolute top-1/2 right-5 w-5 p-0.25 -translate-y-1/2 text-0 dark:bg-n-9">
                                 <Image
                                     className="w-full"
                                     src={image}

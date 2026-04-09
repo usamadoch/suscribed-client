@@ -129,8 +129,8 @@ const MemberAccount = () => {
                                 fill
                                 alt="Avatar"
                             />
-                            <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100 rounded-full border-2 border-transparent hover:bg-n-3/5 dark:hover:bg-white/10 dark:border-white">
-                                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-n-1">
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100 rounded-full border-2 border-transparent hover:bg-n-3/5 dark:hover:bg-n-1/10 dark:border-n-9">
+                                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white dark:bg-n-2 text-n-1 dark:text-n-9">
                                     <Icon name="upload" className="w-4 h-4 fill-n-1" />
                                 </div>
                             </div>

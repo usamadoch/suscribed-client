@@ -85,21 +85,21 @@ const Step4Socials = ({ onBack }: Step4Props) => {
 
         <div className="animate-in fade-in slide-in-from-right-8 duration-300">
             {/* <div className="card-title">Social profiles</div> */}
-            <div className="mb-5 text-h3">Connect your socials</div>
+            <h3 className="mb-5 text-h3 text-n-1 dark:text-n-9">Connect your socials</h3>
 
             <div className="">
                 <div>
                     {socialProfiles.map((item) => (
                         <div
-                            className="flex items-center mb-4 pb-4 pl-3 md:pl-0 dark:border-white"
+                            className="flex items-center mb-4 pb-4 pl-3 md:pl-0 dark:border-n-6"
                             key={item.id}
                         >
                             <Icon
-                                className="shrink-0 icon-20 mr-8 md:mr-4 dark:fill-white"
+                                className="shrink-0 icon-20 mr-8 md:mr-4 dark:fill-n-1"
                                 name={item.icon}
                             />
                             <div className="mr-auto">
-                                <div className="mb-1.5 text-xs font-medium text-n-3 dark:text-white/75">
+                                <div className="mb-1.5 text-xs font-medium text-n-3 dark:text-n-8">
                                     {item.label}
                                 </div>
                                 <div className="break-all text-sm font-bold">
@@ -107,9 +107,9 @@ const Step4Socials = ({ onBack }: Step4Props) => {
                                 </div>
                             </div>
                             {!item.link && (
-                                <button className="group inline-flex items-center self-end pb-0.5 text-xs font-bold transition-colors hover:text-purple-1">
+                                <button className="group inline-flex items-center self-end pb-0.5 text-xs font-bold cursor-pointer">
                                     <Icon
-                                        className="mr-1.5 transition-colors group-hover:fill-purple-1 dark:fill-white dark:group-hover:fill-purple-1"
+                                        className="mr-1.5 dark:fill-9"
                                         name="external-link"
                                     />
                                     Connect

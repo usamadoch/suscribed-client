@@ -55,7 +55,9 @@ const Sidebar = ({ }: SidebarProps) => {
                         >
                             <Image
                                 className="object-cover scale-105"
-                                src={user?.avatarUrl || "/images/avatars/avatar.jpg"}
+                                family="avatar"
+                                slot="sidebar"
+                                src={user?.avatarUrl}
                                 fill
                                 alt="Avatar"
                             />

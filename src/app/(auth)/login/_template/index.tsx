@@ -74,7 +74,7 @@ const LoginPage = () => {
                         disabled={googleLoading}
                     >
                         {googleLoading ? (
-                            <Loader className="w-6 h-6 text-n-1 dark:text-white" />
+                            <Loader className="w-6 h-6 text-n-1 dark:text-n-9" />
                         ) : (
                             <>
                                 <Icon name="google" />
@@ -83,9 +83,9 @@ const LoginPage = () => {
                         )}
                     </button>
                     <div className="flex justify-center items-center py-6">
-                        <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-white"></span>
-                        <span className="mx-4 text-sm font-medium">or</span>
-                        <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-white"></span>
+                        <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-n-6"></span>
+                        <span className="mx-4 text-sm font-medium dark:text-n-6">or</span>
+                        <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-n-6"></span>
                     </div>
                 </>
             )}

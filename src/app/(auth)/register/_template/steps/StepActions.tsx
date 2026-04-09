@@ -51,7 +51,7 @@ const StepActions = ({
             >
                 {isLoading ? (
                     <div className="flex items-center justify-center">
-                        <Loader className="h-6 w-6 text-white" />
+                        <Loader className="h-6 w-6 text-n-1 dark:text-n-9" />
                     </div>
                 ) : (
                     nextLabel

@@ -77,7 +77,7 @@ const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
 
     return (
         <div className="animate-in fade-in slide-in-from-right-8 duration-300">
-            <h4 className="mb-5 text-h4">Creator Profile</h4>
+            <h4 className="mb-5 text-h4 dark:text-n-9">Creator Profile</h4>
 
             {error && (
                 <Alert

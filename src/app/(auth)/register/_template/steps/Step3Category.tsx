@@ -57,7 +57,7 @@ const Step3Category = ({ onNext, onBack }: Step3Props) => {
                 />
             )}
 
-            <h4 className="mb-5 text-h4">Choose a category</h4>
+            <h4 className="mb-5 text-h4 text-n-1 dark:text-n-9">Choose a category</h4>
             <div className="flex flex-wrap gap-4">
                 {CATEGORIES.map((cat) => {
                     const isSelected = selectedCategory?.includes(cat);
@@ -73,7 +73,7 @@ const Step3Category = ({ onNext, onBack }: Step3Props) => {
                             }}
                             className={`btn-stroke btn-small h-12 px-8 
                             ${isSelected
-                                    ? "bg-black text-white dark:bg-white dark:text-black"
+                                    ? "bg-black text-white dark:bg-n-9 dark:text-n-1"
                                     : ""
                                 }`}
                         >

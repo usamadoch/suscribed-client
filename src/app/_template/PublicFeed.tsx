@@ -18,7 +18,7 @@ const PublicFeed = () => {
             <h1 className="text-h1 text-n-1 dark:text-white mb-4">
                 Public Feed
             </h1>
-            <p className="text-n-3 text-lg text-center max-w-md">
+            <p className="text-n-3 text-lg text-center max-w-md dark:text-n-8">
                 Discover amazing creators and their content. Sign in to personalize your feed.
             </p>
         </div>
