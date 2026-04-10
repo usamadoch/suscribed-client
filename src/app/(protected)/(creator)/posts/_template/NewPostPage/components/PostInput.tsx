@@ -1,5 +1,5 @@
 import Image from "@/components/Image";
-import { useMyPage } from "@/hooks/useQueries";
+import { useMyPage } from "@/hooks/queries";
 import TextareaAutosize from "react-textarea-autosize";
 
 type PostInputProps = {

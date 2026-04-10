@@ -1,5 +1,5 @@
 
-import { useExploreCreators as useQueryExplore } from "@/hooks/useQueries";
+import { useExploreCreators as useQueryExplore } from "@/hooks/queries";
 
 export const useExploreCreators = () => {
     const { data, isLoading, isError, error, refetch } = useQueryExplore();

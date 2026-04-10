@@ -1,10 +1,10 @@
 
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Loader from "@/components/Loader";
-import { CreatorPage, Tier } from "@/lib/types";
-import { useCreatorPlans } from "@/hooks/useQueries";
+import { CreatorPage, Tier } from "@/types";
+import { useCreatorPlans } from "@/hooks/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { membershipPlanApi } from "@/lib/api";
+import { membershipService as membershipPlanApi } from "@/services/membership.service";
 import { toast } from "react-hot-toast";
 import Icon from "../Icon";
 import { AnimatePresence, motion } from "framer-motion";

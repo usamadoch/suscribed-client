@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon";
 import Image from "next/image";
-import { Conversation, User, AuthUser } from "@/lib/types";
+import { Conversation, User, AuthUser } from "@/types";
 import { formatAppDate } from "@/lib/date";
 
 type MessagesProps = {

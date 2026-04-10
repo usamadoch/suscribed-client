@@ -3,7 +3,7 @@ import { useState } from "react";
 import Comment from "@/components/Comment";
 
 import { useAuth } from "@/store/auth";
-import { useMyPage } from "@/hooks/useQueries";
+import { useMyPage } from "@/hooks/queries";
 
 import { ChatProps } from "./types";
 import { useChatMessages } from "./hooks/useChatMessages";

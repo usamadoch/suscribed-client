@@ -1,4 +1,4 @@
-import { Tier } from "@/lib/types";
+import { Tier } from "@/types";
 import Icon from "@/components/Icon";
 import { ReactNode } from "react";
 
@@ -18,7 +18,7 @@ const PlanCard = ({ plan, interval = 'MONTHLY', action, headerAction, className 
     const periodLabel = interval === 'YEARLY' ? 'year' : 'month';
 
     return (
-        <div className={`relative w-full max-w-80 border-2 border-n-1 dark:border-n-6 p ${className}`}>
+        <div className={`relative w-full max-w-80 ${className}`}>
             {plan.isHighlighted && (
                 <div className="absolute top-1.5 left-1.5 w-full h-full bg-white dark:bg-n-6 border border-n-1 dark:border-n-6"></div>
             )}
@@ -34,17 +34,17 @@ const PlanCard = ({ plan, interval = 'MONTHLY', action, headerAction, className 
                         </div>
                     </div>
 
-                    <h4 className="text-h4">
+                    <h4 className="text-h4 dark:text-n-7">
                         PKR {displayPrice}<span className="text-sm font-medium"> /{periodLabel}</span>
                     </h4>
                 </div>
 
                 {action}
 
-                <p className="text-sm font-medium py-3">{plan.description}</p>
+                <p className="text-sm font-medium py-3 dark:text-n-9">{plan.description}</p>
 
                 {plan.benefits?.length > 0 && (
-                    <ul className="space-y-1">
+                    <ul className="space-y-1 dark:text-n-9">
                         {plan.benefits.map((b, i) => (
                             <li key={i} className="text-sm font-medium flex items-center gap-2">
                                 <Icon name="check" />

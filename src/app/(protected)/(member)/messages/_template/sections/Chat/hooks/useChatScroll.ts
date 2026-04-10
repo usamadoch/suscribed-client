@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { InfiniteData } from "@tanstack/react-query";
-import { Message } from "@/lib/types";
+import { Message } from "@/types";
 
 type ChatMessagesPage = {
     messages: Message[];

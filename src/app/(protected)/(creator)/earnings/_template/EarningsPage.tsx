@@ -20,12 +20,14 @@ export default function EarningsPage() {
 
     const renderBanner = () => {
         return (
-            <div className="bg-[#daf464] dark:bg-n-4 border border-n-4 px-5 py-4 mb-6">
+            <div className="bg-[#daf464] dark:bg-n-4 border rounded-xl border-n-4 px-5 py-4 mb-6">
                 <div className='flex flex-col items-start gap-2 justify-between'>
 
 
                     <h5 className="text-h5 font-bold dark:text-n-9">Setup Payout Method</h5>
-                    <p className="text-sm dark:text-n-8">Add your bank details to receive payments from your fans.</p>
+                    <p className="text-sm dark:text-n-8">
+                        Add your bank details to receive payments from your fans.
+                    </p>
 
                     <button
                         onClick={() => router.push('/earnings/setup-bank')}
@@ -54,7 +56,7 @@ export default function EarningsPage() {
                                 Available Balance
                             </div>
                         </div>
-                        <div className="text-h5 dark:text-n-9">${((summary?.availableBalance || 0) / 100).toFixed(2)}</div>
+                        <div className="text-h5 dark:text-n-9">PKR {((summary?.availableBalance || 0) / 100).toFixed(2)}</div>
                     </div>
 
                     {/* Pending Balance Box */}
@@ -64,7 +66,7 @@ export default function EarningsPage() {
                                 Pending Balance
                             </div>
                         </div>
-                        <div className="text-h5 dark:text-n-9">${((summary?.pendingBalance || 0) / 100).toFixed(2)}</div>
+                        <div className="text-h5 dark:text-n-9">PKR {((summary?.pendingBalance || 0) / 100).toFixed(2)}</div>
                     </div>
 
                     {/* Lifetime Earnings Box */}
@@ -74,7 +76,7 @@ export default function EarningsPage() {
                                 Lifetime Earnings
                             </div>
                         </div>
-                        <div className="text-h5 dark:text-n-9">${((summary?.lifetimeEarnings || 0) / 100).toFixed(2)}</div>
+                        <div className="text-h5 dark:text-n-9">PKR {((summary?.lifetimeEarnings || 0) / 100).toFixed(2)}</div>
                     </div>
                 </div>
             </div>

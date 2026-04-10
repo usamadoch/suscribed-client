@@ -4,11 +4,11 @@ import Link from "next/link";
 
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
-import { Skeleton } from "@/components/Skeleton";
+
 
 import { usePermission } from "@/hooks/usePermission";
-import { useMyMemberships } from "@/hooks/useQueries";
-import { Member, CreatorPage } from "@/lib/types";
+import { useMyMemberships } from "@/hooks/queries";
+import { Member, CreatorPage } from "@/types";
 
 type TeamMembersProps = {
     visible?: boolean;
@@ -36,8 +36,8 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
                 <div className="-mx-4">
                     {[1, 2, 3, 4].map((i) => (
                         <div key={i} className={`flex items-center h-9.5 mb-1.5 px-4 ${visible ? "px-4" : "xl:px-0"}`}>
-                            <Skeleton className={`shrink-0 w-5.5 h-5.5 rounded-full ${visible ? "mr-2.5 ml-0" : "xl:mx-auto"}`} />
-                            <Skeleton className={`h-3 w-24 rounded ${visible ? "block" : "xl:hidden"}`} />
+                            <div className={`shrink-0 w-5.5 h-5.5 mr-2.5 rounded-full bg-n-3/20 dark:bg-n-6/50 animate-pulse ${visible ? "mr-2.5 ml-0" : "xl:mx-auto"}`} />
+                            <div className={`h-3 w-24 rounded-sm bg-n-3/20 dark:bg-n-6/50 animate-pulse ${visible ? "block" : "xl:hidden"}`} />
                         </div>
                     ))}
                 </div>
@@ -60,7 +60,7 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
                     const page = item.pageId as CreatorPage;
                     return (
                         <Link
-                            className={`flex items-center h-9.5 mb-1.5 px-4 text-sm text-white font-bold last:mb-0 transition-colors hover:bg-[#161616] ${visible ? "px-4 text-sm" : "xl:px-0 xl:text-0"
+                            className={`flex items-center h-9.5 mb-1.5 px-4 text-sm text-white font-bold last:mb-0 transition-colors ${visible ? "px-4 text-sm" : "xl:px-0 xl:text-0"
                                 }`}
                             href={`/${page.pageSlug}`}
                             key={item._id}

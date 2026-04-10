@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { payoutApi } from '@/lib/api';
-import { PayoutMethod } from '@/lib/types';
+import { payoutService as payoutApi } from '@/services/payout.service';
+import { PayoutMethod } from '@/types';
 import toast from 'react-hot-toast';
 
 export const usePayoutMethod = () => {

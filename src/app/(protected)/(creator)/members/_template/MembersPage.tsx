@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { useMediaQuery } from "react-responsive";
 
 import { useHydrated } from "@/hooks/useHydrated";
-import { useMyMembers } from "@/hooks/useQueries";
+import { useMyMembers } from "@/hooks/queries";
 
 
 import TablePagination from "@/components/TablePagination";

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useCreatorPosts } from "@/hooks/useQueries";
+import { useCreatorPosts } from "@/hooks/queries";
 import { usePageSlug } from "@/hooks/usePageSlug";
-import { VideoPost } from "@/lib/types";
+import { VideoPost } from "@/types";
 
 import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";

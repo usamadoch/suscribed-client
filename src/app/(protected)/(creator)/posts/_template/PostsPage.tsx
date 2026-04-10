@@ -5,14 +5,14 @@ import { useMediaQuery } from "react-responsive";
 import Row from "./Row";
 import Item from "./Item";
 
-import { usePosts } from "@/hooks/useQueries";
+import { usePosts } from "@/hooks/queries";
 
 import Sorting from "@/components/Sorting";
 import Icon from "@/components/Icon";
 import Empty from "@/components/Empty";
 import TablePagination from "@/components/TablePagination";
 
-import { DashboardPost, Pagination } from "@/lib/types";
+import { DashboardPost, Pagination } from "@/types";
 import Loader from "@/components/Loader";
 
 // --- Isolated child components to limit render scope ---

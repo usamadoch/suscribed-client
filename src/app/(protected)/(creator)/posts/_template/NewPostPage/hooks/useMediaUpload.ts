@@ -1,8 +1,9 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import axios from "axios";
-import { MediaAttachment } from "@/lib/types";
-import { postApi, mediaApi } from "@/lib/api";
+import { MediaAttachment } from "@/types";
+import { postService as postApi } from "@/services/post.service";
+import { mediaService as mediaApi } from "@/services/media.service";
 
 export type UploadStatus = 'pending' | 'uploading' | 'completed' | 'error';
 

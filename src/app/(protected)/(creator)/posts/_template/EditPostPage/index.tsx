@@ -1,7 +1,7 @@
 
 "use client"
 
-import { usePost } from "@/hooks/useQueries";
+import { usePost } from "@/hooks/queries";
 import { useRouter } from "next/navigation";
 import { useEffect, use, useState } from "react";
 import { usePostForm } from "../NewPostPage/usePostForm";

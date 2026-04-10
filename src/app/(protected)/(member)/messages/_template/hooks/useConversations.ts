@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/store/auth";
-import { conversationApi, userApi } from "@/lib/api";
-import { Conversation, User } from "@/lib/types";
+import { conversationService as conversationApi } from "@/services/conversation.service";
+import { userService as userApi } from "@/services/user.service";
+import { Conversation, User } from "@/types";
 
 /**
  * Manages conversation fetching, recipient resolution, and the "new conversation" placeholder.

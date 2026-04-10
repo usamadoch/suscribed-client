@@ -1,6 +1,6 @@
 "use client";
 
-import { usePost, usePostComments } from "@/hooks/useQueries";
+import { usePost, usePostComments } from "@/hooks/queries";
 import { isValidObjectId } from "@/lib/validation";
 import {
     Post,
@@ -9,7 +9,7 @@ import {
     isUnlockedMedia,
     CreatorPage,
     Comment as PostComment,
-} from "@/lib/types";
+} from "@/types";
 
 import { usePostComment } from "./hooks/usePostComment";
 import { usePostJoin } from "./hooks/usePostJoin";

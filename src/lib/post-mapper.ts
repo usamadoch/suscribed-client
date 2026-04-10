@@ -1,4 +1,4 @@
-import { Post, CreatorPage, isLockedMedia, ReviewItem } from "./types";
+import { Post, CreatorPage, isLockedMedia, ReviewItem } from "@/types";
 import { formatAppDate } from "./date";
 
 /**

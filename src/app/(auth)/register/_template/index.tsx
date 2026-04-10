@@ -13,7 +13,7 @@ import Loader from "@/components/Loader";
 
 import { SignUpFormValues, SignUpSchema } from "../../_validations";
 import { useAuthStore } from "@/store/auth";
-import { ONBOARDING_STEPS } from "@/lib/types";
+import { ONBOARDING_STEPS } from "@/types";
 
 const STEPS = {
     ACCOUNT: 1,

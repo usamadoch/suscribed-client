@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import { getSocialIcon } from "@/lib/utils";
-import { CreatorPage } from "@/lib/types";
+import { CreatorPage } from "@/types";
 
 type ProfileSocialsProps = {
     socialLinks: NonNullable<CreatorPage["socialLinks"]>;

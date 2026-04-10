@@ -1,7 +1,7 @@
 
 import Link from "next/link";
-import { VideoAttachment } from "@/lib/types";
-import { useRecentVideos } from "@/hooks/useQueries";
+import { VideoAttachment } from "@/types";
+import { useRecentVideos } from "@/hooks/queries";
 import { formatAppDate, formatDuration } from "@/lib/date";
 import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
@@ -27,10 +27,10 @@ const RecentVideos = ({ pageSlug }: RecentVideosProps) => {
     }
 
     return (
-        <div className="card p-5 sticky top-24 lg:static lg:top-0">
+        <div className=" sticky top-24 lg:static lg:top-0">
             <div className="flex items-center justify-between mb-6">
-                <h5 className="text-lg font-bold flex items-center gap-2 dark:text-n-9">
-                    <span>Recent Videos</span>
+                <h5 className="text-h5 font-bold flex items-center gap-2 dark:text-n-9">
+                    Recent Videos
                 </h5>
             </div>
 
@@ -46,9 +46,9 @@ const RecentVideos = ({ pageSlug }: RecentVideosProps) => {
                         <Link
                             key={post._id}
                             href={`/posts/${post._id}`}
-                            className="group cursor-pointer flex gap-3"
+                            className="group cursor-pointer flex items-center gap-3"
                         >
-                            <div className="relative w-24 h-16 shrink-0 overflow-hidden bg-n-6">
+                            <div className="relative w-32 aspect-video shrink-0 overflow-hidden bg-n-6">
                                 <Image
                                     src={thumbnail}
                                     alt={title}

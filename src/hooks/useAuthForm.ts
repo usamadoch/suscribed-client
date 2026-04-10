@@ -4,7 +4,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGoogleLogin, CodeResponse } from "@react-oauth/google";
 
-import { ApiClientError, authApi } from "@/lib/api";
+import { ApiClientError } from "@/services/api.client";
+import { authService as authApi } from "@/services/auth.service";
 import { LoginSchema } from "@/app/(auth)/_validations";
 import { useAuth, useAuthStore } from "@/store/auth";
 

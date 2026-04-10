@@ -1,10 +1,10 @@
 
 import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
-import { CreatorPage, Tier } from "@/lib/types";
-import { useCreatorPlans } from "@/hooks/useQueries";
+import { CreatorPage, Tier } from "@/types";
+import { useCreatorPlans } from "@/hooks/queries";
 import { useMutation } from "@tanstack/react-query";
-import { membershipPlanApi } from "@/lib/api";
+import { membershipService as membershipPlanApi } from "@/services/membership.service";
 import { toast } from "react-hot-toast";
 import Icon from "@/components/Icon";
 import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
@@ -90,8 +90,6 @@ const JoinTierModal = ({
     });
 
 
-
-    console.log("safepayData", safepayData);
     return (
         <Transition show={visible} as={Fragment}>
             <Dialog onClose={onClose} className="relative z-9999">
@@ -160,26 +158,28 @@ const JoinTierModal = ({
                                             transition={{ type: "tween", ease: "easeInOut", duration: 0.4 }}
                                             className="w-full"
                                         >
-                                            <div className="flex justify-center mb-10">
-                                                <div className="flex items-center gap-3">
-                                                    <span
-                                                        className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'MONTHLY' ? 'text-purple-1' : 'text-n-1 hover:text-n-1 dark:hover:text-white'}`}
-                                                        onClick={() => setInterval('MONTHLY')}
-                                                    >
+                                            {plans.length > 0 && (
+                                                <div className="flex justify-center mb-10">
+                                                    <div className="flex items-center gap-3">
+                                                        <span
+                                                            className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'MONTHLY' ? 'text-purple-1' : 'text-n-1 hover:text-n-1 dark:hover:text-white'}`}
+                                                            onClick={() => setInterval('MONTHLY')}
+                                                        >
 
-                                                    </span>
-                                                    <Switch
-                                                        value={interval === 'YEARLY'}
-                                                        setValue={() => setInterval(interval === 'MONTHLY' ? 'YEARLY' : 'MONTHLY')}
-                                                    />
-                                                    <span
-                                                        className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'YEARLY' ? 'text-purple-1' : 'text-n-8 '}`}
-                                                        onClick={() => setInterval('YEARLY')}
-                                                    >
-                                                        Annually
-                                                    </span>
+                                                        </span>
+                                                        <Switch
+                                                            value={interval === 'YEARLY'}
+                                                            setValue={() => setInterval(interval === 'MONTHLY' ? 'YEARLY' : 'MONTHLY')}
+                                                        />
+                                                        <span
+                                                            className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'YEARLY' ? 'text-purple-1' : 'text-n-8 '}`}
+                                                            onClick={() => setInterval('YEARLY')}
+                                                        >
+                                                            Annually
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )}
                                             <div className="flex justify-center gap-6 w-full max-w-6xl mx-auto px-6 flex-wrap pb-20">
                                                 {loadingPlans ? (
                                                     <div className="flex justify-center p-4"><Loader /></div>
@@ -189,6 +189,7 @@ const JoinTierModal = ({
                                                             key={plan._id}
                                                             plan={plan}
                                                             interval={interval}
+                                                            className="border border-n-8 rounded-xl dark:border-n-7"
                                                             action={
                                                                 <button
                                                                     className="btn-purple btn-medium w-full transition-shadow hover:shadow-primary-4"
@@ -202,14 +203,14 @@ const JoinTierModal = ({
                                                     ))
                                                 ) : (
                                                     <div className="text-center p-4">
-                                                        <p className="text-n-3 mb-4">This creator hasn&apos;t published any subscription tiers yet.</p>
-                                                        <button
+                                                        <p className="text-n-3 dark:text-n-8">This creator hasn&apos;t published any subscription tiers yet.</p>
+                                                        {/* <button
                                                             className="btn-stroke btn-medium w-full"
                                                             onClick={onJoin}
                                                             disabled={isJoining}
                                                         >
                                                             {isJoining ? <Loader /> : <span>Follow for free instead</span>}
-                                                        </button>
+                                                        </button> */}
                                                     </div>
                                                 )}
                                             </div>

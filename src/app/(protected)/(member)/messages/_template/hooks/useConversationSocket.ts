@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSocket } from "@/store/socket";
-import { Conversation, Message } from "@/lib/types";
+import { Conversation, Message } from "@/types";
 
 /**
  * Handles real-time socket updates for the conversation list:

@@ -7,7 +7,7 @@ import Icon from "../Icon";
 import ActionMenu from "@/components/ActionMenu";
 import { formatDuration } from "@/lib/date";
 
-import { ReviewItem } from "@/lib/types";
+import { ReviewItem } from "@/types";
 
 type ReviewProps = {
     item: ReviewItem;

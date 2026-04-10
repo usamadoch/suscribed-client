@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "@/components/Image";
 
-import { DashboardPost } from "@/lib/types";
+import { DashboardPost } from "@/types";
 
 type ItemProps = {
     item: DashboardPost;

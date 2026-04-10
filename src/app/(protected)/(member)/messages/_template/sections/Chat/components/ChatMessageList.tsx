@@ -1,6 +1,6 @@
 import { RefObject } from "react";
-import { Message, AuthUser } from "@/lib/types";
-import { CreatorPage } from "@/lib/types";
+import { Message, AuthUser } from "@/types";
+import { CreatorPage } from "@/types";
 import { formatAppDate } from "@/lib/date";
 import Loader from "@/components/Loader";
 import Answer from "../Answer";

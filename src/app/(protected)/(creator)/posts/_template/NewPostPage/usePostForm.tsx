@@ -5,8 +5,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Alert from "@/components/Alert";
 
-import { PostVisibility, MediaAttachment, Post, PostType, CreatePostPayload, UpdatePostPayload, getUnlockedMediaAttachments } from "@/lib/types";
-import { postApi } from "@/lib/api";
+import { PostVisibility, MediaAttachment, Post, PostType, CreatePostPayload, UpdatePostPayload, getUnlockedMediaAttachments } from "@/types";
+import { postService as postApi } from "@/services/post.service";
 import { useMediaUpload, MediaFile } from "./hooks/useMediaUpload";
 import { generateObjectId } from "@/lib/idGenerator";
 

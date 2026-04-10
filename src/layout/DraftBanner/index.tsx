@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { useCreatorPage } from "@/hooks/useQueries";
+import { useCreatorPage } from "@/hooks/queries";
 
 import Loader from "@/components/Loader";
 import PublishModal from "@/components/modals/PublishModal";
 
-import { pageApi } from "@/lib/api";
+import { pageService as pageApi } from "@/services/page.service";
 
 
 

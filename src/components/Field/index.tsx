@@ -51,7 +51,7 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                         className={twMerge(
                             "relative",
                             prefix &&
-                            "flex items-center w-full bg-white border border-n-1 transition-colors focus-within:border-purple-1 dark:bg-n-4 dark:border-n-6 dark:focus-within:border-purple-1",
+                            "flex items-center w-full rounded-md bg-white border border-n-1 transition-colors focus-within:border-purple-1 dark:bg-n-4 dark:border-n-6 dark:focus-within:border-purple-1",
                             prefix && error && "border-pink-1!",
                             prefix && classInput
                         )}
@@ -66,7 +66,8 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                                 className={twMerge(
                                     `w-full h-24 px-5 py-3 bg-white border border-n-1 text-sm text-n-1 font-bold outline-none resize-none transition-colors placeholder:text-n-3 focus:border-purple-1 dark:bg-[#1f1f1f] dark:border-n-6 dark:text-n-9 dark:focus:border-purple-1 dark:placeholder:text-n-9 ${icon ? "pr-15" : ""
                                     } ${error ? "pr-15 border-pink-1!" : ""} ${image || currency ? "pr-15" : ""
-                                    } ${classInput}`
+                                    } ${classInput}`,
+                                    prefix ? "rounded-r-md" : "rounded-md"
                                 )}
                                 value={value}
                                 onChange={onChange}
@@ -81,7 +82,7 @@ const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps>(
                                     `w-full h-16 bg-white border border-n-1 text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-purple-1 dark:bg-[#1f1f1f] dark:border-n-6 dark:text-n-9 dark:focus:border-purple-1 dark:placeholder:text-n-9 ${icon || type === "password" ? "pr-15" : ""
                                     } ${error ? "pr-15 border-pink-1!" : ""} ${image || currency ? "pr-15" : ""
                                     } ${classInput}`,
-                                    prefix ? "flex-1 h-full bg-transparent border-none pl-0" : "px-5"
+                                    prefix ? "flex-1 h-full border-none pl-0 rounded-r-md" : "px-5 rounded-md"
                                 )}
                                 type={
                                     (type === "password" &&

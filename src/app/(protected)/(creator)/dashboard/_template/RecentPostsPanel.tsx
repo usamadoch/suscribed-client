@@ -2,8 +2,8 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
-import { PostStatus } from "@/lib/types";
-import { useAnalyticsPosts } from "@/hooks/useQueries";
+import { PostStatus } from "@/types";
+import { useAnalyticsPosts } from "@/hooks/queries";
 
 // Explicit view model for the panel
 interface RecentPostViewModel {

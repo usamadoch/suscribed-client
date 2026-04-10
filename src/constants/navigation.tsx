@@ -1,5 +1,5 @@
 
-import { Permission } from "@/lib/types";
+import { Permission } from "@/types";
 
 export type NavigationItem = {
     title: string;

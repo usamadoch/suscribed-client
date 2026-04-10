@@ -7,7 +7,7 @@
 
 
 import Loader from "@/components/Loader";
-import { useMyMemberships } from "@/hooks/useQueries";
+import { useMyMemberships } from "@/hooks/queries";
 import { useAuth } from "@/store/auth";
 // import WelcomeSection from "./_components/WelcomeSection";
 import EmptySubscriptions from "./_components/EmptySubscriptions";

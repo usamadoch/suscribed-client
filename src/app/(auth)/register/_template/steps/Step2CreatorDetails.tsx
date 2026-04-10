@@ -10,9 +10,10 @@ import StepActions from "./StepActions";
 import { slugify } from "@/lib/utils";
 
 import { SignUpFormValues } from "@/app/(auth)/_validations";
-import { pageApi, authApi } from "@/lib/api";
+import { pageService as pageApi } from "@/services/page.service";
+import { authService as authApi } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth";
-import { ONBOARDING_STEPS } from "@/lib/types";
+import { ONBOARDING_STEPS } from "@/types";
 
 
 

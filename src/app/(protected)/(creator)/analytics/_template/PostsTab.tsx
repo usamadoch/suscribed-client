@@ -8,7 +8,7 @@ import {
     useAnalyticsOverview,
     useAnalyticsPosts,
     useAnalyticsEngagement
-} from "@/hooks/useQueries";
+} from "@/hooks/queries";
 import Tabs from "@/components/Tabs";
 import SimpleChart from "./SimpleChart";
 import { TimeRange } from "./types";

@@ -1,4 +1,4 @@
-import { membershipPlanApi } from "@/lib/api";
+import { membershipService as membershipPlanApi } from "@/services/membership.service";
 import { useEffect } from "react";
 
 interface SubscriptionPollerProps {

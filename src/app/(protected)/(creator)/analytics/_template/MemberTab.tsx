@@ -9,7 +9,7 @@ import { format, subDays } from "date-fns";
 import {
     useAnalyticsOverview,
     useAnalyticsMembers
-} from "@/hooks/useQueries";
+} from "@/hooks/queries";
 
 // import Statistics, { StatisticsItem } from "../../../analytics/_template/Statistics";
 import SimpleChart from "./SimpleChart";

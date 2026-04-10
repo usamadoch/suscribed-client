@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
-import { pageApi, mediaApi } from '@/lib/api';
+import { pageService as pageApi } from '@/services/page.service';
+import { mediaService as mediaApi } from '@/services/media.service';
 
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB

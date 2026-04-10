@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
-import { Post } from "@/lib/types";
+import { Post } from "@/types";
 import { useAuth } from "@/store/auth";
-import { useCreatorPage, useCreatorPosts, useJoinPage } from "@/hooks/useQueries";
+import { useCreatorPage, useCreatorPosts, useJoinPage } from "@/hooks/queries";
 import PostModal from "@/components/modals/PostModal";
 import LoginModal from "@/components/modals/LoginModal";
 import JoinTierModal from "@/components/modals/JoinTierModal";

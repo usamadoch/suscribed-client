@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { PayoutMethod } from '@/lib/types';
+import { PayoutMethod } from '@/types';
 
 interface ReviewModalProps {
     payout: PayoutMethod;

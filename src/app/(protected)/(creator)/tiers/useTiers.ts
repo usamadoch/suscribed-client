@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { membershipPlanApi } from '@/lib/api';
-import { Tier } from '@/lib/types';
+import { membershipService as membershipPlanApi } from '@/services/membership.service';
+import { Tier } from '@/types';
 import toast from 'react-hot-toast';
 import * as React from 'react';
 import Alert from '@/components/Alert';

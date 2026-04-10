@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 import ActionMenu from "@/components/ActionMenu";
 import { format } from "date-fns";
 
-import { useDeletePost } from "@/hooks/useQueries";
+import { useDeletePost } from "@/hooks/queries";
 
 import DeletePostModal from "@/components/modals/DeletePostModal";
 import Image from "@/components/Image";

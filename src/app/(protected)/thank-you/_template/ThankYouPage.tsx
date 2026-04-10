@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { membershipPlanApi } from "@/lib/api";
+import { membershipService as membershipPlanApi } from "@/services/membership.service";
 import Loader from "@/components/Loader";
 import Link from "next/link";
 import Icon from "@/components/Icon";

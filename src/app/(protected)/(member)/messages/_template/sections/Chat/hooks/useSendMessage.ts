@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { conversationApi } from "@/lib/api";
-import { Message, User } from "@/lib/types";
+import { conversationService as conversationApi } from "@/services/conversation.service";
+import { Message, User } from "@/types";
 
 type UseSendMessageParams = {
     conversationId: string | null;

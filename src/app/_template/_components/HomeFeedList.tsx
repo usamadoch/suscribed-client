@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useHomeFeed } from "@/hooks/useQueries";
-import { Post } from "@/lib/types";
+import { useHomeFeed } from "@/hooks/queries";
+import { Post } from "@/types";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Loader from "@/components/Loader";
 import PostModal from "@/components/modals/PostModal";

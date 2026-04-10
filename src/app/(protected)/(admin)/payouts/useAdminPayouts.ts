@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { adminApi } from '@/lib/api';
+import { adminService as adminApi } from '@/services/payout.service';
 import toast from 'react-hot-toast';
 
 export const useAdminPayouts = () => {

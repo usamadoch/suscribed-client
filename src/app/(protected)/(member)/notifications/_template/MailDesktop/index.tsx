@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { formatAppDate } from "@/lib/date";
-import { Notification as AppNotification, NotificationType } from "@/lib/types";
+import { Notification as AppNotification, NotificationType } from "@/types";
 
 type MailDesktopProps = {
     item: AppNotification;

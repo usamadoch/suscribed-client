@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
 import { hasPermission } from "@/constants/permissions";
-import { NotificationPreferences } from "@/lib/types";
-import { userApi } from "@/lib/api";
+import { NotificationPreferences } from "@/types";
+import { userService as userApi } from "@/services/user.service";
 
 import { useAuth } from "@/store/auth";
-import { useFullProfile } from "@/hooks/useQueries";
+import { useFullProfile } from "@/hooks/queries";
 
 import Switch from "@/components/Switch";
 

@@ -7,7 +7,7 @@ import Image from "@/components/Image";
 
 import { usePageImageUpload } from "@/hooks/usePageImageUpload";
 
-import { CreatorPage } from "@/lib/types";
+import { CreatorPage } from "@/types";
 
 import PageImageUploader from "./PageImageUploader";
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Message } from "@/lib/types";
+import { Message } from "@/types";
 import { useSocket } from "@/store/socket";
 
 type UseChatSocketParams = {

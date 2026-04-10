@@ -1,7 +1,7 @@
 import Image from '@/components/Image';
 import MuxVideoPlayer from '@/components/MuxVideoPlayer';
 import { constructSlotImageUrl } from '@/lib/image-slots';
-import { MediaAttachment } from '@/lib/types';
+import { MediaAttachment } from '@/types';
 
 // ─── Types ──────────────────────────────────────────────────
 

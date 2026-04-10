@@ -2,7 +2,7 @@ import Link from "next/link";
 import Icon from "@/components/Icon";
 import ReadMore from "@/components/ReadMore";
 import { formatAppDate, formatDuration } from "@/lib/date";
-import { VideoPost } from "@/lib/types";
+import { VideoPost } from "@/types";
 
 interface VideoPostCardProps {
     post: VideoPost;

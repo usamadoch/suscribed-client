@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // ======================
-// NEXT.JS MIDDLEWARE
+// NEXT.JS PROXY
 // ======================
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Only redirect if visiting root path /
@@ -28,7 +28,7 @@ export function middleware(request: NextRequest) {
                     }
                 }
             } catch (error) {
-                console.error("[Middleware] JWT Decode Error:", error);
+                console.error("[Proxy] JWT Decode Error:", error);
             }
         }
     }

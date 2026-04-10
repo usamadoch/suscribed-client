@@ -1,4 +1,4 @@
-import { Message, User } from "@/lib/types";
+import { Message, User } from "@/types";
 
 /**
  * Props for the Chat component.

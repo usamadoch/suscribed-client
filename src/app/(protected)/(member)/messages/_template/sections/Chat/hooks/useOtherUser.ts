@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Message, User } from "@/lib/types";
+import { Message, User } from "@/types";
 
 type OtherUserInfo = {
     displayName: string;

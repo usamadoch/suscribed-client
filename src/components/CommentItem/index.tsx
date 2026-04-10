@@ -2,7 +2,7 @@
 import { formatAppDate } from "@/lib/date";
 import Image from "@/components/Image";
 import Actions from "@/components/Review/Actions";
-import { Comment as PostComment } from "@/lib/types";
+import { Comment as PostComment } from "@/types";
 
 interface CommentItemProps {
     comment: PostComment;

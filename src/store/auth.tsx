@@ -8,8 +8,9 @@ import React, { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { create } from 'zustand';
 
-import { AuthState, LoginPayload, SignupPayload, ONBOARDING_STEPS } from '@/lib/types';
-import { ApiClientError, authApi, } from '@/lib/api';
+import { AuthState, LoginPayload, SignupPayload, ONBOARDING_STEPS } from '@/types';
+import { ApiClientError } from "@/services/api.client";
+import { authService as authApi } from "@/services/auth.service";
 
 
 // ====================

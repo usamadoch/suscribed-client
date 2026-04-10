@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { twMerge } from "tailwind-merge";
 import Icon from "@/components/Icon";
-import { postApi } from "@/lib/api";
+import { postService as postApi } from "@/services/post.service";
 import { useAuth } from "@/store/auth";
 import LoginModal from "../modals/LoginModal";
 

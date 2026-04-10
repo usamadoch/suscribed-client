@@ -11,9 +11,10 @@ import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 
 import Image from "@/components/Image";
-import { useCreatorPage, usePost } from "@/hooks/useQueries";
+import { useCreatorPage, usePost } from "@/hooks/queries";
 
 import { useCreatorHeader } from "@/context/CreatorHeaderContext";
+import { useAuth } from "@/store/auth";
 
 type CreatorHeaderProps = {
     pageSlug?: string;
@@ -33,6 +34,7 @@ const navLinks = [
 const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
     const [headerStyle, setHeaderStyle] = useState<boolean>(false);
     const { isHeaderHidden } = useCreatorHeader();
+    const { isAuthenticated, user } = useAuth();
     const pathname = usePathname();
     const params = useParams();
 
@@ -82,8 +84,8 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
 
                     {isLoading ? (
                         <div className="flex items-center gap-2 mr-24">
-                            <div className="border border-n-6 dark:border-n-6 overflow-hidden rounded-full w-9 h-9 animate-skeleton bg-n-4/10"></div>
-                            <div className="border border-n-6 dark:border-n-6 h-6 w-26 animate-skeleton bg-n-4/10"></div>
+                            <div className="overflow-hidden rounded-full w-9 h-9 bg-n-3/20 dark:bg-n-6/50 animate-pulse" />
+                            <div className="h-6 w-26 rounded bg-n-3/20 dark:bg-n-6/50 animate-pulse" />
                         </div>
                     ) : (
                         <Link href={`/${page?.pageSlug || slug || ''}`} className="flex items-center gap-2 mr-24" >
@@ -103,9 +105,12 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
                         </Link>
                     )}
 
-                    {(isOwner || isMember) && (
-                        <Link href="/dashboard" className="text-h6 dark:text-n-9 font-medium underline hover:no-underline transition-all duration-100 cursor-pointer flex items-center gap-2">
-                            {isOwner ? "Dashboard" : "Home"}
+                    {isAuthenticated && (
+                        <Link
+                            href={user?.role === 'creator' ? "/dashboard" : "/"}
+                            className="text-h6 dark:text-n-9 font-medium underline hover:no-underline transition-all duration-100 cursor-pointer flex items-center gap-2"
+                        >
+                            {user?.role === 'creator' ? "Dashboard" : "Home"}
                         </Link>
                     )}
 
@@ -116,7 +121,7 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
                         <Link
                             key={index}
                             href={`/${slug}${link.url}`}
-                            className={`btn-transparent-dark btn-medium ${isLinkActive(link.url)
+                            className={`btn btn-medium border-none ${isLinkActive(link.url)
                                 ? "text-purple-1 fill-purple-1"
                                 : "text-n-1 fill-n-1 dark:text-n-9 dark:fill-n-9 "
                                 }`}
@@ -124,6 +129,15 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
                             {link.title}
                         </Link>
                     ))}
+
+                    {!isAuthenticated && !isOwner && !isMember && !isLoading && (
+                        <Link
+                            href="/login"
+                            className="btn-purple btn-medium px-10 ml-2"
+                        >
+                            Login
+                        </Link>
+                    )}
                 </div>
 
             </div>

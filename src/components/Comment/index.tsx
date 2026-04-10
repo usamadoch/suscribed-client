@@ -25,7 +25,7 @@ const Comment = ({
 }: CommentProps) => {
     return (
         <form
-            className={`flex pl-1 py-1 pr-5 bg-white border border-n-1 shadow-primary-4 md:pr-4 dark:bg-n-1 dark:border-n-6 ${className}`}
+            className={`flex pl-1 py-1 pr-5 bg-white border border-n-1 rounded-sm shadow-primary-4 md:pr-4 dark:bg-n-1 dark:border-n-6 ${className}`}
             action=""
             onSubmit={(e) => {
                 e.preventDefault();

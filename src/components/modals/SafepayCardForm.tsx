@@ -2,11 +2,11 @@ import { Suspense, useRef, useCallback, useState } from 'react';
 import { CardCapture, PayerAuthentication, Environment } from '@sfpy/atoms';
 import '@sfpy/atoms/styles';
 import Loader from '../Loader';
-import { Tier, CreatorPage } from '@/lib/types';
+import { Tier, CreatorPage } from '@/types';
 import { Radio, RadioGroup } from '@headlessui/react';
 import Icon from '../Icon';
 import { useMutation } from "@tanstack/react-query";
-import { membershipPlanApi } from "@/lib/api";
+import { membershipService as membershipPlanApi } from "@/services/membership.service";
 import { toast } from "react-hot-toast";
 
 const SafepayCardForm = ({
@@ -249,7 +249,9 @@ const SafepayCardForm = ({
                     {/* Right side: Payment form */}
                     <div className='flex-1 w-full mx-8'>
 
-                        <div className="text-n-1 dark:text-white capitalize mb-1 font-semibold">Card details</div>
+                        <div className="text-n-1 dark:text-white capitalize mb-1 font-semibold">
+                            Card details
+                        </div>
                         <div
                             className="flex flex-col"
                             style={{
@@ -261,6 +263,9 @@ const SafepayCardForm = ({
                                 // padding: '0 14px',
                                 boxSizing: 'border-box',
                                 transition: 'border-color 0.2s',
+
+                                marginBottom: '30px',
+
                             }}
                         >
 
@@ -275,7 +280,7 @@ const SafepayCardForm = ({
                                             environment={Environment.Sandbox}
                                             authToken={currentAuthToken}
                                             tracker={currentTrackerToken}
-                                            validationEvent="change"
+                                            validationEvent="submit"
                                             imperativeRef={cardRef}
 
                                             onReady={() => {
@@ -295,7 +300,7 @@ const SafepayCardForm = ({
                                                 width: '100%',
                                                 fontFamily: 'Inter, sans-serif',
                                                 fontSize: '14px',
-                                                color: '#ffffff',
+                                                color: '#151515',
                                                 backgroundColor: '#f5f6f9',
                                                 letterSpacing: '0.02em',
                                             }}
@@ -306,7 +311,7 @@ const SafepayCardForm = ({
                             </div>
                         </div>
 
-                        <div className="my-4 text-n-3 flex flex-col gap-1 dark:text-n-9">
+                        <div className=" mb-4 text-n-3 flex flex-col gap-1 dark:text-n-9">
                             <div className='text-sm font-medium'>
                                 {updateTrackerMutation.isPending ? (
                                     <div className="h-5 w-[280px] max-w-full bg-n-3/20 dark:bg-n-6/50 animate-pulse rounded" />
@@ -338,28 +343,31 @@ const SafepayCardForm = ({
                             <p className="text-red-400 mt-2">{errorMessage}</p>
                         )}
 
-                        {showAuth && deviceJWT && deviceURL && (
-                            <Suspense fallback={<div>Authenticating...</div>}>
-                                <PayerAuthentication
-                                    environment={Environment.Sandbox}
-                                    tracker={currentTrackerToken}
-                                    authToken={currentAuthToken}
-                                    deviceDataCollectionJWT={deviceJWT}
-                                    deviceDataCollectionURL={deviceURL}
-                                    authorizationOptions={{
-                                        do_capture: true,       // charge immediately
-                                        do_card_on_file: true   // save the card for future recurring charges
-                                    }}
+                        <div className='w-full'>
 
-                                    imperativeRef={cardRef}
-                                    onPayerAuthenticationSuccess={handleSuccess}
-                                    onPayerAuthenticationFrictionless={handleSuccess} // bank skipped OTP, still success
-                                    onPayerAuthenticationFailure={handleFailure}
-                                    onPayerAuthenticationUnavailable={handleFailure}
-                                    onSafepayError={handleFailure}
-                                />
-                            </Suspense>
-                        )}
+                            {showAuth && deviceJWT && deviceURL && (
+                                <Suspense fallback={<div>Authenticating...</div>}>
+                                    <PayerAuthentication
+                                        environment={Environment.Sandbox}
+                                        tracker={currentTrackerToken}
+                                        authToken={currentAuthToken}
+                                        deviceDataCollectionJWT={deviceJWT}
+                                        deviceDataCollectionURL={deviceURL}
+                                        authorizationOptions={{
+                                            do_capture: true,       // charge immediately
+                                            do_card_on_file: true   // save the card for future recurring charges
+                                        }}
+
+                                        imperativeRef={cardRef}
+                                        onPayerAuthenticationSuccess={handleSuccess}
+                                        onPayerAuthenticationFrictionless={handleSuccess} // bank skipped OTP, still success
+                                        onPayerAuthenticationFailure={handleFailure}
+                                        onPayerAuthenticationUnavailable={handleFailure}
+                                        onSafepayError={handleFailure}
+                                    />
+                                </Suspense>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

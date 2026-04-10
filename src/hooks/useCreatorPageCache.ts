@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { type CreatorPage as CreatorPageType } from "@/lib/types";
+import { type CreatorPage as CreatorPageType } from "@/types";
 
 export const useCreatorPageCache = (slug: string, userId?: string) => {
     const queryClient = useQueryClient();

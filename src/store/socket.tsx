@@ -5,8 +5,9 @@ import { io, Socket } from 'socket.io-client';
 import { create } from 'zustand';
 import { useAuth } from './auth';
 import { useQueryClient } from '@tanstack/react-query';
-import { Notification } from '@/lib/types';
-import { notificationApi, conversationApi } from '@/lib/api';
+import { Notification } from '@/types';
+import { notificationService as notificationApi } from '@/services/notification.service';
+import { conversationService as conversationApi } from '@/services/conversation.service';
 
 interface SocketState {
     socket: Socket | null;

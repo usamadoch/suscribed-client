@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import Icon from "@/components/Icon";
-import { User, CreatorPage, MembershipStatus } from "@/lib/types";
-import { useAnalyticsOverview, useMyMembers } from "@/hooks/useQueries";
+import { User, CreatorPage, MembershipStatus } from "@/types";
+import { useAnalyticsOverview, useMyMembers } from "@/hooks/queries";
 import Loader from "@/components/Loader";
 
 // Domain model for the view

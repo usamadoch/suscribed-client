@@ -1,7 +1,7 @@
 import Modal from "@/components/Modal";
 import Field from "@/components/Field";
 import Loader from "@/components/Loader";
-import { Tier } from "@/lib/types";
+import { Tier } from "@/types";
 
 type ChangePriceModalProps = {
     visible: boolean;

@@ -5,9 +5,9 @@ import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Field from "@/components/Field";
 import { useAuth } from "@/store/auth";
-import { userApi } from "@/lib/api";
+import { userService as userApi } from "@/services/user.service";
 import { useImageUpload } from "@/hooks/useImageUpload";
-import { useFullProfile } from "@/hooks/useQueries";
+import { useFullProfile } from "@/hooks/queries";
 import Alert from "@/components/Alert";
 
 type AccountFormValues = {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Tier } from '@/lib/types';
+import { Tier } from '@/types';
 import { useTiers } from '../useTiers';
 import Loader from '@/components/Loader';
 import PlanCard from '@/components/PlanCard';

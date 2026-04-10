@@ -15,7 +15,7 @@ import StepActions from "./StepActions";
 import AuthFields from "../../../_components/AuthFields";
 
 import { useAuth, useAuthStore } from "@/store/auth";
-import { authApi } from "@/lib/api";
+import { authService as authApi } from "@/services/auth.service";
 import { SignUpFormValues } from "@/app/(auth)/_validations";
 import { generateUsername } from "@/lib/utils";
 import Link from "next/link";

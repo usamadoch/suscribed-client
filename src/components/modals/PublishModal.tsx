@@ -21,9 +21,12 @@ const PublishModal = ({
             visible={visible}
             onClose={onClose}
             title="Publish Page"
+            showCloseIcon={false}
+
         >
-            <div className="space-y-4">
-                <p className="text-base text-n-2">
+
+            <div className=" space-y-4">
+                <p className="text-base text-n-2 dark:text-n-8">
                     Are you sure you want to publish your page? It will become visible to everyone.
                 </p>
 

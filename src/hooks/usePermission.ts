@@ -1,6 +1,6 @@
 import { useAuth } from '@/store/auth';
 import { hasPermission, ROLE_PERMISSIONS } from '@/constants/permissions';
-import { Permission } from '@/lib/types';
+import { Permission } from '@/types';
 
 
 export const usePermission = (permission: Permission): boolean => {

@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import MediaBlock from './MediaBlock';
-import { MediaAttachment } from '@/lib/types';
+import { MediaAttachment } from '@/types';
 
 
 interface MediaCarouselProps {

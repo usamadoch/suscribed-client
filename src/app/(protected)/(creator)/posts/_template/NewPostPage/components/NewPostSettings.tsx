@@ -1,6 +1,6 @@
 import { Radio, RadioGroup } from "@headlessui/react";
 import Switch from "@/components/Switch";
-import { PostVisibility } from "@/lib/types";
+import { PostVisibility } from "@/types";
 import Loader from "@/components/Loader";
 
 type DetailsProps = {

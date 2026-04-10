@@ -68,7 +68,7 @@ const MessagesPage = () => {
                 // onClick={() => console.log("Create a message")}
                 />
             ) : (
-                <div className="flex h-[calc(100vh-10.7rem)] card lg:block lg:h-auto">
+                <div className="flex h-[calc(100vh-10.7rem)] card rounded-none lg:block lg:h-auto">
                     <Messages
                         setVisible={setVisible}
                         conversations={finalConversations}

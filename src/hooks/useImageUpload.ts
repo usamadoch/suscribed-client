@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { mediaApi } from '@/lib/api';
+import { mediaService as mediaApi } from '@/services/media.service';
 
 interface UseImageUploadResult {
     uploadImage: (file: File, type: string, refId?: string) => Promise<string | null>;

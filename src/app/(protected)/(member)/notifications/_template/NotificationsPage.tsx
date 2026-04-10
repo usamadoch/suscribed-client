@@ -5,10 +5,10 @@ import { useMediaQuery } from "react-responsive";
 
 import Empty from "@/components/Empty";
 import Icon from "@/components/Icon";
-import { Notification as AppNotification } from "@/lib/types";
+import { Notification as AppNotification } from "@/types";
 
 import { useHydrated } from "@/hooks/useHydrated";
-import { useNotifications, useMarkNotificationsAsRead } from "@/hooks/useQueries";
+import { useNotifications, useMarkNotificationsAsRead } from "@/hooks/queries";
 
 import { useSocket } from "@/store/socket";
 

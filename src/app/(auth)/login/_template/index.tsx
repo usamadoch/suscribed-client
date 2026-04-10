@@ -11,7 +11,7 @@ import Loader from "@/components/Loader";
 
 import Alert from "@/components/Alert";
 import AuthFields from "../../_components/AuthFields";
-import { ONBOARDING_STEPS } from "@/lib/types";
+import { ONBOARDING_STEPS } from "@/types";
 
 import { useAuthForm } from "@/hooks/useAuthForm";
 

@@ -2,8 +2,8 @@ import { useState, createElement } from "react";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import Alert from "@/components/Alert";
-import { postApi } from "@/lib/api";
-import { Comment as PostComment } from "@/lib/types";
+import { postService as postApi } from "@/services/post.service";
+import { Comment as PostComment } from "@/types";
 
 export const usePostComment = (postId: string) => {
     const queryClient = useQueryClient();

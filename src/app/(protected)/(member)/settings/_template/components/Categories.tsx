@@ -28,7 +28,7 @@ const Categories = ({
                         <ListboxButton
                             as="div"
                             className={twMerge(
-                                `relative w-full h-12 px-5 py-3 text-left bg-white border border-n-4 text-sm text-n-1 font-bold outline-none transition-colors cursor-pointer dark:bg-[#1f1f1f] dark:border-n-6 dark:text-n-9 ${open ? "border-purple-1 dark:border-purple-1" : ""
+                                `relative w-full h-12 px-5 py-3 text-left bg-white border border-n-4 rounded-md text-sm text-n-1 font-bold outline-none transition-colors cursor-pointer dark:bg-[#1f1f1f] dark:border-n-6 dark:text-n-9 ${open ? "border-purple-1 dark:border-purple-1" : ""
                                 }`
                             )}
                         >
@@ -73,7 +73,7 @@ const Categories = ({
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <ListboxOptions className="absolute left-0 right-0 z-10 mt-1 p-2 bg-white border border-n-4 shadow-lg dark:bg-n-1 dark:border-white">
+                            <ListboxOptions className="absolute left-0 right-0 z-10 mt-1 p-2 bg-white border border-n-4 rounded-b-md shadow-lg dark:bg-n-1 dark:border-n-6">
                                 {options.map((item) => (
                                     <ListboxOption
                                         className="flex items-start px-3 py-2 text-sm font-bold text-n-3 transition-colors cursor-pointer ui-selected:bg-n-3/20! ui-selected:text-n-1! tap-highlight-color dark:text-n-7  dark:ui-selected:text-white!"

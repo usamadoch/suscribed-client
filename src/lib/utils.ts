@@ -1,4 +1,4 @@
-import { SocialLink } from "./types";
+import { SocialLink } from "@/types";
 
 export const getPlatformFromUrl = (url: string): SocialLink['platform'] => {
     const lowerUrl = url.toLowerCase();

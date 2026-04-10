@@ -5,7 +5,7 @@
 "use client";
 import Link from "next/link";
 import Loader from "@/components/Loader";
-import { useMyPage } from "@/hooks/useQueries";
+import { useMyPage } from "@/hooks/queries";
 // import { useHydrated } from "@/hooks/useHydrated";
 
 

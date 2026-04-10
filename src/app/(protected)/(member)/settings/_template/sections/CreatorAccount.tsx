@@ -3,15 +3,15 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-import { useMyPage } from "@/hooks/useQueries";
+import { useMyPage } from "@/hooks/queries";
 import { usePageImageUpload } from "@/hooks/usePageImageUpload";
 
 
 import { useAuth } from "@/store/auth";
 
 import { getPlatformFromUrl } from "@/lib/utils";
-import { pageApi } from "@/lib/api";
-import { UpdatePagePayload, CreatorPage } from "@/lib/types";
+import { pageService as pageApi } from "@/services/page.service";
+import { UpdatePagePayload, CreatorPage } from "@/types";
 
 import Icon from "@/components/Icon";
 import Field from "@/components/Field";

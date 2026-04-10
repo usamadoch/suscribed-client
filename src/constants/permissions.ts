@@ -1,4 +1,4 @@
-import { Permission, UserRole } from "@/lib/types";
+import { Permission, UserRole } from "@/types";
 
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     creator: [

@@ -1,4 +1,4 @@
-import { AuthUser } from "@/lib/types";
+import { AuthUser } from "@/types";
 
 interface WelcomeSectionProps {
     user: AuthUser;

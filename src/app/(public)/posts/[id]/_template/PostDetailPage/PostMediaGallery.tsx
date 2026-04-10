@@ -2,7 +2,7 @@ import Image from "@/components/Image";
 import LockedContent from "./LockedContent";
 import MediaCarousel from "./MediaCarousel";
 import MediaBlock from "./MediaBlock";
-import { AnyMediaAttachment, MediaAttachment } from "@/lib/types";
+import { AnyMediaAttachment, MediaAttachment } from "@/types";
 
 interface PostMediaGalleryProps {
     locked: boolean;

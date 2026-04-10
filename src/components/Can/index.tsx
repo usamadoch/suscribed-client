@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { usePermission } from '@/hooks/usePermission';
-import { Permission } from '@/lib/types';
+import { Permission } from '@/types';
 
 type CanProps = {
     permission: Permission;

@@ -9,7 +9,7 @@ import {
     Post,
     MediaAttachment,
     AnyMediaAttachment,
-} from "@/lib/types";
+} from "@/types";
 
 import { formatAppDate } from "@/lib/date";
 import { getCreatorInfo } from "@/lib/post-mapper";

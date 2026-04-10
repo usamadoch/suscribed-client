@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { conversationApi } from "@/lib/api";
-import { Message } from "@/lib/types";
+import { conversationService as conversationApi } from "@/services/conversation.service";
+import { Message } from "@/types";
 
 type ChatMessagesPage = {
     messages: Message[];

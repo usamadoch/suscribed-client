@@ -10,12 +10,12 @@ import ShareModal from "@/components/modals/ShareModal";
 import JoinTierModal from "@/components/modals/JoinTierModal";
 import ReadMore from "@/components/ReadMore";
 
-import { CreatorPage } from "@/lib/types";
+import { CreatorPage } from "@/types";
 
 import { usePageImageUpload } from "@/hooks/usePageImageUpload";
 
 import { useAuth } from "@/store/auth";
-import { useJoinPage } from "@/hooks/useQueries";
+import { useJoinPage } from "@/hooks/queries";
 import PageImageUploader from "./PageImageUploader";
 
 
@@ -118,7 +118,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                             <span className="text-sm dark:text-n-7">{page.postCount || 0} Posts</span>
                         </div>
                         <p className="mt-1 text-base text-n-3 dark:text-n-9">
-                            <ReadMore words={20}>
+                            <ReadMore words={24}>
                                 {page.tagline || page.about || "No description available."}
                             </ReadMore>
                         </p>

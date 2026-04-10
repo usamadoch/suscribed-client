@@ -1,4 +1,4 @@
-import { ApiClientError } from "@/lib/api";
+import { ApiClientError } from "@/services/api.client";
 
 interface CreatorPageErrorProps {
     code: 'NOT_PUBLISHED' | 'NOT_FOUND' | string;

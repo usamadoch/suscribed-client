@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSocket } from "@/store/socket";
-import { Conversation, User } from "@/lib/types";
+import { Conversation, User } from "@/types";
 
 /**
  * Manages MessagesPage navigation side-effects:

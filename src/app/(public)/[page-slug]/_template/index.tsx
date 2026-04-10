@@ -4,10 +4,10 @@ import { useEffect } from "react";
 import { notFound } from "next/navigation";
 
 import { useAuth } from "@/store/auth";
-import { useCreatorPage } from "@/hooks/useQueries";
+import { useCreatorPage } from "@/hooks/queries";
 import { usePageSlug } from "@/hooks/usePageSlug";
 import { useCreatorPageCache } from "@/hooks/useCreatorPageCache";
-import { ApiClientError } from "@/lib/api";
+import { ApiClientError } from "@/services/api.client";
 
 import { useCreatorHeader } from "@/context/CreatorHeaderContext";
 

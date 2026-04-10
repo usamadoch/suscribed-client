@@ -69,7 +69,7 @@ const Menu = ({ visible }: MenuProps) => {
                                 return (
                                     <Link
                                         className={twMerge(
-                                            `flex items-center h-9.5 mb-2 px-4 text-sm dark:text-n-9 dark:fill-n-9 font-semibold last:mb-0 transition-colors ${isActive ? "bg-n-5 text-purple-1 fill-purple-1" : ""
+                                            `flex items-center h-9.5 mb-2 px-4 text-sm dark:text-n-9 dark:fill-n-9 font-semibold last:mb-0 transition-colors ${isActive ? "bg-n-5 text-purple-1 fill-purple-1 rounded-md" : ""
                                             } ${visible ? "text-sm" : "xl:text-0"}`
                                         )}
                                         href={link.url}

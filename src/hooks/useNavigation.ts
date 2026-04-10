@@ -4,8 +4,8 @@ import { navigation, NavigationItem } from '@/constants/navigation';
 import { useAuth } from '@/store/auth';
 import { hasPermission } from '@/constants/permissions';
 
-import { Permission } from '@/lib/types';
-import { useMyPage } from '@/hooks/useQueries';
+import { Permission } from '@/types';
+import { useMyPage } from '@/hooks/queries';
 
 export type { NavigationItem } from '@/constants/navigation';
 

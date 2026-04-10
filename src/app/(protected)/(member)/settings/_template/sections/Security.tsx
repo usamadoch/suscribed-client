@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { authApi } from "@/lib/api";
+import { authService as authApi } from "@/services/auth.service";
 
 import Field from "@/components/Field";
 import Loader from "@/components/Loader";
-import { useFullProfile } from "@/hooks/useQueries";
+import { useFullProfile } from "@/hooks/queries";
 
 import Alert from "@/components/Alert";
 

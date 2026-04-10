@@ -1,5 +1,5 @@
 import MuxVideoPlayer from '@/components/MuxVideoPlayer';
-import { MediaAttachment } from '@/lib/types';
+import { MediaAttachment } from '@/types';
 import Image from '@/components/Image';
 import { constructSlotImageUrl } from '@/lib/image-slots';
 

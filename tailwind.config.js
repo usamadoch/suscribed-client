@@ -209,7 +209,7 @@ module.exports = {
             });
             addComponents({
                 ".btn": {
-                    "@apply cursor-pointer inline-flex items-center justify-center h-13 px-5 border border-n-1 text-base text-n-1 fill-n-1 font-bold transition-colors":
+                    "@apply cursor-pointer inline-flex items-center justify-center h-13 px-5 border border-n-1 rounded-xs text-base text-n-1 fill-n-1 font-bold transition-colors":
                         {},
                 },
                 ".btn svg": {
@@ -309,7 +309,7 @@ module.exports = {
                         {},
                 },
                 ".card": {
-                    "@apply bg-white border border-n-4 dark:bg-n-4":
+                    "@apply bg-white border border-n-4 rounded-xl dark:bg-n-4":
                         {},
                 },
                 ".card-head": {

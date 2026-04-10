@@ -1,7 +1,7 @@
 import CommentInput from "@/components/Comment";
 import CommentItem from "@/components/CommentItem";
-import { AuthUser, Comment } from "@/lib/types";
-import { useMyPage } from "@/hooks/useQueries";
+import { AuthUser, Comment } from "@/types";
+import { useMyPage } from "@/hooks/queries";
 
 interface CommentsSectionProps {
     user: AuthUser | null;

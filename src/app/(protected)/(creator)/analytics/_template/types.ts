@@ -1,4 +1,4 @@
-import { TimeRange } from "@/lib/types";
+import { TimeRange } from "@/types";
 
 export type { TimeRange };
 export type TabValue = "member" | "posts" | "earnings";

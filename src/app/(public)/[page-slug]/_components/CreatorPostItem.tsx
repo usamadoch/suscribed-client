@@ -1,4 +1,4 @@
-import { Post, CreatorPage } from "@/lib/types";
+import { Post, CreatorPage } from "@/types";
 import Review from "@/components/Review";
 import { mapPostToReviewItem } from "@/lib/post-mapper";
 

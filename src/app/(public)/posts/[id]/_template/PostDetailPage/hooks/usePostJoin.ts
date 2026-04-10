@@ -1,8 +1,8 @@
 import { useState, createElement } from "react";
 import { toast } from "react-hot-toast";
 import Alert from "@/components/Alert";
-import { useJoinPage } from "@/hooks/useQueries";
-import { Post } from "@/lib/types";
+import { useJoinPage } from "@/hooks/queries";
+import { Post } from "@/types";
 import { useAuth } from "@/store/auth";
 
 export const usePostJoin = (post: Post | null | undefined) => {

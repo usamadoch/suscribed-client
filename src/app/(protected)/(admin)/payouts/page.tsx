@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useAdminPayouts } from './useAdminPayouts';
 import { AdminReviewModal } from './AdminReviewModal';
-import { PayoutMethod } from '@/lib/types';
+import { PayoutMethod } from '@/types';
 import { formatAppDate } from '@/lib/date';
 
 const Spinner = ({ className }: { className?: string }) => (
