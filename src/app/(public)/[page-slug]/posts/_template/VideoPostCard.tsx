@@ -54,7 +54,7 @@ const VideoPostCard = ({ post }: VideoPostCardProps) => {
                 <p className={`text-sm font-semibold mb-2 ${isLocked ? "blur-xs select-none" : ""}`}>
                     <ReadMore
                         words={12}
-                        blurClass="bg-linear-to-r from-transparent to-white dark:to-n-1"
+                    // blurClass="bg-linear-to-r from-transparent to-white dark:to-n-1"
                     >
                         {displayCaption}
                     </ReadMore>
