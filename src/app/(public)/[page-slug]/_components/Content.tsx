@@ -19,7 +19,7 @@ type CreatorContentProps = {
 const Content = ({ pageSlug }: CreatorContentProps) => {
     // Using cached queries
     const { data: pageData } = useCreatorPage(pageSlug);
-    const { data: postsData, isLoading } = useCreatorPosts(pageSlug, { type: ['text', 'image'] });
+    const { data: postsData, isLoading } = useCreatorPosts(pageSlug, { type: ['text', 'image', 'video'] });
     const { isAuthenticated, user } = useAuth();
     const queryClient = useQueryClient();
 

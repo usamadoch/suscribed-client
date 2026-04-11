@@ -43,7 +43,7 @@ const CreatorsPostsPage = () => {
     const sortedPosts = sortPosts(posts, sortOption.id);
 
     return (
-        <div className="max-w-360 mx-auto px-6 2xl:px-8 lg:px-6 md:px-5">
+        <div className="max-w-360 w-full mx-auto px-6 2xl:px-8 lg:px-6 md:px-5">
             <div className="grid gap-6 pt-10">
                 {isLoading ? (
                     <div className="flex items-center justify-center">

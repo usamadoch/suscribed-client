@@ -8,7 +8,8 @@ import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Comment from "@/components/Comment";
 import { postService as postApi } from "@/services/post.service";
-import { Post, isLockedMedia, CreatorPage } from "@/types";
+import { Post, isLockedMedia, CreatorPage, VideoAttachment } from "@/types";
+import MuxVideoPlayer from "@/components/MuxVideoPlayer";
 import Actions from "@/components/Review/Actions";
 import Loader from "@/components/Loader";
 import CommentItem from "@/components/CommentItem";
@@ -67,10 +68,14 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
         ? post.mediaAttachments.find(m => !isLockedMedia(m) && m.url)?.url
         : undefined;
 
+    const displayedVideo = post.postType === 'video' && !post.isLocked
+        ? post.mediaAttachments.find(m => !isLockedMedia(m) && m.type === 'video') as VideoAttachment | undefined
+        : undefined;
+
     // Use centralized creator info logic
     const creator = getCreatorInfo(post, page);
 
-    const showMediaSection = post.postType === 'image' && (!!displayedImage || post.isLocked);
+    const showMediaSection = (post.postType === 'image' || post.postType === 'video') && (!!displayedImage || !!displayedVideo || post.isLocked);
 
 
     return (
@@ -92,6 +97,16 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
                                 fill
                                 className="object-contain"
                                 alt="Post content"
+                            />
+                        </div>
+                    ) : displayedVideo ? (
+                        <div className="relative w-full h-full bg-black">
+                            <MuxVideoPlayer
+                                playbackId={displayedVideo.muxPlaybackId}
+                                status={displayedVideo.status}
+                                fallbackSrc={displayedVideo.url}
+                                className="w-full h-full"
+                                autoPlay
                             />
                         </div>
                     ) : (

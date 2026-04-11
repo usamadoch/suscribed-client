@@ -78,23 +78,25 @@ const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
                 )}
 
                 {item.video && (
-                    <div className={`relative aspect-video bg-n-2 overflow-hidden mb-4 ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
-                        {item.video.thumbnailUrl ? (
-                            <img
-                                src={item.video.thumbnailUrl}
-                                alt="Video thumbnail"
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-black">
-                                <Icon name="play" className="w-12 h-12 fill-white/80" />
-                            </div>
-                        )}
-                        {item.video.duration && (
-                            <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 rounded text-xs font-semibold text-white dark:text-n-8">
-                                {formatDuration(item.video.duration)}
-                            </div>
-                        )}
+                    <div className="pr-5 mb-2.5">
+                        <div className={`relative aspect-video rounded-xs bg-n-2 overflow-hidden ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
+                            {item.video.thumbnailUrl ? (
+                                <img
+                                    src={item.video.thumbnailUrl}
+                                    alt="Video thumbnail"
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-black">
+                                    <Icon name="play" className="w-12 h-12 fill-white/80" />
+                                </div>
+                            )}
+                            {item.video.duration && (
+                                <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 rounded text-xs font-semibold text-white dark:text-n-8">
+                                    {formatDuration(item.video.duration)}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 )}
 
