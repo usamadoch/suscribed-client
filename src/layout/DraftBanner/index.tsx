@@ -70,6 +70,7 @@ const DraftBanner = () => {
                 missingFields={missingFields}
                 onPublish={() => publishMutation.mutate()}
                 isPending={publishMutation.isPending}
+
             />
         </>
     );

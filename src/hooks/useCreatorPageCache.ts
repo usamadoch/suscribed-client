@@ -32,6 +32,10 @@ export const useCreatorPageCache = (slug: string, userId?: string) => {
                 }
             };
         });
+
+        // Also invalidate posts to unlock content
+        queryClient.invalidateQueries({ queryKey: ['creator-posts', slug] });
+        queryClient.invalidateQueries({ queryKey: ['recent-videos', slug] });
     }, [queryClient, slug, userId]);
 
     return { handleImageSuccess, handleJoinSuccess };

@@ -15,7 +15,6 @@ import { CreatorPage } from "@/types";
 import { usePageImageUpload } from "@/hooks/usePageImageUpload";
 
 import { useAuth } from "@/store/auth";
-import { useJoinPage } from "@/hooks/queries";
 import PageImageUploader from "./PageImageUploader";
 
 
@@ -29,10 +28,17 @@ type CreatorProfileHeaderProps = {
 
 const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: CreatorProfileHeaderProps) => {
     const { isAuthenticated } = useAuth();
-    const { mutate: joinPage, isPending: isJoining } = useJoinPage();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
     const [visible, setVisible] = useState(false);
+
+    // Persist modal open state on refresh
+    React.useEffect(() => {
+        const wasOpen = sessionStorage.getItem(`join_modal_open_${page.pageSlug}`);
+        if (wasOpen === 'true' && isAuthenticated) {
+            setIsJoinModalOpen(true);
+        }
+    }, [page.pageSlug, isAuthenticated]);
 
     const handleSuccess = useCallback((type: 'banner' | 'avatar', url: string) => {
         if (type === 'avatar' && onUpdate) {
@@ -57,19 +63,14 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
     const handleOpenJoinModal = () => {
         if (!isAuthenticated) return setIsLoginModalOpen(true);
         setIsJoinModalOpen(true);
+        sessionStorage.setItem(`join_modal_open_${page.pageSlug}`, 'true');
     };
 
-    const handleJoinForFree = async () => {
-        if (!page) return;
-
-        const creatorId = typeof page.userId === 'object' ? page.userId._id : page.userId;
-        joinPage({ creatorId, pageId: page._id }, {
-            onSuccess: () => {
-                setIsJoinModalOpen(false);
-                if (onJoinSuccess) onJoinSuccess();
-            }
-        });
+    const handleCloseJoinModal = () => {
+        setIsJoinModalOpen(false);
+        sessionStorage.removeItem(`join_modal_open_${page.pageSlug}`);
     };
+
 
 
     return (
@@ -142,10 +143,9 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
 
             <JoinTierModal
                 visible={isJoinModalOpen}
-                onClose={() => setIsJoinModalOpen(false)}
+                onClose={handleCloseJoinModal}
                 page={page}
-                onJoin={handleJoinForFree}
-                isJoining={isJoining}
+                onSubscriptionSuccess={onJoinSuccess}
             />
 
             <ShareModal

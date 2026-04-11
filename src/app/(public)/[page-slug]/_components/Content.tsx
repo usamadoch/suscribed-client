@@ -1,10 +1,10 @@
 
-import { useState } from "react";
-import { toast } from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 import { Post } from "@/types";
 import { useAuth } from "@/store/auth";
-import { useCreatorPage, useCreatorPosts, useJoinPage } from "@/hooks/queries";
+import { useCreatorPage, useCreatorPosts } from "@/hooks/queries";
+import { useQueryClient } from "@tanstack/react-query";
 import PostModal from "@/components/modals/PostModal";
 import LoginModal from "@/components/modals/LoginModal";
 import JoinTierModal from "@/components/modals/JoinTierModal";
@@ -21,7 +21,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
     const { data: pageData } = useCreatorPage(pageSlug);
     const { data: postsData, isLoading } = useCreatorPosts(pageSlug, { type: ['text', 'image'] });
     const { isAuthenticated, user } = useAuth();
-    const { mutate: joinPage, isPending: isJoining } = useJoinPage();
+    const queryClient = useQueryClient();
 
     const { page } = pageData || {};
     const posts = postsData || [];
@@ -32,7 +32,26 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
     const [loginModalVisible, setLoginModalVisible] = useState(false);
     const [joinModalVisible, setJoinModalVisible] = useState(false);
 
+    // Persist modal open state on refresh
+    const slug = page?.pageSlug || pageSlug;
+    useEffect(() => {
+        const wasOpen = sessionStorage.getItem(`join_modal_open_${slug}`);
+        if (wasOpen === 'true' && isAuthenticated) {
+            setJoinModalVisible(true);
+        }
+    }, [slug, isAuthenticated]);
+
     const activePost = posts.find(p => p._id === selectedPostId) || null;
+
+    const handleOpenJoinModal = () => {
+        setJoinModalVisible(true);
+        sessionStorage.setItem(`join_modal_open_${slug}`, 'true');
+    };
+
+    const handleCloseJoinModal = () => {
+        setJoinModalVisible(false);
+        sessionStorage.removeItem(`join_modal_open_${slug}`);
+    };
 
     const handlePostClick = (post: Post) => {
         if (!post.isLocked) {
@@ -41,22 +60,11 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
             if (!isAuthenticated) {
                 setLoginModalVisible(true);
             } else {
-                setJoinModalVisible(true);
+                handleOpenJoinModal();
             }
         }
     };
 
-    const handleJoin = () => {
-        if (!page) return;
-
-        const creatorId = typeof page.userId === 'object' ? page.userId._id : page.userId;
-        joinPage({ creatorId, pageId: page._id }, {
-            onSuccess: () => {
-                toast.success("Joined successfully!");
-                setJoinModalVisible(false);
-            }
-        });
-    };
 
     return (
         <div className="pb-20 px-16">
@@ -109,10 +117,13 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
             {page && (
                 <JoinTierModal
                     visible={joinModalVisible}
-                    onClose={() => setJoinModalVisible(false)}
+                    onClose={handleCloseJoinModal}
                     page={page}
-                    onJoin={handleJoin}
-                    isJoining={isJoining}
+                    onSubscriptionSuccess={() => {
+                        queryClient.invalidateQueries({ queryKey: ['creator-posts', pageSlug], refetchType: 'all' });
+                        queryClient.invalidateQueries({ queryKey: ['creator-page', pageSlug], refetchType: 'all' });
+                        queryClient.invalidateQueries({ queryKey: ['recent-videos', pageSlug], refetchType: 'all' });
+                    }}
                 />
             )}
         </div>
