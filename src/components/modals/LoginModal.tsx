@@ -1,11 +1,13 @@
+import Link from "next/link";
+
 import Modal from "@/components/Modal";
 import Field from "@/components/Field";
 import Checkbox from "@/components/Checkbox";
-import Icon from "@/components/Icon";
 import Loader from "@/components/Loader";
 
+import GoogleButton from "@/components/GoogleButton";
+
 import { useAuthForm } from "@/hooks/useAuthForm";
-import Link from "next/link";
 
 type LoginModalProps = {
     visible: boolean;
@@ -20,13 +22,12 @@ const LoginModal = ({ visible, onClose }: LoginModalProps) => {
 
     const {
         form,
-        step, setStep, flow, authLoading, isCheckingEmail, googleLoading,
-        onSubmit, handleGoogleLogin, resetForm
+        step, setStep, flow, authLoading, isCheckingEmail,
+        onSubmit, resetForm
     } = useAuthForm({
         redirect: false,
         onLoginSuccess: handleClose,
         onSignupSuccess: handleClose,
-        onGoogleSuccess: handleClose
     });
 
     const { register, handleSubmit, watch, formState: { errors } } = form;
@@ -44,21 +45,10 @@ const LoginModal = ({ visible, onClose }: LoginModalProps) => {
                 <h6 className="text-h6 pb-5">{step === 1 ? "Sign in / Sign up" : (flow === "login" ? "Sign in" : "Sign up")}</h6>
                 {step === 1 && (
                     <>
-                        <button
-                            className="btn-stroke w-full h-12"
-                            type="button"
-                            onClick={() => handleGoogleLogin()}
-                            disabled={googleLoading}
-                        >
-                            {googleLoading ? (
-                                <Loader className="w-6 h-6 text-n-1 dark:text-white" />
-                            ) : (
-                                <>
-                                    <Icon name="google" />
-                                    <span>Log in with Google</span>
-                                </>
-                            )}
-                        </button>
+                        <GoogleButton
+                            onSuccess={handleClose}
+                            onError={(err) => form.setError("root", { message: err })}
+                        />
                         <div className="flex justify-center items-center py-5">
                             <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-white"></span>
                             <span className="mx-4 text-sm font-medium">or</span>

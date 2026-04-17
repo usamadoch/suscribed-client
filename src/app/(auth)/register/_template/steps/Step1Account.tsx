@@ -5,21 +5,19 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFormContext } from "react-hook-form";
-import { useGoogleLogin, CodeResponse } from "@react-oauth/google";
 
-import Field from "@/components/Field";
-import Icon from "@/components/Icon";
-import Loader from "@/components/Loader";
+
+import GoogleButton from "@/components/GoogleButton";
+import Alert from "@/components/Alert";
 
 import StepActions from "./StepActions";
 import AuthFields from "../../../_components/AuthFields";
 
 import { useAuth, useAuthStore } from "@/store/auth";
-import { authService as authApi } from "@/services/auth.service";
+
 import { SignUpFormValues } from "@/app/(auth)/_validations";
+
 import { generateUsername } from "@/lib/utils";
-import Link from "next/link";
-import Alert from "@/components/Alert";
 
 type Step1Props = {
     onNext: () => void;
@@ -30,50 +28,8 @@ const Step1Account = ({ onNext }: Step1Props) => {
     const { signup } = useAuth();
     const router = useRouter(); // Initialize router here
     const [isLoading, setIsLoading] = useState(false);
-    const [googleLoading, setGoogleLoading] = useState(false);
     const [googleError, setGoogleError] = useState<string | null>(null);
 
-    const handleGoogleLogin = useGoogleLogin({
-        flow: 'auth-code',
-        onSuccess: async (codeResponse: CodeResponse) => {
-            setGoogleLoading(true);
-            try {
-                // Request creator role specifically
-                const { user, isNewUser } = await authApi.googleLogin(codeResponse.code, 'creator');
-
-                // Manually update store state
-                useAuthStore.setState({
-                    user,
-                    isAuthenticated: true,
-                    isLoading: false,
-                    error: null
-                });
-
-                if (!isNewUser) {
-                    // If existing user, go straight to dashboard
-                    router.push('/dashboard');
-                    return;
-                }
-
-                // Pre-fill form data with Google info if available
-                setValue('email', user.email);
-                setValue('displayName', user.displayName);
-
-                // Go to next step (Creator Details)
-                onNext();
-            } catch (error: any) {
-                setGoogleLoading(false);
-                console.error("Google login failed", error);
-
-                // Always use the dedicated Google error state
-                setGoogleError(error?.message || "Google login failed");
-            }
-        },
-        onError: () => {
-            setGoogleLoading(false);
-            setGoogleError("Google login failed");
-        }
-    });
 
     const handleNext = async () => {
         setIsLoading(true);
@@ -124,23 +80,20 @@ const Step1Account = ({ onNext }: Step1Props) => {
                     />
                 )}
                 <h4 className="mb-5 text-h4 dark:text-n-9">Create your account</h4>
-                <button
-                    className="btn-stroke w-full h-12 mb-6"
-                    type="button"
-                    onClick={() => {
-                        setGoogleError(null);
-                        handleGoogleLogin();
+                <GoogleButton
+                    role="creator"
+                    className="btn-stroke w-full h-12 mb-6 rounded-md"
+                    onSuccess={(user, isNewUser) => {
+                        if (!isNewUser) {
+                            router.push('/dashboard');
+                            return;
+                        }
+                        setValue('email', user.email);
+                        setValue('displayName', user.displayName);
+                        onNext();
                     }}
-                >
-                    {googleLoading ? (
-                        <Loader className="w-6 h-6 text-n-1 dark:text-n-9" />
-                    ) : (
-                        <>
-                            <Icon name="google" />
-                            <span>Continue with Google</span>
-                        </>
-                    )}
-                </button>
+                    onError={(err) => setGoogleError(err)}
+                />
 
                 <div className="flex justify-center items-center pb-6">
                     <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-n-6"></span>

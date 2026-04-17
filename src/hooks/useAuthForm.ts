@@ -2,12 +2,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGoogleLogin, CodeResponse } from "@react-oauth/google";
 
 import { ApiClientError } from "@/services/api.client";
 import { authService as authApi } from "@/services/auth.service";
 import { LoginSchema } from "@/app/(auth)/_validations";
-import { useAuth, useAuthStore } from "@/store/auth";
+import { useAuth } from "@/store/auth";
 
 export const SignupSchema = LoginSchema.extend({
     displayName: z.string().min(1, "Full name is required"),
@@ -19,16 +18,14 @@ type UseAuthFormOptions = {
     redirect?: boolean;
     onLoginSuccess?: () => void;
     onSignupSuccess?: () => void;
-    onGoogleSuccess?: (user: any) => void;
 };
 
-export const useAuthForm = ({ redirect = true, onLoginSuccess, onSignupSuccess, onGoogleSuccess }: UseAuthFormOptions = {}) => {
+export const useAuthForm = ({ redirect = true, onLoginSuccess, onSignupSuccess }: UseAuthFormOptions = {}) => {
     const { login, signup, isLoading: authLoading } = useAuth();
 
     const [step, setStep] = useState<1 | 2>(1);
     const [flow, setFlow] = useState<'login' | 'signup'>('login');
     const [isCheckingEmail, setIsCheckingEmail] = useState(false);
-    const [googleLoading, setGoogleLoading] = useState(false);
 
     const form = useForm<AuthFormData>({
         resolver: zodResolver(step === 1 ? LoginSchema.pick({ email: true }) : (flow === 'login' ? LoginSchema : SignupSchema)) as any,
@@ -108,40 +105,6 @@ export const useAuthForm = ({ redirect = true, onLoginSuccess, onSignupSuccess, 
         }
     };
 
-    const handleGoogleLogin = useGoogleLogin({
-        flow: 'auth-code',
-        onSuccess: async (codeResponse: CodeResponse) => {
-            setGoogleLoading(true);
-            try {
-                const { user } = await authApi.googleLogin(codeResponse.code);
-                useAuthStore.setState({
-                    user,
-                    isAuthenticated: true,
-                    isLoading: false,
-                    error: null
-                });
-
-                if (onGoogleSuccess) {
-                    onGoogleSuccess(user);
-                } else if (onLoginSuccess) {
-                    onLoginSuccess();
-                }
-            } catch (error: any) {
-                console.error("Google login failed", error);
-                if (error.code === 'DUPLICATE_EMAIL') {
-                    setError("root", { message: error.message });
-                } else {
-                    setError("root", { message: "Google login failed" });
-                }
-                setGoogleLoading(false);
-            }
-        },
-        onError: () => {
-            setError("root", { message: "Google login failed" });
-            setGoogleLoading(false);
-        }
-    });
-
     const resetForm = () => {
         setStep(1);
         setFlow('login');
@@ -156,9 +119,7 @@ export const useAuthForm = ({ redirect = true, onLoginSuccess, onSignupSuccess, 
         setFlow,
         authLoading,
         isCheckingEmail,
-        googleLoading,
         onSubmit,
-        handleGoogleLogin,
         resetForm
     };
 };

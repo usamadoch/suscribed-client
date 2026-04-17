@@ -6,11 +6,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import Icon from "@/components/Icon";
+import Alert from "@/components/Alert";
+import GoogleButton from "@/components/GoogleButton";
+import AuthFields from "../../_components/AuthFields";
 import Loader from "@/components/Loader";
 
-import Alert from "@/components/Alert";
-import AuthFields from "../../_components/AuthFields";
 import { ONBOARDING_STEPS } from "@/types";
 
 import { useAuthForm } from "@/hooks/useAuthForm";
@@ -20,22 +20,11 @@ const LoginPage = () => {
 
     const {
         form,
-        step, setStep, flow, authLoading, isCheckingEmail, googleLoading,
-        onSubmit, handleGoogleLogin
+        step, setStep, flow, authLoading, isCheckingEmail,
+        onSubmit
     } = useAuthForm({
         redirect: true,
         onSignupSuccess: () => router.push('/dashboard'),
-        onGoogleSuccess: (user) => {
-            if (user?.role === 'creator') {
-                if ((user?.onboardingStep ?? 0) < ONBOARDING_STEPS.COMPLETE) {
-                    router.push('/register');
-                } else {
-                    router.push('/dashboard');
-                }
-            } else {
-                router.push('/explore');
-            }
-        }
     });
 
     const { register, handleSubmit, watch, clearErrors, formState: { errors } } = form;
@@ -67,21 +56,20 @@ const LoginPage = () => {
 
             {step === 1 && (
                 <>
-                    <button
-                        className="btn-stroke w-full h-12"
-                        type="button"
-                        onClick={() => handleGoogleLogin()}
-                        disabled={googleLoading}
-                    >
-                        {googleLoading ? (
-                            <Loader className="w-6 h-6 text-n-1 dark:text-n-9" />
-                        ) : (
-                            <>
-                                <Icon name="google" />
-                                <span>Continue with Google</span>
-                            </>
-                        )}
-                    </button>
+                    <GoogleButton
+                        onSuccess={(user) => {
+                            if (user?.role === 'creator') {
+                                if ((user?.onboardingStep ?? 0) < ONBOARDING_STEPS.COMPLETE) {
+                                    router.push('/register');
+                                } else {
+                                    router.push('/dashboard');
+                                }
+                            } else {
+                                router.push('/explore');
+                            }
+                        }}
+                        onError={(err) => clearErrors("root")}
+                    />
                     <div className="flex justify-center items-center py-6">
                         <span className="w-full max-w-33 h-0.25 bg-n-1 dark:bg-n-6"></span>
                         <span className="mx-4 text-sm font-medium dark:text-n-6">or</span>
