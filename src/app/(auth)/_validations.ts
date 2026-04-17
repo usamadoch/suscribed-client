@@ -32,21 +32,11 @@ export const Step3Schema = z.object({
     category: z.array(z.string()).min(1, "Please select at least one category"),
 });
 
-// Step 4 (Socials) is optional/array
-export const Step4Schema = z.object({
-    socialLinks: z.array(z.object({
-        value: z.string()
-            .regex(URL_REGEX, { message: "Invalid URL" })
-            .optional()
-            .or(z.literal(""))
-    })),
-});
 
 export const SignUpSchema = z.object({
     ...Step1Schema.shape,
     ...Step2Schema.shape,
     ...Step3Schema.shape,
-    ...Step4Schema.shape, // Use expanded shape or just include the key if it was simple
 });
 
 export type SignUpFormValues = z.infer<typeof SignUpSchema>;

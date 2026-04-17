@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
@@ -9,7 +9,6 @@ import { usePageImageUpload } from "@/hooks/usePageImageUpload";
 
 import { useAuth } from "@/store/auth";
 
-import { getPlatformFromUrl } from "@/lib/utils";
 import { pageService as pageApi } from "@/services/page.service";
 import { UpdatePagePayload, CreatorPage } from "@/types";
 
@@ -37,7 +36,6 @@ type AccountFormValues = {
     pageSlug: string;
     about: string;
     category: string[];
-    socialLinks: { value: string }[];
 };
 
 type SpecificationOption = {
@@ -141,7 +139,6 @@ const CreatorAccount = () => {
             pageSlug: "",
             about: "",
             category: [],
-            socialLinks: [{ value: "" }],
         },
     });
 
@@ -156,17 +153,10 @@ const CreatorAccount = () => {
                 pageSlug: page.pageSlug || "",
                 about: page.about || "",
                 category: page.category || [],
-                socialLinks: page.socialLinks?.length
-                    ? page.socialLinks.map((link) => ({ value: link.url }))
-                    : [{ value: "" }],
             });
         }
     }, [page, initialPageId, reset]);
 
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: "socialLinks",
-    });
 
     const about = watch("about");
     const category = watch("category");
@@ -200,20 +190,12 @@ const CreatorAccount = () => {
     };
 
     const onSubmit = async (data: AccountFormValues) => {
-        const socialLinksPayload = data.socialLinks
-            .map(link => link.value.trim())
-            .filter(val => val !== "")
-            .map(url => ({
-                platform: getPlatformFromUrl(url),
-                url: url
-            }));
 
         const updateData = {
             displayName: data.creatorName,
             pageSlug: data.pageSlug,
             about: data.about,
-            category: data.category,
-            socialLinks: socialLinksPayload
+            category: data.category
         };
 
         const res = await updateProfile(updateData);
@@ -331,42 +313,7 @@ const CreatorAccount = () => {
                                     />
                                 </div>
 
-                                {/* Social Links Section */}
-                                <div className="w-[calc(100%-1.25rem)] mt-8 mx-2.5">
-                                    <div className="mb-3 text-h6 font-bold dark:text-n-9">Social Links</div>
-                                    <div className="space-y-4">
-                                        {fields.map((field, index) => (
-                                            <div key={field.id} className="relative">
-                                                <div className="flex justify-between items-center mb-1.5">
-                                                    <div className="text-xs font-semibold dark:text-n-9">New Link</div>
-                                                    <button
-                                                        type="button"
-                                                        className="group flex items-center text-xs font-semibold cursor-pointer"
-                                                        onClick={() => remove(index)}
-                                                    >
-                                                        <Icon name="trash" className="mr-1.5 w-4 h-4 fill-n-3" />
-                                                        Remove
-                                                    </button>
-                                                </div>
-                                                <Field
-                                                    className="w-full"
-                                                    classInput="h-12 border-n-4"
-                                                    {...register(`socialLinks.${index}.value` as const)}
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                    {fields.length < 4 && (
-                                        <button
-                                            type="button"
-                                            className="group inline-flex items-center font-semibold mt-4 cursor-pointer"
-                                            onClick={() => append({ value: "" })}
-                                        >
-                                            <Icon name="add-circle" className="icon-18 mr-1.5 dark:fill-n-9" />
-                                            Add Another
-                                        </button>
-                                    )}
-                                </div>
+
                             </div>
 
                             <div className="flex justify-between mt-16 md:block md:mt-8">

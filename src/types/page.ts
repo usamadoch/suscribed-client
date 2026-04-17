@@ -1,5 +1,5 @@
 
-import { User, SocialLink } from './user';
+import { User } from './user';
 
 export interface PageTheme {
     primaryColor: string;
@@ -17,12 +17,17 @@ export interface CreatorPage {
     avatarUrl: string | null;
     bannerUrl: string | null;
     about: string;
-    socialLinks: SocialLink[];
     theme: PageTheme;
     isPublic: boolean;
     status: 'draft' | 'published';
     memberCount: number;
     postCount: number;
+    youtube?: {
+        channelId: string;
+        channelName: string;
+        thumbnail?: string;
+        isVerified: boolean;
+    };
     createdAt: string;
     updatedAt: string;
 }
@@ -46,7 +51,6 @@ export interface UpdatePagePayload {
     about?: string;
     avatarUrl?: string;
     bannerUrl?: string;
-    socialLinks?: SocialLink[];
     theme?: PageTheme;
     isPublic?: boolean;
     status?: 'draft' | 'published';

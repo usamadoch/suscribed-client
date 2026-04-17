@@ -20,7 +20,7 @@ const DeletePostModal = ({
             onClose={onClose}
             showCloseIcon={false}
         >
-            <div className="text-base text-n-3">
+            <div className="text-base text-n-3 dark:text-n-8">
                 Are you sure you want to delete this post? This action cannot be undone.
             </div>
             <div className="pt-5 flex justify-end gap-3">
@@ -34,7 +34,7 @@ const DeletePostModal = ({
                 </button>
 
                 <button
-                    className="flex-1 btn-purple btn-medium bg-pink-1 hover:bg-pink-1/80 cursor-pointer px-5"
+                    className="flex-1 btn-purple btn-medium dark:bg-red-500 cursor-pointer px-5"
                     onClick={onDelete}
                     disabled={isPending}
                 >

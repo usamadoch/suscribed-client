@@ -16,6 +16,8 @@ type ReviewProps = {
 };
 
 const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
+    console.log("ITEM: ", item);
+
     return (
         <div className="flex py-5 card bg-white border border-n-4 rounded-sm last:mb-0">
             <div className="relative shrink-0 w-8.5 h-8.5 ml-5">

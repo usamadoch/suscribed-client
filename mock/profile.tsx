@@ -341,22 +341,3 @@ export const securityCredentials = [
     },
 ];
 
-export const socialProfiles = [
-    {
-        id: "0",
-        label: "Facebook",
-        link: "https://www.facebook.com/whiteui.store",
-        icon: "facebook",
-    },
-    {
-        id: "1",
-        label: "Twitter",
-        icon: "twitter",
-    },
-
-    {
-        id: "3",
-        label: "Google",
-        icon: "google",
-    },
-];

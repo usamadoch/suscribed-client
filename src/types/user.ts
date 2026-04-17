@@ -84,13 +84,6 @@ export type Permission =
     | 'security:manage'
     | 'admin:access';
 
-export type SocialPlatform = 'twitter' | 'instagram' | 'youtube' | 'tiktok' | 'discord' | 'website' | 'facebook' | 'linkedin' | 'pinterest' | 'x' | 'other';
-
-export interface SocialLink {
-    platform: SocialPlatform;
-    url: string;
-    label?: string;
-}
 
 export interface SignupPayload {
     email: string;

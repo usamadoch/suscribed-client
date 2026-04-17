@@ -57,7 +57,6 @@ const RegistrationPage = () => {
             creatorName: "",
             pageSlug: "",
             category: [],
-            socialLinks: [{ value: "" }],
         },
         mode: "onChange"
     });

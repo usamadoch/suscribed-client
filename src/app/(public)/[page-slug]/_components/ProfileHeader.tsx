@@ -2,9 +2,8 @@
 
 import React, { useState, useCallback } from "react";
 
+
 import Image from "@/components/Image";
-import ProfileSocials from "./ProfileSocials";
-import ProfileHeaderActions from "./ProfileHeaderActions";
 import LoginModal from "@/components/modals/LoginModal";
 import ShareModal from "@/components/modals/ShareModal";
 import JoinTierModal from "@/components/modals/JoinTierModal";
@@ -15,6 +14,9 @@ import { CreatorPage } from "@/types";
 import { usePageImageUpload } from "@/hooks/usePageImageUpload";
 
 import { useAuth } from "@/store/auth";
+
+import ProfileSocials from "./ProfileSocials";
+import ProfileHeaderActions from "./ProfileHeaderActions";
 import PageImageUploader from "./PageImageUploader";
 
 
@@ -127,9 +129,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                 </div>
 
                 <div className="flex-1 flex items-center justify-end  shrink-0">
-                    {page.socialLinks && page.socialLinks.length > 0 && (
-                        <ProfileSocials socialLinks={page.socialLinks} />
-                    )}
+                    <ProfileSocials youtube={page.youtube} />
 
                     <ProfileHeaderActions
                         isOwner={isOwner}

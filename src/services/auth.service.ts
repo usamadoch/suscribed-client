@@ -24,6 +24,26 @@ export const authService = {
         });
     },
 
+    async fetchYoutubeChannels(code: string): Promise<{ channels: any[], token: string }> {
+        return fetchApi('/auth/youtube/channels', {
+            method: 'POST',
+            body: JSON.stringify({ code }),
+        });
+    },
+
+    async connectYoutube(channelId: string, secureToken: string): Promise<{ success: boolean; message: string }> {
+        return fetchApi('/auth/youtube/connect', {
+            method: 'POST',
+            body: JSON.stringify({ channelId, secureToken }),
+        });
+    },
+
+    async disconnectYoutube(): Promise<{ success: boolean; message: string }> {
+        return fetchApi('/auth/youtube/disconnect', {
+            method: 'POST',
+        });
+    },
+
     async checkEmail(email: string): Promise<{ exists: boolean }> {
         return fetchApi('/auth/check-email', {
             method: 'POST',

@@ -1,15 +1,18 @@
+
+
+
+
 import { useState } from "react";
-import { useFormContext, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import StepActions from "./StepActions";
 
 import Icon from "@/components/Icon";
-import { SignUpFormValues } from "@/app/(auth)/_validations";
-import { socialProfiles } from "../../../../../../mock/profile";
-import { pageService as pageApi } from "@/services/page.service";
-import { authService as authApi } from "@/services/auth.service";
+
 import { useAuthStore } from "@/store/auth";
+import { authService as authApi } from "@/services/auth.service";
+
 import { ONBOARDING_STEPS } from "@/types";
 
 type Step4Props = {
@@ -17,15 +20,13 @@ type Step4Props = {
 };
 
 const Step4Socials = ({ onBack }: Step4Props) => {
-    const { control, register, getValues, formState: { errors } } = useFormContext<SignUpFormValues>();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-
-    // useFieldArray must be used with the control from useFormContext
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: "socialLinks",
-    });
+    
+    // "idle" | "authorizing" | "selecting" | "connecting" | "connected"
+    const [youtubeStatus, setYoutubeStatus] = useState<string>("idle");
+    const [availableChannels, setAvailableChannels] = useState<any[]>([]);
+    const [secureToken, setSecureToken] = useState<string | null>(null);
 
     const finishFlow = async () => {
         try {
@@ -38,48 +39,72 @@ const Step4Socials = ({ onBack }: Step4Props) => {
         router.push('/dashboard');
     };
 
+    const handleYoutubeConnectAuth = useGoogleLogin({
+        flow: "auth-code",
+        scope: "https://www.googleapis.com/auth/youtube.readonly",
+        onSuccess: async (codeResponse) => {
+            try {
+                setYoutubeStatus("authorizing");
+                // Fetch channels with code
+                const response = await authApi.fetchYoutubeChannels(codeResponse.code);
+                const { channels, token } = response;
+                
+                if (!channels || channels.length === 0) {
+                    setYoutubeStatus("idle");
+                    console.error("No channels found");
+                    return;
+                }
+
+                if (channels.length === 1) {
+                    setYoutubeStatus("connecting");
+                    await authApi.connectYoutube(channels[0].id, token);
+                    setYoutubeStatus("connected");
+                } else {
+                    setAvailableChannels(channels);
+                    setSecureToken(token);
+                    setYoutubeStatus("selecting");
+                }
+            } catch (error) {
+                console.error("YouTube operation failed", error);
+                setYoutubeStatus("idle");
+            }
+        },
+        onError: (error) => {
+            console.error("Google Auth Error", error);
+            setYoutubeStatus("idle");
+        }
+    });
+
+    const handleChannelSelect = async (channelId: string) => {
+        if (!secureToken) return;
+        try {
+            setYoutubeStatus("connecting");
+            await authApi.connectYoutube(channelId, secureToken);
+            setYoutubeStatus("connected");
+            setAvailableChannels([]);
+            setSecureToken(null);
+        } catch (error) {
+            console.error("YouTube connection failed", error);
+            setYoutubeStatus("idle");
+        }
+    };
+
+    const handleYoutubeDisconnect = async () => {
+        try {
+            setYoutubeStatus("connecting");
+            await authApi.disconnectYoutube();
+            setYoutubeStatus("idle");
+        } catch (error) {
+            console.error("YouTube disconnect failed", error);
+            setYoutubeStatus("connected");
+        }
+    };
+
     const handleNext = async () => {
         setIsLoading(true);
-        const data = getValues();
-
-        try {
-            // Process Social Links
-            // This logic assumes we have captured links in the socialLinks array properly
-            // Since the UI seems to be mock-based or partial, ensure we are actually capturing data
-            // The current UI iterates over `socialProfiles` (static), but the form data expects `socialLinks` array.
-            // Assuming the user fills logic that populates `socialLinks` or we just submit what we have.
-            // Reverting to the logic previously in SignUp/index.tsx:
-
-            const validLinks = data.socialLinks
-                ?.filter(link => link.value && link.value.trim() !== "")
-                .map(link => ({
-                    platform: 'website',
-                    url: link.value as string
-                })) || [];
-
-            if (validLinks.length > 0) {
-                const inferredLinks = validLinks.map(link => {
-                    const url = link.url.toLowerCase();
-                    let platform = 'website';
-                    if (url.includes('twitter.com') || url.includes('x.com')) platform = 'twitter';
-                    else if (url.includes('instagram.com')) platform = 'instagram';
-                    else if (url.includes('youtube.com')) platform = 'youtube';
-                    else if (url.includes('tiktok.com')) platform = 'tiktok';
-                    else if (url.includes('discord.com') || url.includes('discord.gg')) platform = 'discord';
-
-                    return { ...link, platform };
-                });
-
-                // @ts-ignore
-                await pageApi.updateMyPage({ socialLinks: inferredLinks });
-            }
-            finishFlow();
-        } catch (error) {
-            console.error("Submission error:", error);
-            alert("Failed to save social links.");
-        } finally {
-            setIsLoading(false);
-        }
+        // Ensure YouTube is connected if you want to make it mandatory
+        // or just proceed if it's optional.
+        finishFlow();
     };
 
     return (
@@ -88,37 +113,61 @@ const Step4Socials = ({ onBack }: Step4Props) => {
             {/* <div className="card-title">Social profiles</div> */}
             <h3 className="mb-5 text-h3 text-n-1 dark:text-n-9">Connect your socials</h3>
 
-            <div className="">
-                <div>
-                    {socialProfiles.map((item) => (
-                        <div
-                            className="flex items-center mb-4 pb-4 pl-3 md:pl-0 dark:border-n-6"
-                            key={item.id}
-                        >
-                            <Icon
-                                className="shrink-0 icon-20 mr-8 md:mr-4 dark:fill-n-1"
-                                name={item.icon}
-                            />
-                            <div className="mr-auto">
-                                <div className="mb-1.5 text-xs font-medium text-n-3 dark:text-n-8">
-                                    {item.label}
-                                </div>
-                                <div className="break-all text-sm font-bold">
-                                    {item.link ? item.link : "Not connected"}
-                                </div>
-                            </div>
-                            {!item.link && (
-                                <button className="group inline-flex items-center self-end pb-0.5 text-xs font-bold cursor-pointer">
-                                    <Icon
-                                        className="mr-1.5 dark:fill-9"
-                                        name="external-link"
-                                    />
-                                    Connect
-                                </button>
-                            )}
+            <div className="mb-8">
+                <div className="flex items-center mb-4 pb-4 pl-3 md:pl-0 dark:border-n-6">
+                    <Icon className="shrink-0 icon-20 mr-8 md:mr-4 dark:fill-n-1 text-[#ff0033]" name="youtube" />
+                    <div className="mr-auto">
+                        <div className="mb-1.5 text-xs font-medium text-n-3 dark:text-n-8">
+                            YouTube
                         </div>
-                    ))}
+                        <div className="break-all text-sm font-bold">
+                            {youtubeStatus === "connected" ? "Connected" : "Not connected"}
+                        </div>
+                    </div>
+                    {youtubeStatus !== "connected" && youtubeStatus !== "selecting" ? (
+                        <button
+                            type="button"
+                            onClick={() => handleYoutubeConnectAuth()}
+                            disabled={youtubeStatus === "connecting" || youtubeStatus === "authorizing"}
+                            className="group inline-flex items-center self-end pb-0.5 text-xs font-bold cursor-pointer disabled:opacity-50"
+                        >
+                            <Icon className="mr-1.5 dark:fill-n-9" name="external-link" />
+                            {youtubeStatus.includes("ing") ? "Connecting..." : "Connect"}
+                        </button>
+                    ) : youtubeStatus === "connected" ? (
+                        <button
+                            type="button"
+                            onClick={() => handleYoutubeDisconnect()}
+                            className="group inline-flex items-center self-end pb-0.5 text-xs font-bold cursor-pointer"
+                        >
+                            Disconnect
+                        </button>
+                    ) : null}
                 </div>
+
+                {/* Channel Selector UI */}
+                {youtubeStatus === "selecting" && availableChannels.length > 0 && (
+                    <div className="mt-4 p-4 border border-n-3 dark:border-n-6 rounded-xl bg-n-2 dark:bg-n-7">
+                        <div className="text-sm font-bold mb-3 dark:text-n-1">Select a Channel</div>
+                        <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2">
+                            {availableChannels.map((channel) => (
+                                <button
+                                    key={channel.id}
+                                    type="button"
+                                    onClick={() => handleChannelSelect(channel.id)}
+                                    className="flex items-center w-full p-2 hover:bg-n-3 dark:hover:bg-n-6 rounded-lg transition-colors cursor-pointer text-left"
+                                >
+                                    {channel.thumbnail ? (
+                                        <img src={channel.thumbnail} alt={channel.title} className="w-8 h-8 rounded-full mr-3 shrink-0" />
+                                    ) : (
+                                        <div className="w-8 h-8 rounded-full bg-n-4 dark:bg-n-5 mr-3 shrink-0"></div>
+                                    )}
+                                    <div className="truncate text-sm font-semibold dark:text-n-1">{channel.title}</div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
             <StepActions
@@ -137,46 +186,3 @@ export default Step4Socials;
 
 
 
-
-
-
-
-
-
-
-
-
-
-// <div className="animate-in fade-in slide-in-from-right-8 duration-300">
-//             <div className="mb-5 text-h3">Connect your socials</div>
-//             <div className="space-y-4">
-//                 {fields.map((field, index) => (
-//                     <div key={field.id} className="flex items-center gap-2 mb-4">
-//                         <Field
-//                             className="w-full"
-//                             placeholder="https://twitter.com/..."
-//                             icon="link"
-//                             error={errors.socialLinks?.[index]?.value}
-//                             {...register(`socialLinks.${index}.value`)}
-//                         />
-//                         <button
-//                             type="button"
-//                             className="p-2 hover:text-pink-1 shrink-0"
-//                             onClick={() => remove(index)}
-//                         >
-//                             <Icon name="trash" className="w-4 h-4 fill-current transition-colors" />
-//                         </button>
-//                     </div>
-//                 ))}
-//             </div>
-//             {fields.length < 5 && (
-//                 <button
-//                     type="button"
-//                     className="group inline-flex items-center font-bold transition-colors hover:text-purple-1 mt-4"
-//                     onClick={() => append({ value: "" })}
-//                 >
-//                     <Icon name="add-circle" className="icon-18 mr-1.5 transition-colors group-hover:fill-purple-1 dark:fill-white dark:group-hover:fill-purple-1" />
-//                     Add Link
-//                 </button>
-//             )}
-//         </div>
