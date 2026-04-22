@@ -1,16 +1,6 @@
-import { SocialLink } from "@/types";
 
-export const getPlatformFromUrl = (url: string): SocialLink['platform'] => {
-    const lowerUrl = url.toLowerCase();
-    if (lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) return 'twitter';
-    if (lowerUrl.includes('instagram.com')) return 'instagram';
-    if (lowerUrl.includes('facebook.com')) return 'facebook';
-    if (lowerUrl.includes('youtube.com')) return 'youtube';
-    if (lowerUrl.includes('linkedin.com')) return 'linkedin';
-    if (lowerUrl.includes('pinterest.com')) return 'pinterest';
-    if (lowerUrl.includes('tiktok.com')) return 'tiktok';
-    return 'website';
-};
+
+
 
 export const getSocialIcon = (platform: string) => {
     switch (platform.toLowerCase()) {
