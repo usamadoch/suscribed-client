@@ -16,11 +16,9 @@ type ReviewProps = {
 };
 
 const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
-    console.log("ITEM: ", item);
-
     return (
-        <div className="flex py-5 card bg-white border border-n-4 rounded-sm last:mb-0">
-            <div className="relative shrink-0 w-8.5 h-8.5 ml-5">
+        <div className="flex py-5 card bg-white border border-n-4 rounded-sm last:mb-0 mobile:px-4">
+            <div className="relative shrink-0 w-8.5 h-8.5 ml-5 mobile:ml-0">
                 <Image
                     className="object-cover rounded-full"
                     family="avatar"
@@ -30,8 +28,8 @@ const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
                     alt="Avatar"
                 />
             </div>
-            <div className="w-[calc(100%-2.125rem)] pl-3.5">
-                <div className="flex items-center mr-5">
+            <div className="flex-1 pl-3.5 mobile:pl-3 min-w-0">
+                <div className="flex items-center mr-5 mobile:mr-0">
                     <div className="flex items-center gap-2">
                         <div className="capitalize whitespace-nowrap text-base font-bold dark:text-n-9">
                             {item.author}
@@ -71,7 +69,7 @@ const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
                     </div>
                 </div>
 
-                <div className={`text-base py-2.5 ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
+                <div className={`text-base py-2.5 mr-5 mobile:mr-0 ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
                     <ReadMore words={100} buttonClass="text-n-1 dark:text-purple-1">{item.content}</ReadMore>
                 </div>
 
@@ -80,7 +78,7 @@ const Review = ({ item, imageBig, onCommentClick }: ReviewProps) => {
                 )}
 
                 {item.video && (
-                    <div className="pr-5 mb-2.5">
+                    <div className="pr-5 mb-2.5 mobile:pr-0">
                         <div className={`relative aspect-video rounded-xs bg-n-2 overflow-hidden ${item.isLocked ? "blur-[3px] select-none" : ""}`}>
                             {item.video.thumbnailUrl ? (
                                 <img

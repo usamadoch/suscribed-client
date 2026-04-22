@@ -48,7 +48,7 @@ export default function HomeFeedList() {
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 gap-6 w-full mobile:gap-4">
                 {allPosts.map((post: Post) => (
                     <FeedItem
                         key={post._id}

@@ -67,7 +67,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
 
 
     return (
-        <div className="pb-20 px-16">
+        <div className="pb-20 px-16 2xl:px-8 lg:px-6 mobile:px-6">
             {/* <h4 className="text-h4 mb-8">Latest Posts</h4> */}
 
             <div className="grid grid-cols-12 lg:grid-cols-1 gap-8">

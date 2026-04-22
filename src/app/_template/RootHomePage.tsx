@@ -33,7 +33,7 @@ export const RootHomePage = () => {
     }
 
     return (
-        <div className="pb-20 px-4 md:px-8 lg:px-16 w-full max-w-[1400px] mx-auto flex items-start justify-center gap-8">
+        <div className="pb-20 px-4 mobile:px-0 lg:px-8 w-full max-w-[1400px] mx-auto flex items-start justify-center gap-8">
             <div className="flex-1 w-full max-w-2xl">
                 {isAuthenticated ? <AuthenticatedFeed /> : <PublicFeed />}
             </div>

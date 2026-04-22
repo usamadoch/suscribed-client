@@ -83,11 +83,11 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
             visible={visible}
             onClose={onClose}
             showCloseIcon={false}
-            classWrap={`${showMediaSection ? "max-w-[80rem]" : "max-w-[40rem]"} bg-n-1 dark:bg-n-1 w-full flex flex-row !p-0 h-[80vh] overflow-hidden md:flex-col md:h-auto md:max-h-[90vh]`}
+            classWrap={`${showMediaSection ? "max-w-[80rem]" : "max-w-[40rem]"} bg-n-1 dark:bg-n-1 w-full flex flex-row !p-0 h-[80vh] overflow-hidden md:flex-col md:h-auto md:max-h-[90vh] md:overflow-y-auto`}
         >
             {/* Left Section: Image/Media */}
             {showMediaSection && (
-                <div className="w-3/5 bg-n-1 flex items-center justify-center relative overflow-hidden md:min-h-80">
+                <div className="w-3/5 bg-n-1 flex items-center justify-center relative overflow-hidden md:w-full md:h-80 md:order-3">
                     {displayedImage ? (
                         <div className="relative w-full h-full">
                             <Image
@@ -124,9 +124,9 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
             )}
 
             {/* Right Section: Details (Stacked) */}
-            <div className={`${showMediaSection ? "w-2/5" : "w-full"} shrink-0 bg-white dark:bg-n-1 flex flex-col dark:border-n-6 md:w-full md:flex-1 md:h-full`}>
+            <div className={`${showMediaSection ? "w-2/5" : "w-full"} shrink-0 bg-white dark:bg-n-1 flex flex-col dark:border-n-6 md:w-full md:contents`}>
                 {/* 1. Author Header */}
-                <div className="p-4 border-b border-n-4 dark:border-n-6 flex items-center shrink-0">
+                <div className="p-4 flex items-center shrink-0 md:order-1">
                     <div className="relative w-10 h-10 mr-3">
                         <Image
                             className="object-cover rounded-full"
@@ -148,61 +148,64 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
                     />
                 </div>
 
-                {/* 2. Scrollable Comments List */}
-                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
-                    {/* Post Caption as first item if exists */}
-                    {post.caption && !post.isLocked && (
-                        <div className="">
-                            <p className="text-base text-n-1 dark:text-n-9">
-                                <ReadMore words={100}>{post.caption}</ReadMore>
-                            </p>
-                        </div>
-                    )}
-
-                    <div className="flex flex-col gap-3">
-                        {loadingComments ? (
-                            <div className="flex items-center justify-center">
-                                <Loader />
-                            </div>
-                        ) : comments.length > 0 ? (
-                            comments.map((comment) => (
-                                <CommentItem
-                                    key={comment._id}
-                                    comment={comment}
-                                    variant="modal"
-                                />
-                            ))
-                        ) : (
-                            <div className="text-center py-8 text-n-3 text-sm dark:text-n-8">
-                                No comments yet. Be the first!
-                            </div>
-                        )}
+                {/* 2. Caption Section (Extracted for mobile ordering) */}
+                {post.caption && !post.isLocked && (
+                    <div className="p-4 md:order-2">
+                        <p className="text-base text-n-1 dark:text-n-9">
+                            <ReadMore words={100}>{post.caption}</ReadMore>
+                        </p>
                     </div>
-                </div>
+                )}
 
-                <div className="px-4">
-                    <Actions
-                        postId={post._id}
-                        likes={post.likeCount}
-                        comments={post.commentCount}
-                        isLiked={post.isLiked || false}
-                        showComment={false}
-                        shareUrl={`/post/${post._id}`}
-                        type="post"
-                    />
-                </div>
+                {/* 3. Comments and Actions Area */}
+                <div className="flex-1 flex flex-col overflow-hidden md:order-4 md:overflow-visible">
+                    {/* Scrollable Comments List */}
+                    <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 md:overflow-visible md:p-4">
+                        <div className="flex flex-col gap-3">
+                            {loadingComments ? (
+                                <div className="flex items-center justify-center">
+                                    <Loader />
+                                </div>
+                            ) : comments.length > 0 ? (
+                                comments.map((comment) => (
+                                    <CommentItem
+                                        key={comment._id}
+                                        comment={comment}
+                                        variant="modal"
+                                    />
+                                ))
+                            ) : (
+                                <div className="text-center py-8 text-n-3 text-sm dark:text-n-8">
+                                    No comments yet. Be the first!
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
-                {/* 3. Fixed Comment Input */}
-                <div className="p-4 shrink-0">
-                    <Comment
-                        placeholder={post.allowComments ? "Write a comment..." : "Comments are turned off."}
-                        className="shadow-none"
-                        value={commentValue}
-                        setValue={(e) => setCommentValue(e.target.value)}
-                        onSend={handleSendComment}
-                        disabled={!post.allowComments || sendingComment || post.isLocked}
-                        inputDisabled={!post.allowComments}
-                    />
+                    <div className="px-4">
+                        <Actions
+                            postId={post._id}
+                            likes={post.likeCount}
+                            comments={post.commentCount}
+                            isLiked={post.isLiked || false}
+                            showComment={false}
+                            shareUrl={`/post/${post._id}`}
+                            type="post"
+                        />
+                    </div>
+
+                    {/* Fixed Comment Input */}
+                    <div className="p-4 shrink-0">
+                        <Comment
+                            placeholder={post.allowComments ? "Write a comment..." : "Comments are turned off."}
+                            className="shadow-none"
+                            value={commentValue}
+                            setValue={(e) => setCommentValue(e.target.value)}
+                            onSend={handleSendComment}
+                            disabled={!post.allowComments || sendingComment || post.isLocked}
+                            inputDisabled={!post.allowComments}
+                        />
+                    </div>
                 </div>
             </div>
         </Modal>

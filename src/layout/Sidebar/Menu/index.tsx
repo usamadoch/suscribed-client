@@ -87,7 +87,7 @@ const Menu = ({ visible }: MenuProps) => {
                                         {link.suffixIcon ? (
 
                                             <div
-                                                className={`group ml-auto flex items-center justify-center overflow-hidden transition-all duration-300 ${link.suffixIconBg
+                                                className={`group ml-auto flex items-center justify-center overflow-hidden transition-all duration-300 tablet:hidden ${link.suffixIconBg
                                                     ? "bg-purple-2  rounded-full hover:bg-purple-1 h-[30px] min-w-[30px] px-1.5"
                                                     : "opacity-50 hover:opacity-100 p-1"
                                                     }`}

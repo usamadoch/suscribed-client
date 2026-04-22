@@ -55,8 +55,8 @@ const CreatorsPostsPage = () => {
                     </div>
                 ) : (
                     <div>
-                        <div className="flex justify-end items-center gap-4 mb-6">
-                            <div className="relative w-full md:w-64">
+                        <div className="flex justify-end items-center gap-4 mb-6 mobile:flex-col">
+                            <div className="relative w-full ">
                                 <input
                                     type="text"
                                     placeholder="Search..."
@@ -67,7 +67,7 @@ const CreatorsPostsPage = () => {
                                     className="absolute right-4 top-1/2 -translate-y-1/2 icon-20 fill-n-1 dark:fill-n-9"
                                 />
                             </div>
-                            <div className="w-40 md:w-48 z-10 ">
+                            <div className="w-40 z-10 mobile:w-full">
                                 <Select
                                     items={SORT_OPTIONS}
                                     value={sortOption}
@@ -78,7 +78,7 @@ const CreatorsPostsPage = () => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-3 tablet:grid-cols-2 mobile:grid-cols-1 gap-6">
                             {sortedPosts.map((post) => (
                                 <VideoPostCard key={post._id} post={post} />
                             ))}

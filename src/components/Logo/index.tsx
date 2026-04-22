@@ -24,9 +24,8 @@ const Logo = ({ className, light, href = "/dashboard", disabled }: LogoProps) =>
             src={
                 light
                     ? "/images/logo-light.svg"
-                    : isDarkMode
-                        ? "/images/logo-light.svg"
-                        : "/images/logo-dark.svg"
+                    : "/images/logo-light.svg"
+
             }
             width={113}
             height={25}

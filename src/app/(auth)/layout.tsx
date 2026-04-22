@@ -16,18 +16,20 @@ export default function AuthLayout({
     const isLogin = pathname === "/login";
 
     return (
-        <div className="relative overflow-hidden">
-            <div className="relative z-3 flex flex-col max-w-300  min-h-screen mx-auto px-7.5 py-12 xls:px-20 lg:px-8 md:px-6 md:py-8">
+        <div className="relative overflow-hidden dark:bg-n-1">
+            <div className="relative z-3 flex flex-col max-w-300 min-h-screen mx-auto p-12 mobile:px-8">
                 <motion.div
                     layout
                     transition={{ duration: 0.4, ease: "easeInOut", delay: isLogin ? 0.15 : 0 }}
-                    className={`flex flex-col grow max-w-[27.31rem] lg:max-w-100 w-full ${isLogin ? "mx-auto" : ""}`}
+                    className={`flex flex-col max-w-[27.31rem] tablet:max-w-100 w-full ${isLogin ? "mx-auto" : "tablet:mx-auto"}`}
                 >
-                    <motion.div layout transition={{ duration: 0.4, ease: "easeInOut", delay: isLogin ? 0.15 : 0 }} className={`flex ${isLogin ? "justify-center" : ""}`}>
-                        <Logo className="w-25" disabled />
+                    <motion.div layout transition={{ duration: 0.4, ease: "easeInOut", delay: isLogin ? 0.15 : 0 }} className={`flex ${isLogin ? "justify-center" : "tablet:justify-center"}`}>
+                        <Logo className="w-25 " disabled />
                     </motion.div>
-                    <motion.div layout transition={{ duration: 0.4, ease: "easeInOut", delay: isLogin ? 0.15 : 0 }} className="flex flex-col justify-center grow w-full">
-                        {children}
+                    <motion.div layout transition={{ duration: 0.4, ease: "easeInOut", delay: isLogin ? 0.15 : 0 }} className="flex flex-col justify-center tablet:items-center grow w-full pt-24 mobile:pt-18">
+                        <div className="w-full tablet:text-center">
+                            {children}
+                        </div>
                     </motion.div>
                 </motion.div>
             </div>
@@ -39,10 +41,11 @@ export default function AuthLayout({
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, transition: { duration: 0.2, delay: 0.1 } }}
                         transition={{ duration: 0.3 }}
+                        className="tablet:hidden"
                     >
                         <div className="absolute -z-1 inset-0 overflow-hidden pointer-events-none">
                             <div className="absolute z-1 inset-0 bg-n-2 opacity-0 dark:opacity-80"></div>
-                            <div className="absolute top-[50%] left-[45vw] -translate-y-1/2 w-340 xl:w-240 lg:left-[50vw] md:-top-[25%] md:-left-[30%] md:translate-y-0 md:w-120">
+                            <div className="absolute top-[50%] left-[45vw] -translate-y-1/2 w-340 xl:w-240 tablet:left-[50vw] mobile:-top-[25%] mobile:-left-[30%] mobile:translate-y-0 mobile:w-120">
                                 <Image
                                     className=""
                                     src="/images/bg.svg"
@@ -52,18 +55,8 @@ export default function AuthLayout({
                                 />
                             </div>
                         </div>
-                        <div className="absolute top-1/2 right-[calc(50%-61.8125rem)] w-247.25 -translate-y-1/2 xls:right-[calc(50%-61rem)] xls:w-220 lg:right-[calc(50%-64rem)] md:hidden">
-                            {/* <Image
-                                className="w-full"
-                                src={
-                                    isDarkMode
-                                        ? "/images/mockup-dark.png"
-                                        : "/images/mockup-light.png"
-                                }
-                                width={989}
-                                height={862}
-                                alt=""
-                            /> */}
+                        <div className="absolute top-1/2 right-[calc(50%-61.8125rem)] w-247.25 -translate-y-1/2 xls:right-[calc(50%-61rem)] xls:w-220 tablet:right-[calc(50%-64rem)] mobile:hidden">
+                            {/* Side content mockup hidden */}
                         </div>
                     </motion.div>
                 )}

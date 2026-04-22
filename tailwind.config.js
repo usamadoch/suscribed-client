@@ -29,11 +29,10 @@ module.exports = {
             xls: { max: "1179px" },
             // => @media (max-width: 1179px) { ... }
             lg: { max: "1023px" },
-            // => @media (max-width: 1023px) { ... }
+            tablet: { max: "1023px" },
             md: { max: "767px" },
-            // => @media (max-width: 767px) { ... }
+            mobile: { max: "767px" },
             sm: { max: "480px" },
-            // => @media (max-width: 480px) { ... }
         },
         extend: {
             colors: {

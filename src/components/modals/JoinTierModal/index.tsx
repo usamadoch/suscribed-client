@@ -36,7 +36,7 @@ const JoinTierModal = ({
     const router = useRouter();
     const params = useParams<{ "page-slug": string }>();
     const slug = params["page-slug"] || page.pageSlug;
-    
+
 
     const [interval, setInterval] = useState<'MONTHLY' | 'YEARLY'>('MONTHLY');
     const [showSuccess, setShowSuccess] = useState(false);
@@ -107,9 +107,9 @@ const JoinTierModal = ({
             return {
                 ...old,
                 isMember: true,
-                page: { 
-                    ...old.page, 
-                    memberCount: (old.page.memberCount || 0) + 1 
+                page: {
+                    ...old.page,
+                    memberCount: (old.page.memberCount || 0) + 1
                 }
             };
         });
@@ -144,7 +144,7 @@ const JoinTierModal = ({
 
     return (
         <Transition show={visible} as={Fragment}>
-            <Dialog onClose={() => {}} className="relative z-9999">
+            <Dialog onClose={() => { }} className="relative z-9999">
                 <TransitionChild
                     as={Fragment}
                     enter="ease-out duration-300"
@@ -167,7 +167,7 @@ const JoinTierModal = ({
                         leaveFrom="translate-y-0"
                         leaveTo="translate-y-full"
                     >
-                        <DialogPanel className="relative z-10 w-full max-w-full mx-8 mt-8 h-screen overflow-y-auto bg-background border border-n-1 dark:bg-n-4">
+                        <DialogPanel className="relative z-10 w-full max-w-full mx-8 mt-8 h-screen overflow-y-auto bg-background border border-n-1 dark:bg-n-4 tablet:mt-4 tablet:mx-2">
                             <button
                                 className="absolute z-2 fill-white bg-n-1/50 w-8 h-8 flex items-center justify-center rounded-full top-4 right-4 hover:fill-purple-1 outline-none dark:fill-white dark:hover:fill-purple-1"
                                 onClick={handleManualClose}
@@ -180,17 +180,17 @@ const JoinTierModal = ({
 
                                 <AnimatePresence mode="popLayout" initial={false}>
                                     {currentStep === 'success' ? (
-                                        <motion.div 
-                                            key="success" 
-                                            initial={{ x: "100%", opacity: 0 }} 
-                                            animate={{ x: 0, opacity: 1 }} 
+                                        <motion.div
+                                            key="success"
+                                            initial={{ x: "100%", opacity: 0 }}
+                                            animate={{ x: 0, opacity: 1 }}
                                             exit={{ x: "-100%", opacity: 0 }}
                                             transition={{ type: "tween", ease: "easeInOut", duration: 0.4 }}
                                         >
                                             <SubscriptionSuccess
                                                 page={page}
                                                 plan={plans.find((p: Tier) => p._id === pageTierId)}
-                                                onViewContent={() => { 
+                                                onViewContent={() => {
                                                     handleManualClose();
                                                     router.push(`/${slug}`);
                                                     router.refresh();
@@ -199,11 +199,11 @@ const JoinTierModal = ({
                                             />
                                         </motion.div>
                                     ) : currentStep === 'checkout' && safepayData ? (
-                                        <motion.div 
-                                            key="checkout" 
-                                            initial={{ x: "100%", opacity: 0 }} 
-                                            animate={{ x: 0, opacity: 1 }} 
-                                            exit={{ x: "-100%", opacity: 0 }} 
+                                        <motion.div
+                                            key="checkout"
+                                            initial={{ x: "100%", opacity: 0 }}
+                                            animate={{ x: 0, opacity: 1 }}
+                                            exit={{ x: "-100%", opacity: 0 }}
                                             transition={{ type: "tween", ease: "easeInOut", duration: 0.4 }}
                                             className="w-full max-w-6xl mx-auto p-6 pt-0"
                                         >
@@ -218,10 +218,10 @@ const JoinTierModal = ({
                                             />
                                         </motion.div>
                                     ) : (
-                                        <motion.div 
-                                            key="plans" 
-                                            initial={{ x: "-100%", opacity: 0 }} 
-                                            animate={{ x: 0, opacity: 1 }} 
+                                        <motion.div
+                                            key="plans"
+                                            initial={{ x: "-100%", opacity: 0 }}
+                                            animate={{ x: 0, opacity: 1 }}
                                             exit={{ x: "-100%", opacity: 0 }}
                                             transition={{ type: "tween", ease: "easeInOut", duration: 0.4 }}
                                         >

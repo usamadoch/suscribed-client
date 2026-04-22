@@ -126,7 +126,7 @@ const SafepayCardForm = ({
 
                 {onBack && (
                     <button
-                        className='btn-stroke h-8 font-normal ml-8 text-n-3 dark:text-n-9'
+                        className='btn-stroke h-8 font-normal ml-8 text-n-3 dark:text-n-9 tablet:ml-4 mobile:ml-0'
                         onClick={onBack}
                     >
                         <Icon name='arrow-prev' />
@@ -135,10 +135,10 @@ const SafepayCardForm = ({
                 )}
 
 
-                <div className='flex md:flex-row gap-8 items-start w-full mt-8'>
+                <div className='flex gap-8 items-start w-full mt-8 mobile:flex-col'>
 
                     {/* Left side: Selected tier details and interval switch */}
-                    <div className="flex-1 w-full flex flex-col gap-10 items-center px-8">
+                    <div className="flex-1 w-full flex flex-col gap-10 items-center px-8 tablet:px-4 mobile:px-0">
 
                         <div className="flex flex-col gap-4 mb-8 w-full">
                             <div className="flex flex-col gap-1">
@@ -247,7 +247,7 @@ const SafepayCardForm = ({
                     </div>
 
                     {/* Right side: Payment form */}
-                    <div className='flex-1 w-full mx-8'>
+                    <div className='flex-1 w-full mx-8 tablet:mx-4 mobile:mx-0'>
 
                         <div className="text-n-1 dark:text-white capitalize mb-1 font-semibold">
                             Card details

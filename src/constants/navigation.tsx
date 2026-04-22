@@ -101,25 +101,4 @@ export const navigation: NavigationItem[] = [
     },
 ];
 
-export const navigationMobile = [
-    {
-        icon: "dashboard",
-        url: "/dashboard/ecommerce",
-    },
-    // {
-    //     icon: "projects",
-    //     url: "/projects/projects-list-v1",
-    // },
-    // {
-    //     icon: "tasks",
-    //     url: "/projects/tasks-list-v1",
-    // },
-    // {
-    //     icon: "layers",
-    //     url: "/projects/kanban-desc",
-    // },
-    {
-        icon: "dots",
-        onClick: () => console.log("Click on dots"),
-    },
-];
+

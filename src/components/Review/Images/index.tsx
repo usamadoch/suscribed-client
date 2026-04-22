@@ -39,7 +39,7 @@ const Images = ({ items, imageBig }: ImagesProps) => {
     const currentIndex = page;
 
     return (
-        <div className={`relative pb-2.5 group w-full pr-5 ${imageBig ? "h-80" : "h-120"}`}>
+        <div className={`relative pb-2.5 group w-full pr-5 mobile:pr-0 mobile:aspect-square ${imageBig ? "h-80 mobile:h-auto" : "h-120 mobile:h-auto"}`}>
             <div className="w-full h-full relative border border-n-4 dark:border-n-1 overflow-hidden bg-n-8 rounded-sm">
                 <AnimatePresence initial={false} custom={direction}>
                     <motion.div

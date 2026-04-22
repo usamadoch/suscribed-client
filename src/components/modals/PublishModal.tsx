@@ -31,14 +31,14 @@ const PublishModal = ({
                 </p>
 
                 {missingFields.length > 0 && (
-                    <div className=" p-4 border border-n-1 shadow-primary-4 ">
-                        <h6 className="text-n-2 text-h6 dark:text-purple-200 font-medium mb-2 flex items-center gap-2">
-                            <span className="text-lg">⚠️</span> Complete your profile
+                    <div className=" p-4 border border-n-1 shadow-primary-4  dark:border-n-6">
+                        <h6 className="text-n-2 text-h6 dark:text-purple-400 font-medium mb-2 flex items-center gap-2">
+                            Complete your profile
                         </h6>
-                        <p className="text-base text-n-2 dark:text-purple-300 mb-2">
+                        <p className="text-base text-n-2 dark:text-purple-400 mb-2">
                             Your page is looking a bit empty! Consider adding the following before publishing:
                         </p>
-                        <ul className="list-[square] pl-5 text-sm font-medium text-n-2 dark:text-purple-300 space-y-1">
+                        <ul className="list-[square] pl-5 text-sm font-medium text-n-2 dark:text-purple-400 space-y-1">
                             {missingFields.map(field => (
                                 <li key={field}>{field}</li>
                             ))}

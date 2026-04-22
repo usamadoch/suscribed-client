@@ -40,7 +40,7 @@ const ReadMore = ({
                     className={twMerge(
                         "inline-flex items-center cursor-pointer whitespace-nowrap transition-all",
                         !isExpanded
-                            ? "relative pl-8 -ml-8 bg-gradient-to-r from-transparent via-white to-white dark:via-n-1 dark:to-n-1 text-purple-1 hover:text-purple-1"
+                            ? "relative pl-8 -ml-8 bg-linear-to-r from-transparent via-white to-white dark:via-n-1 dark:to-n-1 text-purple-1 hover:text-purple-1"
                             : "ml-1 text-purple-1 hover:text-purple-1",
                         buttonClass
                     )}

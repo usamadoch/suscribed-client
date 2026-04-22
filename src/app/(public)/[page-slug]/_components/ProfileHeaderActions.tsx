@@ -17,8 +17,8 @@ type ProfileHeaderActionsProps = {
 const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: ProfileHeaderActionsProps) => {
     if (isOwner) {
         return (
-            <div className="flex shrink-0 max-w-60 w-full">
-                <Link href="/settings" className="btn-purple grow">
+            <div className="flex shrink-0 max-w-60 w-full mobile:max-w-none">
+                <Link href="/settings" className="btn-purple btn-medium grow">
                     <Icon name="setup" />
                     <span className="">Edit Profile</span>
                 </Link>
@@ -27,7 +27,7 @@ const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: 
     }
 
     return (
-        <div className="flex shrink-0 max-w-80 w-full 4xl:w-59">
+        <div className="flex shrink-0 max-w-80 w-full mobile:max-w-none">
             <button
                 className={`btn-purple btn-medium grow ${isMember ? "opacity-75" : ""}`}
                 onClick={isMember ? undefined : onJoinClick}
@@ -38,7 +38,7 @@ const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: 
             </button>
 
             <ActionMenu
-                className="ml-4 shrink-0"
+                className="ml-2 shrink-0"
                 buttonClass="btn-purple btn-medium px-4 focus:outline-none"
                 items={[
                     {

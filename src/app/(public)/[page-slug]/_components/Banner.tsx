@@ -40,7 +40,7 @@ const Banner = ({ page, isOwner, onUpdate }: CreatorBannerProps) => {
 
 
     return (
-        <div className="relative w-full aspect-5/1 md:aspect-5/1 bg-n-2 border-b border-n-4">
+        <div className="relative w-full aspect-6/1 bg-n-2 border-b border-n-4 tablet:aspect-5/2 mobile:aspect-3/2">
             {isOwner ? (
                 <PageImageUploader
                     containerClassName="w-full h-full"

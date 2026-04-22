@@ -76,18 +76,18 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
 
 
     return (
-        <div className="relative z-1 flex items-end h-full pb-10 px-16 2xl:px-8 lg:px-6 md:px-5 md:pb-8">
+        <div className="relative z-1 flex flex-col items-end h-full pb-10 px-16 2xl:px-8 lg:px-6 mobile:px-6 mobile:pb-8">
             <div className="flex items-start justify-between w-full pt-4">
                 <div className="flex flex-1 items-start">
                     {/* Avatar Section */}
-                    <div className="relative shrink-0 w-27.5 h-27.5">
+                    <div className="relative shrink-0 w-27.5 tablet:w-24 mobile:w-20 aspect-square">
                         {/* {(optimisticAvatar || page.avatarUrl) && (
-                            <div className="absolute top-1 left-1 w-full h-full rounded-full bg-[#4ADBC8] border border-black"></div>
+                            <div className="absolute top-1 left-1 w-full aspect-square rounded-full bg-[#4ADBC8] border border-black"></div>
                         )} */}
-                        <div className="relative w-full h-full rounded-full z-10">
+                        <div className="relative w-full aspect-square rounded-full z-10">
                             {isOwner ? (
                                 <PageImageUploader
-                                    containerClassName="w-full h-full rounded-full"
+                                    containerClassName="w-full aspect-square rounded-full"
                                     imageClassName="object-cover rounded-full"
                                     imageSrc={optimisticAvatar || page.avatarUrl}
 
@@ -100,7 +100,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                                     slot="profile"
                                 />
                             ) : (
-                                <div className="relative w-full h-full rounded-full overflow-hidden">
+                                <div className="relative w-full aspect-square rounded-full overflow-hidden">
                                     <Image
                                         className="object-cover"
                                         family="avatar"
@@ -115,7 +115,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                     </div>
 
                     <div className="text-n-1 dark:text-n-9 pl-4">
-                        <h5 className="capitalize mb-4 text-h5 md:text-h3">{page.displayName}</h5>
+                        <h5 className="capitalize mb-4 text-h5">{page.displayName}</h5>
                         <div className="flex items-center font-medium text-n-3">
                             <span className="text-sm mr-2 md:mr-4 dark:text-n-7">{page.memberCount || 0} Members</span>
                             <span className="text-sm dark:text-n-7">{page.postCount || 0} Posts</span>
@@ -128,7 +128,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                     </div>
                 </div>
 
-                <div className="flex-1 flex items-center justify-end  shrink-0">
+                <div className="flex-1 flex items-center justify-end shrink-0 mobile:hidden">
                     <ProfileSocials youtube={page.youtube} />
 
                     <ProfileHeaderActions
@@ -139,6 +139,19 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                     />
                 </div>
             </div>
+
+
+            <div className="hidden mobile:flex w-full pt-6 flex-col-reverse gap-4 items-center">
+                <ProfileSocials youtube={page.youtube} />
+
+                <ProfileHeaderActions
+                    isOwner={isOwner}
+                    isMember={isMember}
+                    onJoinClick={handleOpenJoinModal}
+                    onShareClick={() => setVisible(true)}
+                />
+            </div>
+
             <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
 
             <JoinTierModal

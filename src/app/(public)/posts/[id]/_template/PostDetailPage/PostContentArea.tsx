@@ -46,7 +46,7 @@ const PostContentArea = ({
 
             {/* ── Caption, Actions, Metadata ───────────────── */}
             <div className="max-w-4xl mx-auto p-5 pt-0">
-                <div className="flex items-start justify-between w-full">
+                <div className="flex flex-col items-start justify-between w-full">
                     <div className="flex items-start w-full">
                         {/* Avatar Section */}
                         <div className="relative shrink-0 w-16 h-16 mb-3 rounded-full shadow-primary-4 bg-n-1">
@@ -66,10 +66,12 @@ const PostContentArea = ({
                             <div className="flex justify-between w-full">
                                 <div className="flex items-center gap-3">
                                     <h5 className="capitalize text-h5 md:text-h4 dark:text-n-9">{creator.displayName}</h5>
-                                    <span className="dark:text-n-8">•</span>
-                                    <span className="text-sm text-n-3 dark:text-n-8">
-                                        {formatAppDate(post.publishedAt || post.createdAt, { suffix: true })}
-                                    </span>
+                                    <div className="flex items-center gap-3 ">
+                                        <span className="dark:text-n-8">•</span>
+                                        <span className="text-sm text-n-3 dark:text-n-8">
+                                            {formatAppDate(post.publishedAt || post.createdAt, { suffix: true })}
+                                        </span>
+                                    </div>
                                 </div>
                                 <Actions
                                     postId={post._id}
@@ -77,7 +79,7 @@ const PostContentArea = ({
                                     comments={post.commentCount}
                                     isLiked={post.isLiked || false}
                                     showComment={false}
-                                    className="mt-0 ml-auto"
+                                    className="mt-0 ml-auto mobile:hidden"
                                 />
                             </div>
 
@@ -85,10 +87,26 @@ const PostContentArea = ({
                                 <div className={`text-sm whitespace-pre-wrap text-n-1 dark:text-n-9 w-[60%] ${locked ? "blur-xs select-none" : ""}`}>
                                     <ReadMore words={20} className="dark:text-n-9">{displayCaption}</ReadMore>
                                 </div>
-                                <div className="shrink-0">
+                                <div className="shrink-0 mobile:hidden">
                                     <PostMetadata viewCount={post.viewCount} />
                                 </div>
                             </div>
+                        </div>
+
+                    </div>
+                    <div className=" hidden mobile:flex pt-4 justify-between items-center w-full">
+                        <div className="flex items-center gap-3 ml-2">
+                            <Actions
+                                postId={post._id}
+                                likes={post.likeCount}
+                                comments={post.commentCount}
+                                isLiked={post.isLiked || false}
+                                showComment={false}
+                                className="mt-0"
+                            />
+                        </div>
+                        <div className="shrink-0">
+                            <PostMetadata viewCount={post.viewCount} />
                         </div>
                     </div>
                 </div>
