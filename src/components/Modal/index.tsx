@@ -14,6 +14,7 @@ type ModalProps = {
     children: React.ReactNode;
     video?: boolean;
     showCloseIcon?: boolean;
+    disableOutsideClick?: boolean;
 };
 
 const Modal = ({
@@ -27,13 +28,14 @@ const Modal = ({
     children,
     video,
     showCloseIcon = true,
+    disableOutsideClick = false,
 }: ModalProps) => {
     return (
         <Transition show={visible} as={Fragment}>
             <Dialog
                 initialFocus={initialFocus}
                 className={twMerge(`fixed inset-0 z-50 flex p-6 overflow-auto scroll-smooth md:px-4`, className)}
-                onClose={onClose}
+                onClose={disableOutsideClick ? () => {} : onClose}
             >
                 <TransitionChild
                     as={Fragment}

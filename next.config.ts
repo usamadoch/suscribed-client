@@ -25,6 +25,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'picsum.photos',
       },
+      {
+        protocol: 'https',
+        hostname: 'yt3.ggpht.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'yt4.ggpht.com',
+      },
     ],
   },
 };

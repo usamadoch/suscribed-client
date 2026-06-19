@@ -6,6 +6,7 @@ import { create } from 'zustand';
 import { useAuth } from './auth';
 import { useQueryClient } from '@tanstack/react-query';
 import { Notification } from '@/types';
+import { ManagerOptions, SocketOptions } from 'socket.io-client';
 import { notificationService as notificationApi } from '@/services/notification.service';
 import { conversationService as conversationApi } from '@/services/conversation.service';
 
@@ -97,7 +98,7 @@ const SOCKET_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http
 
 export function SocketProvider({ children }: { children: React.ReactNode }) {
     const queryClient = useQueryClient();
-    const { user, isAuthenticated } = useAuth() as any;
+    const { user, isAuthenticated } = useAuth() as { user: { _id: string } | null, isAuthenticated: boolean };
     const {
         setSocket,
         setIsConnected,
@@ -108,72 +109,71 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     } = useSocketStore();
 
     useEffect(() => {
-        // If not authenticated, ensure socket is disconnected
-        if (!isAuthenticated || !user) {
-            if (currentSocket) {
-                currentSocket.disconnect();
-                setSocket(null);
-                setIsConnected(false);
-            }
-            return;
+        // Disconnect previous socket when auth state changes
+        if (currentSocket) {
+            currentSocket.disconnect();
+            setSocket(null);
+            setIsConnected(false);
         }
 
-        // Initialize new connection
-        const newSocket = io(SOCKET_URL, {
+        // Always create a socket — anonymous for guests, authenticated for logged-in users.
+        // Anonymous sockets enable live session rooms (YouTube chat) for all visitors.
+        // Interactions (sending chat, hearting) are gated at the component level with login modals.
+        const socketOptions: Partial<ManagerOptions & SocketOptions> = {
             withCredentials: true,
-            auth: {
-                userId: user._id,
-            },
             transports: ['websocket', 'polling'],
-        });
+        };
+
+        if (isAuthenticated && user) {
+            socketOptions.auth = { userId: user._id };
+        }
+
+        const newSocket = io(SOCKET_URL, socketOptions);
 
         newSocket.on('connect', () => {
             setIsConnected(true);
 
-            // Fetch initial notification unread count
-            notificationApi.getUnreadCount()
-                .then(res => setUnreadCount(res.count))
-                .catch(err => console.error('Failed to fetch notification unread count', err));
+            // Only fetch counts for authenticated users
+            if (isAuthenticated && user) {
+                notificationApi.getUnreadCount()
+                    .then(res => setUnreadCount(res.count))
+                    .catch(err => console.error('Failed to fetch notification unread count', err));
 
-            // Fetch initial message unread count
-            conversationApi.getUnreadCount()
-                .then(res => setMessageUnreadCount(res.count))
-                .catch(err => console.error('Failed to fetch message unread count', err));
+                conversationApi.getUnreadCount()
+                    .then(res => setMessageUnreadCount(res.count))
+                    .catch(err => console.error('Failed to fetch message unread count', err));
+            }
         });
 
         newSocket.on('disconnect', () => {
             setIsConnected(false);
         });
 
-        // Handle general notifications (excluding messages)
-        newSocket.on('notification', (notification: Notification) => {
-            // Skip message notifications - those are handled separately
-            if (notification.type === 'new_message') {
-                return;
-            }
+        // Notification and message listeners — only relevant for authenticated users
+        if (isAuthenticated && user) {
+            newSocket.on('notification', (notification: Notification) => {
+                if (notification.type === 'new_message') {
+                    return;
+                }
 
-            addNotification(notification);
-            queryClient.invalidateQueries({ queryKey: ['notifications'] });
-        });
+                addNotification(notification);
+                queryClient.invalidateQueries({ queryKey: ['notifications'] });
+            });
 
-        // Handle new message notifications for sidebar badge
-        newSocket.on('new_message_notification', ({ conversationId }: { conversationId: string; message: any }) => {
-            const state = useSocketStore.getState();
+            newSocket.on('new_message_notification', ({ conversationId }: { conversationId: string; message: unknown }) => {
+                const state = useSocketStore.getState();
 
-            // Don't increment if user is on the messages page
-            if (state.isOnMessagesPage) {
+                if (state.isOnMessagesPage) {
+                    queryClient.invalidateQueries({ queryKey: ['conversations'] });
+                    return;
+                }
+
+                useSocketStore.getState().incrementMessageUnreadCount();
                 queryClient.invalidateQueries({ queryKey: ['conversations'] });
-                return;
-            }
+            });
+        }
 
-            // Increment unread count for sidebar badge
-            useSocketStore.getState().incrementMessageUnreadCount();
-
-            // Invalidate conversations query to update last message preview
-            queryClient.invalidateQueries({ queryKey: ['conversations'] });
-        });
-
-        newSocket.on('connect_error', (error: any) => {
+        newSocket.on('connect_error', (error: Error) => {
             console.error('Socket connection error:', error.message);
         });
 

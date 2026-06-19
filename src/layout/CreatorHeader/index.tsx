@@ -11,7 +11,7 @@ import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 
 import Image from "@/components/Image";
-import { useCreatorPage, usePost } from "@/hooks/queries";
+import { useCreatorPage, usePost, usePublicLiveSession } from "@/hooks/queries";
 
 import { useCreatorHeader } from "@/context/CreatorHeaderContext";
 import { useAuth } from "@/store/auth";
@@ -39,19 +39,28 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
     const params = useParams();
 
     const paramSlug = params?.["page-slug"] as string | undefined;
-    const postId = params?.id as string | undefined;
+    const idParam = params?.id as string | undefined;
 
     let slug = (pageSlug || paramSlug) as string | undefined;
 
-    const isValidPostId = !slug && postId && /^[a-f\d]{24}$/i.test(postId);
-    const { data: postData, isLoading: isPostLoading } = usePost(isValidPostId ? postId! : "");
+    const isValidId = !slug && idParam && /^[a-f\d]{24}$/i.test(idParam);
+    const isPostRoute = pathname?.includes("/posts/");
+    const isLiveRoomRoute = pathname?.includes("/live-room/");
+
+    const { data: postData, isLoading: isPostLoading } = usePost(isValidId && isPostRoute ? idParam! : "");
+    
+    const { data: sessionData, isLoading: isSessionLoading } = usePublicLiveSession(idParam, !!isValidId && isLiveRoomRoute);
 
     if (!slug && postData?.pageId && typeof postData.pageId === 'object') {
         slug = (postData.pageId as any).pageSlug;
     }
 
+    if (!slug && sessionData?.creatorId && typeof sessionData.creatorId === 'object') {
+        slug = (sessionData.creatorId as any).pageSlug;
+    }
+
     const { data, isLoading: isPageLoading } = useCreatorPage(slug);
-    const isLoading = isPageLoading || (!!isValidPostId && isPostLoading);
+    const isLoading = isPageLoading || (!!isValidId && isPostRoute && isPostLoading) || (!!isValidId && isLiveRoomRoute && isSessionLoading);
 
 
     const { page } = data || {};

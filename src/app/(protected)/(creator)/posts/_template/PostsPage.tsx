@@ -11,9 +11,10 @@ import Sorting from "@/components/Sorting";
 import Icon from "@/components/Icon";
 import Empty from "@/components/Empty";
 import TablePagination from "@/components/TablePagination";
+import Tabs from "@/components/Tabs";
+import LiveTable, { mockLiveData } from "./LiveTable";
 
 import { DashboardPost, Pagination } from "@/types";
-import Loader from "@/components/Loader";
 
 // --- Isolated child components to limit render scope ---
 
@@ -71,6 +72,12 @@ const PostsTable = ({ posts, isLoading }: { posts: DashboardPost[]; isLoading: b
 // --- Main page component: orchestration only ---
 
 const PostsPage = () => {
+    const [activeTab, setActiveTab] = useState<string>("posts");
+
+    const tabs = [
+        { title: "Posts", value: "posts" },
+        { title: "Live", value: "live" }
+    ];
 
     // Pagination State
     const [page, setPage] = useState(1);
@@ -105,18 +112,36 @@ const PostsPage = () => {
 
     return (
         <>
+            <div className="mb-6 border-b border-n-6 pb-4 md:overflow-auto md:-mx-5 md:scrollbar-none md:before:w-5 md:before:shrink-0 md:after:w-5 md:after:shrink-0">
+                <Tabs
+                    items={tabs}
+                    value={activeTab}
+                    setValue={setActiveTab}
+                    className="flex-wrap!"
+                />
+            </div>
 
-            {/* <PostsMobileList posts={posts} /> */}
+            {activeTab === "posts" && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    {/* <PostsMobileList posts={posts} /> */}
 
-            <PostsTable posts={posts} isLoading={isLoading} />
+                    <PostsTable posts={posts} isLoading={isLoading} />
 
-            <TablePagination
-                page={pagination.page}
-                totalPages={pagination.totalPages}
-                hasNextPage={pagination.hasNextPage}
-                hasPrevPage={pagination.hasPrevPage}
-                onPageChange={handlePageChange}
-            />
+                    <TablePagination
+                        page={pagination.page}
+                        totalPages={pagination.totalPages}
+                        hasNextPage={pagination.hasNextPage}
+                        hasPrevPage={pagination.hasPrevPage}
+                        onPageChange={handlePageChange}
+                    />
+                </div>
+            )}
+
+            {activeTab === "live" && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <LiveTable items={mockLiveData} isLoading={false} />
+                </div>
+            )}
         </>
     );
 };

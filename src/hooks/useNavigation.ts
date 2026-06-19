@@ -4,7 +4,6 @@ import { navigation, NavigationItem } from '@/constants/navigation';
 import { useAuth } from '@/store/auth';
 import { hasPermission } from '@/constants/permissions';
 
-import { Permission } from '@/types';
 import { useMyPage } from '@/hooks/queries';
 
 export type { NavigationItem } from '@/constants/navigation';
@@ -58,18 +57,6 @@ export const useNavigation = () => {
                 // Insert after Dashboard
                 newNav.splice(dashboardIndex + 1, 0, yourPageLink);
             }
-        }
-
-        // Add suffix to posts
-        const postsIndex = newNav.findIndex(item => item.url === '/posts');
-        if (postsIndex !== -1) {
-            newNav[postsIndex] = {
-                ...newNav[postsIndex],
-                suffixIcon: "plus",
-                suffixIconBg: true,
-                suffixText: "Create Post",
-                suffixUrl: "/posts/new"
-            };
         }
 
         return newNav;
