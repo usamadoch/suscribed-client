@@ -9,6 +9,7 @@ import LiveHeader from "../../_components/LiveHeader";
 import LiveDuration from "../../_components/LiveDuration";
 import LiveLayout from "../../_components/LiveLayout";
 import LiveChat from "../../_components/LiveChat";
+import LiveRoomStats from "../../_components/LiveRoomStats";
 import Icon from "@/components/Icon";
 import { Skeleton } from "@/components/Skeleton";
 import Alert from "@/components/Alert";
@@ -138,46 +139,7 @@ const LiveRoomControlPage = () => {
                 )}
             </div>
 
-            {/* 3 stats boxes */}
-            <div className="grid grid-cols-3 gap-4 shrink-0">
-                <div className=" border border-n-4 dark:border-n-6 rounded-xl p-4 text-center">
-                    <div className="text-xs font-bold  dark:text-n-7 mb-1 uppercase tracking-wider">Collected</div>
-                    <div className="text-h4 font-bold dark:text-purple-1">Rs 8,450</div>
-                </div>
-                <div className=" border border-n-4 dark:border-n-6 rounded-xl p-4 text-center">
-                    <div className="text-xs font-bold  dark:text-n-7 mb-1 uppercase tracking-wider">Watching</div>
-                    <div className="text-h4 font-bold dark:text-n-9">347</div>
-                </div>
-                <div className=" dark:bg-n-1 border border-n-4 dark:border-n-6 rounded-xl p-4 text-center">
-                    <div className="text-xs font-bold  dark:text-n-7 mb-1 uppercase tracking-wider">Paid msgs</div>
-                    <div className="text-h4 font-bold  dark:text-n-9">31</div>
-                </div>
-            </div>
-
-            {/* Top Supporters */}
-            <h2 className="text-lg font-bold dark:text-n-9 mb-4">Top Supporters</h2>
-            <div className="border border-n-4 dark:border-n-6 rounded-xl">
-                {[
-                    { rank: 1, name: "Hamza Ali", amount: "Rs 2,000" },
-                    { rank: 2, name: "Ali Raza", amount: "Rs 1,500" },
-                    { rank: 3, name: "Fatima K.", amount: "Rs 1,000" },
-                    { rank: 4, name: "Ahmed", amount: "Rs 750" },
-                ].map(supporter => (
-                    <div key={supporter.rank} className="flex items-center justify-between px-4 py-2 border-b border-n-4 dark:border-n-6 last:border-b-0">
-                        <div className="flex items-center gap-3">
-                            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-purple-1 text-white text-xs font-bold shrink-0 shadow-sm">
-                                {supporter.rank}
-                            </div>
-                            <div className="font-bold text-n-1 dark:text-n-9 text-sm">
-                                {supporter.name}
-                            </div>
-                        </div>
-                        <div className="font-bold text-purple-1 text-sm">
-                            {supporter.amount}
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <LiveRoomStats sessionId={sessionId} />
 
             {/* Share with audience */}
             {!isEnded && (

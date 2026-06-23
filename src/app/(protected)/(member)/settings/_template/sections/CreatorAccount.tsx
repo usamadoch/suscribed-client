@@ -200,14 +200,14 @@ const CreatorAccount = () => {
 
         const res = await updateProfile(updateData);
         if (res.success) {
-            toast.custom((t) => (
-                <Alert
-                    className="mb-0 shadow-md"
-                    type="success"
-                    message="Creator profile updated successfully"
-                    onClose={() => toast.dismiss(t.id)}
-                />
-            ), { position: "bottom-right" });
+            // toast.custom((t) => (
+            //     <Alert
+            //         className="mb-0 shadow-md"
+            //         type="success"
+            //         message="Creator profile updated successfully"
+            //         onClose={() => toast.dismiss(t.id)}
+            //     />
+            // ), { position: "bottom-right" });
         } else {
             toast.custom((t) => (
                 <Alert

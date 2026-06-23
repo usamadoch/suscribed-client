@@ -28,6 +28,7 @@ export interface CreatorPage {
         thumbnail?: string;
         isVerified: boolean;
     };
+    activeLiveSessionId?: string | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -40,6 +41,7 @@ export interface ExploreCreator {
     avatarUrl: string | null;
     memberCount: number;
     postCount: number;
+    activeLiveSessionId?: string | null;
 }
 
 export interface UpdatePagePayload {

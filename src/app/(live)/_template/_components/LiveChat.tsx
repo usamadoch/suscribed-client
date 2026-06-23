@@ -8,6 +8,9 @@ import LiveChatInput from "./LiveChatInput";
 import { useLiveSocket, YouTubeMessage, CommonsMessage, LiveMessage } from "./hooks/useLiveSocket";
 import PinnedSuperchats from "./PinnedSuperchats";
 import LiveChatMessageItem from "./LiveChatMessageItem";
+import { useAuth } from "@/store/auth";
+import { liveApi } from "@/services/live.service";
+import { useQuery } from "@tanstack/react-query";
 
 interface LiveChatProps {
     sessionId?: string;
@@ -24,11 +27,28 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
     const [messages, setMessages] = useState<LiveMessage[]>([]);
     const [isScrolledUp, setIsScrolledUp] = useState(false);
     const [now, setNow] = useState(Date.now());
+    const [mutedUntil, setMutedUntil] = useState<Date | null>(null);
+
+    // Assuming we can know if the current user is creator. Wait, we can get current user.
 
     useEffect(() => {
         const timer = setInterval(() => setNow(Date.now()), 1000);
         return () => clearInterval(timer);
     }, []);
+
+    const { user } = useAuth();
+    const { data: sessionData } = useQuery({
+        queryKey: ["publicLiveSession", sessionId],
+        queryFn: () => liveApi.getPublicSession(sessionId as string),
+        enabled: !!sessionId,
+    });
+    
+    // sessionData.creatorId can be a string or an object with userId
+    const creatorUserId = typeof sessionData?.creatorId === 'object' 
+        ? (sessionData.creatorId as any).userId || sessionData.creatorId._id
+        : sessionData?.creatorId;
+        
+    const isCreator = user && creatorUserId === user._id;
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const queryClient = useQueryClient();
@@ -74,6 +94,16 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
         }
     }, [sessionId, queryClient]);
 
+    const handleMessageRemoved = useCallback((msgId: string) => {
+        setMessages(prev => prev.filter(m => m.id !== msgId));
+    }, []);
+
+    const handleUserMuted = useCallback((data: { userId: string, mutedUntil: string }) => {
+        if (user && data.userId === user._id) {
+            setMutedUntil(new Date(data.mutedUntil));
+        }
+    }, [user]);
+
     useLiveSocket({
         sessionId,
         enabled: isLive,
@@ -81,6 +111,8 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
         onYouTubeMessages: handleYouTubeMessages,
         onChatMessage: handleChatMessage,
         onSessionEnded: handleSessionEnded,
+        onMessageRemoved: handleMessageRemoved,
+        onUserMuted: handleUserMuted,
     });
 
     const displayMessages = activeTab === "live"
@@ -108,7 +140,7 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
                     {displayMessages.length > 0 && (
                         [...displayMessages].reverse().map(msg => (
                             <div key={msg.id} className="text-sm animate-in fade-in duration-300">
-                                <LiveChatMessageItem msg={msg} />
+                                <LiveChatMessageItem msg={msg} isCreator={!!isCreator} sessionId={sessionId} />
                             </div>
                         ))
                     )}
@@ -123,7 +155,7 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
                 )}
             </div>
 
-            <LiveChatInput sessionId={sessionId} isLive={isLive} />
+            <LiveChatInput sessionId={sessionId} isLive={isLive} mutedUntil={mutedUntil} isCreator={!!isCreator} />
         </>
     );
 }

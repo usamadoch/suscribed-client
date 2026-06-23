@@ -36,10 +36,16 @@ const ActionMenu = ({
     portal = false,
     showFooterLinks = false,
     itemClass = "flex items-center cursor-pointer w-full h-10 mb-1.5 last:mb-0 px-6.5 text-sm font-bold text-n-1 transition-colors dark:text-n-9",
-    menuItemsClass = "z-[9999] absolute border border-n-6 rounded-sm right-0 top-full mt-2 min-w-[14.69rem] py-2 bg-white dark:bg-n-1 transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 ",
+    menuItemsClass,
     children,
 }: ActionMenuProps) => {
     const containerClass = `relative inline-flex w-fit ${className || ""}`.trim();
+
+    const defaultMenuItemsClass = anchor
+        ? "z-[9999] min-w-[14.69rem] py-2 bg-white dark:bg-n-1 border border-n-6 rounded-sm focus:outline-none [--anchor-gap:8px] transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+        : "z-[9999] absolute border border-n-6 rounded-sm right-0 top-full mt-2 min-w-[14.69rem] py-2 bg-white dark:bg-n-1 transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0";
+
+    const finalMenuItemsClass = menuItemsClass !== undefined ? menuItemsClass : defaultMenuItemsClass;
 
     return (
         <MenuDropdown className={containerClass} as="div">
@@ -51,7 +57,7 @@ const ActionMenu = ({
                 anchor={anchor}
                 portal={portal}
                 modal={false}
-                className={`${menuItemsClass} focus:outline-none`}
+                className={`${finalMenuItemsClass} focus:outline-none`}
             >
                 {items.map((item, index) => (
                     <MenuItem

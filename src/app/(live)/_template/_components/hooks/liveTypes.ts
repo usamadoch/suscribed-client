@@ -11,6 +11,7 @@ export interface YouTubeMessage {
 export interface CommonsMessage {
     id: string;
     source: 'commons';
+    senderId: string;
     senderName: string;
     senderAvatar?: string;
     message: string;

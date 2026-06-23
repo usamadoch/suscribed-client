@@ -35,6 +35,13 @@ export interface LiveSession {
     isLocked?: boolean;
 }
 
+export interface LiveSessionStats {
+    collected: number;
+    paidMsgs: number;
+    watching: number;
+    topSupporters: Array<{ rank: number; name: string; amount: string }>;
+}
+
 export interface ChatMessageResponse {
     id: string;
     source: 'commons';
@@ -59,8 +66,23 @@ export const liveApi = {
             body: JSON.stringify(payload),
         });
     },
+    listSessions: async () => {
+        return fetchApi<LiveSession[]>('/live/sessions', {
+            method: 'GET',
+        });
+    },
+    deleteSession: async (sessionId: string) => {
+        return fetchApi<{ success: boolean; message: string }>(`/live/sessions/${sessionId}`, {
+            method: 'DELETE',
+        });
+    },
     getSession: async (sessionId: string) => {
         return fetchApi<LiveSession>(`/live/sessions/${sessionId}/control`, {
+            method: 'GET',
+        });
+    },
+    getSessionStats: async (sessionId: string) => {
+        return fetchApi<LiveSessionStats>(`/live/sessions/${sessionId}/stats`, {
             method: 'GET',
         });
     },
@@ -78,6 +100,17 @@ export const liveApi = {
         return fetchApi<ChatMessageResponse>(`/live/sessions/${sessionId}/chat`, {
             method: 'POST',
             body: JSON.stringify({ message }),
+        });
+    },
+    deleteChatMessage: async (sessionId: string, msgId: string) => {
+        return fetchApi<{ success: boolean }>(`/live/sessions/${sessionId}/chat/${msgId}`, {
+            method: 'DELETE',
+        });
+    },
+    timeoutUser: async (sessionId: string, userId: string, durationMinutes: number) => {
+        return fetchApi<{ success: boolean; mutedUntil: string }>(`/live/sessions/${sessionId}/chat/timeout/${userId}`, {
+            method: 'POST',
+            body: JSON.stringify({ durationMinutes }),
         });
     },
     initiatePaidMessage: async (sessionId: string, payload: { amount: number, message: string }) => {

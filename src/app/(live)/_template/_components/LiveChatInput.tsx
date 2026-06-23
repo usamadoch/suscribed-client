@@ -12,16 +12,20 @@ import CommentInput from "@/components/Comment";
 import Alert from "@/components/Alert";
 import { liveApi } from "@/services/live.service";
 import SuperChatModal from "./SuperChatModal";
+import { useMyPage } from "@/hooks/queries";
 
 
 
 interface LiveChatInputProps {
     sessionId?: string;
     isLive?: boolean;
+    mutedUntil?: Date | null;
+    isCreator?: boolean;
 }
 
-export default function LiveChatInput({ sessionId, isLive }: LiveChatInputProps) {
+export default function LiveChatInput({ sessionId, isLive, mutedUntil, isCreator }: LiveChatInputProps) {
     const { isAuthenticated, user } = useAuth();
+    const { data: myPage } = useMyPage();
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -29,6 +33,30 @@ export default function LiveChatInput({ sessionId, isLive }: LiveChatInputProps)
     const emojiPickerRef = useRef<HTMLDivElement>(null);
     const emojiButtonRef = useRef<HTMLButtonElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const [muteRemaining, setMuteRemaining] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!mutedUntil) {
+            setMuteRemaining(null);
+            return;
+        }
+        
+        const updateMute = () => {
+            const now = new Date();
+            if (mutedUntil <= now) {
+                setMuteRemaining(null);
+            } else {
+                const diffMs = mutedUntil.getTime() - now.getTime();
+                const mins = Math.floor(diffMs / 60000);
+                const secs = Math.floor((diffMs % 60000) / 1000);
+                setMuteRemaining(`${mins > 0 ? `${mins}m ` : ''}${secs}s`);
+            }
+        };
+
+        updateMute();
+        const interval = setInterval(updateMute, 1000);
+        return () => clearInterval(interval);
+    }, [mutedUntil]);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -148,15 +176,22 @@ export default function LiveChatInput({ sessionId, isLive }: LiveChatInputProps)
 
                 <CommentInput
                     inputRef={inputRef}
-                    avatar={messageText?.trim() ? (user?.avatarUrl || "/images/avatars/avatar.jpg") : null}
+                    avatar={messageText?.trim() ? (isCreator ? (myPage?.avatarUrl || user?.avatarUrl || "/images/avatars/avatar.jpg") : (user?.avatarUrl || "/images/avatars/avatar.jpg")) : null}
                     placeholder={isLive ? "Chat..." : "Chat is closed"}
+                    overlayNode={
+                        muteRemaining ? (
+                            <span>
+                                You're in timeout &mdash; <span className="font-bold text-purple-1">{muteRemaining}</span> remaining
+                            </span>
+                        ) : undefined
+                    }
                     value={messageText}
                     setValue={(e) => {
                         setMessageText(e.target.value);
                     }}
                     onSend={onSubmit}
-                    disabled={!isLive || isSending}
-                    inputDisabled={!isLive}
+                    disabled={!isLive || isSending || !!muteRemaining}
+                    inputDisabled={!isLive || !!muteRemaining}
                     progress={percentageRemaining}
                     progressColor={isCloseToLimit ? 'bg-pink-1' : 'bg-purple-1'}
                     maxLength={maxLength}
@@ -166,13 +201,19 @@ export default function LiveChatInput({ sessionId, isLive }: LiveChatInputProps)
                             <button
                                 ref={emojiButtonRef}
                                 type="button"
-                                className="btn btn-stroke btn-square h-8 w-8 bg-n-3 rounded-md"
+                                className={`btn btn-stroke btn-square h-8 w-8 bg-n-3 rounded-md ${(!isLive || !!muteRemaining) ? "opacity-50 cursor-not-allowed" : ""}`}
                                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                                disabled={!isLive || !!muteRemaining}
                             >
                                 <Icon className="icon-20 fill-currentColor" name="smile" />
                             </button>
                             {!messageText?.trim() ? (
-                                <button type="button" className="btn btn-stroke btn-square h-8 w-8 bg-n-3 rounded-md" onClick={() => setShowSuperChatModal(true)}>
+                                <button
+                                    type="button" 
+                                    className={`btn btn-stroke btn-square h-8 w-8 bg-n-3 rounded-md ${(!isLive || !!muteRemaining) ? "opacity-50 cursor-not-allowed" : ""}`} 
+                                    onClick={() => setShowSuperChatModal(true)}
+                                    disabled={!isLive || !!muteRemaining}
+                                >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="18"
@@ -189,9 +230,9 @@ export default function LiveChatInput({ sessionId, isLive }: LiveChatInputProps)
                                 </button>
                             ) : (
                                 <button
-                                    className={`btn-purple btn-square btn-small ${(!isLive || isSending) ? "opacity-50 cursor-not-allowed" : ""}`}
+                                    className={`btn-purple btn-square btn-small ${(!isLive || isSending || !!muteRemaining) ? "opacity-50 cursor-not-allowed" : ""}`}
                                     type="submit"
-                                    disabled={!isLive || isSending}
+                                    disabled={!isLive || isSending || !!muteRemaining}
                                 >
                                     <Icon name="send" />
                                 </button>

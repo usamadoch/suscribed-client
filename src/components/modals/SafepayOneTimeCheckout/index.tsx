@@ -77,13 +77,18 @@ const SafepayOneTimeCheckout = ({
         }
     };
 
+    const hasSucceeded = useRef(false);
+
     const handleFailure = useCallback((error: any) => {
+        if (hasSucceeded.current) return;
         console.error('Failed:', error);
         setIsProcessing(false);
         setErrorMessage("Payment failed or was cancelled. Please try again.");
     }, []);
 
     const handleSuccess = useCallback((data: any) => {
+        if (hasSucceeded.current) return;
+        hasSucceeded.current = true;
         console.log('Payment succeeded:', data);
         if (onSuccess) onSuccess(data);
     }, [onSuccess]);

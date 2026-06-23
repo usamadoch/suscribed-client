@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
+import Link from "next/link";
 
 
 import Image from "@/components/Image";
@@ -8,6 +9,7 @@ import LoginModal from "@/components/modals/LoginModal";
 import ShareModal from "@/components/modals/ShareModal";
 import JoinTierModal from "@/components/modals/JoinTierModal";
 import ReadMore from "@/components/ReadMore";
+import LiveBadge from "@/components/LiveBadge";
 
 import { CreatorPage } from "@/types";
 
@@ -100,15 +102,31 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                                     slot="profile"
                                 />
                             ) : (
-                                <div className="relative w-full aspect-square rounded-full overflow-hidden">
-                                    <Image
-                                        className="object-cover"
-                                        family="avatar"
-                                        slot="profile"
-                                        src={page?.avatarUrl}
-                                        fill
-                                        alt="Avatar"
-                                    />
+                                <div className="relative w-full aspect-square rounded-full bg-n-1">
+                                    {page.activeLiveSessionId && <LiveBadge size="md" />}
+                                    {page.activeLiveSessionId ? (
+                                        <Link href={`/live-room/${page.activeLiveSessionId}`} className="block w-full h-full relative rounded-full overflow-hidden cursor-pointer border-2 border-red-500">
+                                            <Image
+                                                className="object-cover"
+                                                family="avatar"
+                                                slot="profile"
+                                                src={page?.avatarUrl}
+                                                fill
+                                                alt="Avatar"
+                                            />
+                                        </Link>
+                                    ) : (
+                                        <div className="relative w-full aspect-square rounded-full overflow-hidden">
+                                            <Image
+                                                className="object-cover"
+                                                family="avatar"
+                                                slot="profile"
+                                                src={page?.avatarUrl}
+                                                fill
+                                                alt="Avatar"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

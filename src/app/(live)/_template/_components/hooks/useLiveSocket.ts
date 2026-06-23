@@ -13,6 +13,8 @@ interface UseLiveSocketOptions {
     onChatHistory?: (messages: LiveMessage[]) => void;
     onChatMessage?: (message: CommonsMessage) => void;
     onSessionEnded?: () => void;
+    onMessageRemoved?: (messageId: string) => void;
+    onUserMuted?: (data: { userId: string, mutedUntil: string }) => void;
 }
 
 export function useLiveSocket({
@@ -22,6 +24,8 @@ export function useLiveSocket({
     onChatHistory,
     onChatMessage,
     onSessionEnded,
+    onMessageRemoved,
+    onUserMuted,
 }: UseLiveSocketOptions) {
     const socket = useSocketStore((s) => s.socket);
     const isConnected = useSocketStore((s) => s.isConnected);
@@ -38,6 +42,12 @@ export function useLiveSocket({
 
     const onEndedRef = useRef(onSessionEnded);
     onEndedRef.current = onSessionEnded;
+
+    const onRemovedRef = useRef(onMessageRemoved);
+    onRemovedRef.current = onMessageRemoved;
+
+    const onMutedRef = useRef(onUserMuted);
+    onMutedRef.current = onUserMuted;
 
     // Join / leave room
     useEffect(() => {
@@ -78,8 +88,17 @@ export function useLiveSocket({
         };
 
         socket.on('session.ended', handleEnded);
+        socket.on('chat_message.removed', (data: { messageId: string }) => {
+            onRemovedRef.current?.(data.messageId);
+        });
+        socket.on('chat.user_muted', (data: { userId: string, mutedUntil: string }) => {
+            onMutedRef.current?.(data);
+        });
+
         return () => {
             socket.off('session.ended', handleEnded);
+            socket.off('chat_message.removed');
+            socket.off('chat.user_muted');
         };
     }, [socket, isConnected, sessionId]);
 }

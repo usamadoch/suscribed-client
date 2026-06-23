@@ -16,6 +16,7 @@ type CommentProps = {
     progressColor?: string;
     maxLength?: number;
     inputRef?: React.RefObject<HTMLTextAreaElement | null>;
+    overlayNode?: React.ReactNode;
 };
 
 const Comment = ({
@@ -31,7 +32,8 @@ const Comment = ({
     progress,
     progressColor,
     maxLength,
-    inputRef
+    inputRef,
+    overlayNode,
 }: CommentProps) => {
     return (
         <form
@@ -57,26 +59,33 @@ const Comment = ({
                     </div>
                 </div>
             )}
-            <TextareaAutosize
-                ref={inputRef as any}
-                className={`grow self-center py-2 px-4 bg-transparent text-sm font-medium text-n-1 outline-none resize-none placeholder:text-n-1 md:px-3 dark:text-n-9 dark:placeholder:text-n-9 ${inputDisabled ? "cursor-not-allowed opacity-50" : ""}`}
-                maxRows={5}
-                autoFocus
-                value={value}
-                onChange={setValue}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        if (value.trim() && !disabled && !inputDisabled) {
-                            onSend?.();
+            
+            {overlayNode ? (
+                <div className={`grow self-center py-2 px-4 bg-transparent text-sm font-medium text-n-1 outline-none md:px-3 dark:text-n-9 ${inputDisabled ? "cursor-not-allowed opacity-50" : ""}`}>
+                    {overlayNode}
+                </div>
+            ) : (
+                <TextareaAutosize
+                    ref={inputRef as any}
+                    className={`grow self-center py-2 px-4 bg-transparent text-sm font-medium text-n-1 outline-none resize-none placeholder:text-n-1 md:px-3 dark:text-n-9 dark:placeholder:text-n-9 ${inputDisabled ? "cursor-not-allowed opacity-50" : ""}`}
+                    maxRows={5}
+                    autoFocus
+                    value={value}
+                    onChange={setValue}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            if (value && value.trim() && !disabled && !inputDisabled) {
+                                onSend?.();
+                            }
                         }
-                    }
-                }}
-                placeholder={placeholder}
-                required
-                disabled={inputDisabled}
-                maxLength={maxLength}
-            />
+                    }}
+                    placeholder={placeholder}
+                    required
+                    disabled={inputDisabled}
+                    maxLength={maxLength}
+                />
+            )}
             <div className="flex items-center shrink-0 h-13.5 gap-2">
                 {/* <button
                     className="btn-transparent-dark btn-square btn-small mr-1 md:hidden"

@@ -1,18 +1,19 @@
 
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
 import Row from "./Row";
 import Item from "./Item";
 
-import { usePosts } from "@/hooks/queries";
+import { usePosts, useLiveSessions } from "@/hooks/queries";
 
 import Sorting from "@/components/Sorting";
 import Icon from "@/components/Icon";
 import Empty from "@/components/Empty";
 import TablePagination from "@/components/TablePagination";
 import Tabs from "@/components/Tabs";
-import LiveTable, { mockLiveData } from "./LiveTable";
+import LiveTable from "./LiveTable";
 
 import { DashboardPost, Pagination } from "@/types";
 
@@ -72,7 +73,28 @@ const PostsTable = ({ posts, isLoading }: { posts: DashboardPost[]; isLoading: b
 // --- Main page component: orchestration only ---
 
 const PostsPage = () => {
-    const [activeTab, setActiveTab] = useState<string>("posts");
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const tabParam = searchParams.get("tab");
+    const initialTab = tabParam === "live" ? "live" : "posts";
+    const [activeTab, setActiveTabState] = useState<string>(initialTab);
+
+    useEffect(() => {
+        if (tabParam === "live" || tabParam === "posts") {
+            setActiveTabState(tabParam);
+        } else if (!tabParam) {
+            setActiveTabState("posts");
+        }
+    }, [tabParam]);
+
+    const setActiveTab = (tab: string) => {
+        setActiveTabState(tab);
+        const params = new URLSearchParams(searchParams);
+        params.set("tab", tab);
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    };
 
     const tabs = [
         { title: "Posts", value: "posts" },
@@ -85,6 +107,7 @@ const PostsPage = () => {
 
     // React Query Hook
     const { data, isLoading } = usePosts({ page, limit });
+    const { data: liveSessionsData, isLoading: isLoadingLiveSessions } = useLiveSessions();
 
     const posts: DashboardPost[] = data?.posts || [];
 
@@ -139,7 +162,7 @@ const PostsPage = () => {
 
             {activeTab === "live" && (
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <LiveTable items={mockLiveData} isLoading={false} />
+                    <LiveTable items={liveSessionsData || []} isLoading={isLoadingLiveSessions} />
                 </div>
             )}
         </>

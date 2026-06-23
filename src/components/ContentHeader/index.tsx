@@ -1,5 +1,7 @@
 import React from "react";
+import Link from "next/link";
 import Image from "@/components/Image";
+import LiveBadge from "@/components/LiveBadge";
 import { formatAppDate } from "@/lib/date";
 
 export interface ContentHeaderProps {
@@ -13,6 +15,7 @@ export interface ContentHeaderProps {
     badges?: React.ReactNode;
     actions?: React.ReactNode;
     metadata?: React.ReactNode;
+    activeLiveSessionId?: string | null;
 }
 
 const ContentHeader = ({
@@ -23,23 +26,38 @@ const ContentHeader = ({
     badges,
     actions,
     metadata,
+    activeLiveSessionId,
 }: ContentHeaderProps) => {
     return (
         <div className="max-w-4xl mx-auto p-5 pt-0">
             <div className="flex flex-col items-start justify-between w-full">
                 <div className="flex items-start w-full">
                     {/* Avatar Section */}
-                    <div className="relative shrink-0 w-16 h-16 mb-3 rounded-full shadow-primary-4 bg-n-1">
-                        <div className="relative w-full h-full rounded-full overflow-hidden">
-                            <Image
-                                className="object-cover"
-                                slot="profile"
-                                family="avatar"
-                                src={creator.avatarUrl}
-                                fill
-                                alt={creator.displayName}
-                            />
-                        </div>
+                    <div className={`relative shrink-0 w-16 h-16 mb-3 rounded-full bg-n-1 ${!activeLiveSessionId ? 'shadow-primary-4' : ''}`}>
+                        {activeLiveSessionId && <LiveBadge />}
+                        {activeLiveSessionId ? (
+                            <Link href={`/live-room/${activeLiveSessionId}`} className="block w-full h-full relative rounded-full overflow-hidden cursor-pointer border-2 border-red-500">
+                                <Image
+                                    className="object-cover"
+                                    slot="profile"
+                                    family="avatar"
+                                    src={creator.avatarUrl}
+                                    fill
+                                    alt={creator.displayName}
+                                />
+                            </Link>
+                        ) : (
+                            <div className="relative w-full h-full rounded-full overflow-hidden">
+                                <Image
+                                    className="object-cover"
+                                    slot="profile"
+                                    family="avatar"
+                                    src={creator.avatarUrl}
+                                    fill
+                                    alt={creator.displayName}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex flex-col w-full pl-4 gap-2">
@@ -75,7 +93,7 @@ const ContentHeader = ({
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Mobile version for actions/metadata */}
                 {(actions || metadata) && (
                     <div className="hidden mobile:flex pt-4 justify-between items-center w-full">
