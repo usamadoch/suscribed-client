@@ -2,7 +2,8 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { ArrowDown } from "@/lib/icons";
 import Tabs from "@/components/Tabs";
 import LiveChatInput from "./LiveChatInput";
 import { useLiveSocket, YouTubeMessage, CommonsMessage, LiveMessage } from "./hooks/useLiveSocket";
@@ -42,12 +43,12 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
         queryFn: () => liveApi.getPublicSession(sessionId as string),
         enabled: !!sessionId,
     });
-    
+
     // sessionData.creatorId can be a string or an object with userId
-    const creatorUserId = typeof sessionData?.creatorId === 'object' 
+    const creatorUserId = typeof sessionData?.creatorId === 'object'
         ? (sessionData.creatorId as any).userId || sessionData.creatorId._id
         : sessionData?.creatorId;
-        
+
     const isCreator = user && creatorUserId === user._id;
 
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -148,9 +149,9 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
                 {isScrolledUp && (
                     <button
                         onClick={scrollToBottom}
-                        className="absolute bottom-2 left-1/2 -translate-x-1/2 btn btn-square btn-stroke h-8 w-8 p-0 flex items-center justify-center bg-purple-1 hover:bg-purple-2 rounded-full transition-all z-10"
+                        className="absolute bottom-2 left-1/2 -translate-x-1/2 btn btn-square btn-stroke h-8 w-8 p-0 flex items-center border dark:border-n-1 justify-center bg-purple-1 hover:bg-purple-2 rounded-full transition-all z-10"
                     >
-                        <Icon name="arrow-bottom" className="icon-20 fill-n-1 dark:fill-white" />
+                        <Icon icon={ArrowDown} strokeWidth={2.5} className="text-n-1 dark:text-n-9" />
                     </button>
                 )}
             </div>

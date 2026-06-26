@@ -33,6 +33,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'yt4.ggpht.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'image.mux.com',
+      },
     ],
   },
 };

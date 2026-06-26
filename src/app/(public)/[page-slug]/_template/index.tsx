@@ -64,13 +64,12 @@ const CreatorPage = () => {
 
     return (
         <>
-            {/* CreatorHeader removed from here, now in layout */}
 
-            <Banner
+            {/* <Banner
                 page={page}
                 isOwner={!!isOwner}
                 onUpdate={handleImageSuccess}
-            />
+            /> */}
 
             <div className="max-w-300 w-full mx-auto">
                 <ProfileHeader
@@ -81,7 +80,6 @@ const CreatorPage = () => {
                     onJoinSuccess={handleJoinSuccess}
                 />
 
-                {/* Content section handles its own loading */}
                 <Content pageSlug={slug} />
             </div>
         </>

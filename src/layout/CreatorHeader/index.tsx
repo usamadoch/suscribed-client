@@ -48,7 +48,7 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
     const isLiveRoomRoute = pathname?.includes("/live-room/");
 
     const { data: postData, isLoading: isPostLoading } = usePost(isValidId && isPostRoute ? idParam! : "");
-    
+
     const { data: sessionData, isLoading: isSessionLoading } = usePublicLiveSession(idParam, !!isValidId && isLiveRoomRoute);
 
     if (!slug && postData?.pageId && typeof postData.pageId === 'object') {
@@ -114,14 +114,14 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
                         </Link>
                     )}
 
-                    {isAuthenticated && (
+                    {/* {isAuthenticated && (
                         <Link
                             href={user?.role === 'creator' ? "/dashboard" : "/"}
                             className="text-h6 dark:text-n-9 font-medium underline hover:no-underline transition-all duration-100 cursor-pointer flex items-center gap-2"
                         >
                             {user?.role === 'creator' ? "Dashboard" : "Home"}
                         </Link>
-                    )}
+                    )} */}
 
                 </div>
 

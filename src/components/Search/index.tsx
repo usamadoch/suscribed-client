@@ -1,13 +1,14 @@
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { Search as SearchIcon } from "@/lib/icons";
 
-import { ChangeEvent, FormEvent } from "react";
+import React, { ChangeEvent } from "react";
 
 type SearchProps = {
     className?: string;
     placeholder: string;
     value: string;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     large?: boolean;
 };
 
@@ -43,7 +44,7 @@ const Search = ({
                     : "top-0 left-0 bottom-0 w-8"
                     }`}
             >
-                <Icon className="text-n-1 dark:text-n-8" name="search" />
+                <Icon className="text-n-1 dark:text-n-8 ml-2" icon={SearchIcon} />
             </button>
         </form>
     );

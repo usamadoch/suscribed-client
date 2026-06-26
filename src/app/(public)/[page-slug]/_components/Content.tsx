@@ -10,7 +10,7 @@ import LoginModal from "@/components/modals/LoginModal";
 import JoinTierModal from "@/components/modals/JoinTierModal";
 import Loader from "@/components/Loader";
 import RecentVideos from "./RecentVideos";
-import CreatorPostItem from "./CreatorPostItem";
+import PostCard from "@/components/PostCard";
 
 type CreatorContentProps = {
     pageSlug: string;
@@ -81,12 +81,12 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
 
                         <div className="grid grid-cols-1 gap-5">
                             {posts.map((post: Post) => (
-                                <CreatorPostItem
+                                <PostCard
                                     key={post._id}
                                     post={post}
                                     page={page}
                                     isOwner={!!isOwner}
-                                    onClick={handlePostClick}
+                                    onCommentClick={() => handlePostClick(post)}
                                 />
                             ))}
                         </div>

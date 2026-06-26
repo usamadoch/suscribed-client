@@ -12,11 +12,11 @@ import { CreatorPage, Tier } from "@/types";
 import { useCreatorPlans } from "@/hooks/queries";
 import { membershipService as membershipPlanApi } from "@/services/membership.service";
 import { useAuth } from "@/store/auth";
-import Icon from "@/components/Icon";
-
 import SafepayCardForm from "../SafepayCardForm";
 import PlansSelection from "./PlansSelection";
 import SubscriptionSuccess from "./SubscriptionSuccess";
+import { Icon } from "@/components/ui/icon";
+import { X } from "@/lib/icons";
 
 type JoinTierModalProps = {
     visible: boolean;
@@ -169,14 +169,22 @@ const JoinTierModal = ({
                     >
                         <DialogPanel className="relative z-10 w-full max-w-full mx-8 mt-8 h-screen overflow-y-auto bg-background border border-n-1 dark:bg-n-4 tablet:mt-4 tablet:mx-2">
                             <button
-                                className="absolute z-2 fill-white bg-n-1/50 w-8 h-8 flex items-center justify-center rounded-full top-4 right-4 hover:fill-purple-1 outline-none dark:fill-white dark:hover:fill-purple-1"
+                                className="absolute z-2 btn btn-medium btn-stroke btn-square flex items-center justify-center rounded-full top-4 right-4 outline-none"
                                 onClick={handleManualClose}
                             >
-                                <Icon className="fill-inherit transition-colors" name="close" />
+                                <Icon icon={X} strokeWidth={2.5} />
                             </button>
 
+                            {/* <Link
+                                                href={backHref}
+                                                className="btn-medium btn-stroke btn-square rounded-full bg-white dark:bg-n-1"
+                                                title={backTitle}
+                                            >
+                                                <Icon icon={X} strokeWidth={2.5} className="text-n-1 dark:text-n-9" />
+                                            </Link> */}
+
                             <div className="pt-18 overflow-hidden relative">
-                                {!showSuccess && <h4 className="text-h4 text-center py-10">Choose your membership</h4>}
+                                {!showSuccess && <h4 className="text-h4 text-center dark:text-n-9 py-10">Choose your membership</h4>}
 
                                 <AnimatePresence mode="popLayout" initial={false}>
                                     {currentStep === 'success' ? (

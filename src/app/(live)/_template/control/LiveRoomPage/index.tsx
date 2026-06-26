@@ -10,7 +10,8 @@ import LiveDuration from "../../_components/LiveDuration";
 import LiveLayout from "../../_components/LiveLayout";
 import LiveChat from "../../_components/LiveChat";
 import LiveRoomStats from "../../_components/LiveRoomStats";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { Clock, CheckCircle, Copy } from "@/lib/icons";
 import { Skeleton } from "@/components/Skeleton";
 import Alert from "@/components/Alert";
 import { liveApi } from "@/services/live.service";
@@ -70,7 +71,7 @@ const LiveRoomControlPage = () => {
                     isEnded ? (
                         <div className="flex items-center gap-2 font-medium text-n-7">
                             <span className="flex items-center gap-1.5">
-                                <Icon name="clock" className="w-3 h-3" />
+                                <Icon icon={Clock} className="w-3 h-3" />
                                 {sessionData?.startedAt ? new Date(sessionData.startedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '--'}
                                 {' · '}
                                 {sessionData?.startedAt ? new Date(sessionData.startedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '--:--'}
@@ -105,7 +106,7 @@ const LiveRoomControlPage = () => {
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
                         <div className="text-center">
                             <div className="w-20 h-20 rounded-full bg-linear-to-tr from-purple-1/20 to-purple-1/5 flex items-center justify-center mx-auto mb-6 border border-purple-1/30 ">
-                                <Icon name="check-circle" className="w-10 h-10 text-purple-1" />
+                                <Icon icon={CheckCircle} className="w-10 h-10 text-purple-1" />
                             </div>
                             <h3 className="text-h3 font-bold select-none dark:text-n-9 tracking-tight mb-2">
                                 Stream Ended
@@ -139,7 +140,7 @@ const LiveRoomControlPage = () => {
                 )}
             </div>
 
-            <LiveRoomStats sessionId={sessionId} />
+            <LiveRoomStats sessionId={sessionId} isLive={sessionData?.status === 'live'} />
 
             {/* Share with audience */}
             {!isEnded && (
@@ -166,7 +167,7 @@ const LiveRoomControlPage = () => {
                                 ), { position: "bottom-right" });
                             }}
                         >
-                            <Icon name="copy" viewBox="0 0 24 24" className="w-5 h-5" /> Copy link
+                            <Icon icon={Copy} className="" /> Copy link
                         </button>
                     </div>
                 </div>

@@ -1,9 +1,11 @@
 import { MenuButton, Menu as MenuDropdown, MenuItem, MenuItems } from "@headlessui/react";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { LucideIcon } from "lucide-react";
+import { MoreHorizontal } from "@/lib/icons";
 import Link from "next/link";
 
 type ActionItem = {
-    icon?: string;
+    icon?: LucideIcon | React.ReactNode;
     label: string;
     onClick: (e: React.MouseEvent) => void;
     viewBox?: string;
@@ -14,7 +16,7 @@ type ActionMenuProps = {
     items: ActionItem[];
     className?: string;
     buttonClass?: string;
-    iconName?: string;
+    iconName?: LucideIcon;
     iconClass?: string;
     iconViewBox?: string;
     anchor?: any;
@@ -29,7 +31,7 @@ const ActionMenu = ({
     items,
     className,
     buttonClass = "btn-transparent-dark btn-square btn-small focus:outline-none",
-    iconName = "dots",
+    iconName = MoreHorizontal,
     iconClass,
     iconViewBox,
     anchor,
@@ -50,7 +52,9 @@ const ActionMenu = ({
     return (
         <MenuDropdown className={containerClass} as="div">
             <MenuButton className={`${buttonClass} focus:outline-none`} onClick={(e) => e.stopPropagation()}>
-                {children ? children : <Icon name={iconName} className={iconClass} viewBox={iconViewBox} />}
+                {children ? children : iconName && (
+                    <Icon icon={iconName} className={iconClass} />
+                )}
             </MenuButton>
             <MenuItems
                 transition
@@ -70,11 +74,13 @@ const ActionMenu = ({
                         }}
                     >
                         {item.icon && (
-                            <Icon
-                                className={`-mt-0.25 mr-3 fill-n-1 dark:fill-white`}
-                                name={item.icon}
-                                viewBox={item.viewBox}
-                            />
+                            <div className="flex items-center -mt-0.25 mr-3 w-5 h-5">
+                                {typeof item.icon === 'function' || (typeof item.icon === 'object' && !('type' in (item.icon as any))) ? (
+                                    <Icon icon={item.icon as LucideIcon} />
+                                ) : (
+                                    item.icon as React.ReactNode
+                                )}
+                            </div>
                         )}
                         {item.label}
                     </MenuItem>

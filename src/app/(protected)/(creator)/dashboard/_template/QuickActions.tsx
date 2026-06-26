@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { ExternalLink, Settings, Copy } from "@/lib/icons";
 
 interface QuickActionsProps {
     pageSlug: string;
@@ -12,8 +13,7 @@ const QuickActions = ({ pageSlug }: QuickActionsProps) => {
     };
 
     return (
-        <div className=" mb-6">
-
+        <div className="mb-6">
 
             <div className="flex mt-8 md:mt-6">
                 <Link
@@ -21,20 +21,20 @@ const QuickActions = ({ pageSlug }: QuickActionsProps) => {
                     target="_blank"
                     className="btn-stroke btn-medium grow gap-2"
                 >
-                    <Icon name="new-window" viewBox="0 0 24 24" className="w-4 h-4" />
+                    <Icon icon={ExternalLink} />
                     <span>View Public Profile</span>
                 </Link>
                 <Link
                     href="/settings"
                     className="btn-stroke btn-medium btn-square cursor-pointer shrink-0 ml-1.5 flex items-center justify-center"
                 >
-                    <Icon name="setup" className="w-5 h-5" />
+                    <Icon icon={Settings} />
                 </Link>
                 <button
                     onClick={handleCopyLink}
                     className="btn-stroke btn-medium btn-square cursor-pointer shrink-0 ml-1.5 flex items-center justify-center"
                 >
-                    <Icon name="copy" viewBox="0 0 24 24" className="w-5 h-5" />
+                    <Icon icon={Copy} />
                 </button>
             </div>
 

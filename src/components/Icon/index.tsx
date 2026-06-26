@@ -115,7 +115,7 @@ type IconProps = {
     viewBox?: string;
 };
 
-const Icon = ({ className, name, fill = "currentColor", viewBox = "0 0 16 16" }: IconProps) => (
+const LegacyIcon = ({ className, name, fill = "currentColor", viewBox = "0 0 16 16" }: IconProps) => (
     <svg
         className={twMerge(`inline-block w-4 h-4 ${className}`)}
         width={16}
@@ -126,5 +126,5 @@ const Icon = ({ className, name, fill = "currentColor", viewBox = "0 0 16 16" }:
     </svg>
 );
 
-export default Icon;
+export default LegacyIcon;
 

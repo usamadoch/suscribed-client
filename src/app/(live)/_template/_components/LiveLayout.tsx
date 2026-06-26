@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
-import Icon from "@/components/Icon";
-
+import { Icon } from "@/components/ui/icon";
+import { ChevronRight } from "@/lib/icons";
 type LiveLayoutProps = {
     children: React.ReactNode;        // Left side main content
     sidebar: React.ReactNode;         // Right side sidebar content
@@ -46,12 +46,12 @@ const LiveLayout = ({
                 <button
                     onClick={() => setIsChatMinimized(prev => !prev)}
                     className={twMerge(
-                        "absolute bottom-6 z-20 w-10 h-10 btn btn-square btn-stroke rounded-full transition-all duration-300",
-                        isChatMinimized ? "-left-14 rotate-180" : "-left-5"
+                        "absolute bottom-6 z-20 w-8 h-8 btn btn-square btn-stroke rounded-full transition-all duration-300",
+                        isChatMinimized ? "-left-11 rotate-180" : "-left-4"
                     )}
                     title={isChatMinimized ? "Expand Chat" : "Minimize Chat"}
                 >
-                    <Icon name="arrow-next" className="w-5 h-5 fill-n-4 dark:fill-n-3" />
+                    <Icon icon={ChevronRight} className=" text-n-4 dark:text-n-9" />
                 </button>
             </div>
 

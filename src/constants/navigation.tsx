@@ -1,9 +1,21 @@
-
 import { Permission } from "@/types";
+import { LucideIcon } from "lucide-react";
+import { 
+    LayoutDashboard, 
+    Home, 
+    FileText, 
+    Users, 
+    CreditCard, 
+    Search, 
+    Bell, 
+    MessageCircle, 
+    BarChart2, 
+    Settings 
+} from "@/lib/icons";
 
 export type NavigationItem = {
     title: string;
-    icon: string;
+    icon: LucideIcon | string;
     url: string;
     category?: string;
     roles?: string[]; // Keep for backward compatibility if needed, or deprecate
@@ -11,7 +23,7 @@ export type NavigationItem = {
     target?: string;
     counter?: number;
     counterColor?: string;
-    suffixIcon?: string;
+    suffixIcon?: LucideIcon | string;
     suffixIconViewBox?: string;
     suffixIconBg?: boolean;
     suffixText?: string;
@@ -22,17 +34,16 @@ export type NavigationItem = {
 
 export const navigation: NavigationItem[] = [
     // Creator Pages
-
     {
         title: "Dashboard",
-        icon: "dashboard",
+        icon: LayoutDashboard,
         url: "/dashboard",
         category: "Creator",
         permissions: ["dashboard:view"],
     },
     {
         title: "Home",
-        icon: "dashboard",
+        icon: Home,
         url: "/",
         category: "Discover",
         isPublicRoute: true,
@@ -40,23 +51,21 @@ export const navigation: NavigationItem[] = [
     },
     {
         title: "Posts",
-        icon: "document",
-
-
+        icon: FileText,
         url: "/posts",
         category: "Creator",
         permissions: ["post:create"], // Only creators see "Posts" management
     },
     {
         title: "Members",
-        icon: "team",
+        icon: Users,
         url: "/members",
         category: "Creator",
         permissions: ["members:view"],
     },
     {
         title: "Earnings",
-        icon: "card",
+        icon: CreditCard,
         url: "/earnings",
         category: "Creator",
         permissions: ["payouts:view"],
@@ -64,7 +73,7 @@ export const navigation: NavigationItem[] = [
     // Member Pages
     {
         title: "Explore",
-        icon: "search",
+        icon: Search,
         url: "/explore",
         category: "Discover",
         isPublicRoute: true,
@@ -74,31 +83,29 @@ export const navigation: NavigationItem[] = [
     // Shared Pages
     {
         title: "Notifications",
-        icon: "notification",
+        icon: Bell,
         url: "/notifications",
         category: "General",
         counterColor: "#AE7AFF",
     },
     {
         title: "Messages",
-        icon: "messages",
+        icon: MessageCircle,
         category: "General",
         counterColor: "#98E9AB",
         url: "/messages",
     },
     {
         title: "Analytics",
-        icon: "chart",
+        icon: BarChart2,
         url: "/analytics",
         category: "Creator",
         permissions: ["analytics:view"],
     },
     {
         title: "Settings",
-        icon: "setup",
+        icon: Settings,
         category: "General",
         url: "/settings",
     },
 ];
-
-

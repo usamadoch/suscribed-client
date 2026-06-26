@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { User as UserIcon, ChevronRight } from "@/lib/icons";
 import { User, CreatorPage, MembershipStatus } from "@/types";
 import { useAnalyticsOverview, useMyMembers } from "@/hooks/queries";
 import Loader from "@/components/Loader";
@@ -80,7 +81,7 @@ const MemberActivityPanel = ({ page }: MemberActivityPanelProps) => {
                                                     className="w-full h-full object-cover"
                                                 />
                                             ) : (
-                                                <Icon name="profile" className="w-6 h-6 fill-purple-1" />
+                                                <Icon icon={UserIcon} className="w-6 h-6 text-purple-1 fill-current" />
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -113,7 +114,7 @@ const MemberActivityPanel = ({ page }: MemberActivityPanelProps) => {
                         className="mt-5 flex items-center justify-center text-sm text-purple-1 capitalize"
                     >
                         View all Members
-                        <Icon name="arrow-next" className="icon-20 fill-purple-1 " />
+                        <Icon icon={ChevronRight} size={18} className="text-purple-1 " />
                     </Link>
                 </>
             )}

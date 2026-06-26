@@ -1,12 +1,11 @@
 
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Alert from "@/components/Alert";
+import { usePostMutation } from "@/hooks/mutations/usePostMutation";
 
-import { PostVisibility, MediaAttachment, Post, PostType, CreatePostPayload, UpdatePostPayload, getUnlockedMediaAttachments } from "@/types";
-import { postService as postApi } from "@/services/post.service";
+import { PostVisibility, MediaAttachment, Post, getUnlockedMediaAttachments } from "@/types";
 import { useMediaUpload, MediaFile } from "./hooks/useMediaUpload";
 import { generateObjectId } from "@/lib/idGenerator";
 
@@ -16,7 +15,7 @@ export type UsePostFormProps = {
 };
 
 export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps = {}) => {
-    const queryClient = useQueryClient();
+
 
     // Use existing ID if editing, otherwise generate a new draft ID for this session
     const [draftId, setDraftId] = useState(() => initialData?._id || generateObjectId());
@@ -74,97 +73,20 @@ export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps
 
     }, [caption, visibility, allowComments, attachments, initialData]);
 
-
-    const mutation = useMutation({
-        mutationFn: async () => {
-            // Use pre-uploaded data for new files, original data for existing
-            const finalAttachments: MediaAttachment[] = attachments.map(fileObj => {
-                if (fileObj.uploadedData) {
-                    return fileObj.uploadedData;
-                }
-                // Fallback for existing files without uploadedData
-                if (!fileObj.isNew && initialData) {
-                    const originalAttachments = getUnlockedMediaAttachments(initialData);
-                    const original = originalAttachments.find(
-                        m => m.url === fileObj.url
-                    );
-                    if (original) return original;
-                }
-                throw new Error(`No upload data for ${fileObj.id}`);
-            });
-
-            const payload = {
-                caption,
-                mediaAttachments: finalAttachments,
-                visibility,
-                allowComments,
-                postType: (finalAttachments.length > 0
-                    ? (finalAttachments[0].type === 'video' ? 'video' : 'image')
-                    : 'text') as PostType,
-                status: 'published' as const,
-            } as CreatePostPayload;
-
-            // Include ID if creating new post
+    const mutation = usePostMutation({
+        isEditing,
+        initialData,
+        draftId,
+        onSuccessCb: () => {
             if (!isEditing) {
-                payload._id = draftId;
+                setCaption("");
+                setAttachments([]);
+                setDraftId(generateObjectId());
             }
-
-            console.log('Creating post with payload:', JSON.stringify(payload, null, 2));
-
-            if (isEditing && initialData) {
-                return await postApi.update(initialData._id, payload as UpdatePostPayload);
-            } else {
-                return await postApi.create(payload);
-            }
-        },
-        onSuccess: (data) => {
-            const isUpdate = isEditing && initialData;
-
-            queryClient.invalidateQueries({ queryKey: ['posts'] });
-            queryClient.invalidateQueries({ queryKey: ['creator-posts'] });
-
-            if (isUpdate) {
-                queryClient.invalidateQueries({ queryKey: ['post', initialData._id] });
-                toast.custom((t) => (
-                    <Alert
-                        className="mb-0 shadow-md"
-                        type="success"
-                        message="Post updated successfully"
-                        onClose={() => toast.dismiss(t.id)}
-                    />
-                ), { position: "bottom-right" });
-            } else {
-                toast.custom((t) => (
-                    <Alert
-                        className="mb-0 shadow-md"
-                        type="success"
-                        message="Post created successfully"
-                        onClose={() => toast.dismiss(t.id)}
-                    />
-                ), { position: "bottom-right" });
-
-                if (!isEditing) {
-                    setCaption("");
-                    setAttachments([]);
-                    setDraftId(generateObjectId());
-                }
-            }
-        },
-        onError: (error) => {
-            console.error("Failed to save post:", error);
-            toast.custom((t) => (
-                <Alert
-                    className="mb-0 shadow-md"
-                    type="error"
-                    message="Failed to save post"
-                    onClose={() => toast.dismiss(t.id)}
-                />
-            ), { position: "bottom-right" });
         }
     });
 
     const handleSubmit = async () => {
-        // console.log('Submitting post...', attachments);
         if (!caption.trim() && attachments.length === 0) {
             toast.custom((t) => (
                 <Alert
@@ -198,7 +120,7 @@ export const usePostForm = ({ initialData, isEditing = false }: UsePostFormProps
             ), { position: "bottom-right" });
             return;
         }
-        mutation.mutate();
+        mutation.mutate({ caption, visibility, allowComments, attachments });
     };
 
     return {

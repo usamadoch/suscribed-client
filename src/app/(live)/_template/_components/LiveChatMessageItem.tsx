@@ -52,7 +52,7 @@ export default function LiveChatMessageItem({ msg, isCreator, sessionId }: LiveC
         const tier = getTier(amount);
 
         return (
-            <div className="rounded-xl px-4 py-3 flex flex-col relative shrink-0 transition-colors duration-300 shadow-sm mb-2 group" style={{ backgroundColor: tier.bg }}>
+            <div className="rounded-sm shadow-primary-4 px-4 py-3 flex flex-col relative shrink-0 transition-colors duration-300 mb-2 group" style={{ backgroundColor: tier.bg }}>
 
                 <div className={`flex items-center gap-3 relative z-10 ${tier.canMessage && cm.message ? 'mb-2' : ''} pr-8`}>
                     <div className="flex  items-center gap-3">

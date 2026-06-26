@@ -8,7 +8,8 @@ import { useGoogleLogin } from "@react-oauth/google";
 
 import StepActions from "./StepActions";
 
-import Icon from "@/components/Icon";
+import { ExternalLink } from "@/lib/icons";
+import { Icon } from "@/components/ui/icon";
 
 import { useAuthStore } from "@/store/auth";
 import { authService as authApi } from "@/services/auth.service";
@@ -115,7 +116,14 @@ const Step4Socials = ({ onBack }: Step4Props) => {
 
             <div className="mb-8">
                 <div className="flex items-center mb-4 pb-4 pl-3 md:pl-0 dark:border-n-6">
-                    <Icon className="shrink-0 icon-20 mr-8 md:mr-4 dark:fill-n-1 text-[#ff0033]" name="youtube" />
+                    <svg
+                        className="shrink-0 w-5 h-5 mr-8 md:mr-4 text-[#ff0033]"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
                     <div className="mr-auto">
                         <div className="mb-1.5 text-xs font-medium text-n-3 dark:text-n-8">
                             YouTube
@@ -131,7 +139,7 @@ const Step4Socials = ({ onBack }: Step4Props) => {
                             disabled={youtubeStatus === "connecting" || youtubeStatus === "authorizing"}
                             className="group inline-flex items-center self-end pb-0.5 text-xs font-bold cursor-pointer disabled:opacity-50"
                         >
-                            <Icon className="mr-1.5 dark:fill-n-9" name="external-link" />
+                            <Icon className="mr-1.5" icon={ExternalLink} />
                             {youtubeStatus.includes("ing") ? "Connecting..." : "Connect"}
                         </button>
                     ) : youtubeStatus === "connected" ? (

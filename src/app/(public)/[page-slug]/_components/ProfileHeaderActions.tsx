@@ -5,7 +5,9 @@
 
 import Link from "next/link";
 import ActionMenu from "@/components/ActionMenu";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { Settings, Share2, Check } from "@/lib/icons";
+import LegacyIcon from "@/components/Icon";
 
 type ProfileHeaderActionsProps = {
     isOwner: boolean;
@@ -19,7 +21,7 @@ const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: 
         return (
             <div className="flex shrink-0 max-w-60 w-full mobile:max-w-none">
                 <Link href="/settings" className="btn-purple btn-medium grow">
-                    <Icon name="setup" />
+                    <LegacyIcon name="setup" />
                     <span className="">Edit Profile</span>
                 </Link>
             </div>
@@ -33,19 +35,19 @@ const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: 
                 onClick={isMember ? undefined : onJoinClick}
                 disabled={isMember}
             >
-                {isMember && <Icon name="check" />}
+                {/* {isMember && <Icon name="check" />} */}
                 <span>{isMember ? "Member" : "Become a Member"}</span>
             </button>
 
             <ActionMenu
                 className="ml-2 shrink-0"
-                buttonClass="btn-purple btn-medium px-4 focus:outline-none"
+                buttonClass="btn-purple btn-medium px-1 focus:outline-none"
                 items={[
                     {
-                        icon: "share",
+                        icon: Share2,
                         label: "Share",
                         onClick: onShareClick,
-                        className: "flex items-center cursor-pointer w-full h-8 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-white dark:hover:bg-white/20"
+                        className: "flex items-center cursor-pointer w-full h-8 mb-1.5 px-6.5 text-sm font-bold text-n-1 transition-colors hover:bg-n-3/10 dark:text-n-9 dark:hover:bg-n-9/20"
                     }
                 ]}
             />

@@ -1,6 +1,7 @@
 import Loader from "@/components/Loader";
 import LoginModal from "@/components/modals/LoginModal";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { LockKeyhole } from "@/lib/icons";
 
 interface LockedContentProps {
     type?: 'box' | 'overlay';
@@ -27,9 +28,9 @@ const LockedContent = ({
 
     if (type === 'overlay') {
         return (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-n-1/80 backdrop-blur-sm p-6 text-center rounded-2xl">
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-n-1/80 backdrop-blur-sm p-6 text-center">
                 <div className="w-12 h-12 rounded-full bg-n-1 flex items-center justify-center mb-3 shadow-lg">
-                    <Icon name="lock" className="w-6 h-6 fill-purple-1" />
+                    <Icon icon={LockKeyhole} className="w-6 h-6 text-purple-1 fill-current" />
                 </div>
                 <h3 className="text-h6 text-white dark:text-n-9 mb-1">{title}</h3>
                 {text && <p className="text-sm text-n-3 dark:text-n-8">{text}</p>}
@@ -38,14 +39,14 @@ const LockedContent = ({
     }
 
     return (
-        <div className="flex items-center justify-between text-center p-10 border rounded border-n-1 dark:bg-n-3 mt-6 md:p-12 bg-n-1/5">
+        <div className="flex items-center justify-between text-center p-8 border rounded-md border-n-1 dark:bg-n-3 mt-6 md:p-12 bg-n-1/5">
             <div className="flex flex-col items-start  max-w-[50%]">
                 <h4 className="text-h6 mb-2 dark:text-n-9">{title} Content</h4>
                 <p className="text-n-3 mb-4 text-left dark:text-n-8">{text || "Join this creator's community to access full posts, excessive media, and comments."}</p>
             </div>
 
             <button
-                className="btn-purple btn-medium px-8 max-w-[50%] "
+                className="btn-purple btn-medium px-8 max-w-[50%]"
                 onClick={handleJoin}
                 disabled={isJoining}
             >

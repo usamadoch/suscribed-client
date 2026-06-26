@@ -12,7 +12,8 @@ import ActionMenu from "@/components/ActionMenu";
 
 import Logo from "@/components/Logo";
 import Image from "@/components/Image";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { Menu as MenuIcon, X, Plus, FileText, Radio, LogOut } from "@/lib/icons";
 import { useAuth } from "@/store/auth";
 
 import Menu from "./Menu";
@@ -32,12 +33,12 @@ const Sidebar = ({ isMinimize = false }: SidebarProps) => {
     const createMenuItems = [
         {
             label: "Post",
-            icon: "document",
+            icon: FileText,
             onClick: () => router.push("/posts/new"),
         },
         {
             label: "Live",
-            icon: "video",
+            icon: Radio,
             onClick: () => router.push("/live-room/new"),
         },
     ];
@@ -53,8 +54,8 @@ const Sidebar = ({ isMinimize = false }: SidebarProps) => {
                     onClick={() => setVisible(!visible)}
                 >
                     <Icon
-                        className="fill-n-1"
-                        name={visible ? "close" : "burger"}
+                        className="text-n-9  cursor-pointer"
+                        icon={visible ? X : MenuIcon}
                     />
                 </button>
             </div>
@@ -66,18 +67,20 @@ const Sidebar = ({ isMinimize = false }: SidebarProps) => {
 
             {isAuthenticated && (
                 <div className={`mt-auto flex flex-col pt-10 ${visible ? "mx-0" : isMinimize ? "-mx-4" : "xl:-mx-4"}`}>
-                    <ActionMenu
-                        className={`mb-6 ${visible ? "w-full" : isMinimize ? "w-auto mx-auto" : "w-full xl:w-auto xl:mx-auto"}`}
-                        buttonClass={`btn-purple btn-medium flex items-center justify-center ${visible ? "gap-2 w-full px-5" : isMinimize ? "w-10 h-10 p-0 mx-auto gap-0" : "gap-2 w-full px-5 xl:w-10 xl:h-10 xl:p-0 xl:mx-auto xl:gap-0"
-                            }`}
-                        anchor="top start"
-                        portal
-                        menuItemsClass="z-[9999] w-[14.69rem] py-2 bg-white dark:bg-n-1 border border-n-6 focus:outline-none [--anchor-gap:10px] transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
-                        items={createMenuItems}
-                    >
-                        <Icon className={`fill-white icon-18 shrink-0 ${isMinimize && !visible ? "mr-0!" : ""}`} name="plus" />
-                        <span className={`transition-all ${visible ? "inline" : isMinimize ? "hidden" : "xl:hidden"}`}>Create</span>
-                    </ActionMenu>
+                    {user?.role === "creator" && (
+                        <ActionMenu
+                            className={`mb-6 ${visible ? "w-full" : isMinimize ? "w-auto mx-auto" : "w-full xl:w-auto xl:mx-auto"}`}
+                            buttonClass={`btn-purple btn-medium flex items-center justify-center ${visible ? "gap-2 w-full px-5" : isMinimize ? "w-10 h-10 p-0 mx-auto gap-0" : "gap-2 w-full px-5 xl:w-10 xl:h-10 xl:p-0 xl:mx-auto xl:gap-0"
+                                }`}
+                            anchor="top start"
+                            portal
+                            menuItemsClass="z-[9999] w-[14.69rem] py-2 bg-white dark:bg-n-1 border border-n-6 focus:outline-none [--anchor-gap:10px] transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                            items={createMenuItems}
+                        >
+                            <Icon className={`text-n-1 icon-18 shrink-0 ${isMinimize && !visible ? "mr-0!" : ""}`} icon={Plus} strokeWidth={2} />
+                            <span className={`transition-all ${visible ? "inline" : isMinimize ? "hidden" : "xl:hidden"}`}>Create</span>
+                        </ActionMenu>
+                    )}
 
 
 
@@ -86,7 +89,7 @@ const Sidebar = ({ isMinimize = false }: SidebarProps) => {
                         <div className={`inline-flex items-center font-semibold text-n-9 transition-colors ${visible ? "mx-0 text-sm" : isMinimize ? "mx-auto text-[0px]" : "text-sm xl:mx-auto xl:text-0"}`}>
                             <ActionMenu
                                 className={`shrink-0 mr-2.5 ${visible ? "mr-2.5" : isMinimize ? "mr-0!" : "xl:mr-0"}`}
-                                buttonClass="block focus:outline-none w-5.5 h-5.5 rounded-full"
+                                buttonClass={`block focus:outline-none w-5.5 h-5.5 rounded-full ${isMinimize ? "cursor-pointer pointer-events-auto" : visible ? "cursor-default pointer-events-none" : "pointer-events-none cursor-default xl:pointer-events-auto xl:cursor-pointer"}`}
                                 anchor="top start"
                                 showFooterLinks
                                 menuItemsClass="z-[9999] w-[14.69rem] py-2 bg-white dark:bg-n-1 border border-n-6 focus:outline-none [--anchor-gap:10px] transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
@@ -94,7 +97,7 @@ const Sidebar = ({ isMinimize = false }: SidebarProps) => {
                                 items={[
                                     {
                                         label: "Logout",
-                                        icon: "arrow-next",
+                                        icon: LogOut,
                                         onClick: logout,
                                     }
                                 ]}
@@ -123,7 +126,7 @@ const Sidebar = ({ isMinimize = false }: SidebarProps) => {
                             items={[
                                 {
                                     label: "Logout",
-                                    icon: "arrow-next",
+                                    icon: LogOut,
                                     onClick: logout,
                                 }
                             ]}

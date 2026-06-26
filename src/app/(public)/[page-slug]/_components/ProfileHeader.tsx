@@ -79,7 +79,7 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
 
     return (
         <div className="relative z-1 flex flex-col items-end h-full pb-10 px-16 2xl:px-8 lg:px-6 mobile:px-6 mobile:pb-8">
-            <div className="flex items-start justify-between w-full pt-4">
+            <div className="flex items-start justify-between w-full pt-8">
                 <div className="flex flex-1 items-start">
                     {/* Avatar Section */}
                     <div className="relative shrink-0 w-27.5 tablet:w-24 mobile:w-20 aspect-square">
@@ -133,20 +133,24 @@ const ProfileHeader = ({ page, isOwner, isMember, onUpdate, onJoinSuccess }: Cre
                     </div>
 
                     <div className="text-n-1 dark:text-n-9 pl-4">
-                        <h5 className="capitalize mb-4 text-h5">{page.displayName}</h5>
+                        <div className="mb-4">
+                            <h5 className="capitalize text-h5 leading-tight">{page.displayName}</h5>
+                            <p className="text-base font-medium text-n-4 dark:text-n-8 mt-1">@{page.pageSlug}</p>
+                        </div>
                         <div className="flex items-center font-medium text-n-3">
-                            <span className="text-sm mr-2 md:mr-4 dark:text-n-7">{page.memberCount || 0} Members</span>
+                            <span className="text-sm dark:text-n-7">{page.memberCount || 0} Members</span>
+                            <span className="mx-2 text-n-3 dark:text-n-8">•</span>
                             <span className="text-sm dark:text-n-7">{page.postCount || 0} Posts</span>
                         </div>
                         <p className="mt-1 text-base text-n-3 dark:text-n-9">
-                            <ReadMore words={24}>
+                            <ReadMore words={18}>
                                 {page.tagline || page.about || "No description available."}
                             </ReadMore>
                         </p>
                     </div>
                 </div>
 
-                <div className="flex-1 flex items-center justify-end shrink-0 mobile:hidden">
+                <div className="flex-1 flex items-center justify-end self-end shrink-0 mobile:hidden">
                     <ProfileSocials youtube={page.youtube} />
 
                     <ProfileHeaderActions

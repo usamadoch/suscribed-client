@@ -5,14 +5,15 @@ import { liveApi } from "@/services/live.service";
 
 interface LiveRoomStatsProps {
     sessionId: string;
+    isLive?: boolean;
 }
 
-export default function LiveRoomStats({ sessionId }: LiveRoomStatsProps) {
+export default function LiveRoomStats({ sessionId, isLive }: LiveRoomStatsProps) {
     const { data: sessionStats } = useQuery({
         queryKey: ["liveSessionStats", sessionId],
         queryFn: () => liveApi.getSessionStats(sessionId),
         enabled: !!sessionId,
-        refetchInterval: 60000,
+        refetchInterval: isLive ? 60000 : false,
     });
 
     return (
@@ -24,8 +25,12 @@ export default function LiveRoomStats({ sessionId }: LiveRoomStatsProps) {
                     <div className="text-h4 font-bold dark:text-purple-1">Rs {sessionStats?.collected?.toLocaleString() || 0}</div>
                 </div>
                 <div className=" border border-n-4 dark:border-n-6 rounded-xl p-4 text-center">
-                    <div className="text-xs font-bold  dark:text-n-7 mb-1 uppercase tracking-wider">Watching</div>
-                    <div className="text-h4 font-bold dark:text-n-9">{sessionStats?.watching || 0}</div>
+                    <div className="text-xs font-bold  dark:text-n-7 mb-1 uppercase tracking-wider">
+                        {sessionStats?.status === 'ended' ? "Peak Viewers" : "Watching"}
+                    </div>
+                    <div className="text-h4 font-bold dark:text-n-9">
+                        {sessionStats?.status === 'ended' ? (sessionStats?.peakViewers || 0) : (sessionStats?.watching || 0)}
+                    </div>
                 </div>
                 <div className=" dark:bg-n-1 border border-n-4 dark:border-n-6 rounded-xl p-4 text-center">
                     <div className="text-xs font-bold  dark:text-n-7 mb-1 uppercase tracking-wider">Paid msgs</div>

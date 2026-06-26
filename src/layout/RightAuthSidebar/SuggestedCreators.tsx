@@ -24,7 +24,7 @@ const SuggestedCreators = () => {
     if (suggestedCreators.length === 0) return null;
 
     return (
-        <div className=" bg-white dark:bg-n-4 border border-n-6 p-6 mt-6">
+        <div className=" bg-white dark:bg-n-4 border border-n-6 p-6 mt-6 rounded-md">
             <h6 className="text-h6 font-bold mb-5 dark:text-n-9">Creators you may like</h6>
 
             <div className="flex flex-col gap-6">

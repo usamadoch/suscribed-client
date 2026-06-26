@@ -1,13 +1,16 @@
 "use client";
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useEarningsSummary, usePayoutMethod } from '../usePayout';
 import Loader from '@/components/Loader';
-
+import Tabs from '@/components/Tabs';
+import TiersPage from '../../tiers/_template/TiersPage';
 
 export default function EarningsPage() {
     const router = useRouter();
+    const [activeTab, setActiveTab] = useState('earnings');
 
     const { payoutMethod, isLoading: isPayoutLoading } = usePayoutMethod();
     const { data: summary, isLoading: isSummaryLoading } = useEarningsSummary();
@@ -22,8 +25,6 @@ export default function EarningsPage() {
         return (
             <div className="bg-[#daf464] dark:bg-n-4 border rounded-xl border-n-4 px-5 py-4 mb-6">
                 <div className='flex flex-col items-start gap-2 justify-between'>
-
-
                     <h5 className="text-h5 font-bold dark:text-n-9">Setup Payout Method</h5>
                     <p className="text-sm dark:text-n-8">
                         Add your bank details to receive payments from your fans.
@@ -41,45 +42,66 @@ export default function EarningsPage() {
         );
     };
 
+    const tabs = [
+        { title: 'Earnings', value: 'earnings' },
+        { title: 'Membership Tiers', value: 'tiers' },
+    ];
+
     return (
         <div className='max-w-5xl mx-auto w-full '>
-
-            {renderBanner()}
-
-
-            <div className='card'>
-                <div className="flex lg:block dark:border-white">
-                    {/* Available Balance Box */}
-                    <div className="flex-1 px-5 py-4 border-r border-n-4 dark:border-n-6 last:border-none lg:border-r-0 lg:border-b ">
-                        <div className="flex justify-between items-center mb-2">
-                            <div className="text-sm capitalize dark:text-white/75">
-                                Available Balance
-                            </div>
-                        </div>
-                        <div className="text-h5 dark:text-n-9">PKR {((summary?.availableBalance || 0) / 100).toFixed(2)}</div>
-                    </div>
-
-                    {/* Pending Balance Box */}
-                    <div className="flex-1 px-5 py-4 border-r border-n-4 dark:border-n-6 last:border-none lg:border-r-0 lg:border-b ">
-                        <div className="flex justify-between items-center mb-2">
-                            <div className="text-sm capitalize dark:text-white/75">
-                                Pending Balance
-                            </div>
-                        </div>
-                        <div className="text-h5 dark:text-n-9">PKR {((summary?.pendingBalance || 0) / 100).toFixed(2)}</div>
-                    </div>
-
-                    {/* Lifetime Earnings Box */}
-                    <div className="flex-1 px-5 py-4 border-r border-n-4 dark:border-n-6 last:border-none lg:border-r-0 lg:border-b ">
-                        <div className="flex justify-between items-center mb-2">
-                            <div className="text-sm capitalize dark:text-white/75">
-                                Lifetime Earnings
-                            </div>
-                        </div>
-                        <div className="text-h5 dark:text-n-9">PKR {((summary?.lifetimeEarnings || 0) / 100).toFixed(2)}</div>
-                    </div>
-                </div>
+            <div className="mb-6 flex justify-between items-center">
+                <Tabs 
+                    items={tabs} 
+                    value={activeTab} 
+                    setValue={setActiveTab} 
+                />
             </div>
+
+            {activeTab === 'earnings' && (
+                <>
+                    {renderBanner()}
+
+                    <div className='card'>
+                        <div className="flex lg:block dark:border-white">
+                            {/* Available Balance Box */}
+                            <div className="flex-1 px-5 py-4 border-r border-n-4 dark:border-n-6 last:border-none lg:border-r-0 lg:border-b ">
+                                <div className="flex justify-between items-center mb-2">
+                                    <div className="text-sm capitalize dark:text-white/75">
+                                        Available Balance
+                                    </div>
+                                </div>
+                                <div className="text-h5 dark:text-n-9">PKR {((summary?.availableBalance || 0) / 100).toFixed(2)}</div>
+                            </div>
+
+                            {/* Pending Balance Box */}
+                            <div className="flex-1 px-5 py-4 border-r border-n-4 dark:border-n-6 last:border-none lg:border-r-0 lg:border-b ">
+                                <div className="flex justify-between items-center mb-2">
+                                    <div className="text-sm capitalize dark:text-white/75">
+                                        Pending Balance
+                                    </div>
+                                </div>
+                                <div className="text-h5 dark:text-n-9">PKR {((summary?.pendingBalance || 0) / 100).toFixed(2)}</div>
+                            </div>
+
+                            {/* Lifetime Earnings Box */}
+                            <div className="flex-1 px-5 py-4 border-r border-n-4 dark:border-n-6 last:border-none lg:border-r-0 lg:border-b ">
+                                <div className="flex justify-between items-center mb-2">
+                                    <div className="text-sm capitalize dark:text-white/75">
+                                        Lifetime Earnings
+                                    </div>
+                                </div>
+                                <div className="text-h5 dark:text-n-9">PKR {((summary?.lifetimeEarnings || 0) / 100).toFixed(2)}</div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {activeTab === 'tiers' && (
+                <div className="mt-4">
+                    <TiersPage />
+                </div>
+            )}
         </div>
     );
 }

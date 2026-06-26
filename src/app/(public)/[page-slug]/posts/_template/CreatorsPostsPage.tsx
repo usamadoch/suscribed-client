@@ -5,7 +5,8 @@ import { useCreatorPosts } from "@/hooks/queries";
 import { usePageSlug } from "@/hooks/usePageSlug";
 import { VideoPost } from "@/types";
 
-import Icon from "@/components/Icon";
+import { Search } from "@/lib/icons";
+import { Icon } from "@/components/ui/icon";
 import Loader from "@/components/Loader";
 import Select from "@/components/Select";
 
@@ -43,7 +44,7 @@ const CreatorsPostsPage = () => {
     const sortedPosts = sortPosts(posts, sortOption.id);
 
     return (
-        <div className="max-w-360 w-full mx-auto px-6 2xl:px-8 lg:px-6 md:px-5">
+        <div className="max-w-300 w-full mx-auto px-16 2xl:px-8 lg:px-6 md:px-5">
             <div className="grid gap-6 pt-10">
                 {isLoading ? (
                     <div className="flex items-center justify-center">
@@ -63,8 +64,8 @@ const CreatorsPostsPage = () => {
                                     className="w-full h-9 px-4 bg-white border border-n-1 text-sm text-n-1 font-bold outline-none transition-colors placeholder:font-normal dark:bg-[#1f1f1f] dark:border-n-6 dark:text-n-9 dark:placeholder:text-n-9/75"
                                 />
                                 <Icon
-                                    name="search"
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 icon-20 fill-n-1 dark:fill-n-9"
+                                    icon={Search}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-n-1 dark:text-n-9"
                                 />
                             </div>
                             <div className="w-40 z-10 mobile:w-full">

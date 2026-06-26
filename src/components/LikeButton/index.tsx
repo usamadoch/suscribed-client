@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { twMerge } from "tailwind-merge";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { Heart } from "@/lib/icons";
 import { postService as postApi } from "@/services/post.service";
 import { useAuth } from "@/store/auth";
 import LoginModal from "../modals/LoginModal";
@@ -104,15 +105,14 @@ const LikeButton = ({ postId, initialLikes, initialIsLiked }: LikeButtonProps) =
                 onClick={handleLike}
             >
                 <Icon
-                    name={liked ? "like-filled" : "like"}
+                    icon={Heart}
                     className={twMerge(
                         "transition-colors ",
                         animating && "animate-heart-pop",
-                        liked ? "fill-purple-1 icon-22" : "fill-n-1 icon-20 dark:fill-white"
+                        liked ? "fill-purple-1 text-purple-1 icon-22" : "text-n-1 dark:text-n-8"
                     )}
-                    viewBox="0 0 512 512"
                 />
-                <span className="text-sm">{likesCount}</span>
+                <span className="text-sm dark:text-n-8">{likesCount}</span>
             </button>
             <div
                 onClick={(e) => e.stopPropagation()}

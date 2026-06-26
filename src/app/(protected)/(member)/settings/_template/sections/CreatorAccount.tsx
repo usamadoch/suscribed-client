@@ -236,7 +236,7 @@ const CreatorAccount = () => {
                 <div className="card-title border-b dark:border-n-6">Profile Settings</div>
                 <div className="">
                     {/* Banner Image */}
-                    <PageImageUploader
+                    {/* <PageImageUploader
                         containerClassName="w-full aspect-[5/1] bg-n-2"
                         imageSrc={optimisticBanner || page?.bannerUrl}
 
@@ -246,12 +246,12 @@ const CreatorAccount = () => {
 
                         family="banner"
                         slot="profileHeader"
-                    />
+                    /> */}
 
                     <div className="p-5">
                         <div className="flex items-center w-[calc(50%-1.5rem)] mx-3 md:w-full md:mb-6 md:mt-0 md:mx-0 md:last:mb-0">
                             {/* Avatar Image */}
-                            <div className="-mt-20 relative shrink-0 w-24 h-24 mr-3">
+                            <div className="relative shrink-0 w-24 h-24 mr-3">
                                 <PageImageUploader
                                     containerClassName="w-full h-full shadow-primary-4 rounded-full"
                                     imageClassName="object-cover rounded-full"

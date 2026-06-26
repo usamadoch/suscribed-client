@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useHomeFeed } from "@/hooks/queries";
-import { Post } from "@/types";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { Post } from "@/types";
 import Loader from "@/components/Loader";
 import PostModal from "@/components/modals/PostModal";
 
 import CaughtUpMessage from "./CaughtUpMessage";
-import FeedItem from "./FeedItem";
+import PostCard from "@/components/PostCard";
 
 export default function HomeFeedList() {
     const {
@@ -50,11 +50,14 @@ export default function HomeFeedList() {
         <>
             <div className="grid grid-cols-1 gap-6 w-full mobile:gap-4">
                 {allPosts.map((post: Post) => (
-                    <FeedItem
-                        key={post._id}
-                        post={post}
-                        onClick={handlePostClick}
-                    />
+                    <div key={post._id} className="w-full">
+                        <div className="relative">
+                            <PostCard
+                                post={post}
+                                onCommentClick={() => handlePostClick(post)}
+                            />
+                        </div>
+                    </div>
                 ))}
 
                 <div ref={sentinelRef} className="h-1" />

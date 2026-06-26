@@ -211,7 +211,7 @@ module.exports = {
                     "@apply cursor-pointer inline-flex items-center justify-center h-13 px-5 border border-n-1 rounded-xs text-base text-n-1 fill-n-1 font-bold transition-colors":
                         {},
                 },
-                ".btn svg": {
+                ".btn :where(svg)": {
                     "@apply icon-18 fill-inherit first:mr-1.5 last:ml-1.5": {},
                 },
                 ".btn-transparent-light": {
@@ -240,7 +240,7 @@ module.exports = {
                 ".btn-square": {
                     "@apply !px-0": {},
                 },
-                ".btn-square svg": {
+                ".btn-square :where(svg)": {
                     "@apply !ml-0 !mr-0": {},
                 },
                 ".btn-small": {
@@ -249,7 +249,7 @@ module.exports = {
                 ".btn-medium": {
                     "@apply h-9 px-2 text-xs": {},
                 },
-                ".btn-small svg, .btn-medium svg": {
+                ".btn-small :where(svg), .btn-medium :where(svg)": {
                     "@apply icon-16": {},
                 },
                 ".btn-square.btn-small": {
@@ -320,22 +320,22 @@ module.exports = {
                         {},
                 },
                 ".icon-16": {
-                    "@apply !w-4 !h-4": {},
+                    "@apply w-4 h-4": {},
                 },
                 ".icon-18": {
-                    "@apply !w-4.5 !h-4.5": {},
+                    "@apply w-4.5 h-4.5": {},
                 },
                 ".icon-20": {
-                    "@apply !w-5 !h-5": {},
+                    "@apply w-5 h-5": {},
                 },
                 ".icon-22": {
-                    "@apply !w-5.5 !h-5.5": {},
+                    "@apply w-5.5 h-5.5": {},
                 },
                 ".icon-24": {
-                    "@apply !w-6 !h-6": {},
+                    "@apply w-6 h-6": {},
                 },
                 ".icon-28": {
-                    "@apply !w-7 !h-7": {},
+                    "@apply w-7 h-7": {},
                 },
                 ".shadow-primary-4": {
                     "@apply shadow-[0.25rem_0.25rem_0_#000000] dark:shadow-[0.25rem_0.25rem_0_rgba(255,255,255,.25)]":

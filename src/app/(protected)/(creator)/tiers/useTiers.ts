@@ -23,11 +23,11 @@ export const useTiers = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tiers'] });
-            toast.custom((t) => React.createElement(Alert, {
-                type: 'success',
-                message: 'Member plan created',
-                onClose: () => toast.dismiss(t.id)
-            }));
+            // toast.custom((t) => React.createElement(Alert, {
+            //     type: 'success',
+            //     message: 'Member plan created',
+            //     onClose: () => toast.dismiss(t.id)
+            // }));
         },
         onError: (err: any) => {
             toast.custom((t) => React.createElement(Alert, {

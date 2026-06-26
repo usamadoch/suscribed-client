@@ -1,5 +1,11 @@
+
+
+
+
 import Link from "next/link";
-import Icon from "@/components/Icon";
+
+import { Copy, X } from "@/lib/icons";
+import { Icon } from "@/components/ui/icon";
 
 type LiveHeaderProps = {
     title?: React.ReactNode;
@@ -44,7 +50,7 @@ const LiveHeader = ({
                     className="btn-medium btn-stroke btn-square rounded-full bg-white dark:bg-n-1"
                     title={backTitle}
                 >
-                    <Icon name="close" />
+                    <Icon icon={X} strokeWidth={2.5} className="text-n-1 dark:text-n-9" />
                 </Link>
                 {(title || duration) && (
                     <div>
@@ -61,7 +67,7 @@ const LiveHeader = ({
                             onClick={onCopyLink}
                             className="btn btn-medium btn-stroke px-4 gap-2"
                         >
-                            <Icon name="copy" viewBox="0 0 24 24" className="w-5 h-5" /> Copy link
+                            <Icon icon={Copy} className=" text-n-1 dark:text-n-9" /> Copy link
                         </button>
                     )}
                     {isEnded ? null : (

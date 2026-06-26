@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { ChevronRight, FileText, Plus } from "@/lib/icons";
 import Loader from "@/components/Loader";
 import { PostStatus } from "@/types";
 import { useAnalyticsPosts } from "@/hooks/queries";
@@ -46,7 +47,7 @@ const RecentPostsPanel = () => {
                 <h3 className="font-semibold text-n-1 dark:text-n-9">Recent Posts</h3>
                 <Link href="/posts" className="text-sm text-purple-1 capitalize flex items-center ">
                     View All
-                    <Icon name="arrow-next" className="icon-20 " />
+                    <Icon icon={ChevronRight} size={18} />
                 </Link>
             </div>
 
@@ -95,7 +96,7 @@ const RecentPostsPanel = () => {
                         </div>
                     ) : (
                         <div className="text-center py-8 text-n-3 dark:text-n-8 fill-n-3 dark:fill-n-8">
-                            <Icon name="document" className="w-12 h-12 mx-auto mb-3" />
+                            <Icon icon={FileText} className="w-12 h-12 mx-auto mb-3" />
                             <p className="text-sm">No published posts yet</p>
                         </div>
                     )}
@@ -107,7 +108,7 @@ const RecentPostsPanel = () => {
                             href="/posts/new"
                             className="btn-purple btn-medium w-full flex items-center justify-center gap-2"
                         >
-                            <Icon name="plus" className="w-4 h-4" />
+                            <Icon icon={Plus} strokeWidth={2.5} />
                             <span>Create New Post</span>
                         </Link>
                     </div>

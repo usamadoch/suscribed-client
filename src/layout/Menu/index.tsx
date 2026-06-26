@@ -1,7 +1,7 @@
 import { usePathname, useRouter } from "next/navigation";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { MoreHorizontal } from "@/lib/icons";
 
-import { navigation } from "@/constants/navigation";
 import { useNavigation } from "@/hooks/useNavigation";
 import ActionMenu from "@/components/ActionMenu";
 
@@ -52,9 +52,8 @@ const Menu = ({ }: MenuProps) => {
                             key={index}
                         >
                             <Icon
-                                className={`icon-22 transition-colors dark:fill-n-9 ${isActive ? "text-purple-1!" : "text-n-7 dark:text-n-9"
-                                    }`}
-                                name={link.icon}
+                                className={`icon-22 transition-colors ${isActive ? "text-purple-1!" : "text-n-7 dark:text-n-9"}`}
+                                icon={link.icon}
                             />
                         </button>
                     );
@@ -63,9 +62,8 @@ const Menu = ({ }: MenuProps) => {
                     <ActionMenu
                         items={moreItems}
                         buttonClass="flex justify-center items-center w-12 h-18 tap-highlight-color"
-                        iconName="dots"
-                        iconClass={`icon-22 transition-colors dark:fill-n-9 ${hiddenItems.some(item => pathname === item.url) ? "text-purple-1!" : "text-n-7 dark:text-n-9"
-                            }`}
+                        iconName={MoreHorizontal}
+                        iconClass={`icon-22 transition-colors ${hiddenItems.some(item => pathname === item.url) ? "text-purple-1!" : "text-n-7 dark:text-n-9"}`}
                         anchor="top end"
                     />
                 )}

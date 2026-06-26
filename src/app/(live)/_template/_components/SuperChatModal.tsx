@@ -5,7 +5,8 @@ import { useForm, Controller } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "react-hot-toast";
 import SafepayOneTimeCheckout from "@/components/modals/SafepayOneTimeCheckout";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { X, Pin } from "@/lib/icons";
 import Image from "@/components/Image";
 import Modal from "@/components/Modal";
 import { useAuth } from "@/store/auth";
@@ -95,6 +96,12 @@ export default function SuperChatModal({ visible, onClose, sessionId }: SuperCha
         onClose();
     };
 
+    const displayCheckoutDataRef = useRef<{ trackerToken: string, authToken: string, messageId: string } | null>(null);
+    if (checkoutData) {
+        displayCheckoutDataRef.current = checkoutData;
+    }
+    const displayCheckoutData = checkoutData || displayCheckoutDataRef.current;
+
     return (
         <>
             <div
@@ -117,7 +124,7 @@ export default function SuperChatModal({ visible, onClose, sessionId }: SuperCha
                                 <div className="flex items-center justify-between p-4 pb-3">
                                     <div className="flex items-center gap-3">
                                         <button onClick={handleClose} className="hover:text-n-4 cursor-pointer" type="button">
-                                            <Icon name="close" className="fill-white w-6 h-6" />
+                                            <Icon icon={X} strokeWidth={2.5} className="text-n-9 " />
                                         </button>
                                         <div className="text-h6 font-normal">Send a Super...</div>
                                     </div>
@@ -131,10 +138,7 @@ export default function SuperChatModal({ visible, onClose, sessionId }: SuperCha
                                                 <div className="flex items-center gap-1">
                                                     {tier.pinTime && (
                                                         <>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                <line x1="12" y1="17" x2="12" y2="22"></line>
-                                                                <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.68V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.68a2 2 0 0 1-1.11 1.87l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
-                                                            </svg>
+                                                            <Icon icon={Pin} size={14} />
                                                             {tier.pinTime}
                                                         </>
                                                     )}
@@ -216,7 +220,7 @@ export default function SuperChatModal({ visible, onClose, sessionId }: SuperCha
                 disableOutsideClick={true}
                 classWrap="max-w-lg w-full p-0"
             >
-                {checkoutData && (
+                {displayCheckoutData && (
                     <div className="flex flex-col">
                         {confirmError && (
                             <div className="px-4 pt-4 pb-0">
@@ -225,9 +229,9 @@ export default function SuperChatModal({ visible, onClose, sessionId }: SuperCha
                         )}
                         <SafepayOneTimeCheckout
                             amount={amount}
-                            trackerToken={checkoutData.trackerToken}
-                            authToken={checkoutData.authToken}
-                            messageId={checkoutData.messageId}
+                            trackerToken={displayCheckoutData.trackerToken}
+                            authToken={displayCheckoutData.authToken}
+                            messageId={displayCheckoutData.messageId}
                             sessionId={sessionId}
                             onBack={() => setCheckoutData(null)}
                             onSuccess={(data) => {
@@ -236,7 +240,7 @@ export default function SuperChatModal({ visible, onClose, sessionId }: SuperCha
                                     handleClose();
                                 } else {
                                     setConfirmError(null);
-                                    confirmMutation.mutate(checkoutData.trackerToken, {
+                                    confirmMutation.mutate(displayCheckoutData.trackerToken, {
                                         onSuccess: () => handleClose(),
                                         onError: (err: any) => setConfirmError(err.message || 'Failed to confirm payment')
                                     });

@@ -70,7 +70,7 @@ const PlansSelection = ({
                 <div className="flex justify-center mb-10">
                     <div className="flex items-center gap-3">
                         <span
-                            className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'MONTHLY' ? 'text-purple-1' : 'text-n-1 hover:text-n-1 dark:hover:text-white'}`}
+                            className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'MONTHLY' ? 'text-purple-1' : 'dark:text-n-8 dark:hover:text-n-9'}`}
                             onClick={() => setInterval('MONTHLY')}
                         >
                             Monthly
@@ -80,7 +80,7 @@ const PlansSelection = ({
                             setValue={() => setInterval(interval === 'MONTHLY' ? 'YEARLY' : 'MONTHLY')}
                         />
                         <span
-                            className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'YEARLY' ? 'text-purple-1' : 'text-n-8 '}`}
+                            className={`text-sm font-semibold transition-colors duration-200 cursor-pointer ${interval === 'YEARLY' ? 'text-purple-1' : 'text-n-8 dark:hover:text-n-9'}`}
                             onClick={() => setInterval('YEARLY')}
                         >
                             Annually
@@ -108,10 +108,10 @@ const PlansSelection = ({
                                     <PlanCard
                                         plan={plan}
                                         interval={interval}
-                                        className="border border-n-8 rounded-xl dark:border-n-7 max-w-none"
+                                        className="border border-n-8 rounded-lg dark:border-n-7 max-w-none"
                                         action={
                                             <button
-                                                className="btn-purple btn-medium w-full transition-shadow hover:shadow-primary-4"
+                                                className="btn-purple btn-medium w-full transition-shadow shadow-primary-4"
                                                 onClick={() => onSubscribe(plan._id)}
                                                 disabled={isSubscribing}
                                             >
@@ -125,7 +125,7 @@ const PlansSelection = ({
                     </div>
                 ) : (
                     <div className="text-center p-4">
-                        <p className="text-n-3 dark:text-n-8">This creator hasn&apos;t published any subscription tiers yet.</p>
+                        <p className="text-n-3 dark:text-n-8">Creator hasn&apos;t published any subscription tiers yet.</p>
                     </div>
                 )}
 

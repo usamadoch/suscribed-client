@@ -5,7 +5,8 @@ import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import { toast } from "react-hot-toast";
 
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { Smile, Star, Send } from "@/lib/icons";
 import { useAuth } from "@/store/auth";
 import LoginModal from "@/components/modals/LoginModal";
 import CommentInput from "@/components/Comment";
@@ -40,7 +41,7 @@ export default function LiveChatInput({ sessionId, isLive, mutedUntil, isCreator
             setMuteRemaining(null);
             return;
         }
-        
+
         const updateMute = () => {
             const now = new Date();
             if (mutedUntil <= now) {
@@ -205,28 +206,16 @@ export default function LiveChatInput({ sessionId, isLive, mutedUntil, isCreator
                                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                                 disabled={!isLive || !!muteRemaining}
                             >
-                                <Icon className="icon-20 fill-currentColor" name="smile" />
+                                <Icon icon={Smile} />
                             </button>
                             {!messageText?.trim() ? (
                                 <button
-                                    type="button" 
-                                    className={`btn btn-stroke btn-square h-8 w-8 bg-n-3 rounded-md ${(!isLive || !!muteRemaining) ? "opacity-50 cursor-not-allowed" : ""}`} 
+                                    type="button"
+                                    className={`btn btn-stroke btn-square h-8 w-8 bg-n-3 rounded-md ${(!isLive || !!muteRemaining) ? "opacity-50 cursor-not-allowed" : ""}`}
                                     onClick={() => setShowSuperChatModal(true)}
                                     disabled={!isLive || !!muteRemaining}
                                 >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="18"
-                                        height="18"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                    </svg>
+                                    <Icon icon={Star} />
                                 </button>
                             ) : (
                                 <button
@@ -234,7 +223,7 @@ export default function LiveChatInput({ sessionId, isLive, mutedUntil, isCreator
                                     type="submit"
                                     disabled={!isLive || isSending || !!muteRemaining}
                                 >
-                                    <Icon name="send" />
+                                    <Icon icon={Send} />
                                 </button>
                             )}
                         </div>

@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import Image from "@/components/Image";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { Upload } from "@/lib/icons";
 import Loader from "@/components/Loader";
 import { SlotFamily, SlotName } from "@/lib/image-slots";
 
@@ -57,14 +58,14 @@ export function PageImageUploader<F extends SlotFamily>(props: PageImageUploader
 
             {/* Hover/Loading Overlay */}
             <div className={`absolute inset-0 flex items-center justify-center transition-opacity border-2 border-transparent z-20 
-                ${isLoading ? 'opacity-100 bg-black/50' : 'opacity-0'} 
+                ${isLoading ? 'opacity-100 bg-black/50' : 'opacity-0 group-hover:opacity-100 group-hover:bg-black/50'} 
                 ${imageClassName?.includes("rounded-full") ? "rounded-full" : ""}`}>
 
                 {isLoading ? (
                     <Loader className="text-n-9" />
                 ) : (
                     <div className={`flex items-center justify-center ${uploadIconWrapperClassName || "w-10 h-10"} rounded-full bg-white text-n-1`}>
-                        <Icon name="upload" className={iconClassName} />
+                        <Icon icon={Upload} className={iconClassName} />
                     </div>
                 )}
             </div>

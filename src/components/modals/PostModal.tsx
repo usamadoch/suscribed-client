@@ -5,16 +5,19 @@ import { toast } from "react-hot-toast";
 import { usePostComments } from "@/hooks/queries";
 import Modal from "@/components/Modal";
 import Image from "@/components/Image";
-import Icon from "@/components/Icon";
+import Images from "@/components/PostCard/Images";
+import { Icon } from "@/components/ui/icon";
+import { Copy, LockKeyhole } from "@/lib/icons";
 import Comment from "@/components/Comment";
 import { postService as postApi } from "@/services/post.service";
 import { Post, isLockedMedia, CreatorPage, VideoAttachment } from "@/types";
 import MuxVideoPlayer from "@/components/MuxVideoPlayer";
-import Actions from "@/components/Review/Actions";
+import Actions from "@/components/PostCard/Actions";
 import Loader from "@/components/Loader";
 import CommentItem from "@/components/CommentItem";
 import ReadMore from "@/components/ReadMore";
 import ActionMenu from "@/components/ActionMenu";
+import Alert from "@/components/Alert";
 import { getCreatorInfo } from "@/lib/post-mapper";
 
 type PostModalProps = {
@@ -35,13 +38,19 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
     const shareItems = post ? [
         {
             label: "Copy link",
-            icon: "copy",
-            viewBox: "0 0 24 24",
+            icon: Copy,
             onClick: () => {
-                const shareUrl = `/post/${post._id}`;
+                const shareUrl = `/posts/${post._id}`;
                 const fullUrl = `${window.location.origin}${shareUrl}`;
                 navigator.clipboard.writeText(fullUrl);
-                toast.success("Link copied to clipboard");
+                toast.custom((t) => (
+                    <Alert
+                        className="mb-0 shadow-md"
+                        type="success"
+                        message="Link copied to clipboard"
+                        onClose={() => toast.dismiss(t.id)}
+                    />
+                ), { position: "bottom-right" });
             },
         }
     ] : [];
@@ -64,9 +73,9 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
     if (!post) return null;
 
     // Helper to extract media
-    const displayedImage = post.postType === 'image' && !post.isLocked
-        ? post.mediaAttachments.find(m => !isLockedMedia(m) && m.url)?.url
-        : undefined;
+    const displayedImages = post.postType === 'image' && !post.isLocked
+        ? post.mediaAttachments.filter(m => !isLockedMedia(m) && m.type === 'image' && m.url).map(m => m.url as string)
+        : [];
 
     const displayedVideo = post.postType === 'video' && !post.isLocked
         ? post.mediaAttachments.find(m => !isLockedMedia(m) && m.type === 'video') as VideoAttachment | undefined
@@ -75,7 +84,7 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
     // Use centralized creator info logic
     const creator = getCreatorInfo(post, page);
 
-    const showMediaSection = (post.postType === 'image' || post.postType === 'video') && (!!displayedImage || !!displayedVideo || post.isLocked);
+    const showMediaSection = (post.postType === 'image' || post.postType === 'video') && (displayedImages.length > 0 || !!displayedVideo || post.isLocked);
 
 
     return (
@@ -88,17 +97,12 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
             {/* Left Section: Image/Media */}
             {showMediaSection && (
                 <div className="w-3/5 bg-n-1 flex items-center justify-center relative overflow-hidden md:w-full md:h-80 md:order-3">
-                    {displayedImage ? (
-                        <div className="relative w-full h-full">
-                            <Image
-                                family="post"
-                                slot="modal"
-                                src={displayedImage}
-                                fill
-                                className="object-contain"
-                                alt="Post content"
-                            />
-                        </div>
+                    {displayedImages.length > 0 ? (
+                        <Images
+                            items={displayedImages}
+                            slot="modal"
+                            className="relative group w-full h-full"
+                        />
                     ) : displayedVideo ? (
                         <div className="relative w-full h-full bg-black">
                             <MuxVideoPlayer
@@ -113,7 +117,7 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
                         <div className="text-n-3">
                             {post.isLocked && (
                                 <div className="text-center">
-                                    <Icon name="lock" className="w-12 h-12 fill-white mb-4 mx-auto" />
+                                    <Icon icon={LockKeyhole} className="w-12 h-12 text-n-9 fill-current mb-4 mx-auto" />
                                     <div className="text-white font-bold mb-2 dark:text-n-9">Members Only</div>
                                     <div className="text-sm text-white/70 dark:text-n-8">Join to unlock this content</div>
                                 </div>
@@ -189,7 +193,7 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
                             comments={post.commentCount}
                             isLiked={post.isLiked || false}
                             showComment={false}
-                            shareUrl={`/post/${post._id}`}
+                            shareUrl={`/posts/${post._id}`}
                             type="post"
                         />
                     </div>

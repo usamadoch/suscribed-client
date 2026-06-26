@@ -48,7 +48,7 @@ const RecentVideos = ({ pageSlug }: RecentVideosProps) => {
                             href={`/posts/${post._id}`}
                             className="group cursor-pointer flex items-center gap-3"
                         >
-                            <div className="relative w-32 aspect-video shrink-0 overflow-hidden bg-n-6">
+                            <div className="relative w-32 aspect-video shrink-0 overflow-hidden bg-n-6 rounded-md">
                                 <Image
                                     src={thumbnail}
                                     alt={title}

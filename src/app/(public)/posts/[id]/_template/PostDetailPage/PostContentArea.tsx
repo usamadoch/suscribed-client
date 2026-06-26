@@ -1,4 +1,4 @@
-import Actions from "@/components/Review/Actions";
+import Actions from "@/components/PostCard/Actions";
 import ReadMore from "@/components/ReadMore";
 
 import PostMediaGallery from "./PostMediaGallery";

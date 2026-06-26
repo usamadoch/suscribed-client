@@ -1,6 +1,7 @@
 import Loader from "@/components/Loader";
 import LoginModal from "@/components/modals/LoginModal";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { LockKeyhole } from "@/lib/icons";
 
 interface LockedContentProps {
     type?: 'box' | 'overlay';
@@ -29,7 +30,7 @@ const LockedContent = ({
         return (
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-n-1/80 backdrop-blur-sm p-6 text-center ">
                 <div className="w-12 h-12 rounded-full bg-n-1 flex items-center justify-center mb-3 shadow-lg">
-                    <Icon name="lock" className="w-6 h-6 fill-purple-1" />
+                    <Icon icon={LockKeyhole} className="w-6 h-6 text-purple-1 fill-current" />
                 </div>
                 <h3 className="text-h6 text-white mb-1">{title}</h3>
                 {text && <p className="text-sm text-n-3">{text}</p>}

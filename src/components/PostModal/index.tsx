@@ -5,16 +5,16 @@ import { toast } from "react-hot-toast";
 import { usePostComments } from "@/hooks/queries";
 import Modal from "@/components/Modal";
 import Image from "@/components/Image";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { LockKeyhole } from "@/lib/icons";
 import Comment from "@/components/Comment";
 import { postService as postApi } from "@/services/post.service";
-import { Post, Comment as CommentType, isLockedMedia, CreatorPage } from "@/types";
-import Actions from "@/components/Review/Actions";
+import { Post, isLockedMedia, CreatorPage } from "@/types";
+import Actions from "@/components/PostCard/Actions";
 import Loader from "../Loader";
 import CommentItem from "@/components/CommentItem";
 import ReadMore from "@/components/ReadMore";
 import ActionMenu from "@/components/ActionMenu";
-import { getSocialShareItems } from "@/utils/share";
 import { getCreatorInfo } from "@/lib/post-mapper";
 
 type PostModalProps = {
@@ -99,7 +99,7 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
                         <div className="text-n-3">
                             {post.isLocked && (
                                 <div className="text-center">
-                                    <Icon name="lock" className="w-12 h-12 fill-white mb-4 mx-auto" />
+                                    <Icon icon={LockKeyhole} className="w-12 h-12 text-white fill-current mb-4 mx-auto" />
                                     <div className="text-white font-bold mb-2">Members Only</div>
                                     <div className="text-sm text-white/70">Join to unlock this content</div>
                                 </div>

@@ -1,12 +1,10 @@
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import Icon from "@/components/Icon";
-import { twMerge } from "tailwind-merge";
+import { useState, useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { useNavigation, NavigationItem } from "@/hooks/useNavigation";
 import { useSocket } from "@/store/socket";
 import { useAuth } from "@/store/auth";
 import LoginModal from "@/components/modals/LoginModal";
+import MenuItem from "./MenuItem";
 
 type MenuProps = {
     visible?: boolean;
@@ -15,130 +13,69 @@ type MenuProps = {
 
 const Menu = ({ visible, isMinimize }: MenuProps) => {
     const pathname = usePathname();
-    const router = useRouter();
     const navigationItems = useNavigation();
     const { isAuthenticated } = useAuth();
-
     const { unreadCount, messageUnreadCount } = useSocket();
 
     const [showLoginModal, setShowLoginModal] = useState(false);
 
     const handleNavClick = (e: React.MouseEvent, link: NavigationItem) => {
-        // If the user is not authenticated and the route is NOT public, intercept
         if (!isAuthenticated && !link.isPublicRoute) {
             e.preventDefault();
             setShowLoginModal(true);
         }
     };
 
+    const groupedNavigation = useMemo(() => {
+        const grouped: Record<string, NavigationItem[]> = {};
+        navigationItems.forEach((link) => {
+            const cat = link.category || "Navigation";
+            if (!grouped[cat]) grouped[cat] = [];
+            grouped[cat].push(link);
+        });
+        return Object.entries(grouped);
+    }, [navigationItems]);
+
+    // Centralized configuration for dynamic counters
+    const dynamicCounters: Record<string, number> = {
+        "/notifications": unreadCount,
+        "/messages": messageUnreadCount,
+    };
+
     return (
         <>
             <div className="-mx-4 mb-10">
-                {(() => {
-                    const grouped: Record<string, NavigationItem[]> = {};
-                    navigationItems.forEach((link) => {
-                        const cat = link.category || "Navigation";
-                        if (!grouped[cat]) grouped[cat] = [];
-                        grouped[cat].push(link);
-                    });
-
-                    return Object.entries(grouped).map(([category, links], catIndex) => (
-                        <div key={catIndex} className="mb-6 last:mb-0">
-                            <div
-                                className={`mb-3 px-4 uppercase overflow-hidden whitespace-nowrap text-[11px] font-medium text-n-7 ${visible ? "w-full opacity-100" : isMinimize ? "text-0 opacity-0" : "xl:text-0 xl:opacity-0"
-                                    }`}
-                            >
-                                {category}
-                            </div>
-                            {links.map((link: NavigationItem, index: number) => {
-                                // Centralized configuration for dynamic counters
-                                // Add new counters here mapping the URL to the count value
-                                const dynamicCounters: Record<string, number> = {
-                                    "/notifications": unreadCount,
-                                    "/messages": messageUnreadCount,
-                                };
-
-                                const dynamicCount = dynamicCounters[link.url];
-                                const hasDynamicCounter = typeof dynamicCount === "number";
-
-                                const showCounter = hasDynamicCounter ? dynamicCount > 0 : !!link.counter;
-                                const counterValue = hasDynamicCounter ? dynamicCount : link.counter;
-
-                                // Check if the current pathname matches the link exactly, or if it's a sub-route of the link.
-                                const isActive = pathname === link.url || (link.url !== "/" && pathname.startsWith(`${link.url}/`));
-
-                                return (
-                                    <Link
-                                        className={twMerge(
-                                            `flex items-center h-9.5 mb-2 px-4 dark:text-n-9 dark:fill-n-9 font-semibold last:mb-0 transition-colors ${isActive ? "bg-n-5 text-purple-1 fill-purple-1 rounded-md" : ""
-                                            } ${visible ? "text-sm" : isMinimize ? "text-[0px]" : "text-sm xl:text-0"}`
-                                        )}
-                                        href={link.url}
-                                        key={index}
-                                        target={link.target}
-                                        onClick={(e) => handleNavClick(e, link)}
-                                    >
-                                        <Icon
-                                            className={`mr-3 fill-inherit ${visible ? "mr-3" : isMinimize ? "mr-0" : "xl:mr-0"
-                                                }`}
-                                            name={link.icon}
-                                        />
-                                        {link.title}
-
-                                        {link.suffixIcon ? (
-
-                                            <div
-                                                className={`group ml-auto flex items-center justify-center overflow-hidden transition-all duration-300 tablet:hidden ${link.suffixIconBg
-                                                    ? "bg-purple-2  rounded-full hover:bg-purple-1 h-[30px] min-w-[30px] px-1.5"
-                                                    : "opacity-50 hover:opacity-100 p-1"
-                                                    } ${visible ? "" : isMinimize ? "hidden!" : "xl:hidden!"}`}
-                                                onClick={(e) => {
-                                                    if (link.suffixUrl) {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-
-                                                        if (!isAuthenticated) {
-                                                            setShowLoginModal(true);
-                                                            return;
-                                                        }
-                                                        router.push(link.suffixUrl);
-                                                    }
-                                                }}
-                                            >
-                                                {link.suffixText && (
-                                                    <span className={`max-w-0 opacity-0  overflow-hidden whitespace-nowrap transition-all duration-300 group-hover:max-w-[100px] group-hover:opacity-100 group-hover:ml-1 group-hover:mr-1 text-[10px] uppercase font-bold tracking-wider ${link.suffixIconBg ? 'text-n-9' : ''} ${visible ? "block" : isMinimize ? "hidden" : "xl:hidden"}`}>
-                                                        {link.suffixText}
-                                                    </span>
-                                                )}
-
-                                                <Icon
-                                                    className={`${link.suffixIconBg ? 'fill-white' : 'fill-inherit'} transition-colors icon-18 shrink-0 ${visible ? "block" : isMinimize ? "hidden" : "xl:hidden"
-                                                        }`}
-                                                    name={link.suffixIcon}
-                                                    viewBox={link.suffixIconViewBox}
-                                                />
-                                            </div>
-                                        ) : showCounter ? (
-
-                                            <div
-                                                className={`min-w-[1.625rem] ml-auto px-1 py-0.25 text-center text-xs font-bold tex t-n-1 ${visible ? "block" : isMinimize ? "hidden" : "xl:hidden"
-                                                    }`}
-                                                style={{
-                                                    backgroundColor: link.counterColor || "#AE7AFF",
-                                                }}
-                                            >
-                                                {counterValue}
-                                            </div>
-                                        ) : null}
-                                    </Link>
-                                );
-                            })}
+                {groupedNavigation.map(([category, links], catIndex) => (
+                    <div key={catIndex} className="mb-6 last:mb-0">
+                        <div
+                            className={`mb-3 px-4 uppercase overflow-hidden whitespace-nowrap text-[11px] font-medium text-n-7 ${
+                                visible ? "w-full opacity-100" : isMinimize ? "text-0 opacity-0" : "xl:text-0 xl:opacity-0"
+                            }`}
+                        >
+                            {category}
                         </div>
-                    ));
-                })()}
+                        {links.map((link: NavigationItem, index: number) => {
+                            const dynamicCount = dynamicCounters[link.url];
+                            const isActive = pathname === link.url || (link.url !== "/" && pathname.startsWith(`${link.url}/`));
+
+                            return (
+                                <MenuItem
+                                    key={index}
+                                    link={link}
+                                    isActive={isActive}
+                                    visible={visible}
+                                    isMinimize={isMinimize}
+                                    dynamicCount={dynamicCount}
+                                    isAuthenticated={isAuthenticated}
+                                    onNavClick={handleNavClick}
+                                    onShowLoginModal={() => setShowLoginModal(true)}
+                                />
+                            );
+                        })}
+                    </div>
+                ))}
             </div>
 
-            {/* Login Modal for guests clicking protected routes */}
             <LoginModal
                 visible={showLoginModal}
                 onClose={() => setShowLoginModal(false)}

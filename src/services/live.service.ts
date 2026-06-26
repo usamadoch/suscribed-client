@@ -39,6 +39,8 @@ export interface LiveSessionStats {
     collected: number;
     paidMsgs: number;
     watching: number;
+    peakViewers?: number;
+    status?: 'draft' | 'live' | 'ended';
     topSupporters: Array<{ rank: number; name: string; amount: string }>;
 }
 

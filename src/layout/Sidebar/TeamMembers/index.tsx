@@ -29,19 +29,15 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
 
     if (isLoading) {
         return (
-            <>
-                {/* <div className={`mb-3 overflow-hidden whitespace-nowrap uppercase text-xs font-medium text-white/50 ${visible ? "w-full opacity-100" : "xl:w-0 xl:opacity-0"}`}>
-                    My Members
-                </div> */}
-                <div className="-mx-4">
-                    {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className={`flex items-center h-9.5 mb-1.5 px-4 ${visible ? "px-4" : "xl:px-0"}`}>
-                            <div className={`shrink-0 w-5.5 h-5.5 mr-2.5 rounded-full bg-n-3/20 dark:bg-n-6/50 animate-pulse ${visible ? "mr-2.5 ml-0" : "xl:mx-auto"}`} />
-                            <div className={`h-3 w-24 rounded-sm bg-n-3/20 dark:bg-n-6/50 animate-pulse ${visible ? "block" : "xl:hidden"}`} />
-                        </div>
-                    ))}
-                </div>
-            </>
+
+            <div className="-mx-4">
+                {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className={`flex items-center h-9.5 mb-1.5 px-4 ${visible ? "px-4" : "xl:px-0"}`}>
+                        <div className={`shrink-0 w-5.5 h-5.5 mr-2.5 rounded-full bg-n-3/20 dark:bg-n-6/50 animate-pulse ${visible ? "mr-2.5 ml-0" : "xl:mx-auto"}`} />
+                        <div className={`h-3 w-24 rounded-sm bg-n-3/20 dark:bg-n-6/50 animate-pulse ${visible ? "block" : "xl:hidden"}`} />
+                    </div>
+                ))}
+            </div>
         );
     }
 
@@ -49,12 +45,7 @@ const TeamMembers = ({ visible }: TeamMembersProps) => {
 
     return (
         <>
-            {/* <div
-                className={`mb-3 overflow-hidden whitespace-nowrap text-xs font-medium text-white/50 ${visible ? "w-full opacity-100" : "xl:w-0 xl:opacity-0"
-                    }`}
-            >
-                My Members
-            </div> */}
+
             <div className="-mx-4">
                 {displayedMemberships.map((item: Member) => {
                     const page = item.pageId as CreatorPage;

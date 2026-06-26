@@ -1,66 +1,70 @@
-
 import { useMemo } from 'react';
 import { navigation, NavigationItem } from '@/constants/navigation';
 import { useAuth } from '@/store/auth';
 import { hasPermission } from '@/constants/permissions';
+import { User, ExternalLink } from '@/lib/icons';
+import { UserRole } from '@/types';
 
 import { useMyPage } from '@/hooks/queries';
 
 export type { NavigationItem } from '@/constants/navigation';
 
+// Helper: Filter navigation for unauthenticated users
+const getUnauthenticatedNav = (): NavigationItem[] => {
+    return navigation
+        .filter((link) => !link.permissions)
+        .map((link) => ({ ...link }));
+};
+
+// Helper: Filter navigation for authenticated users
+const getAuthenticatedNav = (role: UserRole): NavigationItem[] => {
+    return navigation.filter((link) => {
+        if (link.roles && !link.roles.includes(role)) return false;
+        if (link.permissions) {
+            return link.permissions.some(permission => hasPermission(role, permission));
+        }
+        return true;
+    });
+};
+
+// Helper: Inject dynamic "Your Page" link
+const injectYourPageLink = (navItems: NavigationItem[], pageSlug: string): NavigationItem[] => {
+    const dashboardIndex = navItems.findIndex(item => item.url === '/dashboard');
+    if (dashboardIndex === -1) return navItems;
+
+    const newNav = [...navItems];
+    const yourPageLink: NavigationItem = {
+        title: "Your Page",
+        icon: User,
+        url: `/${pageSlug}`,
+        category: "Creator",
+        target: "_blank",
+        suffixIcon: ExternalLink,
+    };
+
+    newNav.splice(dashboardIndex + 1, 0, yourPageLink);
+    return newNav;
+};
+
 export const useNavigation = () => {
     const { user, isAuthenticated } = useAuth();
-
-    // Fetch user's page data using cached query
     const { data: myPage } = useMyPage();
 
-    // Determine the correct slug: prefer server page slug, fallback to username
     const pageSlug = myPage?.pageSlug || user?.username || null;
 
-    // Compute Final Navigation
     const navItems = useMemo(() => {
-
         if (!isAuthenticated || !user?.role) {
-            return navigation
-                .filter((link) => {
-                    if (link.permissions) return false;
-                    return true;
-                })
-                .map((link) => ({ ...link }));
+            return getUnauthenticatedNav();
         }
-        const filteredNav = navigation.filter((link) => {
-            if (link.roles && !link.roles.includes(user.role)) return false;
 
-            if (link.permissions) {
-                return link.permissions.some(permission => hasPermission(user.role, permission));
-            }
-            if (link.isPublicRoute) return true;
-            return true;
-        });
-
-        let newNav = [...filteredNav];
+        let filteredNav = getAuthenticatedNav(user.role);
 
         if (hasPermission(user.role, 'page:manage') && pageSlug) {
-            const dashboardIndex = newNav.findIndex(item => item.url === '/dashboard');
-
-            if (dashboardIndex !== -1) {
-                const yourPageLink: NavigationItem = {
-                    title: "Your Page",
-                    icon: "profile", // Ensure this icon exists in your Icon component
-                    url: `/${pageSlug}`,
-                    category: "Creator",
-                    target: "_blank",
-                    suffixIcon: "new-window",
-                    suffixIconViewBox: "0 0 24 24"
-                };
-
-                // Insert after Dashboard
-                newNav.splice(dashboardIndex + 1, 0, yourPageLink);
-            }
+            filteredNav = injectYourPageLink(filteredNav, pageSlug);
         }
 
-        return newNav;
-    }, [user?.role, isAuthenticated, pageSlug]);
+        return filteredNav;
+    }, [user, isAuthenticated, pageSlug]);
 
     return navItems;
 };

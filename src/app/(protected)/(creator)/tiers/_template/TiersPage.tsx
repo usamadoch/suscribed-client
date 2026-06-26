@@ -47,7 +47,7 @@ export default function TiersPage() {
     }
 
     return (
-        <div className="max-w-3xl w-full mx-auto p-4 md:p-8">
+        <div className="max-w-5xl w-full mx-auto">
             <div className="flex  justify-between items-start md:items-center mb-6 gap-4">
                 <h4 className="text-h4 font-bold dark:text-n-9">Subscription Tiers</h4>
                 <div className="flex gap-4">
