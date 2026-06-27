@@ -5,8 +5,7 @@
 
 import Link from "next/link";
 import ActionMenu from "@/components/ActionMenu";
-import { Icon } from "@/components/ui/icon";
-import { Settings, Share2, Check } from "@/lib/icons";
+import { Share2 } from "@/lib/icons";
 import LegacyIcon from "@/components/Icon";
 
 type ProfileHeaderActionsProps = {
@@ -20,7 +19,7 @@ const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: 
     if (isOwner) {
         return (
             <div className="flex shrink-0 max-w-60 w-full mobile:max-w-none">
-                <Link href="/settings" className="btn-purple btn-medium grow">
+                <Link href="/settings" className="btn-purple h-10 grow">
                     <LegacyIcon name="setup" />
                     <span className="">Edit Profile</span>
                 </Link>
@@ -31,7 +30,7 @@ const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: 
     return (
         <div className="flex shrink-0 max-w-80 w-full mobile:max-w-none">
             <button
-                className={`btn-purple btn-medium grow ${isMember ? "opacity-75" : ""}`}
+                className={`btn-purple h-10 grow ${isMember ? "opacity-75" : ""}`}
                 onClick={isMember ? undefined : onJoinClick}
                 disabled={isMember}
             >
@@ -41,7 +40,7 @@ const ProfileHeaderActions = ({ isOwner, isMember, onJoinClick, onShareClick }: 
 
             <ActionMenu
                 className="ml-2 shrink-0"
-                buttonClass="btn-purple btn-medium px-1 focus:outline-none"
+                buttonClass="btn-purple h-10 px-1 focus:outline-none"
                 items={[
                     {
                         icon: Share2,

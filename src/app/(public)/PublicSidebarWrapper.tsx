@@ -5,11 +5,11 @@ import Sidebar from "@/layout/Sidebar";
 import { ReactNode } from "react";
 
 export default function PublicSidebarWrapper({ children }: { children: ReactNode }) {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isLoading } = useAuth();
 
     return (
-        <div className={`relative flex w-full flex-col grow ${isAuthenticated ? "pl-20 md:pl-0" : ""}`}>
-            {isAuthenticated && <Sidebar isMinimize />}
+        <div className={`relative flex w-full flex-col grow ${(isAuthenticated && !isLoading) ? "pl-20 md:pl-0" : ""}`}>
+            {(isAuthenticated && !isLoading) && <Sidebar isMinimize />}
             <div className="flex flex-col grow w-full min-w-0">
                 {children}
             </div>

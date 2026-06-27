@@ -1,4 +1,8 @@
 export {
+  Newspaper,
+  Mic,
+  GraduationCap,
+  Gamepad2,
   Home,
   Search,
   Bell,
