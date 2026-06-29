@@ -31,6 +31,7 @@ export const ExplorePage = () => {
                     value={search}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
                     onSubmit={(e: React.FormEvent) => e.preventDefault()}
+
                 />
 
                 {isLoading ? (

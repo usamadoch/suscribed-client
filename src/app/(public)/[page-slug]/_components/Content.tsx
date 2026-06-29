@@ -11,6 +11,7 @@ import JoinTierModal from "@/components/modals/JoinTierModal";
 import Loader from "@/components/Loader";
 import RecentVideos from "./RecentVideos";
 import PostCard from "@/components/PostCard";
+import Empty from "@/components/Empty";
 
 type CreatorContentProps = {
     pageSlug: string;
@@ -26,7 +27,7 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
     const { page } = pageData || {};
     const posts = postsData || [];
 
-    const isOwner = user && page && (user._id === (typeof page.userId === 'object' ? page.userId._id : page.userId));
+    const isOwner = pageData?.isOwner;
 
     const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
     const [loginModalVisible, setLoginModalVisible] = useState(false);
@@ -68,8 +69,6 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
 
     return (
         <div className="pb-20 px-16 2xl:px-8 lg:px-6 mobile:px-6">
-            {/* <h4 className="text-h4 mb-8">Latest Posts</h4> */}
-
             <div className="grid grid-cols-12 lg:grid-cols-1 gap-8">
                 <div className="col-span-8 lg:col-span-1 pt-10 lg:pt-0">
 
@@ -78,20 +77,37 @@ const Content = ({ pageSlug }: CreatorContentProps) => {
                             <Loader text="Loading posts..." />
                         </div>
                     ) : (
-
-                        <div className="grid grid-cols-1 gap-5">
-                            {posts.map((post: Post) => (
-                                <PostCard
-                                    key={post._id}
-                                    post={post}
-                                    page={page}
-                                    isOwner={!!isOwner}
-                                    onCommentClick={() => handlePostClick(post)}
-                                />
-                            ))}
-                        </div>
-
-
+                        posts.length > 0 ? (
+                            <div className="grid grid-cols-1 gap-5">
+                                {posts.map((post: Post) => (
+                                    <PostCard
+                                        key={post._id}
+                                        post={post}
+                                        page={page}
+                                        isOwner={!!isOwner}
+                                        onCommentClick={() => handlePostClick(post)}
+                                    />
+                                ))}
+                            </div>
+                        ) : page?.status === 'published' ? (
+                            isOwner ? (
+                                <div className="mt-8">
+                                    <Empty
+                                        title="No posts yet"
+                                        content="Start creating your first post and share it with your audience."
+                                        buttonText="Create Post"
+                                        buttonUrl={`/posts/new`}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="mt-8">
+                                    <Empty
+                                        title="No posts yet"
+                                        content="This creator hasn't published any posts yet."
+                                    />
+                                </div>
+                            )
+                        ) : null
                     )}
                 </div>
 

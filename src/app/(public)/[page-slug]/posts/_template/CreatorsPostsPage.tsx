@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useCreatorPosts } from "@/hooks/queries";
+import { useCreatorPosts, useCreatorPage } from "@/hooks/queries";
 import { usePageSlug } from "@/hooks/usePageSlug";
 import { VideoPost } from "@/types";
+import Empty from "@/components/Empty";
 
 import { Search } from "@/lib/icons";
 import { Icon } from "@/components/ui/icon";
@@ -36,6 +37,9 @@ const sortPosts = (posts: VideoPost[], sortId: string) => {
 const CreatorsPostsPage = () => {
     const slug = usePageSlug();
 
+    const { data: pageData } = useCreatorPage(slug);
+    const isOwner = pageData?.isOwner;
+
     const { data: postsData, isLoading } = useCreatorPosts(slug, { type: 'video' });
     const posts = (postsData || []) as VideoPost[];
 
@@ -51,9 +55,23 @@ const CreatorsPostsPage = () => {
                         <Loader />
                     </div>
                 ) : posts.length === 0 ? (
-                    <div className="flex items-center justify-center">
-                        <div className="text-center py-10 text-n-8">No video posts found.</div>
-                    </div>
+                    isOwner ? (
+                        <div className="mt-8">
+                            <Empty
+                                title="No posts yet"
+                                content="You haven't uploaded any videos yet. Share your first video with your audience!"
+                                buttonText="Create Post"
+                                buttonUrl={`/posts/new`}
+                            />
+                        </div>
+                    ) : (
+                        <div className="mt-8">
+                            <Empty
+                                title="No posts yet"
+                                content="This creator hasn't uploaded any videos yet. Check back later!"
+                            />
+                        </div>
+                    )
                 ) : (
                     <div>
                         <div className="flex justify-end items-center gap-4 mb-6 mobile:flex-col">
@@ -61,7 +79,7 @@ const CreatorsPostsPage = () => {
                                 <input
                                     type="text"
                                     placeholder="Search..."
-                                    className="w-full h-9 px-4 bg-white border border-n-1 text-sm text-n-1 font-bold outline-none transition-colors placeholder:font-normal dark:bg-[#1f1f1f] dark:border-n-6 dark:text-n-9 dark:placeholder:text-n-9/75"
+                                    className="w-full h-10 px-4 bg-white border border-n-1 rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:font-normal dark:bg-[#1f1f1f] dark:border-n-6 dark:text-n-9 dark:placeholder:text-n-9/75"
                                 />
                                 <Icon
                                     icon={Search}
@@ -73,8 +91,8 @@ const CreatorsPostsPage = () => {
                                     items={SORT_OPTIONS}
                                     value={sortOption}
                                     onChange={setSortOption}
-                                    classButton="h-9"
-                                    classOption="h-9"
+                                    classButton="h-10 rounded-sm"
+                                    classOption="h-10"
                                 />
                             </div>
                         </div>

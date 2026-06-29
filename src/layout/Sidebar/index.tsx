@@ -61,7 +61,7 @@ const Sidebar = ({ isMinimize = false }: SidebarProps) => {
             </div>
             {/* <div className="flex-1 overflow-y-auto scroll-smooth -mr-4 pr-4"> */}
             <Menu visible={visible} isMinimize={isMinimize} />
-            {isAuthenticated && <TeamMembers visible={visible} />}
+            {isAuthenticated && <TeamMembers visible={visible} isMinimize={isMinimize} />}
             {/* </div> */}
 
 

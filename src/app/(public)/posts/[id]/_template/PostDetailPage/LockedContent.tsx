@@ -1,4 +1,3 @@
-import Loader from "@/components/Loader";
 import LoginModal from "@/components/modals/LoginModal";
 import { Icon } from "@/components/ui/icon";
 import { LockKeyhole } from "@/lib/icons";
@@ -9,7 +8,6 @@ interface LockedContentProps {
     text?: string;
     // Box props
     handleJoin?: () => void;
-    isJoining?: boolean;
     user?: any;
     isLoginModalOpen?: boolean;
     setIsLoginModalOpen?: (open: boolean) => void;
@@ -20,7 +18,6 @@ const LockedContent = ({
     title = "Members Only",
     text,
     handleJoin,
-    isJoining,
     user,
     isLoginModalOpen,
     setIsLoginModalOpen
@@ -48,9 +45,8 @@ const LockedContent = ({
             <button
                 className="btn-purple btn-medium px-8 max-w-[50%]"
                 onClick={handleJoin}
-                disabled={isJoining}
             >
-                {isJoining ? <Loader /> : user ? "Join to unlock" : "Log in to unlock"}
+                {user ? "Join to unlock" : "Log in to unlock"}
 
             </button>
             {(isLoginModalOpen !== undefined && setIsLoginModalOpen) && (

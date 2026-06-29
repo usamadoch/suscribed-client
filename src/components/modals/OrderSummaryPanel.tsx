@@ -103,10 +103,23 @@ export default function OrderSummaryPanel({ interval, onIntervalChange, plan, pa
                                 {isPending ? (
                                     <div className="h-5 w-16 bg-n-3/20 dark:bg-n-6/50 animate-pulse rounded" />
                                 ) : (
-                                    `PKR ${plan.price}`
+                                    `PKR ${plan.price.toLocaleString()}`
                                 )}
                             </div>
                         </div>
+
+                        {interval === 'YEARLY' && (
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium text-n-3 dark:text-n-9">Yearly billing (x12)</span>
+                                <div className="text-sm text-n-1 dark:text-white flex items-center">
+                                    {isPending ? (
+                                        <div className="h-5 w-16 bg-n-3/20 dark:bg-n-6/50 animate-pulse rounded" />
+                                    ) : (
+                                        `PKR ${(plan.price * 12).toLocaleString()}`
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
                         <div className="flex justify-between items-center">
                             <span className="text-sm font-medium text-n-1 dark:text-white">Due Total</span>
@@ -114,7 +127,7 @@ export default function OrderSummaryPanel({ interval, onIntervalChange, plan, pa
                                 {isPending ? (
                                     <div className="h-6 w-24 bg-n-3/20 dark:bg-n-6/50 animate-pulse rounded" />
                                 ) : (
-                                    `PKR ${interval === 'YEARLY' ? plan.price * 12 : plan.price}`
+                                    `PKR ${(interval === 'YEARLY' ? plan.price * 12 : plan.price).toLocaleString()}`
                                 )}
                             </div>
                         </div>

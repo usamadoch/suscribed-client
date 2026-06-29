@@ -1,5 +1,6 @@
 import { twMerge } from "tailwind-merge";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/ui/icon";
+import { CheckCircle, X, AlertCircle, Info, OctagonX } from "@/lib/icons";
 
 export type AlertType = "success" | "error" | "warning" | "info";
 
@@ -21,29 +22,29 @@ const Alert = ({
     onClose,
 }: AlertProps) => {
     const styles = {
-        success: "bg-green-1 dark:bg-green-500 text-n-1 dark:text-n-9 border-n-1",
-        error: "bg-pink-1 dark:bg-pink-500 text-n-1 dark:text-n-9 border-n-1",
-        warning: "bg-yellow-1 dark:bg-yellow-500 text-n-1 dark:text-n-9 border-n-1",
-        info: "bg-purple-3 dark:bg-purple-500 text-n-1 dark:text-n-9 border-n-1",
+        success: "bg-green-500",
+        error: "bg-red-500",
+        warning: "bg-yellow-600",
+        info: "bg-purple-500",
     };
 
     const icons = {
-        success: "check-circle",
-        error: "close",
-        warning: "info-circle",
-        info: "info-circle",
+        success: CheckCircle,
+        error: OctagonX,
+        warning: AlertCircle,
+        info: Info,
     };
 
     return (
         <div
             className={twMerge(
-                "relative flex items-center h-12 px-5 border mb-4 transition-all",
+                "relative flex items-center h-10 px-4 rounded-full transition-all text-n-9 shadow-md",
                 styles[type],
                 className
             )}
         >
             {showIcon && (
-                <Icon name={icons[type]} className="mr-3 shrink-0 icon-20" />
+                <Icon icon={icons[type]} strokeWidth={2.5} size={16} className="mr-2 shrink-0" />
             )}
             <div className="flex-1 text-sm font-bold">
                 {message || children}
@@ -52,10 +53,10 @@ const Alert = ({
                 <button
                     type="button"
                     onClick={onClose}
-                    className="ml-3 cursor-pointer shrink-0 hover:opacity-70 transition-opacity"
+                    className=" ml-3 cursor-pointer shrink-0"
                     aria-label="Close alert"
                 >
-                    <Icon name="close" className="icon-20" />
+                    <Icon icon={X} size={20} strokeWidth={2.5} />
                 </button>
             )}
         </div>

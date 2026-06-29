@@ -11,13 +11,37 @@ import { ONBOARDING_STEPS } from "@/types";
 import Alert from "@/components/Alert";
 
 const CATEGORIES = [
-    "Gaming",
-    "Art & Design",
-    "Music",
+    "Politics",
+    "Cricket",
+    "Philosophy",
+    "Food & Drink",
+    "Finance",
+    "Humor",
+    "Fashion & Beauty",
+    "History",
+    "Science",
+    "Travel",
+    "News",
+    "Film & TV",
     "Technology",
+    "Faith & Spirituality",
+    "Business",
+    "Crypto",
     "Education",
-    "Entertainment",
-    "Other",
+    "Music",
+    "Sports",
+    "Culture",
+    "Art & Illustration",
+    "Design",
+    "Literature",
+    "Fiction",
+    "Comics",
+    "Health & Wellness",
+    "Home & Garden",
+    "Parenting",
+    "International",
+    "World Politics",
+    "Climate & Environment"
 ];
 
 type Step3Props = {
@@ -72,7 +96,7 @@ const Step3Category = ({ onNext, onBack }: Step3Props) => {
                                     : [...(selectedCategory || []), cat];
                                 setValue("category", newCategories, { shouldValidate: true });
                             }}
-                            className={`btn-stroke btn-small h-12 px-8 
+                            className={`btn-stroke btn-small h-10 px-4 
                             ${isSelected
                                     ? "bg-black text-white dark:bg-n-9 dark:text-n-1"
                                     : ""

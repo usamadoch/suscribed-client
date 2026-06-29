@@ -11,6 +11,7 @@ import { useAuth } from "@/store/auth";
 
 import { pageService as pageApi } from "@/services/page.service";
 import { UpdatePagePayload, CreatorPage } from "@/types";
+import { APP_DOMAIN } from "@/lib/utils";
 
 import Icon from "@/components/Icon";
 import Field from "@/components/Field";
@@ -21,13 +22,38 @@ import PageImageUploader from "@/app/(public)/[page-slug]/_components/PageImageU
 
 // Constants
 const SPECIFICATION_OPTIONS = [
-    { id: "0", title: "Gaming" },
-    { id: "1", title: "Art & Design" },
+    { id: "0", title: "Cricket" },
+    { id: "1", title: "Pakistan Politics" },
     { id: "2", title: "Music" },
-    { id: "3", title: "Technology" },
-    { id: "4", title: "Education" },
-    { id: "5", title: "Entertainment" },
-    { id: "6", title: "Other" },
+    { id: "3", title: "Food & Drink" },
+    { id: "4", title: "Humor" },
+    { id: "5", title: "Fashion & Beauty" },
+    { id: "6", title: "Travel" },
+    { id: "7", title: "Film & TV" },
+    { id: "8", title: "Technology" },
+    { id: "9", title: "Faith & Spirituality" },
+    { id: "10", title: "Business" },
+    { id: "11", title: "Finance" },
+    { id: "12", title: "Crypto" },
+    { id: "13", title: "Education" },
+    { id: "14", title: "News" },
+    { id: "15", title: "Sports" },
+    { id: "16", title: "Culture" },
+    { id: "17", title: "Art & Illustration" },
+    { id: "18", title: "Design" },
+    { id: "19", title: "Literature" },
+    { id: "20", title: "Fiction" },
+    { id: "21", title: "Comics" },
+    { id: "22", title: "Health & Wellness" },
+    { id: "23", title: "Home & Garden" },
+    { id: "24", title: "Parenting" },
+    { id: "25", title: "Science" },
+    { id: "26", title: "History" },
+    { id: "27", title: "Philosophy" },
+    { id: "28", title: "International" },
+    { id: "29", title: "World Politics" },
+    { id: "30", title: "Climate & Environment" },
+    { id: "31", title: "Health Politics" },
 ];
 
 // Types
@@ -287,7 +313,7 @@ const CreatorAccount = () => {
                                     className="w-[calc(50%-1.25rem)] mx-2.5 mt-4 "
                                     label="Profile URL"
 
-                                    prefix="example.com/"
+                                    prefix={`${APP_DOMAIN}/`}
                                     classInput="h-12 border-n-4"
                                     icon="link"
                                     error={errors.pageSlug}

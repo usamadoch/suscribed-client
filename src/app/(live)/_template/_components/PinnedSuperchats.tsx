@@ -1,4 +1,4 @@
-import { useRef, useCallback, useMemo } from "react";
+import { useRef, useCallback, useMemo, useState, useEffect } from "react";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import { useSuperChatTiers } from "@/hooks/useSuperChatAPI";
@@ -6,12 +6,18 @@ import { LiveMessage, CommonsMessage } from "./hooks/useLiveSocket";
 
 interface PinnedSuperchatsProps {
     messages: LiveMessage[];
-    now: number;
 }
 
-export default function PinnedSuperchats({ messages, now }: PinnedSuperchatsProps) {
+export default function PinnedSuperchats({ messages }: PinnedSuperchatsProps) {
     const { getTier } = useSuperChatTiers();
     const superchatsRef = useRef<HTMLDivElement>(null);
+    
+    const [now, setNow] = useState(Date.now());
+
+    useEffect(() => {
+        const timer = setInterval(() => setNow(Date.now()), 1000);
+        return () => clearInterval(timer);
+    }, []);
 
     const scrollSuperchats = useCallback((direction: "left" | "right") => {
         if (superchatsRef.current) {

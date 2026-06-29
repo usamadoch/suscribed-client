@@ -110,3 +110,20 @@ export const idTypeOptions = [
     { id: 'driving_license', title: 'Driving License' },
     { id: 'passport', title: 'Passport' }
 ];
+
+export const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || "https://commons.pk").replace(/\/$/, "");
+export const APP_DOMAIN = APP_URL.replace(/^https?:\/\//, "");
+
+export const getRenewalDate = (interval: 'MONTHLY' | 'YEARLY') => {
+    const date = new Date();
+    if (interval === 'YEARLY') {
+        date.setFullYear(date.getFullYear() + 1);
+    } else {
+        date.setMonth(date.getMonth() + 1);
+    }
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+};

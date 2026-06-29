@@ -31,7 +31,7 @@ const PublishModal = ({
                 </p>
 
                 {missingFields.length > 0 && (
-                    <div className=" p-4 border border-n-1 shadow-primary-4  dark:border-n-6">
+                    <div className=" mt-8">
                         <h6 className="text-n-2 text-h6 dark:text-red-400 font-medium mb-2 flex items-center gap-2">
                             Complete your profile
                         </h6>

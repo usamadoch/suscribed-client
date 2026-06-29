@@ -1,6 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import Icon from '@/components/Icon';
+import { Icon } from '@/components/ui/icon';
+import { Pencil, Trash2, Menu } from '@/lib/icons';
 
 interface SortableItemProps {
     id: string;
@@ -38,9 +39,7 @@ export default function SortableItem({ id, value, onRemove, onEdit, isOverlay = 
                 {...listeners}
                 className={`px-1 text-n-8 transition-opacity outline-none ${isOverlay ? 'opacity-100 cursor-grabbing' : 'opacity-50 hover:opacity-100 cursor-grab active:cursor-grabbing'}`}
             >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
-                </svg>
+                <Icon icon={Menu} size={20} />
             </div>
             <div className="flex-1 text-sm font-medium text-gray-900 dark:text-n-9 truncate">
                 {value || 'Empty perk'}
@@ -50,16 +49,16 @@ export default function SortableItem({ id, value, onRemove, onEdit, isOverlay = 
                 type="button"
                 onClick={onEdit}
                 title="Edit"
-                className="w-8 h-8 bg-purple-1 border border-n-1 text-0 cursor-pointer transition-colors hover:bg-purple-2">
-                <Icon name="edit" viewBox='0 0 24 24' />
+                className="flex items-center justify-center w-8 h-8 bg-purple-1 border border-n-1 cursor-pointer transition-colors hover:bg-purple-2 text-white">
+                <Icon icon={Pencil} size={16} />
             </button>
 
             <button
                 onClick={onRemove}
                 type="button"
                 title="Remove"
-                className="w-8 h-8 bg-purple-1 border border-n-1 text-0 cursor-pointer transition-colors hover:bg-purple-2">
-                <Icon name="remove" />
+                className="flex items-center justify-center w-8 h-8 bg-purple-1 border border-n-1 cursor-pointer transition-colors hover:bg-purple-2 text-white">
+                <Icon icon={Trash2} size={16} />
             </button>
         </div>
     );

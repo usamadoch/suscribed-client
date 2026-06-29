@@ -18,6 +18,7 @@ import { useAuth, useAuthStore } from "@/store/auth";
 import { SignUpFormValues } from "@/app/(auth)/_validations";
 
 import { generateUsername } from "@/lib/utils";
+import Link from "next/link";
 
 type Step1Props = {
     onNext: () => void;
@@ -113,22 +114,28 @@ const Step1Account = ({ onNext }: Step1Props) => {
                     emailAutoFocus={true}
                 />
 
+                <p className="mb-4 text-xs dark:text-n-8 ">
+                    By creating an account, you agree to our{" "}
+                    <Link href="/terms" className=" underline transition-colors">
+                        Terms of Service
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/privacy" className=" underline transition-colors">
+                        Privacy Policy
+                    </Link>.
+                </p>
+
                 <StepActions
                     onNext={handleNext}
                     isLoading={isLoading}
                 />
             </div>
 
-            {/* <div className="mt-20 text-sm dark:text-n-8">
-                Not a Creator?
-
-                <Link
-                    href="/login"
-                    className="ml-1.5 font-bold transition-colors dark:text-n-9"
-                >
-                    Join as a Member
+            <div className="flex justify-center mt-20">
+                <Link href="/login" className="btn btn-stroke rounded-md btn-medium px-4">
+                    If not a Creator? Join as a Member
                 </Link>
-            </div> */}
+            </div>
         </>
     );
 };

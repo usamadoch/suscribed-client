@@ -81,6 +81,16 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
         ? post.mediaAttachments.find(m => !isLockedMedia(m) && m.type === 'video') as VideoAttachment | undefined
         : undefined;
 
+    const firstImage = post.postType === 'image' && !post.isLocked
+        ? post.mediaAttachments.find(m => !isLockedMedia(m) && m.type === 'image' && m.url) as any
+        : undefined;
+
+    const mediaAspectRatio = firstImage?.dimensions
+        ? `${firstImage.dimensions.width} / ${firstImage.dimensions.height}`
+        : displayedVideo?.dimensions
+            ? `${displayedVideo.dimensions.width} / ${displayedVideo.dimensions.height}`
+            : undefined;
+
     // Use centralized creator info logic
     const creator = getCreatorInfo(post, page);
 
@@ -92,11 +102,15 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
             visible={visible}
             onClose={onClose}
             showCloseIcon={false}
-            classWrap={`${showMediaSection ? "max-w-[80rem]" : "max-w-[40rem]"} bg-n-1 dark:bg-n-1 w-full flex flex-row !p-0 h-[80vh] overflow-hidden md:flex-col md:h-auto md:max-h-[90vh] md:overflow-y-auto`}
+            classWrap={`${showMediaSection ? "max-w-[80rem] w-fit" : "max-w-[40rem] w-full"} bg-n-1 dark:bg-n-1 flex flex-row !p-0 h-[80vh] overflow-hidden md:w-full md:flex-col md:h-auto md:max-h-[90vh] md:overflow-y-auto`}
         >
+
             {/* Left Section: Image/Media */}
             {showMediaSection && (
-                <div className="w-3/5 bg-n-1 flex items-center justify-center relative overflow-hidden md:w-full md:h-80 md:order-3">
+                <div
+                    style={{ aspectRatio: mediaAspectRatio }}
+                    className={`bg-n-1 flex items-center justify-center relative overflow-hidden md:w-full md:h-auto md:order-3 ${mediaAspectRatio ? "w-auto h-[80vh] max-w-[56rem] max-w-[calc(100vw-24rem)] xl:max-w-[calc(100vw-22rem)]" : "w-160 lg:w-120 h-[80vh]"}`}
+                >
                     {displayedImages.length > 0 ? (
                         <Images
                             items={displayedImages}
@@ -128,7 +142,7 @@ const PostModal = ({ visible, onClose, post, page }: PostModalProps) => {
             )}
 
             {/* Right Section: Details (Stacked) */}
-            <div className={`${showMediaSection ? "w-2/5" : "w-full"} shrink-0 bg-white dark:bg-n-1 flex flex-col dark:border-n-6 md:w-full md:contents`}>
+            <div className={`${showMediaSection ? "w-md xl:w-88" : "w-full"} shrink-0 bg-white dark:bg-n-1 flex flex-col dark:border-n-6 md:w-full md:contents`}>
                 {/* 1. Author Header */}
                 <div className="p-4 flex items-center shrink-0 md:order-1">
                     <div className="relative w-10 h-10 mr-3">

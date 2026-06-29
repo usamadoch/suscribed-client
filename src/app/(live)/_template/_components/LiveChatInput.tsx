@@ -14,27 +14,35 @@ import Alert from "@/components/Alert";
 import { liveApi } from "@/services/live.service";
 import SuperChatModal from "./SuperChatModal";
 import { useMyPage } from "@/hooks/queries";
+import { useEmojiPicker } from "@/hooks/useEmojiPicker";
 
 
 
 interface LiveChatInputProps {
     sessionId?: string;
     isLive?: boolean;
+    isLoading?: boolean;
     mutedUntil?: Date | null;
     isCreator?: boolean;
 }
 
-export default function LiveChatInput({ sessionId, isLive, mutedUntil, isCreator }: LiveChatInputProps) {
+export default function LiveChatInput({ sessionId, isLive, isLoading, mutedUntil, isCreator }: LiveChatInputProps) {
     const { isAuthenticated, user } = useAuth();
     const { data: myPage } = useMyPage();
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [isSending, setIsSending] = useState(false);
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showSuperChatModal, setShowSuperChatModal] = useState(false);
-    const emojiPickerRef = useRef<HTMLDivElement>(null);
-    const emojiButtonRef = useRef<HTMLButtonElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const [muteRemaining, setMuteRemaining] = useState<string | null>(null);
+    const [messageText, setMessageText] = useState("");
+
+    const {
+        showEmojiPicker,
+        setShowEmojiPicker,
+        emojiPickerRef,
+        emojiButtonRef,
+        onEmojiSelect,
+    } = useEmojiPicker(inputRef, messageText, setMessageText);
 
     useEffect(() => {
         if (!mutedUntil) {
@@ -59,45 +67,7 @@ export default function LiveChatInput({ sessionId, isLive, mutedUntil, isCreator
         return () => clearInterval(interval);
     }, [mutedUntil]);
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (
-                emojiPickerRef.current &&
-                !emojiPickerRef.current.contains(event.target as Node) &&
-                emojiButtonRef.current &&
-                !emojiButtonRef.current.contains(event.target as Node)
-            ) {
-                setShowEmojiPicker(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
-    const [messageText, setMessageText] = useState("");
     const maxLength = 196;
-
-    const onEmojiSelect = (emoji: any) => {
-        if (inputRef.current) {
-            const cursorPosition = inputRef.current.selectionStart;
-            const textBeforeCursor = messageText.substring(0, cursorPosition);
-            const textAfterCursor = messageText.substring(cursorPosition);
-            const newMessage = textBeforeCursor + emoji.native + textAfterCursor;
-            setMessageText(newMessage);
-
-            setTimeout(() => {
-                inputRef.current?.focus();
-                inputRef.current?.setSelectionRange(
-                    cursorPosition + emoji.native.length,
-                    cursorPosition + emoji.native.length
-                );
-            }, 0);
-        } else {
-            setMessageText(messageText + emoji.native);
-        }
-    };
     const currentLength = messageText?.length || 0;
     const remainingLength = Math.max(0, maxLength - currentLength);
     const percentageRemaining = (remainingLength / maxLength) * 100;
@@ -135,7 +105,7 @@ export default function LiveChatInput({ sessionId, isLive, mutedUntil, isCreator
             <>
                 <div className="shrink-0 pt-4 border-t border-n-4 dark:border-n-6 px-5">
                     <button
-                        className="btn btn-purple btn-medium w-full h-10"
+                        className="btn btn-purple btn-medium rounded-sm w-full h-10"
                         onClick={() => setShowLoginModal(true)}
                     >
                         Sign in to chat
@@ -167,18 +137,20 @@ export default function LiveChatInput({ sessionId, isLive, mutedUntil, isCreator
             )}
 
 
-            <SuperChatModal
-                visible={showSuperChatModal}
-                onClose={() => setShowSuperChatModal(false)}
-                sessionId={sessionId}
-            />
+            {!isCreator && (
+                <SuperChatModal
+                    visible={showSuperChatModal}
+                    onClose={() => setShowSuperChatModal(false)}
+                    sessionId={sessionId}
+                />
+            )}
 
             <div className="px-5">
 
                 <CommentInput
                     inputRef={inputRef}
                     avatar={messageText?.trim() ? (isCreator ? (myPage?.avatarUrl || user?.avatarUrl || "/images/avatars/avatar.jpg") : (user?.avatarUrl || "/images/avatars/avatar.jpg")) : null}
-                    placeholder={isLive ? "Chat..." : "Chat is closed"}
+                    placeholder={isLoading ? "Loading..." : (isLive ? "Chat..." : "Chat is closed")}
                     overlayNode={
                         muteRemaining ? (
                             <span>
@@ -209,14 +181,16 @@ export default function LiveChatInput({ sessionId, isLive, mutedUntil, isCreator
                                 <Icon icon={Smile} />
                             </button>
                             {!messageText?.trim() ? (
-                                <button
-                                    type="button"
-                                    className={`btn btn-stroke btn-square h-8 w-8 bg-n-3 rounded-md ${(!isLive || !!muteRemaining) ? "opacity-50 cursor-not-allowed" : ""}`}
-                                    onClick={() => setShowSuperChatModal(true)}
-                                    disabled={!isLive || !!muteRemaining}
-                                >
-                                    <Icon icon={Star} />
-                                </button>
+                                !isCreator && (
+                                    <button
+                                        type="button"
+                                        className={`btn btn-stroke btn-square h-8 w-8 bg-n-3 rounded-md ${(!isLive || !!muteRemaining) ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        onClick={() => setShowSuperChatModal(true)}
+                                        disabled={!isLive || !!muteRemaining}
+                                    >
+                                        <Icon icon={Star} />
+                                    </button>
+                                )
                             ) : (
                                 <button
                                     className={`btn-purple btn-square btn-small ${(!isLive || isSending || !!muteRemaining) ? "opacity-50 cursor-not-allowed" : ""}`}

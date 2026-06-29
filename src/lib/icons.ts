@@ -49,5 +49,10 @@ export {
   Star,
   Pin,
   Video,
-  LockKeyhole
+  LockKeyhole,
+  Square,
+  Power,
+  Info,
+  OctagonX
 } from "lucide-react";
+

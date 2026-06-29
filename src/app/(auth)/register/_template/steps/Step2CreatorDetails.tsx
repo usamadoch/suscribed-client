@@ -7,7 +7,7 @@ import Field from "@/components/Field";
 import Alert from "@/components/Alert";
 import StepActions from "./StepActions";
 
-import { slugify } from "@/lib/utils";
+import { slugify, APP_DOMAIN } from "@/lib/utils";
 
 import { SignUpFormValues } from "@/app/(auth)/_validations";
 import { pageService as pageApi } from "@/services/page.service";
@@ -63,9 +63,6 @@ const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
             } catch (err: any) {
                 console.error("Failed to update page details", err);
 
-                // If the error suggests page not found, it means the page wasn't created during signup.
-                // We could try to create it here or just show an error.
-                // For this quick fix, let's show an error.
                 if (err.status === 404) {
                     setError("Your creator page could not be found. Please try refreshing or logging in again.");
                 } else {
@@ -91,7 +88,6 @@ const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
 
             <Field
                 className="mb-4"
-                // label="Creator Name"
                 classInput="h-12"
 
                 placeholder="Creator Name"
@@ -102,9 +98,8 @@ const Step2CreatorDetails = ({ onNext, onBack }: Step2Props) => {
             />
             <Field
                 className="mb-4"
-                // label="Profile URL"
                 placeholder="my-page"
-                prefix="suscribed.co/"
+                prefix={`${APP_DOMAIN}/`}
                 classInput="h-12"
                 icon="link"
                 error={errors.pageSlug}

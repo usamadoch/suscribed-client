@@ -4,7 +4,7 @@
 
 import Link from "next/link";
 
-import { Copy, X } from "@/lib/icons";
+import { Copy, Radio, Square, X } from "@/lib/icons";
 import { Icon } from "@/components/ui/icon";
 
 type LiveHeaderProps = {
@@ -65,7 +65,7 @@ const LiveHeader = ({
                     {showCopyLink && (
                         <button
                             onClick={onCopyLink}
-                            className="btn btn-medium btn-stroke px-4 gap-2"
+                            className="btn btn-medium btn-stroke px-4"
                         >
                             <Icon icon={Copy} className=" text-n-1 dark:text-n-9" /> Copy link
                         </button>
@@ -82,9 +82,9 @@ const LiveHeader = ({
                                     <button
                                         onClick={onStartLive}
                                         disabled={startLiveDisabled}
-                                        className="btn btn-medium btn-purple cursor-pointer btn-shadow bg-red-500 text-n-9 hover:bg-red-600 hover:text-n-9 px-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
+                                        className="btn btn-medium btn-purple cursor-pointer btn-shadow rounded-sm bg-red-500 text-n-9 hover:bg-red-600 hover:text-n-9 px-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
                                     >
-                                        Start Live
+                                        <Icon icon={Radio} className="text-n-9" /> Start Live
                                     </button>
                                 </div>
                             )}
@@ -93,7 +93,7 @@ const LiveHeader = ({
                                     onClick={onEndStream}
                                     className="btn btn-medium btn-purple btn-shadow bg-red-500 text-n-9 hover:bg-red-600 hover:text-n-9 px-4"
                                 >
-                                    End Stream
+                                    <Icon icon={Square} className="text-n-9" /> End Stream
                                 </button>
                             )}
                         </>

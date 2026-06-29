@@ -3,11 +3,14 @@ import { CardCapture, PayerAuthentication, Environment } from '@sfpy/atoms';
 import '@sfpy/atoms/styles';
 import Loader from '../Loader';
 import { Tier, CreatorPage } from '@/types';
-import Icon from '../Icon';
+import Link from 'next/link';
+import { Icon } from "@/components/ui/icon";
+import { ChevronLeft, LockKeyhole } from "@/lib/icons";
 import { useMutation } from "@tanstack/react-query";
 import { membershipService as membershipPlanApi } from "@/services/membership.service";
 import { toast } from "react-hot-toast";
 import OrderSummaryPanel from './OrderSummaryPanel';
+import { getRenewalDate } from '@/lib/utils';
 
 const SafepayCardForm = ({
     trackerToken,
@@ -30,10 +33,6 @@ const SafepayCardForm = ({
     const [currentTrackerToken, setCurrentTrackerToken] = useState(trackerToken);
     const [currentAuthToken, setCurrentAuthToken] = useState(authToken);
 
-    const intervalOptions = [
-        { id: 'MONTHLY', label: 'Monthly', description: 'Pay month-by-month' },
-        { id: 'YEARLY', label: 'Yearly', description: 'Save more with yearly billing' }
-    ];
 
     const cardRef = useRef<{
         submit: () => void;
@@ -122,15 +121,15 @@ const SafepayCardForm = ({
 
     return (
         <>
-            <div className="">
+            <div>
 
                 {onBack && (
                     <button
-                        className='btn-stroke h-8 font-normal ml-8 text-n-3 dark:text-n-9 tablet:ml-4 mobile:ml-0'
+                        className="btn-medium btn-stroke btn-square rounded-full bg-white dark:bg-n-1 ml-8 tablet:ml-4 mobile:ml-0"
                         onClick={onBack}
+                        title="Back"
                     >
-                        <Icon name='arrow-prev' />
-                        Back
+                        <Icon icon={ChevronLeft} strokeWidth={2.5} className="text-n-1 dark:text-n-9" />
                     </button>
                 )}
 
@@ -138,7 +137,7 @@ const SafepayCardForm = ({
                 <div className='flex gap-8 items-start w-full mt-8 mobile:flex-col'>
 
                     {/* Left side: Selected tier details and interval switch */}
-                    <OrderSummaryPanel 
+                    <OrderSummaryPanel
                         interval={interval}
                         onIntervalChange={handleIntervalChange}
                         plan={plan}
@@ -164,7 +163,7 @@ const SafepayCardForm = ({
                                 boxSizing: 'border-box',
                                 transition: 'border-color 0.2s',
 
-                                marginBottom: '30px',
+                                // marginBottom: '30px',
 
                             }}
                         >
@@ -211,21 +210,41 @@ const SafepayCardForm = ({
                             </div>
                         </div>
 
-                        <div className=" mb-4 text-n-3 flex flex-col gap-1 dark:text-n-9">
+                        <div className="flex items-center justify-between mb-8 mt-2">
+                            <div className="flex gap-2 items-center">
+                                <img src="/merchant_logos/visa.svg" alt="Visa" className="h-8 w-auto" />
+                                <img src="/merchant_logos/mastercard.svg" alt="Mastercard" className="h-8 w-auto" />
+                            </div>
+                            <div className="flex items-center gap-1.5 text-xs font-semibold text-n-3 dark:text-n-9">
+                                <Icon icon={LockKeyhole} size={14} className="text-n-3 dark:text-n-9" />
+                                <span>Secured</span>
+                            </div>
+                        </div>
+
+                        <div className=" mb-4 gap-3 text-n-3 flex flex-col dark:text-n-9">
                             <div className='text-sm font-medium'>
                                 {updateTrackerMutation.isPending ? (
                                     <div className="h-5 w-[280px] max-w-full bg-n-3/20 dark:bg-n-6/50 animate-pulse rounded" />
                                 ) : (
-                                    `You’ll pay PKR ${plan ? (interval === 'YEARLY' ? plan.price * 12 : plan.price) : 0} ${interval === 'YEARLY' ? 'yearly' : 'monthly'} starting today.`
+                                    `You’ll pay PKR ${plan ? (interval === 'YEARLY' ? plan.price * 12 : plan.price).toLocaleString() : 0} ${interval === 'YEARLY' ? 'yearly' : 'monthly'} starting today.`
                                 )}
                             </div>
-                            <p className='text-xs'>
-                                By clicking "Pay Now", you agree to our Terms of Use and Privacy Policy. This subscription automatically renews, and you’ll be notified in advance if the pricing changes. Cancel anytime in your membership settings.
+                            <p className="text-xs">
+                                By clicking Subscribe now, you agree to our{" "}
+                                <Link href="/terms" className="underline transition-colors ">
+                                    Terms of Use
+                                </Link>{" "}
+                                and{" "}
+                                <Link href="/privacy" className="underline transition-colors">
+                                    Privacy Policy
+                                </Link>.
+                                This subscription automatically renews, you can cancel anytime.
+
                             </p>
                         </div>
 
                         <button
-                            className='btn-purple btn-medium w-full h-12 mt-4 font-bold cursor-pointer uppercase tracking-widest flex items-center justify-center'
+                            className='btn-purple rounded-sm w-full mt-4 font-bold cursor-pointer uppercase tracking-widest flex items-center justify-center'
                             onClick={handlePayNow}
                             disabled={isProcessing || updateTrackerMutation.isPending}
                         >
@@ -233,10 +252,14 @@ const SafepayCardForm = ({
                                 updateTrackerMutation.isPending ? (
                                     <div className="h-5 w-32 bg-n-1/20 dark:bg-n-3/20 animate-pulse rounded" />
                                 ) : (
-                                    `Pay PKR ${plan ? (interval === 'YEARLY' ? plan.price * 12 : plan.price) : 0}`
+                                    `Subscribe now`
                                 )
                             )}
                         </button>
+
+                        <p className="text-xs text-center text-n-3 dark:text-n-9 mt-3">
+                            Renews PKR {plan ? (interval === 'YEARLY' ? plan.price * 12 : plan.price).toLocaleString() : 0} on {getRenewalDate(interval)} · Cancel anytime
+                        </p>
 
                         {/* Show error below the button */}
                         {errorMessage && (

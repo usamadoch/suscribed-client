@@ -42,9 +42,10 @@ interface UsePostDetailReturn {
 
     // Join / Auth
     handleJoin: () => void;
-    isJoining: boolean;
     isLoginModalOpen: boolean;
     setIsLoginModalOpen: (open: boolean) => void;
+    isJoinTierModalOpen: boolean;
+    setIsJoinTierModalOpen: (open: boolean) => void;
 
     // Auth user
     user: ReturnType<typeof useAuth>["user"];
@@ -73,10 +74,11 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
 
     const {
         user,
-        isJoining,
         handleJoin,
         isLoginModalOpen,
         setIsLoginModalOpen,
+        isJoinTierModalOpen,
+        setIsJoinTierModalOpen,
     } = usePostJoin(post);
 
     // ── Derived values ───────────────────────────────────────
@@ -115,9 +117,10 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
         handleCommentSubmit,
         isSubmittingComment,
         handleJoin,
-        isJoining,
         isLoginModalOpen,
         setIsLoginModalOpen,
+        isJoinTierModalOpen,
+        setIsJoinTierModalOpen,
         user,
     };
 };

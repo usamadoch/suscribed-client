@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useCreatorPage } from "@/hooks/queries";
 
-import Loader from "@/components/Loader";
 import PublishModal from "@/components/modals/PublishModal";
 
 import { pageService as pageApi } from "@/services/page.service";
@@ -38,7 +37,7 @@ const DraftBanner = () => {
 
     // Check for missing fields for warning
     const missingFields: string[] = [];
-    if (page && !page.bannerUrl) missingFields.push('Banner image');
+    // if (page && !page.bannerUrl) missingFields.push('Banner image');
     if (page && !page.avatarUrl) missingFields.push('Profile picture');
     if (page && !page.about) missingFields.push('About section');
 
@@ -50,7 +49,9 @@ const DraftBanner = () => {
                 <div className="max-w-lg mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div className="flex items-center justify-between w-full gap-4">
                         <div className="flex items-center gap-2">
-                            <span className="text-base font-medium">Your page is unpublished. Only you can see it.</span>
+                            <span className="text-base font-medium">
+                                Your page is unpublished. Only you can see it.
+                            </span>
                         </div>
                         <div className="flex items-center gap-2">
                             <button

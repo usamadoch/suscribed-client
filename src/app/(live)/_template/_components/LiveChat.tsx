@@ -27,18 +27,12 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
     const [activeTab, setActiveTab] = useState<string>("live");
     const [messages, setMessages] = useState<LiveMessage[]>([]);
     const [isScrolledUp, setIsScrolledUp] = useState(false);
-    const [now, setNow] = useState(Date.now());
     const [mutedUntil, setMutedUntil] = useState<Date | null>(null);
 
     // Assuming we can know if the current user is creator. Wait, we can get current user.
 
-    useEffect(() => {
-        const timer = setInterval(() => setNow(Date.now()), 1000);
-        return () => clearInterval(timer);
-    }, []);
-
     const { user } = useAuth();
-    const { data: sessionData } = useQuery({
+    const { data: sessionData, isLoading } = useQuery({
         queryKey: ["publicLiveSession", sessionId],
         queryFn: () => liveApi.getPublicSession(sessionId as string),
         enabled: !!sessionId,
@@ -120,6 +114,10 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
         ? messages
         : messages.filter(m => m.source === "commons" && m.type === "paid");
 
+    const creatorAvatar = typeof sessionData?.creatorId === 'object'
+        ? sessionData.creatorId.avatarUrl
+        : undefined;
+
     return (
         <>
             <div className="pb-4 px-5 border-b border-n-4 dark:border-n-6 shrink-0">
@@ -129,19 +127,25 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
                         ⚙ Mod
                     </button>
                 </div>
-                <PinnedSuperchats messages={messages} now={now} />
+                <PinnedSuperchats messages={messages} />
             </div>
 
             <div className="relative flex-1 min-h-0 flex flex-col px-5">
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-n-4 dark:scrollbar-thumb-n-6 flex flex-col-reverse gap-2 pb-2"
+                    className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-n-4 dark:scrollbar-thumb-n-6 flex flex-col-reverse pb-2"
                 >
                     {displayMessages.length > 0 && (
                         [...displayMessages].reverse().map(msg => (
                             <div key={msg.id} className="text-sm animate-in fade-in duration-300">
-                                <LiveChatMessageItem msg={msg} isCreator={!!isCreator} sessionId={sessionId} />
+                                <LiveChatMessageItem
+                                    msg={msg}
+                                    isCreator={!!isCreator}
+                                    sessionId={sessionId}
+                                    creatorId={creatorUserId}
+                                    creatorAvatar={creatorAvatar}
+                                />
                             </div>
                         ))
                     )}
@@ -156,7 +160,7 @@ export default function LiveChat({ sessionId, isLive }: LiveChatProps) {
                 )}
             </div>
 
-            <LiveChatInput sessionId={sessionId} isLive={isLive} mutedUntil={mutedUntil} isCreator={!!isCreator} />
+            <LiveChatInput sessionId={sessionId} isLive={isLive} isLoading={isLoading} mutedUntil={mutedUntil} isCreator={!!isCreator} />
         </>
     );
 }

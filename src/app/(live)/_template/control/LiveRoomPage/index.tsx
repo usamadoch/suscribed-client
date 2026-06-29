@@ -14,6 +14,7 @@ import { Icon } from "@/components/ui/icon";
 import { Clock, CheckCircle, Copy } from "@/lib/icons";
 import { Skeleton } from "@/components/Skeleton";
 import Alert from "@/components/Alert";
+import { APP_URL } from "@/lib/utils";
 import { liveApi } from "@/services/live.service";
 import EndStreamModal from "@/components/modals/EndStreamModal";
 
@@ -21,6 +22,7 @@ const LiveRoomControlPage = () => {
     const params = useParams();
     const sessionId = params?.id as string;
     const queryClient = useQueryClient();
+    const appUrl = APP_URL;
 
     const [isEndModalVisible, setIsEndModalVisible] = useState(false);
 
@@ -87,7 +89,7 @@ const LiveRoomControlPage = () => {
                 showEndStream={!isEnded}
                 isEnded={isEnded}
                 onCopyLink={() => {
-                    navigator.clipboard.writeText(`https://commons.pk/live-room/${sessionId}`);
+                    navigator.clipboard.writeText(`${appUrl}/live-room/${sessionId}`);
                     toast.custom((t) => (
                         <Alert
                             className="mb-0"
@@ -149,14 +151,14 @@ const LiveRoomControlPage = () => {
                     <Field
                         className="mb-4"
                         classInput="h-10 text-xs"
-                        value={`https://commons.pk/live-room/${sessionId}`}
+                        value={`${appUrl}/live-room/${sessionId}`}
                         disabled
                     />
                     <div className="flex gap-3 md:flex-col">
                         <button
                             className="btn btn-stroke btn-small"
                             onClick={() => {
-                                navigator.clipboard.writeText(`https://commons.pk/live-room/${sessionId}`);
+                                navigator.clipboard.writeText(`${appUrl}/live-room/${sessionId}`);
                                 toast.custom((t) => (
                                     <Alert
                                         className="mb-0 shadow-md"

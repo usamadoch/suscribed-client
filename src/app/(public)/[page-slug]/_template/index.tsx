@@ -11,11 +11,12 @@ import { ApiClientError } from "@/services/api.client";
 
 import { useCreatorHeader } from "@/context/CreatorHeaderContext";
 
-import Banner from "../_components/Banner";
+// import Banner from "../_components/Banner";
 import ProfileHeader from "../_components/ProfileHeader";
 import Content from "../_components/Content";
 import CreatorPageError from "../_components/CreatorPageError";
 import Loader from "@/components/Loader";
+import StickyJoinBar from "../_components/StickyJoinBar";
 
 
 const CreatorPage = () => {
@@ -82,6 +83,13 @@ const CreatorPage = () => {
 
                 <Content pageSlug={slug} />
             </div>
+
+            <StickyJoinBar
+                page={page}
+                isOwner={!!isOwner}
+                isMember={!!isMember}
+                onJoinSuccess={handleJoinSuccess}
+            />
         </>
     );
 };

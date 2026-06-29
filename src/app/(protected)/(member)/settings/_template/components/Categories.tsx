@@ -73,7 +73,7 @@ const Categories = ({
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <ListboxOptions className="absolute left-0 right-0 z-10 mt-1 p-2 bg-white border border-n-4 rounded-b-md shadow-lg dark:bg-n-1 dark:border-n-6">
+                            <ListboxOptions className="absolute left-0 right-0 z-10 mt-1 p-2 bg-white border border-n-4 rounded-b-md shadow-lg dark:bg-n-1 dark:border-n-6 max-h-[300px] overflow-y-auto scrollbar-none outline-none">
                                 {options.map((item) => (
                                     <ListboxOption
                                         className="flex items-start px-3 py-2 text-sm font-bold text-n-3 transition-colors cursor-pointer ui-selected:bg-n-3/20! ui-selected:text-n-1! tap-highlight-color dark:text-n-7  dark:ui-selected:text-white!"

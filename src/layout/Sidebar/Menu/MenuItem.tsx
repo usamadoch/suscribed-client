@@ -56,7 +56,7 @@ const MenuItem = ({
             onClick={(e) => onNavClick(e, link)}
         >
             <Icon
-                className={`shrink-0 ${visible ? "mr-3" : isMinimize ? "mr-0" : "mr-3 xl:mr-0"}`}
+                className={`shrink-0  ${visible ? "mr-3" : isMinimize ? "mr-0" : "mr-3 xl:mr-0"}`}
                 icon={link.icon as LucideIcon}
             />
             {link.title}

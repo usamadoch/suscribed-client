@@ -3,7 +3,7 @@ import { truncateMessage, renderMessageText } from "@/utils/chatFormatting";
 import { useSuperChatTiers } from "@/hooks/useSuperChatAPI";
 import { LiveMessage, YouTubeMessage, CommonsMessage } from "./hooks/useLiveSocket";
 import ActionMenu from "@/components/ActionMenu";
-import { useState } from "react";
+import { useState, memo } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { liveApi } from "@/services/live.service";
 import toast from "react-hot-toast";
@@ -13,9 +13,11 @@ interface LiveChatMessageItemProps {
     msg: LiveMessage;
     isCreator?: boolean;
     sessionId?: string;
+    creatorId?: string;
+    creatorAvatar?: string | null;
 }
 
-export default function LiveChatMessageItem({ msg, isCreator, sessionId }: LiveChatMessageItemProps) {
+export default memo(function LiveChatMessageItem({ msg, isCreator, sessionId, creatorId, creatorAvatar }: LiveChatMessageItemProps) {
     const { getTier } = useSuperChatTiers();
     const [isTimeoutModalOpen, setIsTimeoutModalOpen] = useState(false);
 
@@ -52,57 +54,59 @@ export default function LiveChatMessageItem({ msg, isCreator, sessionId }: LiveC
         const tier = getTier(amount);
 
         return (
-            <div className="rounded-sm shadow-primary-4 px-4 py-3 flex flex-col relative shrink-0 transition-colors duration-300 mb-2 group" style={{ backgroundColor: tier.bg }}>
+            <div className="py-1">
+                <div className="rounded-sm shadow-primary-4 px-4 py-3 flex flex-col relative shrink-0 transition-colors duration-300 mb-2 group" style={{ backgroundColor: tier.bg }}>
 
-                <div className={`flex items-center gap-3 relative z-10 ${tier.canMessage && cm.message ? 'mb-2' : ''} pr-8`}>
-                    <div className="flex  items-center gap-3">
+                    <div className={`flex items-center gap-3 relative z-10 ${tier.canMessage && cm.message ? 'mb-2' : ''} pr-8`}>
+                        <div className="flex  items-center gap-3">
 
-                        <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0">
-                            <Image
-                                className="object-cover"
-                                family="avatar"
-                                slot="sidebar"
-                                src={cm.senderAvatar || "/images/avatars/avatar-1.jpg"}
-                                fill
-                                alt="Avatar"
-                                referrerPolicy="no-referrer"
-                            />
-                        </div>
-                        <div>
-                            <span className={`opacity-90 text-sm font-bold transition-colors duration-300 ${tier.textDark ? 'dark:text-n-4/80' : 'dark:text-n-9'}`}>
-                                @{cm.senderName}
-                            </span>
-                            <span className={`text-[15px] font-bold ml-2 transition-colors duration-300 ${tier.textDark ? 'dark:text-n-1' : 'dark:text-n-9 '}`}>
-                                Rs {amount.toLocaleString()}
-                            </span>
-                        </div>
-                        {isCreator && isCommons && (
-                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity z-100">
-                                <ActionMenu
-                                    items={getMenuItems()}
-                                    buttonClass={` focus:outline-none cursor-pointer ${tier.textDark ? "text-n-1" : "text-n-9"} hover:text-purple-1`}
-                                    portal={true}
-                                    anchor="bottom end"
+                            <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0">
+                                <Image
+                                    className="object-cover"
+                                    family="avatar"
+                                    slot="sidebar"
+                                    src={cm.senderAvatar || "/images/avatars/avatar-1.jpg"}
+                                    fill
+                                    alt="Avatar"
+                                    referrerPolicy="no-referrer"
                                 />
                             </div>
-                        )}
+                            <div>
+                                <span className={`opacity-90 text-sm font-bold transition-colors duration-300 ${tier.textDark ? 'dark:text-n-4/80' : 'dark:text-n-9'}`}>
+                                    @{cm.senderName}
+                                </span>
+                                <span className={`text-[15px] font-bold ml-2 transition-colors duration-300 ${tier.textDark ? 'dark:text-n-1' : 'dark:text-n-9 '}`}>
+                                    Rs {amount.toLocaleString()}
+                                </span>
+                            </div>
+                            {isCreator && isCommons && (
+                                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity z-100">
+                                    <ActionMenu
+                                        items={getMenuItems()}
+                                        buttonClass={` focus:outline-none cursor-pointer ${tier.textDark ? "text-n-1" : "text-n-9"} hover:text-purple-1`}
+                                        portal={true}
+                                        anchor="bottom end"
+                                    />
+                                </div>
+                            )}
 
 
+                        </div>
                     </div>
+                    {tier.canMessage && cm.message && (
+                        <div className={`w-full text-[15px] font-medium relative z-10 wrap-break-words transition-colors duration-300 ${tier.textDark ? 'dark:text-n-4 text-n-4/60' : 'dark:text-n-9 text-n-9'}`}>
+                            {renderMessageText(truncatedText)}
+                        </div>
+                    )}
+
+                    <TimeoutUserModal
+                        visible={isTimeoutModalOpen}
+                        onClose={() => setIsTimeoutModalOpen(false)}
+                        onTimeout={(duration) => timeoutMutation.mutate(duration)}
+                        isPending={timeoutMutation.isPending}
+                        userName={cm.senderName}
+                    />
                 </div>
-                {tier.canMessage && cm.message && (
-                    <div className={`w-full text-[15px] font-medium relative z-10 wrap-break-words transition-colors duration-300 ${tier.textDark ? 'dark:text-n-4 text-n-4/60' : 'dark:text-n-9 text-n-9'}`}>
-                        {renderMessageText(truncatedText)}
-                    </div>
-                )}
-
-                <TimeoutUserModal
-                    visible={isTimeoutModalOpen}
-                    onClose={() => setIsTimeoutModalOpen(false)}
-                    onTimeout={(duration) => timeoutMutation.mutate(duration)}
-                    isPending={timeoutMutation.isPending}
-                    userName={cm.senderName}
-                />
             </div>
         );
     }
@@ -114,41 +118,53 @@ export default function LiveChatMessageItem({ msg, isCreator, sessionId }: LiveC
     const text = isYT ? (msg as YouTubeMessage).text : (msg as CommonsMessage).message;
     const truncatedText = truncateMessage(text);
 
+    const isMessageCreator = msg.source === "commons" && (msg as CommonsMessage).senderId === creatorId;
+
     return (
-        <div className="flex gap-4 items-start group relative">
-            {isCreator && isCommons && (
-                <div className="absolute -top-1 right-0 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity z-100">
-                    <ActionMenu
-                        items={getMenuItems()}
-                        buttonClass=" focus:outline-none cursor-pointer hover:text-purple-1"
-                        portal={true}
-                        anchor="bottom end"
+        <div className="py-1">
+            <div className={`${isMessageCreator ? 'bg-n-2 dark:bg-n-3 rounded-sm p-1' : 'px-1'} flex gap-4 items-start group relative`}>
+
+
+                <div className="relative w-6 h-6 rounded-full overflow-hidden shrink-0">
+                    <Image
+                        className="object-cover scale-105"
+                        family="avatar"
+                        slot="sidebar"
+                        src={(isMessageCreator && creatorAvatar) ? creatorAvatar : (avatar || "/images/avatars/avatar-1.jpg")}
+                        fill
+                        alt="Avatar"
+                        referrerPolicy="no-referrer"
                     />
                 </div>
-            )}
-            <div className="relative w-6 h-6 rounded-full overflow-hidden shrink-0 mt-0.5">
-                <Image
-                    className="object-cover scale-105"
-                    family="avatar"
-                    slot="sidebar"
-                    src={avatar || "/images/avatars/avatar-1.jpg"}
-                    fill
-                    alt="Avatar"
-                    referrerPolicy="no-referrer"
+                <div className="flex-1 min-w-0 flex items-center min-h-6">
+                    <div className="text-[13px] font-semibold wrap-break-words min-w-0 w-full">
+                        <span className={`font-bold mr-1 shrink-0 ${isMessageCreator ? 'text-n-1 dark:text-n-1 bg-purple-1 p-1 rounded-sm' : 'dark:text-n-8'}`}>
+                            {authorName}
+                        </span>
+                        <span className="text-n-1 dark:text-n-9">{renderMessageText(truncatedText)}</span>
+                    </div>
+                </div>
+
+                {isCreator && isCommons && (
+                    <div className=" opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity z-100">
+                        <ActionMenu
+                            items={getMenuItems()}
+                            buttonClass=" focus:outline-none cursor-pointer hover:text-purple-1"
+                            portal={true}
+                            anchor="bottom end"
+                        />
+                    </div>
+                )}
+
+
+                <TimeoutUserModal
+                    visible={isTimeoutModalOpen}
+                    onClose={() => setIsTimeoutModalOpen(false)}
+                    onTimeout={(duration) => timeoutMutation.mutate(duration)}
+                    isPending={timeoutMutation.isPending}
+                    userName={authorName}
                 />
             </div>
-            <div className="flex-1 min-w-0 text-[13px] font-semibold wrap-break-words">
-                <span className="font-bold text-n-4 dark:text-n-8 mr-1 shrink-0">{authorName}</span>
-                <span className="text-n-1 dark:text-n-9">{renderMessageText(truncatedText)}</span>
-            </div>
-
-            <TimeoutUserModal
-                visible={isTimeoutModalOpen}
-                onClose={() => setIsTimeoutModalOpen(false)}
-                onTimeout={(duration) => timeoutMutation.mutate(duration)}
-                isPending={timeoutMutation.isPending}
-                userName={authorName}
-            />
         </div>
     );
-}
+});

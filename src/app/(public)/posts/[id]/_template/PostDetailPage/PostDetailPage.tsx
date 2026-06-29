@@ -10,6 +10,7 @@ import PostContentArea from "./PostContentArea";
 import PostLoadingSkeleton from "./PostLoadingSkeleton";
 import LockedContent from "./LockedContent";
 import CommentsSection from "./CommentsSection";
+import JoinTierModal from "@/components/modals/JoinTierModal";
 
 // ─── Component ──────────────────────────────────────────────
 
@@ -33,11 +34,18 @@ const PostDetailPage = () => {
         handleCommentSubmit,
         isSubmittingComment,
         handleJoin,
-        isJoining,
         isLoginModalOpen,
         setIsLoginModalOpen,
+        isJoinTierModalOpen,
+        setIsJoinTierModalOpen,
         user,
     } = usePostDetail(postId);
+
+    const creatorPageForModal = post ? {
+        _id: typeof post.pageId === "object" ? post.pageId._id : post.pageId,
+        pageSlug: pageSlug || "",
+        userId: post.creatorId
+    } as any : null;
 
     return (
         <>
@@ -63,7 +71,6 @@ const PostDetailPage = () => {
                         {locked ? (
                             <LockedContent
                                 handleJoin={handleJoin}
-                                isJoining={isJoining}
                                 user={user}
                                 isLoginModalOpen={isLoginModalOpen}
                                 setIsLoginModalOpen={setIsLoginModalOpen}
@@ -86,7 +93,14 @@ const PostDetailPage = () => {
                     </div>
                 </>
             )}
-
+            
+            {creatorPageForModal && (
+                <JoinTierModal
+                    visible={isJoinTierModalOpen}
+                    onClose={() => setIsJoinTierModalOpen(false)}
+                    page={creatorPageForModal}
+                />
+            )}
         </>
     );
 };

@@ -67,6 +67,8 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
     const isOwner = data?.isOwner;
     const isMember = data?.isMember;
 
+    const isCreatorPage = pathname === `/${slug}` || pathname === `/${slug}/`;
+
     useWindowScrollPosition(({ currPos }) => {
         setHeaderStyle(currPos.y <= -1);
     });
@@ -97,21 +99,35 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
                             <div className="h-6 w-26 rounded bg-n-3/20 dark:bg-n-6/50 animate-pulse" />
                         </div>
                     ) : (
-                        <Link href={`/${page?.pageSlug || slug || ''}`} className="flex items-center gap-2 mr-24 mobile:mr-4" >
-
-                            <div className="relative shrink-0 w-9 h-9 rounded-full overflow-hidden">
-                                <Image
-                                    className="object-cover mb-0"
-                                    family="avatar"
-                                    slot="profile"
-                                    src={page?.avatarUrl}
-                                    fill
-                                    alt={page?.displayName || "Avatar"}
-                                />
+                        isCreatorPage ? (
+                            <div className="flex items-center gap-2 mr-24 mobile:mr-4">
+                                <div className="relative shrink-0 w-9 h-9 rounded-full overflow-hidden">
+                                    <Image
+                                        className="object-cover mb-0"
+                                        family="avatar"
+                                        slot="profile"
+                                        src={page?.avatarUrl}
+                                        fill
+                                        alt={page?.displayName || "Avatar"}
+                                    />
+                                </div>
+                                <div className="font-bold dark:text-n-9 truncate whitespace-nowrap">{page?.displayName || "Creator Page"}</div>
                             </div>
-                            <div className="font-bold dark:text-n-9 truncate whitespace-nowrap">{page?.displayName || "Creator Page"}</div>
-
-                        </Link>
+                        ) : (
+                            <Link href={`/${page?.pageSlug || slug || ''}`} className="flex items-center gap-2 mr-24 mobile:mr-4" >
+                                <div className="relative shrink-0 w-9 h-9 rounded-full overflow-hidden">
+                                    <Image
+                                        className="object-cover mb-0"
+                                        family="avatar"
+                                        slot="profile"
+                                        src={page?.avatarUrl}
+                                        fill
+                                        alt={page?.displayName || "Avatar"}
+                                    />
+                                </div>
+                                <div className="font-bold dark:text-n-9 truncate whitespace-nowrap">{page?.displayName || "Creator Page"}</div>
+                            </Link>
+                        )
                     )}
 
                     {/* {isAuthenticated && (

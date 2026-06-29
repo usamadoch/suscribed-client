@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { CreatorPage, Tier } from "@/types";
-import { useCreatorPlans } from "@/hooks/queries";
+import { useCreatorPlans, useJoinPage } from "@/hooks/queries";
 import { membershipService as membershipPlanApi } from "@/services/membership.service";
 import { useAuth } from "@/store/auth";
 import SafepayCardForm from "../SafepayCardForm";
@@ -140,6 +140,20 @@ const JoinTierModal = ({
         onError: (err: any) => toast.error(err.message || 'Failed to subscribe')
     });
 
+    const { mutate: freeJoin, isPending: isFreeJoining } = useJoinPage();
+
+    const handleFreeJoin = () => {
+        freeJoin(
+            { creatorId, pageId: typeof page._id === 'object' ? page._id : page._id },
+            {
+                onSuccess: () => {
+                    handlePaymentSuccess();
+                },
+                onError: (err: any) => toast.error(err.message || 'Failed to join')
+            }
+        );
+    };
+
     const currentStep = showSuccess ? 'success' : safepayData ? 'checkout' : 'plans';
 
     return (
@@ -184,7 +198,9 @@ const JoinTierModal = ({
                                             </Link> */}
 
                             <div className="pt-18 overflow-hidden relative">
-                                {!showSuccess && <h4 className="text-h4 text-center dark:text-n-9 py-10">Choose your membership</h4>}
+                                {!showSuccess && <h4 className="text-h4 text-center dark:text-n-9 py-10">
+                                    Choose your membership
+                                </h4>}
 
                                 <AnimatePresence mode="popLayout" initial={false}>
                                     {currentStep === 'success' ? (
@@ -241,6 +257,8 @@ const JoinTierModal = ({
                                                 onSubscribe={(id) => subscribeMutation.mutate(id)}
                                                 isSubscribing={subscribeMutation.isPending}
                                                 subscribingPlanId={subscribeMutation.variables as string}
+                                                onFreeJoin={handleFreeJoin}
+                                                isFreeJoining={isFreeJoining}
                                             />
                                         </motion.div>
                                     )}

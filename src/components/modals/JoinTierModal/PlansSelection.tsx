@@ -14,6 +14,8 @@ type PlansSelectionProps = {
     onSubscribe: (planId: string) => void;
     isSubscribing: boolean;
     subscribingPlanId: string | null;
+    onFreeJoin?: () => void;
+    isFreeJoining?: boolean;
 };
 
 const PlansSelection = ({
@@ -23,7 +25,9 @@ const PlansSelection = ({
     setInterval,
     onSubscribe,
     isSubscribing,
-    subscribingPlanId
+    subscribingPlanId,
+    onFreeJoin,
+    isFreeJoining
 }: PlansSelectionProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [itemsToShow, setItemsToShow] = useState(3);
@@ -108,7 +112,7 @@ const PlansSelection = ({
                                     <PlanCard
                                         plan={plan}
                                         interval={interval}
-                                        className="border border-n-8 rounded-lg dark:border-n-7 max-w-none"
+                                        className="border border-n-6 rounded-md dark:border-n-6 max-w-none h-full"
                                         action={
                                             <button
                                                 className="btn-purple btn-medium w-full transition-shadow shadow-primary-4"
@@ -125,7 +129,14 @@ const PlansSelection = ({
                     </div>
                 ) : (
                     <div className="text-center p-4">
-                        <p className="text-n-3 dark:text-n-8">Creator hasn&apos;t published any subscription tiers yet.</p>
+                        <p className="text-n-3 dark:text-n-8 mb-6">Creator hasn&apos;t published any subscription tiers yet.</p>
+                        <button 
+                            className="btn-purple btn-medium" 
+                            onClick={onFreeJoin} 
+                            disabled={isFreeJoining}
+                        >
+                            {isFreeJoining ? <Loader /> : "Join for Free"}
+                        </button>
                     </div>
                 )}
 
