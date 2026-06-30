@@ -25,8 +25,38 @@ export const viewport: Viewport = {
 
 
 export const metadata: Metadata = {
-  title: "Modern Web App",
-  description: "A premium web application",
+  title: "Commons",
+  description: "Join Commons to access exclusive posts, private creator communities, live streams, and connect directly with your favorite creators.",
+  keywords: ["Commons", "creator platform", "exclusive content", "private communities", "creator support", "fan club", "interactive streams"],
+  authors: [{ name: "Commons" }],
+  creator: "Commons",
+  publisher: "Commons",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://commons.pk",
+    siteName: "Commons",
+    title: "Commons — Connect with Creators & Exclusive Communities",
+    description: "Access exclusive posts, join private communities, and connect directly with top creators on Commons.",
+    images: [
+      {
+        url: "/l.svg",
+        width: 800,
+        height: 800,
+        alt: "Commons logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Commons — Connect with Creators & Exclusive Communities",
+    description: "Access exclusive posts, join private communities, and connect directly with top creators on Commons.",
+    images: ["/l.svg"],
+  },
 };
 
 export default function RootLayout({

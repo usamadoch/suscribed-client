@@ -26,7 +26,7 @@ const Layout = ({
     const showRightAuthSidebar = !requireAuth && !isLoading && !isAuthenticated;
 
     const content = (
-        <div className={`relative flex pl-75 xl:pl-20 md:pl-0 md:pb-20 bg-n-1 ${showRightAuthSidebar ? 'pr-16 xl:pr-0' : ''}`}>
+        <div className={`relative flex pl-75 xl:pl-16 md:pl-0 md:pb-20 bg-n-1 ${showRightAuthSidebar ? 'pr-16 xl:pr-0' : ''}`}>
             <Sidebar />
             <div className="flex flex-col grow w-full min-h-screen md:pt-0 md:min-h-[calc(100vh-5rem)]">
                 <div className="flex grow">

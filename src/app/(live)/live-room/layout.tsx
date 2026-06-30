@@ -11,7 +11,7 @@ export default function LiveRoomNewLayout({
     return (
         <RequireCreator>
 
-            <div className="relative flex pl-20 md:pl-0 md:pb-20 bg-n-1">
+            <div className="relative flex pl-16 md:pl-0 md:pb-20 bg-n-1">
                 <Sidebar isMinimize={true} />
                 <div className="flex flex-col grow w-full min-h-screen md:pt-0">
                     <div className="flex grow w-full">

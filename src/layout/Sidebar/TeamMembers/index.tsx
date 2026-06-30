@@ -47,7 +47,7 @@ const TeamMembers = ({ visible, isMinimize }: TeamMembersProps) => {
     return (
         <>
 
-            <div className="-mx-4">
+            <div className={visible ? "-mx-4" : isMinimize ? "mx-0" : "-mx-4 xl:mx-0"}>
                 {displayedMemberships.map((item: Member) => {
                     const page = item.pageId as CreatorPage;
                     return (

@@ -26,10 +26,9 @@ const CreatorPage = () => {
     const { setHeaderHidden } = useCreatorHeader();
     const { handleImageSuccess, handleJoinSuccess } = useCreatorPageCache(slug, user?._id);
 
-    // ... hooks ...
-
     const { data, isLoading, error } = useCreatorPage(slug);
     const { page, isOwner, isMember } = data || {};
+
 
     useEffect(() => {
         if (error && error instanceof ApiClientError && (error.code === 'NOT_PUBLISHED' || error.code === 'NOT_FOUND')) {

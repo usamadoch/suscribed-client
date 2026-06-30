@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <!-- Soft 3D drop shadow -->
+    <filter id="drop-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="25" stdDeviation="20" flood-color="#000000" flood-opacity="0.4"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+
+    <!-- Softer colored brand glow -->
+    <filter id="brand-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="25" result="blur"/>
+      <feColorMatrix type="matrix" values="
+        0 0 0 0 0.68
+        0 0 0 0 0.48
+        0 0 0 0 1.00
+        0 0 0 0.15 0
+      " in="blur" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <mask id="bubbleMask">
+      <rect width="100%" height="100%" fill="black" />
+      <path d="M 250 200 
+               L 550 200 
+               A 150 150 0 0 1 700 350 
+               L 700 450 
+               A 150 150 0 0 1 550 600 
+               L 330 600 
+               L 210 740 
+               L 250 600 
+               A 150 150 0 0 1 100 450 
+               L 100 350 
+               A 150 150 0 0 1 250 200 Z" fill="white" />
+      
+      <circle cx="270" cy="400" r="45" fill="black" />
+      <circle cx="400" cy="400" r="45" fill="black" />
+      <circle cx="530" cy="400" r="45" fill="black" />
+    </mask>
+
+    <!-- Premium 3-stop linear gradients mapped to 3D light source (top-left to bottom-right) -->
+    <linearGradient id="grad-yellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE03D"/>
+      <stop offset="50%" stop-color="#E2A600"/>
+      <stop offset="100%" stop-color="#9C6B00"/>
+    </linearGradient>
+
+    <linearGradient id="grad-teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF"/>
+      <stop offset="50%" stop-color="#088BB5"/>
+      <stop offset="100%" stop-color="#004A66"/>
+    </linearGradient>
+
+    <linearGradient id="grad-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFA066"/>
+      <stop offset="50%" stop-color="#E75D27"/>
+      <stop offset="100%" stop-color="#992C00"/>
+    </linearGradient>
+
+    <linearGradient id="grad-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF759E"/>
+      <stop offset="50%" stop-color="#D82865"/>
+      <stop offset="100%" stop-color="#800435"/>
+    </linearGradient>
+
+    <linearGradient id="grad-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9D66FF"/>
+      <stop offset="50%" stop-color="#372083"/>
+      <stop offset="100%" stop-color="#9D66FF"/>
+    </linearGradient>
+
+    <!-- Gloss overlay gradient -->
+    <linearGradient id="gloss-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0.0"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <!-- Diagonal sheen -->
+    <linearGradient id="sheen-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.0"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.0"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0.0"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <!-- Radial light overlay for central depth -->
+    <radialGradient id="light-overlay" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Masked group applying shadow, brand glow and bubble mask -->
+  <g mask="url(#bubbleMask)" filter="url(#drop-shadow) url(#brand-glow)">
+    <!-- Base background fill -->
+    <rect width="800" height="800" fill="#140640" />
+
+    <!-- Polygons styled as faceted 3D crystal pieces -->
+    <g stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.15" stroke-linejoin="round">
+      <polygon points="0,0 350,0 280,350 0,400" fill="url(#grad-yellow)" />
+      
+      <polygon points="350,0 600,0 550,250 400,300 280,350" fill="url(#grad-teal)" />
+      
+      <polygon points="600,0 800,0 800,350 550,250" fill="url(#grad-orange)" />
+      
+      <polygon points="800,350 800,800 650,800 500,450 600,300" fill="url(#grad-yellow)" />
+      
+      <polygon points="650,800 400,800 350,600 500,450" fill="url(#grad-orange)" />
+      
+      <polygon points="0,400 250,300 300,550 150,800 0,800" fill="url(#grad-teal)" />
+      
+      <polygon points="280,350 400,300 550,250 600,300 500,450 350,600 300,550 250,300" fill="url(#grad-purple)" />
+      
+      <polygon points="350,600 400,800 250,800 200,650" fill="url(#grad-purple)" />
+      <polygon points="150,800 300,550 200,500 0,600" fill="url(#grad-yellow)" />
+      <polygon points="550,250 800,350 700,500 600,300" fill="url(#grad-pink)" />
+      <polygon points="500,450 650,800 400,800" fill="url(#grad-teal)" />
+    </g>
+
+    <!-- Global depth overlay using overlay mix-blend-mode -->
+    <rect width="800" height="800" fill="url(#light-overlay)" style="mix-blend-mode: overlay;" />
+
+    <!-- Light sheen and glossy overlay -->
+    <rect width="800" height="800" fill="url(#sheen-grad)" />
+    <ellipse cx="400" cy="50" rx="600" ry="250" fill="url(#gloss-grad)" />
+  </g>
+
+  <!-- Non-masked overlays for bevels and 3D borders -->
+  <g pointer-events="none">
+    <!-- Bubble outer edge highlight -->
+    <path d="M 250 200 
+             L 550 200 
+             A 150 150 0 0 1 700 350 
+             L 700 450 
+             A 150 150 0 0 1 550 600 
+             L 330 600 
+             L 210 740 
+             L 250 600 
+             A 150 150 0 0 1 100 450 
+             L 100 350 
+             A 150 150 0 0 1 250 200 Z" 
+          fill="none" 
+          stroke="#ffffff" 
+          stroke-width="5" 
+          stroke-opacity="0.25" />
+
+    <!-- Three dots depth effect -->
+    <!-- Dark shadows shifted down-right -->
+    <circle cx="270" cy="400" r="45" fill="none" stroke="#000000" stroke-width="6" stroke-opacity="0.35" transform="translate(-1, -1)"/>
+    <circle cx="400" cy="400" r="45" fill="none" stroke="#000000" stroke-width="6" stroke-opacity="0.35" transform="translate(-1, -1)"/>
+    <circle cx="530" cy="400" r="45" fill="none" stroke="#000000" stroke-width="6" stroke-opacity="0.35" transform="translate(-1, -1)"/>
+
+    <!-- Light highlights shifted up-left -->
+    <circle cx="270" cy="400" r="45" fill="none" stroke="#ffffff" stroke-width="3" stroke-opacity="0.25" transform="translate(2, 2)"/>
+    <circle cx="400" cy="400" r="45" fill="none" stroke="#ffffff" stroke-width="3" stroke-opacity="0.25" transform="translate(2, 2)"/>
+    <circle cx="530" cy="400" r="45" fill="none" stroke="#ffffff" stroke-width="3" stroke-opacity="0.25" transform="translate(2, 2)"/>
+  </g>
+</svg>

@@ -12,37 +12,41 @@ type LogoProps = {
     light?: boolean;
     href?: string;
     disabled?: boolean;
+    hideText?: boolean;
+    textClassName?: string;
 };
 
-const Logo = ({ className, light, href = "/dashboard", disabled }: LogoProps) => {
+const Logo = ({ className, light, href = "/dashboard", disabled, hideText, textClassName }: LogoProps) => {
     const { colorMode } = useColorMode();
     const isDarkMode = colorMode === "dark";
 
     const content = (
-        <Image
-            className="w-full h-auto"
-            src={
-                light
-                    ? "/images/logo-light.svg"
-                    : "/images/logo-light.svg"
-
-            }
-            width={113}
-            height={25}
-            alt="Bruddle"
-        />
+        <>
+            <Image
+                className="w-auto h-full object-contain shrink-0"
+                src="/l.svg"
+                width={40}
+                height={40}
+                alt="Bruddle"
+            />
+            {!hideText && (
+                <span className={`font-bold text-[1.3rem] tracking-tight text-white select-none leading-none ${textClassName || ""}`}>
+                    Commons
+                </span>
+            )}
+        </>
     );
 
     if (disabled) {
         return (
-            <div className={`flex w-28.5 ${className}`}>
+            <div className={`flex items-center gap-2 h-8 ${className}`}>
                 {content}
             </div>
         );
     }
 
     return (
-        <Link className={`flex w-28.5 ${className}`} href={href}>
+        <Link className={`flex items-center gap-2 h-8 ${className}`} href={href}>
             {content}
         </Link>
     );

@@ -46,11 +46,17 @@ const Sidebar = ({ isMinimize = false }: SidebarProps) => {
 
     return (
         <div
-            className={`fixed top-0 left-0 bottom-0 flex flex-col py-6 px-8 bg-background dark:bg-n-2 border-r border-n-6 overflow-auto scroll-smooth xl:z-30 md:hidden ${visible ? "w-75" : isMinimize ? "w-20" : "w-75 xl:w-20"}`}>
-            <div className="flex justify-between items-center h-[1.625rem] mb-11">
-                <Logo className={visible ? "flex" : isMinimize ? "hidden!" : "xl:hidden"} light />
+            className={`fixed top-0 left-0 bottom-0 flex flex-col bg-background dark:bg-n-2 border-r border-n-6 overflow-y-auto overflow-x-hidden scroll-smooth xl:z-30 md:hidden ${
+                visible ? "w-75 py-6 px-8" : isMinimize ? "w-16 py-6 px-3" : "w-75 py-6 px-8 xl:w-16 xl:px-3"
+            }`}>
+            <div className={`flex items-center h-[1.625rem] mb-11 ${visible ? "justify-between" : isMinimize ? "justify-center" : "justify-between xl:justify-center"}`}>
+                <Logo 
+                    className={visible ? "flex" : "xl:hidden"} 
+                    light 
+                    textClassName={visible ? "" : isMinimize ? "hidden" : "xl:hidden"}
+                />
                 <button
-                    className={isMinimize ? "flex" : "hidden xl:flex"}
+                    className="hidden xl:flex"
                     onClick={() => setVisible(!visible)}
                 >
                     <Icon
@@ -66,7 +72,7 @@ const Sidebar = ({ isMinimize = false }: SidebarProps) => {
 
 
             {isAuthenticated && (
-                <div className={`mt-auto flex flex-col pt-10 ${visible ? "mx-0" : isMinimize ? "-mx-4" : "xl:-mx-4"}`}>
+                <div className="mt-auto flex flex-col pt-10 mx-0">
                     {user?.role === "creator" && (
                         <ActionMenu
                             className={`mb-6 ${visible ? "w-full" : isMinimize ? "w-auto mx-auto" : "w-full xl:w-auto xl:mx-auto"}`}

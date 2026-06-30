@@ -44,7 +44,7 @@ const Menu = ({ visible, isMinimize }: MenuProps) => {
 
     return (
         <>
-            <div className="-mx-4 mb-10">
+            <div className={`mb-10 ${visible ? "-mx-4" : isMinimize ? "mx-0" : "-mx-4 xl:mx-0"}`}>
                 {groupedNavigation.map(([category, links], catIndex) => (
                     <div key={catIndex} className="mb-6 last:mb-0">
                         <div

@@ -87,7 +87,7 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
 
     return (
         <header
-            className={`top-0 left-0 right-0 z-20 border-b border-n-4 dark:border-n-6 transition-colors ${headerStyle ? "bg-white dark:bg-n-1" : "bg-n-2"
+            className={`top-0 left-0 right-0 z-20 border-b border-n-4 dark:border-n-6 transition-colors ${headerStyle ? "bg-white dark:bg-n-1" : "bg-n-1"
                 }`}
         >
             <div className="flex justify-between items-center mx-auto w-full h-14 px-8 2xl:px-8 lg:px-6 mobile:px-6">
@@ -111,7 +111,7 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
                                         alt={page?.displayName || "Avatar"}
                                     />
                                 </div>
-                                <div className="font-bold dark:text-n-9 truncate whitespace-nowrap">{page?.displayName || "Creator Page"}</div>
+                                <div className="font-bold capitalize dark:text-n-9 truncate whitespace-nowrap">{page?.displayName || "Creator Page"}</div>
                             </div>
                         ) : (
                             <Link href={`/${page?.pageSlug || slug || ''}`} className="flex items-center gap-2 mr-24 mobile:mr-4" >
@@ -125,7 +125,7 @@ const CreatorHeader = ({ pageSlug }: CreatorHeaderProps) => {
                                         alt={page?.displayName || "Avatar"}
                                     />
                                 </div>
-                                <div className="font-bold dark:text-n-9 truncate whitespace-nowrap">{page?.displayName || "Creator Page"}</div>
+                                <div className="font-bold capitalize dark:text-n-9 truncate whitespace-nowrap">{page?.displayName || "Creator Page"}</div>
                             </Link>
                         )
                     )}

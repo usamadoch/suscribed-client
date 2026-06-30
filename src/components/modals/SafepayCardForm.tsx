@@ -50,14 +50,20 @@ const SafepayCardForm = ({
     const [isProcessing, setIsProcessing] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+    const hasSucceeded = useRef(false);
 
     const handleSuccess = useCallback((data: any) => {
+        if (hasSucceeded.current) return;
+        hasSucceeded.current = true;
         console.log('Payment + card save succeeded:', data);
         if (onSuccess) onSuccess(data);
     }, [onSuccess]);
 
     const handleFailure = useCallback((error: any) => {
+        if (hasSucceeded.current) return;
         console.error('Failed:', error);
+        setIsProcessing(false);
+        setErrorMessage("Payment failed or was cancelled. Please try again.");
     }, []);
 
     const updateTrackerMutation = useMutation({

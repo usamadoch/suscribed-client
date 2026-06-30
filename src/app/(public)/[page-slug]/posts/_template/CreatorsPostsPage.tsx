@@ -36,9 +36,10 @@ const sortPosts = (posts: VideoPost[], sortId: string) => {
 
 const CreatorsPostsPage = () => {
     const slug = usePageSlug();
-
     const { data: pageData } = useCreatorPage(slug);
     const isOwner = pageData?.isOwner;
+    const page = pageData?.page;
+
 
     const { data: postsData, isLoading } = useCreatorPosts(slug, { type: 'video' });
     const posts = (postsData || []) as VideoPost[];
